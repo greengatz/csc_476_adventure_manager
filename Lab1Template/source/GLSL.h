@@ -9,6 +9,10 @@
 //    Many useful helper functions for GLSL shaders - gleaned from various sources including orange book
 //    Created by zwood on 2/21/10.
 
+#ifdef _MSC_VER
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+
 #include "GLIncludes.h"
 
 #pragma once

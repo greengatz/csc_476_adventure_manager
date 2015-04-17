@@ -17,6 +17,9 @@
 // version 0.9.0: Initial
 //
 
+#ifdef _MSC_VER
+#define _CRT_SECURE_NO_WARNINGS
+#endif
 
 #include <cstdlib>
 #include <cstring>

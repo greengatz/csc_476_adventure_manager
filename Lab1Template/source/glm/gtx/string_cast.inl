@@ -6,7 +6,9 @@
 // Licence : This source is under MIT License
 // File    : glm/gtx/string_cast.hpp
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-
+#ifdef _MSC_VER
+#define _CRT_SECURE_NO_WARNINGS
+#endif
 #include <cstdarg>
 #include <cstdio>
 
@@ -27,7 +29,8 @@ namespace detail
 #if((GLM_COMPILER & GLM_COMPILER_VC) && (GLM_COMPILER_VC >= GLM_COMPILER_VC2005))
 			vsprintf_s(text, STRING_BUFFER, msg, list);
 #else//
-			vsprintf(text, msg, list);
+			vsprintf_s(text, STRING_BUFFER, msg, list);
+			// vsprintf(text, msg, list);
 #endif//
 		va_end(list);
 

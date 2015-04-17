@@ -3,6 +3,10 @@
 // October, 2014
 //
 
+#ifdef _MSC_VER
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+
 #include <iostream>
 #include "glm/glm.hpp"
 #include "TextureLoader.h"

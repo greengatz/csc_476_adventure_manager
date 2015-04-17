@@ -7,7 +7,6 @@
 #define GLM_FORCE_RADIANS
 #include "glm/glm.hpp"
 #include "Shape.h"
-#include "GLSL.h"
 
 using namespace std;
 float randFloat(float l, float h)
