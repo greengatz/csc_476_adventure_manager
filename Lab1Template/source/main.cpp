@@ -20,6 +20,9 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "RenderingHelper.h"
 #include "TextureLoader.h"
+#include "obj3d.h"
+#include "obj3dcontainer.h"
+#include "tavern.h"
 
 using namespace std;
 
@@ -103,6 +106,7 @@ GLuint NumBufObj, NumIndBufObj, NumTexBufObj;
 
 //Rendering Helper
 RenderingHelper ModelTrans;
+Tavern tavern;
 
 /**
  * Helper function to send materials to the shader - create below.
@@ -469,6 +473,8 @@ void drawGL()
 
 	drawWalls();
 	glUniform1i(terrainToggleID, 0);
+
+	// tavern.drawTavern();
 	
 	// Unbind the program
 	glUseProgram(0);
@@ -635,26 +641,27 @@ int main(int argc, char **argv)
 	std::string str = "assets/bunny.obj";
 	// initShape(&str[0u]); //initShape(argv[0]);
   	initModels();
+  	tavern.loadTavernMeshes();
    do{
    	timeNew = glfwGetTime();
 	double dtSpawn = timeNew - timeOldSpawn;
 
-	// Update every 1s
-	if(shapes.size() != NUMOBJ && dtSpawn >= timeOldSpawn) {
-		float randomX = rF(10.0f, 40.0f);
-		float randomZ = rF(-10.0f, -40.0f);
-		for (std::vector<Shape>::iterator it = shapes.begin(); it != shapes.end(); ++it){
-			glm::vec3 temp = it->getPosition();
-			if((temp.x < randomX + 1 && temp.x > randomX - 1) || 
-				(temp.z < randomZ + 1 && temp.z > randomZ - 1)){
-				randomX = rF(10.0f, 40.0f);
-				randomZ = rF(-10.0f, -40.0f);
-				it = shapes.begin();
-			}
-		}
-		spinOffNewShape(&str[0u], randomX, randomZ);
-		timeOldSpawn += 1.0;
-	}
+	// // Update every 1s
+	// if(shapes.size() != NUMOBJ && dtSpawn >= timeOldSpawn) {
+	// 	float randomX = rF(10.0f, 40.0f);
+	// 	float randomZ = rF(-10.0f, -40.0f);
+	// 	for (std::vector<Shape>::iterator it = shapes.begin(); it != shapes.end(); ++it){
+	// 		glm::vec3 temp = it->getPosition();
+	// 		if((temp.x < randomX + 1 && temp.x > randomX - 1) || 
+	// 			(temp.z < randomZ + 1 && temp.z > randomZ - 1)){
+	// 			randomX = rF(10.0f, 40.0f);
+	// 			randomZ = rF(-10.0f, -40.0f);
+	// 			it = shapes.begin();
+	// 		}
+	// 	}
+	// 	spinOffNewShape(&str[0u], randomX, randomZ);
+	// 	timeOldSpawn += 1.0;
+	// }
 	
 	
    	//Check for user input
@@ -668,6 +675,7 @@ int main(int argc, char **argv)
 			timeOldDraw += (1.0 / 60);
 			//Draw an image
 			drawGL();
+			tavern.drawTavern(h_ModelMatrix, h_vertPos, h_vertNor);
 		}
 		// Swap buffers
 		glfwSwapBuffers(window);
