@@ -1,0 +1,1691 @@
+The system is: Darwin - 14.1.0 - x86_64
+Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+Compiler: /usr/bin/cc 
+Build flags: 
+Id flags: 
+
+The output was:
+0
+
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.out"
+
+The C compiler identification is AppleClang, found in "/Users/squirrel_matrix/Desktop/Graphics/lab6/CMakeFiles/3.1.0/CompilerIdC/a.out"
+
+Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+Compiler: /usr/bin/c++ 
+Build flags: 
+Id flags: 
+
+The output was:
+0
+
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.out"
+
+The CXX compiler identification is AppleClang, found in "/Users/squirrel_matrix/Desktop/Graphics/lab6/CMakeFiles/3.1.0/CompilerIdCXX/a.out"
+
+Determining if the C compiler works passed with the following output:
+Change Dir: /Users/squirrel_matrix/Desktop/Graphics/lab6/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec3104203720/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec3104203720.dir/build.make CMakeFiles/cmTryCompileExec3104203720.dir/build
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_progress_report /Users/squirrel_matrix/Desktop/Graphics/lab6/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3104203720.dir/testCCompiler.c.o
+/usr/bin/cc   -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk   -o CMakeFiles/cmTryCompileExec3104203720.dir/testCCompiler.c.o   -c /Users/squirrel_matrix/Desktop/Graphics/lab6/CMakeFiles/CMakeTmp/testCCompiler.c
+Linking C executable cmTryCompileExec3104203720
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3104203720.dir/link.txt --verbose=1
+/usr/bin/cc    -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTryCompileExec3104203720.dir/testCCompiler.c.o  -o cmTryCompileExec3104203720  
+
+
+Detecting C compiler ABI info compiled with the following output:
+Change Dir: /Users/squirrel_matrix/Desktop/Graphics/lab6/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec3030217526/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec3030217526.dir/build.make CMakeFiles/cmTryCompileExec3030217526.dir/build
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_progress_report /Users/squirrel_matrix/Desktop/Graphics/lab6/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3030217526.dir/CMakeCCompilerABI.c.o
+/usr/bin/cc   -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk   -o CMakeFiles/cmTryCompileExec3030217526.dir/CMakeCCompilerABI.c.o   -c /usr/local/Cellar/cmake/3.1.0/share/cmake/Modules/CMakeCCompilerABI.c
+Linking C executable cmTryCompileExec3030217526
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3030217526.dir/link.txt --verbose=1
+/usr/bin/cc    -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names -v -Wl,-v CMakeFiles/cmTryCompileExec3030217526.dir/CMakeCCompilerABI.c.o  -o cmTryCompileExec3030217526   
+Apple LLVM version 6.0 (clang-600.0.51) (based on LLVM 3.5svn)
+Target: x86_64-apple-darwin14.1.0
+Thread model: posix
+ "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld" -demangle -dynamic -arch x86_64 -macosx_version_min 10.10.0 -syslibroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -o cmTryCompileExec3030217526 -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTryCompileExec3030217526.dir/CMakeCCompilerABI.c.o -lSystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../lib/clang/6.0/lib/darwin/libclang_rt.osx.a
+@(#)PROGRAM:ld  PROJECT:ld64-241.8
+configured to support archs: armv6 armv7 armv7s arm64 i386 x86_64 x86_64h armv6m armv7m armv7em
+Library search paths:
+	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib
+Framework search paths:
+	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/
+
+
+Parsed C implicit link information from above output:
+  link line regex: [^( *|.*[/\])(ld|([^/\]+-)?ld|collect2)[^/\]*( |$)]
+  ignore line: [Change Dir: /Users/squirrel_matrix/Desktop/Graphics/lab6/CMakeFiles/CMakeTmp]
+  ignore line: []
+  ignore line: [Run Build Command:"/usr/bin/make" "cmTryCompileExec3030217526/fast"]
+  ignore line: [/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec3030217526.dir/build.make CMakeFiles/cmTryCompileExec3030217526.dir/build]
+  ignore line: [/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_progress_report /Users/squirrel_matrix/Desktop/Graphics/lab6/CMakeFiles/CMakeTmp/CMakeFiles 1]
+  ignore line: [Building C object CMakeFiles/cmTryCompileExec3030217526.dir/CMakeCCompilerABI.c.o]
+  ignore line: [/usr/bin/cc   -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk   -o CMakeFiles/cmTryCompileExec3030217526.dir/CMakeCCompilerABI.c.o   -c /usr/local/Cellar/cmake/3.1.0/share/cmake/Modules/CMakeCCompilerABI.c]
+  ignore line: [Linking C executable cmTryCompileExec3030217526]
+  ignore line: [/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3030217526.dir/link.txt --verbose=1]
+  ignore line: [/usr/bin/cc    -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names -v -Wl,-v CMakeFiles/cmTryCompileExec3030217526.dir/CMakeCCompilerABI.c.o  -o cmTryCompileExec3030217526   ]
+  ignore line: [Apple LLVM version 6.0 (clang-600.0.51) (based on LLVM 3.5svn)]
+  ignore line: [Target: x86_64-apple-darwin14.1.0]
+  ignore line: [Thread model: posix]
+  link line: [ "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld" -demangle -dynamic -arch x86_64 -macosx_version_min 10.10.0 -syslibroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -o cmTryCompileExec3030217526 -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTryCompileExec3030217526.dir/CMakeCCompilerABI.c.o -lSystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../lib/clang/6.0/lib/darwin/libclang_rt.osx.a]
+    arg [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld] ==> ignore
+    arg [-demangle] ==> ignore
+    arg [-dynamic] ==> ignore
+    arg [-arch] ==> ignore
+    arg [x86_64] ==> ignore
+    arg [-macosx_version_min] ==> ignore
+    arg [10.10.0] ==> ignore
+    arg [-syslibroot] ==> ignore
+    arg [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk] ==> ignore
+    arg [-o] ==> ignore
+    arg [cmTryCompileExec3030217526] ==> ignore
+    arg [-search_paths_first] ==> ignore
+    arg [-headerpad_max_install_names] ==> ignore
+    arg [-v] ==> ignore
+    arg [CMakeFiles/cmTryCompileExec3030217526.dir/CMakeCCompilerABI.c.o] ==> ignore
+    arg [-lSystem] ==> lib [System]
+    arg [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../lib/clang/6.0/lib/darwin/libclang_rt.osx.a] ==> lib [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../lib/clang/6.0/lib/darwin/libclang_rt.osx.a]
+  Library search paths: [;/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib]
+  Framework search paths: [;/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/]
+  remove lib [System]
+  collapse lib [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../lib/clang/6.0/lib/darwin/libclang_rt.osx.a] ==> [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/6.0/lib/darwin/libclang_rt.osx.a]
+  collapse library dir [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib] ==> [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib]
+  collapse framework dir [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/] ==> [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks]
+  implicit libs: [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/6.0/lib/darwin/libclang_rt.osx.a]
+  implicit dirs: [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib]
+  implicit fwks: [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks]
+
+
+Determining if the CXX compiler works passed with the following output:
+Change Dir: /Users/squirrel_matrix/Desktop/Graphics/lab6/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec3394850584/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec3394850584.dir/build.make CMakeFiles/cmTryCompileExec3394850584.dir/build
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_progress_report /Users/squirrel_matrix/Desktop/Graphics/lab6/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building CXX object CMakeFiles/cmTryCompileExec3394850584.dir/testCXXCompiler.cxx.o
+/usr/bin/c++    -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk   -o CMakeFiles/cmTryCompileExec3394850584.dir/testCXXCompiler.cxx.o -c /Users/squirrel_matrix/Desktop/Graphics/lab6/CMakeFiles/CMakeTmp/testCXXCompiler.cxx
+Linking CXX executable cmTryCompileExec3394850584
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3394850584.dir/link.txt --verbose=1
+/usr/bin/c++     -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTryCompileExec3394850584.dir/testCXXCompiler.cxx.o  -o cmTryCompileExec3394850584  
+
+
+Detecting CXX compiler ABI info compiled with the following output:
+Change Dir: /Users/squirrel_matrix/Desktop/Graphics/lab6/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec3695210273/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec3695210273.dir/build.make CMakeFiles/cmTryCompileExec3695210273.dir/build
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_progress_report /Users/squirrel_matrix/Desktop/Graphics/lab6/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building CXX object CMakeFiles/cmTryCompileExec3695210273.dir/CMakeCXXCompilerABI.cpp.o
+/usr/bin/c++    -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk   -o CMakeFiles/cmTryCompileExec3695210273.dir/CMakeCXXCompilerABI.cpp.o -c /usr/local/Cellar/cmake/3.1.0/share/cmake/Modules/CMakeCXXCompilerABI.cpp
+Linking CXX executable cmTryCompileExec3695210273
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3695210273.dir/link.txt --verbose=1
+/usr/bin/c++     -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names -v -Wl,-v CMakeFiles/cmTryCompileExec3695210273.dir/CMakeCXXCompilerABI.cpp.o  -o cmTryCompileExec3695210273   
+Apple LLVM version 6.0 (clang-600.0.51) (based on LLVM 3.5svn)
+Target: x86_64-apple-darwin14.1.0
+Thread model: posix
+ "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld" -demangle -dynamic -arch x86_64 -macosx_version_min 10.10.0 -syslibroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -o cmTryCompileExec3695210273 -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTryCompileExec3695210273.dir/CMakeCXXCompilerABI.cpp.o -lc++ -lSystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../lib/clang/6.0/lib/darwin/libclang_rt.osx.a
+@(#)PROGRAM:ld  PROJECT:ld64-241.8
+configured to support archs: armv6 armv7 armv7s arm64 i386 x86_64 x86_64h armv6m armv7m armv7em
+Library search paths:
+	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib
+Framework search paths:
+	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/
+
+
+Parsed CXX implicit link information from above output:
+  link line regex: [^( *|.*[/\])(ld|([^/\]+-)?ld|collect2)[^/\]*( |$)]
+  ignore line: [Change Dir: /Users/squirrel_matrix/Desktop/Graphics/lab6/CMakeFiles/CMakeTmp]
+  ignore line: []
+  ignore line: [Run Build Command:"/usr/bin/make" "cmTryCompileExec3695210273/fast"]
+  ignore line: [/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec3695210273.dir/build.make CMakeFiles/cmTryCompileExec3695210273.dir/build]
+  ignore line: [/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_progress_report /Users/squirrel_matrix/Desktop/Graphics/lab6/CMakeFiles/CMakeTmp/CMakeFiles 1]
+  ignore line: [Building CXX object CMakeFiles/cmTryCompileExec3695210273.dir/CMakeCXXCompilerABI.cpp.o]
+  ignore line: [/usr/bin/c++    -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk   -o CMakeFiles/cmTryCompileExec3695210273.dir/CMakeCXXCompilerABI.cpp.o -c /usr/local/Cellar/cmake/3.1.0/share/cmake/Modules/CMakeCXXCompilerABI.cpp]
+  ignore line: [Linking CXX executable cmTryCompileExec3695210273]
+  ignore line: [/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3695210273.dir/link.txt --verbose=1]
+  ignore line: [/usr/bin/c++     -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names -v -Wl,-v CMakeFiles/cmTryCompileExec3695210273.dir/CMakeCXXCompilerABI.cpp.o  -o cmTryCompileExec3695210273   ]
+  ignore line: [Apple LLVM version 6.0 (clang-600.0.51) (based on LLVM 3.5svn)]
+  ignore line: [Target: x86_64-apple-darwin14.1.0]
+  ignore line: [Thread model: posix]
+  link line: [ "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld" -demangle -dynamic -arch x86_64 -macosx_version_min 10.10.0 -syslibroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -o cmTryCompileExec3695210273 -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTryCompileExec3695210273.dir/CMakeCXXCompilerABI.cpp.o -lc++ -lSystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../lib/clang/6.0/lib/darwin/libclang_rt.osx.a]
+    arg [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld] ==> ignore
+    arg [-demangle] ==> ignore
+    arg [-dynamic] ==> ignore
+    arg [-arch] ==> ignore
+    arg [x86_64] ==> ignore
+    arg [-macosx_version_min] ==> ignore
+    arg [10.10.0] ==> ignore
+    arg [-syslibroot] ==> ignore
+    arg [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk] ==> ignore
+    arg [-o] ==> ignore
+    arg [cmTryCompileExec3695210273] ==> ignore
+    arg [-search_paths_first] ==> ignore
+    arg [-headerpad_max_install_names] ==> ignore
+    arg [-v] ==> ignore
+    arg [CMakeFiles/cmTryCompileExec3695210273.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+    arg [-lc++] ==> lib [c++]
+    arg [-lSystem] ==> lib [System]
+    arg [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../lib/clang/6.0/lib/darwin/libclang_rt.osx.a] ==> lib [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../lib/clang/6.0/lib/darwin/libclang_rt.osx.a]
+  Library search paths: [;/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib]
+  Framework search paths: [;/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/]
+  remove lib [System]
+  collapse lib [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../lib/clang/6.0/lib/darwin/libclang_rt.osx.a] ==> [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/6.0/lib/darwin/libclang_rt.osx.a]
+  collapse library dir [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib] ==> [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib]
+  collapse framework dir [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/] ==> [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks]
+  implicit libs: [c++;/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/6.0/lib/darwin/libclang_rt.osx.a]
+  implicit dirs: [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib]
+  implicit fwks: [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks]
+
+
+Determining if files pthread.h exist passed with the following output:
+Change Dir: /Users/squirrel_matrix/Desktop/Graphics/lab6/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec3240623047/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec3240623047.dir/build.make CMakeFiles/cmTryCompileExec3240623047.dir/build
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_progress_report /Users/squirrel_matrix/Desktop/Graphics/lab6/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3240623047.dir/CheckIncludeFiles.c.o
+/usr/bin/cc   -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk   -o CMakeFiles/cmTryCompileExec3240623047.dir/CheckIncludeFiles.c.o   -c /Users/squirrel_matrix/Desktop/Graphics/lab6/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
+Linking C executable cmTryCompileExec3240623047
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3240623047.dir/link.txt --verbose=1
+/usr/bin/cc    -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTryCompileExec3240623047.dir/CheckIncludeFiles.c.o  -o cmTryCompileExec3240623047  
+
+
+Determining if the pthread_create exist passed with the following output:
+Change Dir: /Users/squirrel_matrix/Desktop/Graphics/lab6/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec3435027864/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec3435027864.dir/build.make CMakeFiles/cmTryCompileExec3435027864.dir/build
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_progress_report /Users/squirrel_matrix/Desktop/Graphics/lab6/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3435027864.dir/CheckSymbolExists.c.o
+/usr/bin/cc   -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk   -o CMakeFiles/cmTryCompileExec3435027864.dir/CheckSymbolExists.c.o   -c /Users/squirrel_matrix/Desktop/Graphics/lab6/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTryCompileExec3435027864
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3435027864.dir/link.txt --verbose=1
+/usr/bin/cc    -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTryCompileExec3435027864.dir/CheckSymbolExists.c.o  -o cmTryCompileExec3435027864  
+
+File /Users/squirrel_matrix/Desktop/Graphics/lab6/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if files pthread.h exist passed with the following output:
+Change Dir: /Users/squirrel_matrix/Desktop/Graphics/Lab6Base/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec3211555043/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec3211555043.dir/build.make CMakeFiles/cmTryCompileExec3211555043.dir/build
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_progress_report /Users/squirrel_matrix/Desktop/Graphics/Lab6Base/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3211555043.dir/CheckIncludeFiles.c.o
+/usr/bin/cc   -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk   -o CMakeFiles/cmTryCompileExec3211555043.dir/CheckIncludeFiles.c.o   -c /Users/squirrel_matrix/Desktop/Graphics/Lab6Base/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
+Linking C executable cmTryCompileExec3211555043
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3211555043.dir/link.txt --verbose=1
+/usr/bin/cc    -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTryCompileExec3211555043.dir/CheckIncludeFiles.c.o  -o cmTryCompileExec3211555043  
+
+
+Determining if the pthread_create exist passed with the following output:
+Change Dir: /Users/squirrel_matrix/Desktop/Graphics/Lab6Base/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec4057412059/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec4057412059.dir/build.make CMakeFiles/cmTryCompileExec4057412059.dir/build
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_progress_report /Users/squirrel_matrix/Desktop/Graphics/Lab6Base/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec4057412059.dir/CheckSymbolExists.c.o
+/usr/bin/cc   -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk   -o CMakeFiles/cmTryCompileExec4057412059.dir/CheckSymbolExists.c.o   -c /Users/squirrel_matrix/Desktop/Graphics/Lab6Base/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTryCompileExec4057412059
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec4057412059.dir/link.txt --verbose=1
+/usr/bin/cc    -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTryCompileExec4057412059.dir/CheckSymbolExists.c.o  -o cmTryCompileExec4057412059  
+
+File /Users/squirrel_matrix/Desktop/Graphics/Lab6Base/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if files pthread.h exist passed with the following output:
+Change Dir: /Users/squirrel_matrix/Desktop/Graphics/Lab6/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec246878254/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec246878254.dir/build.make CMakeFiles/cmTryCompileExec246878254.dir/build
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_progress_report /Users/squirrel_matrix/Desktop/Graphics/Lab6/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec246878254.dir/CheckIncludeFiles.c.o
+/usr/bin/cc   -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk   -o CMakeFiles/cmTryCompileExec246878254.dir/CheckIncludeFiles.c.o   -c /Users/squirrel_matrix/Desktop/Graphics/Lab6/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
+Linking C executable cmTryCompileExec246878254
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec246878254.dir/link.txt --verbose=1
+/usr/bin/cc    -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTryCompileExec246878254.dir/CheckIncludeFiles.c.o  -o cmTryCompileExec246878254  
+
+
+Determining if the pthread_create exist passed with the following output:
+Change Dir: /Users/squirrel_matrix/Desktop/Graphics/Lab6/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec440778197/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec440778197.dir/build.make CMakeFiles/cmTryCompileExec440778197.dir/build
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_progress_report /Users/squirrel_matrix/Desktop/Graphics/Lab6/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec440778197.dir/CheckSymbolExists.c.o
+/usr/bin/cc   -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk   -o CMakeFiles/cmTryCompileExec440778197.dir/CheckSymbolExists.c.o   -c /Users/squirrel_matrix/Desktop/Graphics/Lab6/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTryCompileExec440778197
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec440778197.dir/link.txt --verbose=1
+/usr/bin/cc    -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTryCompileExec440778197.dir/CheckSymbolExists.c.o  -o cmTryCompileExec440778197  
+
+File /Users/squirrel_matrix/Desktop/Graphics/Lab6/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if files pthread.h exist passed with the following output:
+Change Dir: /Users/squirrel_matrix/Desktop/Graphics/Lab7/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec3218958533/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec3218958533.dir/build.make CMakeFiles/cmTryCompileExec3218958533.dir/build
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_progress_report /Users/squirrel_matrix/Desktop/Graphics/Lab7/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3218958533.dir/CheckIncludeFiles.c.o
+/usr/bin/cc   -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk   -o CMakeFiles/cmTryCompileExec3218958533.dir/CheckIncludeFiles.c.o   -c /Users/squirrel_matrix/Desktop/Graphics/Lab7/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
+Linking C executable cmTryCompileExec3218958533
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3218958533.dir/link.txt --verbose=1
+/usr/bin/cc    -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTryCompileExec3218958533.dir/CheckIncludeFiles.c.o  -o cmTryCompileExec3218958533  
+
+
+Determining if the pthread_create exist passed with the following output:
+Change Dir: /Users/squirrel_matrix/Desktop/Graphics/Lab7/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec3462572788/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec3462572788.dir/build.make CMakeFiles/cmTryCompileExec3462572788.dir/build
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_progress_report /Users/squirrel_matrix/Desktop/Graphics/Lab7/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3462572788.dir/CheckSymbolExists.c.o
+/usr/bin/cc   -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk   -o CMakeFiles/cmTryCompileExec3462572788.dir/CheckSymbolExists.c.o   -c /Users/squirrel_matrix/Desktop/Graphics/Lab7/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTryCompileExec3462572788
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3462572788.dir/link.txt --verbose=1
+/usr/bin/cc    -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTryCompileExec3462572788.dir/CheckSymbolExists.c.o  -o cmTryCompileExec3462572788  
+
+File /Users/squirrel_matrix/Desktop/Graphics/Lab7/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if files pthread.h exist passed with the following output:
+Change Dir: /Users/squirrel_matrix/Desktop/Graphics/Lab7/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec3206712501/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec3206712501.dir/build.make CMakeFiles/cmTryCompileExec3206712501.dir/build
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_progress_report /Users/squirrel_matrix/Desktop/Graphics/Lab7/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3206712501.dir/CheckIncludeFiles.c.o
+/usr/bin/cc   -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk   -o CMakeFiles/cmTryCompileExec3206712501.dir/CheckIncludeFiles.c.o   -c /Users/squirrel_matrix/Desktop/Graphics/Lab7/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
+Linking C executable cmTryCompileExec3206712501
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3206712501.dir/link.txt --verbose=1
+/usr/bin/cc    -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTryCompileExec3206712501.dir/CheckIncludeFiles.c.o  -o cmTryCompileExec3206712501  
+
+
+Determining if the pthread_create exist passed with the following output:
+Change Dir: /Users/squirrel_matrix/Desktop/Graphics/Lab7/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec63878251/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec63878251.dir/build.make CMakeFiles/cmTryCompileExec63878251.dir/build
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_progress_report /Users/squirrel_matrix/Desktop/Graphics/Lab7/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec63878251.dir/CheckSymbolExists.c.o
+/usr/bin/cc   -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk   -o CMakeFiles/cmTryCompileExec63878251.dir/CheckSymbolExists.c.o   -c /Users/squirrel_matrix/Desktop/Graphics/Lab7/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTryCompileExec63878251
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec63878251.dir/link.txt --verbose=1
+/usr/bin/cc    -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTryCompileExec63878251.dir/CheckSymbolExists.c.o  -o cmTryCompileExec63878251  
+
+File /Users/squirrel_matrix/Desktop/Graphics/Lab7/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if files pthread.h exist passed with the following output:
+Change Dir: /Users/squirrel_matrix/Desktop/graphics/Program3/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec942070141/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec942070141.dir/build.make CMakeFiles/cmTryCompileExec942070141.dir/build
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_progress_report /Users/squirrel_matrix/Desktop/graphics/Program3/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec942070141.dir/CheckIncludeFiles.c.o
+/usr/bin/cc   -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk   -o CMakeFiles/cmTryCompileExec942070141.dir/CheckIncludeFiles.c.o   -c /Users/squirrel_matrix/Desktop/graphics/Program3/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
+Linking C executable cmTryCompileExec942070141
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec942070141.dir/link.txt --verbose=1
+/usr/bin/cc    -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTryCompileExec942070141.dir/CheckIncludeFiles.c.o  -o cmTryCompileExec942070141  
+
+
+Determining if the pthread_create exist passed with the following output:
+Change Dir: /Users/squirrel_matrix/Desktop/graphics/Program3/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec4099045163/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec4099045163.dir/build.make CMakeFiles/cmTryCompileExec4099045163.dir/build
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_progress_report /Users/squirrel_matrix/Desktop/graphics/Program3/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec4099045163.dir/CheckSymbolExists.c.o
+/usr/bin/cc   -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk   -o CMakeFiles/cmTryCompileExec4099045163.dir/CheckSymbolExists.c.o   -c /Users/squirrel_matrix/Desktop/graphics/Program3/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTryCompileExec4099045163
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec4099045163.dir/link.txt --verbose=1
+/usr/bin/cc    -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTryCompileExec4099045163.dir/CheckSymbolExists.c.o  -o cmTryCompileExec4099045163  
+
+File /Users/squirrel_matrix/Desktop/graphics/Program3/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if files pthread.h exist passed with the following output:
+Change Dir: /Users/squirrel_matrix/Desktop/Graphics/Lab8/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec2344792382/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec2344792382.dir/build.make CMakeFiles/cmTryCompileExec2344792382.dir/build
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_progress_report /Users/squirrel_matrix/Desktop/Graphics/Lab8/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2344792382.dir/CheckIncludeFiles.c.o
+/usr/bin/cc   -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk   -o CMakeFiles/cmTryCompileExec2344792382.dir/CheckIncludeFiles.c.o   -c /Users/squirrel_matrix/Desktop/Graphics/Lab8/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
+Linking C executable cmTryCompileExec2344792382
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2344792382.dir/link.txt --verbose=1
+/usr/bin/cc    -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTryCompileExec2344792382.dir/CheckIncludeFiles.c.o  -o cmTryCompileExec2344792382  
+
+
+Determining if the pthread_create exist passed with the following output:
+Change Dir: /Users/squirrel_matrix/Desktop/Graphics/Lab8/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec16995700/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec16995700.dir/build.make CMakeFiles/cmTryCompileExec16995700.dir/build
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_progress_report /Users/squirrel_matrix/Desktop/Graphics/Lab8/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec16995700.dir/CheckSymbolExists.c.o
+/usr/bin/cc   -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk   -o CMakeFiles/cmTryCompileExec16995700.dir/CheckSymbolExists.c.o   -c /Users/squirrel_matrix/Desktop/Graphics/Lab8/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTryCompileExec16995700
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec16995700.dir/link.txt --verbose=1
+/usr/bin/cc    -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTryCompileExec16995700.dir/CheckSymbolExists.c.o  -o cmTryCompileExec16995700  
+
+File /Users/squirrel_matrix/Desktop/Graphics/Lab8/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if files pthread.h exist passed with the following output:
+Change Dir: /Users/squirrel_matrix/Desktop/Graphics/program4/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec3841295383/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec3841295383.dir/build.make CMakeFiles/cmTryCompileExec3841295383.dir/build
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_progress_report /Users/squirrel_matrix/Desktop/Graphics/program4/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3841295383.dir/CheckIncludeFiles.c.o
+/usr/bin/cc   -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk   -o CMakeFiles/cmTryCompileExec3841295383.dir/CheckIncludeFiles.c.o   -c /Users/squirrel_matrix/Desktop/Graphics/program4/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
+Linking C executable cmTryCompileExec3841295383
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3841295383.dir/link.txt --verbose=1
+/usr/bin/cc    -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTryCompileExec3841295383.dir/CheckIncludeFiles.c.o  -o cmTryCompileExec3841295383  
+
+
+Determining if the pthread_create exist passed with the following output:
+Change Dir: /Users/squirrel_matrix/Desktop/Graphics/program4/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec657701609/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec657701609.dir/build.make CMakeFiles/cmTryCompileExec657701609.dir/build
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_progress_report /Users/squirrel_matrix/Desktop/Graphics/program4/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec657701609.dir/CheckSymbolExists.c.o
+/usr/bin/cc   -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk   -o CMakeFiles/cmTryCompileExec657701609.dir/CheckSymbolExists.c.o   -c /Users/squirrel_matrix/Desktop/Graphics/program4/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTryCompileExec657701609
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec657701609.dir/link.txt --verbose=1
+/usr/bin/cc    -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTryCompileExec657701609.dir/CheckSymbolExists.c.o  -o cmTryCompileExec657701609  
+
+File /Users/squirrel_matrix/Desktop/Graphics/program4/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if files pthread.h exist passed with the following output:
+Change Dir: /Users/squirrel_matrix/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec2917607986/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec2917607986.dir/build.make CMakeFiles/cmTryCompileExec2917607986.dir/build
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_progress_report /Users/squirrel_matrix/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2917607986.dir/CheckIncludeFiles.c.o
+/usr/bin/cc   -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk   -o CMakeFiles/cmTryCompileExec2917607986.dir/CheckIncludeFiles.c.o   -c /Users/squirrel_matrix/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
+Linking C executable cmTryCompileExec2917607986
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2917607986.dir/link.txt --verbose=1
+/usr/bin/cc    -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTryCompileExec2917607986.dir/CheckIncludeFiles.c.o  -o cmTryCompileExec2917607986  
+
+
+Determining if the pthread_create exist passed with the following output:
+Change Dir: /Users/squirrel_matrix/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec1865867942/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec1865867942.dir/build.make CMakeFiles/cmTryCompileExec1865867942.dir/build
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_progress_report /Users/squirrel_matrix/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1865867942.dir/CheckSymbolExists.c.o
+/usr/bin/cc   -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk   -o CMakeFiles/cmTryCompileExec1865867942.dir/CheckSymbolExists.c.o   -c /Users/squirrel_matrix/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTryCompileExec1865867942
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1865867942.dir/link.txt --verbose=1
+/usr/bin/cc    -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTryCompileExec1865867942.dir/CheckSymbolExists.c.o  -o cmTryCompileExec1865867942  
+
+File /Users/squirrel_matrix/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+The system is: Linux - 3.13.0-46-generic - x86_64
+Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+Compiler: /usr/bin/cc 
+Build flags: 
+Id flags: 
+
+The output was:
+0
+
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.out"
+
+The C compiler identification is GNU, found in "/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/2.8.12.2/CompilerIdC/a.out"
+
+Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+Compiler: /usr/bin/c++ 
+Build flags: 
+Id flags: 
+
+The output was:
+0
+
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.out"
+
+The CXX compiler identification is GNU, found in "/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/2.8.12.2/CompilerIdCXX/a.out"
+
+Determining if the C compiler works passed with the following output:
+Change Dir: /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec317234138/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec317234138.dir/build.make CMakeFiles/cmTryCompileExec317234138.dir/build
+make[1]: Entering directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec317234138.dir/testCCompiler.c.o
+/usr/bin/cc    -o CMakeFiles/cmTryCompileExec317234138.dir/testCCompiler.c.o   -c /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/testCCompiler.c
+Linking C executable cmTryCompileExec317234138
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec317234138.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTryCompileExec317234138.dir/testCCompiler.c.o  -o cmTryCompileExec317234138 -rdynamic 
+make[1]: Leaving directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+
+
+Detecting C compiler ABI info compiled with the following output:
+Change Dir: /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1261581848/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1261581848.dir/build.make CMakeFiles/cmTryCompileExec1261581848.dir/build
+make[1]: Entering directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1261581848.dir/CMakeCCompilerABI.c.o
+/usr/bin/cc    -o CMakeFiles/cmTryCompileExec1261581848.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-2.8/Modules/CMakeCCompilerABI.c
+Linking C executable cmTryCompileExec1261581848
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1261581848.dir/link.txt --verbose=1
+/usr/bin/cc     -v CMakeFiles/cmTryCompileExec1261581848.dir/CMakeCCompilerABI.c.o  -o cmTryCompileExec1261581848 -rdynamic  
+Using built-in specs.
+COLLECT_GCC=/usr/bin/cc
+COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/4.8/lto-wrapper
+Target: x86_64-linux-gnu
+Configured with: ../src/configure -v --with-pkgversion='Ubuntu 4.8.2-19ubuntu1' --with-bugurl=file:///usr/share/doc/gcc-4.8/README.Bugs --enable-languages=c,c++,java,go,d,fortran,objc,obj-c++ --prefix=/usr --program-suffix=-4.8 --enable-shared --enable-linker-build-id --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --with-gxx-include-dir=/usr/include/c++/4.8 --libdir=/usr/lib --enable-nls --with-sysroot=/ --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --enable-gnu-unique-object --disable-libmudflap --enable-plugin --with-system-zlib --disable-browser-plugin --enable-java-awt=gtk --enable-gtk-cairo --with-java-home=/usr/lib/jvm/java-1.5.0-gcj-4.8-amd64/jre --enable-java-home --with-jvm-root-dir=/usr/lib/jvm/java-1.5.0-gcj-4.8-amd64 --with-jvm-jar-dir=/usr/lib/jvm-exports/java-1.5.0-gcj-4.8-amd64 --with-arch-directory=amd64 --with-ecj-jar=/usr/share/java/eclipse-ecj.jar --enable-objc-gc --enable-multiarch --disable-werror --with-arch-32=i686 --with-abi=m64 --with-multilib-list=m32,m64,mx32 --with-tune=generic --enable-checking=release --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu
+Thread model: posix
+gcc version 4.8.2 (Ubuntu 4.8.2-19ubuntu1) 
+COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/4.8/:/usr/lib/gcc/x86_64-linux-gnu/4.8/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/4.8/:/usr/lib/gcc/x86_64-linux-gnu/
+LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/4.8/:/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../:/lib/:/usr/lib/
+COLLECT_GCC_OPTIONS='-v' '-o' 'cmTryCompileExec1261581848' '-rdynamic' '-mtune=generic' '-march=x86-64'
+ /usr/lib/gcc/x86_64-linux-gnu/4.8/collect2 --sysroot=/ --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -z relro -o cmTryCompileExec1261581848 /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/crt1.o /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/4.8/crtbegin.o -L/usr/lib/gcc/x86_64-linux-gnu/4.8 -L/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/4.8/../../.. CMakeFiles/cmTryCompileExec1261581848.dir/CMakeCCompilerABI.c.o -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed /usr/lib/gcc/x86_64-linux-gnu/4.8/crtend.o /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/crtn.o
+make[1]: Leaving directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+
+
+Parsed C implicit link information from above output:
+  link line regex: [^( *|.*[/\])(ld|([^/\]+-)?ld|collect2)[^/\]*( |$)]
+  ignore line: [Change Dir: /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp]
+  ignore line: []
+  ignore line: [Run Build Command:/usr/bin/make "cmTryCompileExec1261581848/fast"]
+  ignore line: [/usr/bin/make -f CMakeFiles/cmTryCompileExec1261581848.dir/build.make CMakeFiles/cmTryCompileExec1261581848.dir/build]
+  ignore line: [make[1]: Entering directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp']
+  ignore line: [/usr/bin/cmake -E cmake_progress_report /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CMakeFiles 1]
+  ignore line: [Building C object CMakeFiles/cmTryCompileExec1261581848.dir/CMakeCCompilerABI.c.o]
+  ignore line: [/usr/bin/cc    -o CMakeFiles/cmTryCompileExec1261581848.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-2.8/Modules/CMakeCCompilerABI.c]
+  ignore line: [Linking C executable cmTryCompileExec1261581848]
+  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1261581848.dir/link.txt --verbose=1]
+  ignore line: [/usr/bin/cc     -v CMakeFiles/cmTryCompileExec1261581848.dir/CMakeCCompilerABI.c.o  -o cmTryCompileExec1261581848 -rdynamic  ]
+  ignore line: [Using built-in specs.]
+  ignore line: [COLLECT_GCC=/usr/bin/cc]
+  ignore line: [COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/4.8/lto-wrapper]
+  ignore line: [Target: x86_64-linux-gnu]
+  ignore line: [Configured with: ../src/configure -v --with-pkgversion='Ubuntu 4.8.2-19ubuntu1' --with-bugurl=file:///usr/share/doc/gcc-4.8/README.Bugs --enable-languages=c,c++,java,go,d,fortran,objc,obj-c++ --prefix=/usr --program-suffix=-4.8 --enable-shared --enable-linker-build-id --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --with-gxx-include-dir=/usr/include/c++/4.8 --libdir=/usr/lib --enable-nls --with-sysroot=/ --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --enable-gnu-unique-object --disable-libmudflap --enable-plugin --with-system-zlib --disable-browser-plugin --enable-java-awt=gtk --enable-gtk-cairo --with-java-home=/usr/lib/jvm/java-1.5.0-gcj-4.8-amd64/jre --enable-java-home --with-jvm-root-dir=/usr/lib/jvm/java-1.5.0-gcj-4.8-amd64 --with-jvm-jar-dir=/usr/lib/jvm-exports/java-1.5.0-gcj-4.8-amd64 --with-arch-directory=amd64 --with-ecj-jar=/usr/share/java/eclipse-ecj.jar --enable-objc-gc --enable-multiarch --disable-werror --with-arch-32=i686 --with-abi=m64 --with-multilib-list=m32,m64,mx32 --with-tune=generic --enable-checking=release --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu]
+  ignore line: [Thread model: posix]
+  ignore line: [gcc version 4.8.2 (Ubuntu 4.8.2-19ubuntu1) ]
+  ignore line: [COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/4.8/:/usr/lib/gcc/x86_64-linux-gnu/4.8/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/4.8/:/usr/lib/gcc/x86_64-linux-gnu/]
+  ignore line: [LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/4.8/:/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../:/lib/:/usr/lib/]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTryCompileExec1261581848' '-rdynamic' '-mtune=generic' '-march=x86-64']
+  link line: [ /usr/lib/gcc/x86_64-linux-gnu/4.8/collect2 --sysroot=/ --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -z relro -o cmTryCompileExec1261581848 /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/crt1.o /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/4.8/crtbegin.o -L/usr/lib/gcc/x86_64-linux-gnu/4.8 -L/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/4.8/../../.. CMakeFiles/cmTryCompileExec1261581848.dir/CMakeCCompilerABI.c.o -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed /usr/lib/gcc/x86_64-linux-gnu/4.8/crtend.o /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/crtn.o]
+    arg [/usr/lib/gcc/x86_64-linux-gnu/4.8/collect2] ==> ignore
+    arg [--sysroot=/] ==> ignore
+    arg [--build-id] ==> ignore
+    arg [--eh-frame-hdr] ==> ignore
+    arg [-m] ==> ignore
+    arg [elf_x86_64] ==> ignore
+    arg [--hash-style=gnu] ==> ignore
+    arg [--as-needed] ==> ignore
+    arg [-export-dynamic] ==> ignore
+    arg [-dynamic-linker] ==> ignore
+    arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
+    arg [-zrelro] ==> ignore
+    arg [-o] ==> ignore
+    arg [cmTryCompileExec1261581848] ==> ignore
+    arg [/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/crt1.o] ==> ignore
+    arg [/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/crti.o] ==> ignore
+    arg [/usr/lib/gcc/x86_64-linux-gnu/4.8/crtbegin.o] ==> ignore
+    arg [-L/usr/lib/gcc/x86_64-linux-gnu/4.8] ==> dir [/usr/lib/gcc/x86_64-linux-gnu/4.8]
+    arg [-L/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu] ==> dir [/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu]
+    arg [-L/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../../lib] ==> dir [/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../../lib]
+    arg [-L/lib/x86_64-linux-gnu] ==> dir [/lib/x86_64-linux-gnu]
+    arg [-L/lib/../lib] ==> dir [/lib/../lib]
+    arg [-L/usr/lib/x86_64-linux-gnu] ==> dir [/usr/lib/x86_64-linux-gnu]
+    arg [-L/usr/lib/../lib] ==> dir [/usr/lib/../lib]
+    arg [-L/usr/lib/gcc/x86_64-linux-gnu/4.8/../../..] ==> dir [/usr/lib/gcc/x86_64-linux-gnu/4.8/../../..]
+    arg [CMakeFiles/cmTryCompileExec1261581848.dir/CMakeCCompilerABI.c.o] ==> ignore
+    arg [-lgcc] ==> lib [gcc]
+    arg [--as-needed] ==> ignore
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [--no-as-needed] ==> ignore
+    arg [-lc] ==> lib [c]
+    arg [-lgcc] ==> lib [gcc]
+    arg [--as-needed] ==> ignore
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [--no-as-needed] ==> ignore
+    arg [/usr/lib/gcc/x86_64-linux-gnu/4.8/crtend.o] ==> ignore
+    arg [/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/crtn.o] ==> ignore
+  remove lib [gcc]
+  remove lib [gcc_s]
+  remove lib [gcc]
+  remove lib [gcc_s]
+  collapse library dir [/usr/lib/gcc/x86_64-linux-gnu/4.8] ==> [/usr/lib/gcc/x86_64-linux-gnu/4.8]
+  collapse library dir [/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu] ==> [/usr/lib/x86_64-linux-gnu]
+  collapse library dir [/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../../lib] ==> [/usr/lib]
+  collapse library dir [/lib/x86_64-linux-gnu] ==> [/lib/x86_64-linux-gnu]
+  collapse library dir [/lib/../lib] ==> [/lib]
+  collapse library dir [/usr/lib/x86_64-linux-gnu] ==> [/usr/lib/x86_64-linux-gnu]
+  collapse library dir [/usr/lib/../lib] ==> [/usr/lib]
+  collapse library dir [/usr/lib/gcc/x86_64-linux-gnu/4.8/../../..] ==> [/usr/lib]
+  implicit libs: [c]
+  implicit dirs: [/usr/lib/gcc/x86_64-linux-gnu/4.8;/usr/lib/x86_64-linux-gnu;/usr/lib;/lib/x86_64-linux-gnu;/lib]
+  implicit fwks: []
+
+
+Determining if the CXX compiler works passed with the following output:
+Change Dir: /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec3576940/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec3576940.dir/build.make CMakeFiles/cmTryCompileExec3576940.dir/build
+make[1]: Entering directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building CXX object CMakeFiles/cmTryCompileExec3576940.dir/testCXXCompiler.cxx.o
+/usr/bin/c++     -o CMakeFiles/cmTryCompileExec3576940.dir/testCXXCompiler.cxx.o -c /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/testCXXCompiler.cxx
+Linking CXX executable cmTryCompileExec3576940
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3576940.dir/link.txt --verbose=1
+/usr/bin/c++        CMakeFiles/cmTryCompileExec3576940.dir/testCXXCompiler.cxx.o  -o cmTryCompileExec3576940 -rdynamic 
+make[1]: Leaving directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+
+
+Detecting CXX compiler ABI info compiled with the following output:
+Change Dir: /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec2631231827/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec2631231827.dir/build.make CMakeFiles/cmTryCompileExec2631231827.dir/build
+make[1]: Entering directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building CXX object CMakeFiles/cmTryCompileExec2631231827.dir/CMakeCXXCompilerABI.cpp.o
+/usr/bin/c++     -o CMakeFiles/cmTryCompileExec2631231827.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-2.8/Modules/CMakeCXXCompilerABI.cpp
+Linking CXX executable cmTryCompileExec2631231827
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2631231827.dir/link.txt --verbose=1
+/usr/bin/c++      -v CMakeFiles/cmTryCompileExec2631231827.dir/CMakeCXXCompilerABI.cpp.o  -o cmTryCompileExec2631231827 -rdynamic  
+Using built-in specs.
+COLLECT_GCC=/usr/bin/c++
+COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/4.8/lto-wrapper
+Target: x86_64-linux-gnu
+Configured with: ../src/configure -v --with-pkgversion='Ubuntu 4.8.2-19ubuntu1' --with-bugurl=file:///usr/share/doc/gcc-4.8/README.Bugs --enable-languages=c,c++,java,go,d,fortran,objc,obj-c++ --prefix=/usr --program-suffix=-4.8 --enable-shared --enable-linker-build-id --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --with-gxx-include-dir=/usr/include/c++/4.8 --libdir=/usr/lib --enable-nls --with-sysroot=/ --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --enable-gnu-unique-object --disable-libmudflap --enable-plugin --with-system-zlib --disable-browser-plugin --enable-java-awt=gtk --enable-gtk-cairo --with-java-home=/usr/lib/jvm/java-1.5.0-gcj-4.8-amd64/jre --enable-java-home --with-jvm-root-dir=/usr/lib/jvm/java-1.5.0-gcj-4.8-amd64 --with-jvm-jar-dir=/usr/lib/jvm-exports/java-1.5.0-gcj-4.8-amd64 --with-arch-directory=amd64 --with-ecj-jar=/usr/share/java/eclipse-ecj.jar --enable-objc-gc --enable-multiarch --disable-werror --with-arch-32=i686 --with-abi=m64 --with-multilib-list=m32,m64,mx32 --with-tune=generic --enable-checking=release --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu
+Thread model: posix
+gcc version 4.8.2 (Ubuntu 4.8.2-19ubuntu1) 
+COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/4.8/:/usr/lib/gcc/x86_64-linux-gnu/4.8/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/4.8/:/usr/lib/gcc/x86_64-linux-gnu/
+LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/4.8/:/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../:/lib/:/usr/lib/
+COLLECT_GCC_OPTIONS='-v' '-o' 'cmTryCompileExec2631231827' '-rdynamic' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
+ /usr/lib/gcc/x86_64-linux-gnu/4.8/collect2 --sysroot=/ --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -z relro -o cmTryCompileExec2631231827 /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/crt1.o /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/4.8/crtbegin.o -L/usr/lib/gcc/x86_64-linux-gnu/4.8 -L/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/4.8/../../.. CMakeFiles/cmTryCompileExec2631231827.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-linux-gnu/4.8/crtend.o /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/crtn.o
+make[1]: Leaving directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+
+
+Parsed CXX implicit link information from above output:
+  link line regex: [^( *|.*[/\])(ld|([^/\]+-)?ld|collect2)[^/\]*( |$)]
+  ignore line: [Change Dir: /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp]
+  ignore line: []
+  ignore line: [Run Build Command:/usr/bin/make "cmTryCompileExec2631231827/fast"]
+  ignore line: [/usr/bin/make -f CMakeFiles/cmTryCompileExec2631231827.dir/build.make CMakeFiles/cmTryCompileExec2631231827.dir/build]
+  ignore line: [make[1]: Entering directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp']
+  ignore line: [/usr/bin/cmake -E cmake_progress_report /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CMakeFiles 1]
+  ignore line: [Building CXX object CMakeFiles/cmTryCompileExec2631231827.dir/CMakeCXXCompilerABI.cpp.o]
+  ignore line: [/usr/bin/c++     -o CMakeFiles/cmTryCompileExec2631231827.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-2.8/Modules/CMakeCXXCompilerABI.cpp]
+  ignore line: [Linking CXX executable cmTryCompileExec2631231827]
+  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2631231827.dir/link.txt --verbose=1]
+  ignore line: [/usr/bin/c++      -v CMakeFiles/cmTryCompileExec2631231827.dir/CMakeCXXCompilerABI.cpp.o  -o cmTryCompileExec2631231827 -rdynamic  ]
+  ignore line: [Using built-in specs.]
+  ignore line: [COLLECT_GCC=/usr/bin/c++]
+  ignore line: [COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/4.8/lto-wrapper]
+  ignore line: [Target: x86_64-linux-gnu]
+  ignore line: [Configured with: ../src/configure -v --with-pkgversion='Ubuntu 4.8.2-19ubuntu1' --with-bugurl=file:///usr/share/doc/gcc-4.8/README.Bugs --enable-languages=c,c++,java,go,d,fortran,objc,obj-c++ --prefix=/usr --program-suffix=-4.8 --enable-shared --enable-linker-build-id --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --with-gxx-include-dir=/usr/include/c++/4.8 --libdir=/usr/lib --enable-nls --with-sysroot=/ --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --enable-gnu-unique-object --disable-libmudflap --enable-plugin --with-system-zlib --disable-browser-plugin --enable-java-awt=gtk --enable-gtk-cairo --with-java-home=/usr/lib/jvm/java-1.5.0-gcj-4.8-amd64/jre --enable-java-home --with-jvm-root-dir=/usr/lib/jvm/java-1.5.0-gcj-4.8-amd64 --with-jvm-jar-dir=/usr/lib/jvm-exports/java-1.5.0-gcj-4.8-amd64 --with-arch-directory=amd64 --with-ecj-jar=/usr/share/java/eclipse-ecj.jar --enable-objc-gc --enable-multiarch --disable-werror --with-arch-32=i686 --with-abi=m64 --with-multilib-list=m32,m64,mx32 --with-tune=generic --enable-checking=release --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu]
+  ignore line: [Thread model: posix]
+  ignore line: [gcc version 4.8.2 (Ubuntu 4.8.2-19ubuntu1) ]
+  ignore line: [COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/4.8/:/usr/lib/gcc/x86_64-linux-gnu/4.8/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/4.8/:/usr/lib/gcc/x86_64-linux-gnu/]
+  ignore line: [LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/4.8/:/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../:/lib/:/usr/lib/]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTryCompileExec2631231827' '-rdynamic' '-shared-libgcc' '-mtune=generic' '-march=x86-64']
+  link line: [ /usr/lib/gcc/x86_64-linux-gnu/4.8/collect2 --sysroot=/ --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -z relro -o cmTryCompileExec2631231827 /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/crt1.o /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/4.8/crtbegin.o -L/usr/lib/gcc/x86_64-linux-gnu/4.8 -L/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/4.8/../../.. CMakeFiles/cmTryCompileExec2631231827.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-linux-gnu/4.8/crtend.o /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/crtn.o]
+    arg [/usr/lib/gcc/x86_64-linux-gnu/4.8/collect2] ==> ignore
+    arg [--sysroot=/] ==> ignore
+    arg [--build-id] ==> ignore
+    arg [--eh-frame-hdr] ==> ignore
+    arg [-m] ==> ignore
+    arg [elf_x86_64] ==> ignore
+    arg [--hash-style=gnu] ==> ignore
+    arg [--as-needed] ==> ignore
+    arg [-export-dynamic] ==> ignore
+    arg [-dynamic-linker] ==> ignore
+    arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
+    arg [-zrelro] ==> ignore
+    arg [-o] ==> ignore
+    arg [cmTryCompileExec2631231827] ==> ignore
+    arg [/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/crt1.o] ==> ignore
+    arg [/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/crti.o] ==> ignore
+    arg [/usr/lib/gcc/x86_64-linux-gnu/4.8/crtbegin.o] ==> ignore
+    arg [-L/usr/lib/gcc/x86_64-linux-gnu/4.8] ==> dir [/usr/lib/gcc/x86_64-linux-gnu/4.8]
+    arg [-L/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu] ==> dir [/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu]
+    arg [-L/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../../lib] ==> dir [/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../../lib]
+    arg [-L/lib/x86_64-linux-gnu] ==> dir [/lib/x86_64-linux-gnu]
+    arg [-L/lib/../lib] ==> dir [/lib/../lib]
+    arg [-L/usr/lib/x86_64-linux-gnu] ==> dir [/usr/lib/x86_64-linux-gnu]
+    arg [-L/usr/lib/../lib] ==> dir [/usr/lib/../lib]
+    arg [-L/usr/lib/gcc/x86_64-linux-gnu/4.8/../../..] ==> dir [/usr/lib/gcc/x86_64-linux-gnu/4.8/../../..]
+    arg [CMakeFiles/cmTryCompileExec2631231827.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+    arg [-lstdc++] ==> lib [stdc++]
+    arg [-lm] ==> lib [m]
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [-lgcc] ==> lib [gcc]
+    arg [-lc] ==> lib [c]
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [-lgcc] ==> lib [gcc]
+    arg [/usr/lib/gcc/x86_64-linux-gnu/4.8/crtend.o] ==> ignore
+    arg [/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/crtn.o] ==> ignore
+  remove lib [gcc_s]
+  remove lib [gcc]
+  remove lib [gcc_s]
+  remove lib [gcc]
+  collapse library dir [/usr/lib/gcc/x86_64-linux-gnu/4.8] ==> [/usr/lib/gcc/x86_64-linux-gnu/4.8]
+  collapse library dir [/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu] ==> [/usr/lib/x86_64-linux-gnu]
+  collapse library dir [/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../../lib] ==> [/usr/lib]
+  collapse library dir [/lib/x86_64-linux-gnu] ==> [/lib/x86_64-linux-gnu]
+  collapse library dir [/lib/../lib] ==> [/lib]
+  collapse library dir [/usr/lib/x86_64-linux-gnu] ==> [/usr/lib/x86_64-linux-gnu]
+  collapse library dir [/usr/lib/../lib] ==> [/usr/lib]
+  collapse library dir [/usr/lib/gcc/x86_64-linux-gnu/4.8/../../..] ==> [/usr/lib]
+  implicit libs: [stdc++;m;c]
+  implicit dirs: [/usr/lib/gcc/x86_64-linux-gnu/4.8;/usr/lib/x86_64-linux-gnu;/usr/lib;/lib/x86_64-linux-gnu;/lib]
+  implicit fwks: []
+
+
+Determining if the function XOpenDisplay exists in the /usr/lib/x86_64-linux-gnu/libX11.so;/usr/lib/x86_64-linux-gnu/libXext.so passed with the following output:
+Change Dir: /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1535386259/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1535386259.dir/build.make CMakeFiles/cmTryCompileExec1535386259.dir/build
+make[1]: Entering directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1535386259.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=XOpenDisplay   -o CMakeFiles/cmTryCompileExec1535386259.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec1535386259
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1535386259.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=XOpenDisplay    CMakeFiles/cmTryCompileExec1535386259.dir/CheckFunctionExists.c.o  -o cmTryCompileExec1535386259 -rdynamic -lX11 -lXext 
+make[1]: Leaving directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+
+
+Determining if the function gethostbyname exists passed with the following output:
+Change Dir: /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec2301455244/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec2301455244.dir/build.make CMakeFiles/cmTryCompileExec2301455244.dir/build
+make[1]: Entering directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2301455244.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=gethostbyname   -o CMakeFiles/cmTryCompileExec2301455244.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec2301455244
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2301455244.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=gethostbyname    CMakeFiles/cmTryCompileExec2301455244.dir/CheckFunctionExists.c.o  -o cmTryCompileExec2301455244 -rdynamic 
+make[1]: Leaving directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+
+
+Determining if the function connect exists passed with the following output:
+Change Dir: /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec997601620/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec997601620.dir/build.make CMakeFiles/cmTryCompileExec997601620.dir/build
+make[1]: Entering directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec997601620.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=connect   -o CMakeFiles/cmTryCompileExec997601620.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec997601620
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec997601620.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=connect    CMakeFiles/cmTryCompileExec997601620.dir/CheckFunctionExists.c.o  -o cmTryCompileExec997601620 -rdynamic 
+make[1]: Leaving directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+
+
+Determining if the function remove exists passed with the following output:
+Change Dir: /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec2301989388/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec2301989388.dir/build.make CMakeFiles/cmTryCompileExec2301989388.dir/build
+make[1]: Entering directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2301989388.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=remove   -o CMakeFiles/cmTryCompileExec2301989388.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec2301989388
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2301989388.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=remove    CMakeFiles/cmTryCompileExec2301989388.dir/CheckFunctionExists.c.o  -o cmTryCompileExec2301989388 -rdynamic 
+make[1]: Leaving directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+
+
+Determining if the function shmat exists passed with the following output:
+Change Dir: /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec2169399121/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec2169399121.dir/build.make CMakeFiles/cmTryCompileExec2169399121.dir/build
+make[1]: Entering directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2169399121.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=shmat   -o CMakeFiles/cmTryCompileExec2169399121.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec2169399121
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2169399121.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=shmat    CMakeFiles/cmTryCompileExec2169399121.dir/CheckFunctionExists.c.o  -o cmTryCompileExec2169399121 -rdynamic 
+make[1]: Leaving directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+
+
+Determining if the function IceConnectionNumber exists in the ICE passed with the following output:
+Change Dir: /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1347243613/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1347243613.dir/build.make CMakeFiles/cmTryCompileExec1347243613.dir/build
+make[1]: Entering directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1347243613.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=IceConnectionNumber   -o CMakeFiles/cmTryCompileExec1347243613.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec1347243613
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1347243613.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=IceConnectionNumber    CMakeFiles/cmTryCompileExec1347243613.dir/CheckFunctionExists.c.o  -o cmTryCompileExec1347243613 -rdynamic -lICE 
+make[1]: Leaving directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+
+
+Determining if files pthread.h exist passed with the following output:
+Change Dir: /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec509720306/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec509720306.dir/build.make CMakeFiles/cmTryCompileExec509720306.dir/build
+make[1]: Entering directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec509720306.dir/CheckIncludeFiles.c.o
+/usr/bin/cc    -o CMakeFiles/cmTryCompileExec509720306.dir/CheckIncludeFiles.c.o   -c /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
+Linking C executable cmTryCompileExec509720306
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec509720306.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTryCompileExec509720306.dir/CheckIncludeFiles.c.o  -o cmTryCompileExec509720306 -rdynamic 
+make[1]: Leaving directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+
+
+Determining if the function pthread_create exists in the pthread passed with the following output:
+Change Dir: /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec613967280/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec613967280.dir/build.make CMakeFiles/cmTryCompileExec613967280.dir/build
+make[1]: Entering directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec613967280.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTryCompileExec613967280.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec613967280
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec613967280.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTryCompileExec613967280.dir/CheckFunctionExists.c.o  -o cmTryCompileExec613967280 -rdynamic -lpthread 
+make[1]: Leaving directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+
+
+Determining if the function glXGetProcAddress exists passed with the following output:
+Change Dir: /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec2164461603/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec2164461603.dir/build.make CMakeFiles/cmTryCompileExec2164461603.dir/build
+make[1]: Entering directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2164461603.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=glXGetProcAddress   -o CMakeFiles/cmTryCompileExec2164461603.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec2164461603
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2164461603.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=glXGetProcAddress    CMakeFiles/cmTryCompileExec2164461603.dir/CheckFunctionExists.c.o  -o cmTryCompileExec2164461603 -rdynamic -lGL 
+make[1]: Leaving directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+
+
+Determining if the function glXGetProcAddressARB exists passed with the following output:
+Change Dir: /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec217457934/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec217457934.dir/build.make CMakeFiles/cmTryCompileExec217457934.dir/build
+make[1]: Entering directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec217457934.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=glXGetProcAddressARB   -o CMakeFiles/cmTryCompileExec217457934.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec217457934
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec217457934.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=glXGetProcAddressARB    CMakeFiles/cmTryCompileExec217457934.dir/CheckFunctionExists.c.o  -o cmTryCompileExec217457934 -rdynamic -lGL 
+make[1]: Leaving directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+
+
+Determining if the function XOpenDisplay exists in the /usr/lib/x86_64-linux-gnu/libX11.so;/usr/lib/x86_64-linux-gnu/libXext.so passed with the following output:
+Change Dir: /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec4213832034/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec4213832034.dir/build.make CMakeFiles/cmTryCompileExec4213832034.dir/build
+make[1]: Entering directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec4213832034.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=XOpenDisplay   -o CMakeFiles/cmTryCompileExec4213832034.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec4213832034
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec4213832034.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=XOpenDisplay    CMakeFiles/cmTryCompileExec4213832034.dir/CheckFunctionExists.c.o  -o cmTryCompileExec4213832034 -rdynamic -lX11 -lXext 
+make[1]: Leaving directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+
+
+Determining if the function gethostbyname exists passed with the following output:
+Change Dir: /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec3585218707/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec3585218707.dir/build.make CMakeFiles/cmTryCompileExec3585218707.dir/build
+make[1]: Entering directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3585218707.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=gethostbyname   -o CMakeFiles/cmTryCompileExec3585218707.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec3585218707
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3585218707.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=gethostbyname    CMakeFiles/cmTryCompileExec3585218707.dir/CheckFunctionExists.c.o  -o cmTryCompileExec3585218707 -rdynamic 
+make[1]: Leaving directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+
+
+Determining if the function connect exists passed with the following output:
+Change Dir: /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec2554616043/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec2554616043.dir/build.make CMakeFiles/cmTryCompileExec2554616043.dir/build
+make[1]: Entering directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2554616043.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=connect   -o CMakeFiles/cmTryCompileExec2554616043.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec2554616043
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2554616043.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=connect    CMakeFiles/cmTryCompileExec2554616043.dir/CheckFunctionExists.c.o  -o cmTryCompileExec2554616043 -rdynamic 
+make[1]: Leaving directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+
+
+Determining if the function remove exists passed with the following output:
+Change Dir: /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec452991566/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec452991566.dir/build.make CMakeFiles/cmTryCompileExec452991566.dir/build
+make[1]: Entering directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec452991566.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=remove   -o CMakeFiles/cmTryCompileExec452991566.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec452991566
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec452991566.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=remove    CMakeFiles/cmTryCompileExec452991566.dir/CheckFunctionExists.c.o  -o cmTryCompileExec452991566 -rdynamic 
+make[1]: Leaving directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+
+
+Determining if the function shmat exists passed with the following output:
+Change Dir: /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec810260105/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec810260105.dir/build.make CMakeFiles/cmTryCompileExec810260105.dir/build
+make[1]: Entering directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec810260105.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=shmat   -o CMakeFiles/cmTryCompileExec810260105.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec810260105
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec810260105.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=shmat    CMakeFiles/cmTryCompileExec810260105.dir/CheckFunctionExists.c.o  -o cmTryCompileExec810260105 -rdynamic 
+make[1]: Leaving directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+
+
+Determining if the function IceConnectionNumber exists in the ICE passed with the following output:
+Change Dir: /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1669445430/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1669445430.dir/build.make CMakeFiles/cmTryCompileExec1669445430.dir/build
+make[1]: Entering directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1669445430.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=IceConnectionNumber   -o CMakeFiles/cmTryCompileExec1669445430.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec1669445430
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1669445430.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=IceConnectionNumber    CMakeFiles/cmTryCompileExec1669445430.dir/CheckFunctionExists.c.o  -o cmTryCompileExec1669445430 -rdynamic -lICE 
+make[1]: Leaving directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+
+
+Determining if files pthread.h exist passed with the following output:
+Change Dir: /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec3372741412/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec3372741412.dir/build.make CMakeFiles/cmTryCompileExec3372741412.dir/build
+make[1]: Entering directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3372741412.dir/CheckIncludeFiles.c.o
+/usr/bin/cc    -o CMakeFiles/cmTryCompileExec3372741412.dir/CheckIncludeFiles.c.o   -c /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
+Linking C executable cmTryCompileExec3372741412
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3372741412.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTryCompileExec3372741412.dir/CheckIncludeFiles.c.o  -o cmTryCompileExec3372741412 -rdynamic 
+make[1]: Leaving directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+
+
+Determining if the function pthread_create exists in the pthread passed with the following output:
+Change Dir: /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec3875601254/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec3875601254.dir/build.make CMakeFiles/cmTryCompileExec3875601254.dir/build
+make[1]: Entering directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3875601254.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTryCompileExec3875601254.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec3875601254
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3875601254.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTryCompileExec3875601254.dir/CheckFunctionExists.c.o  -o cmTryCompileExec3875601254 -rdynamic -lpthread 
+make[1]: Leaving directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+
+
+Determining if the function glXGetProcAddress exists passed with the following output:
+Change Dir: /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec564097074/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec564097074.dir/build.make CMakeFiles/cmTryCompileExec564097074.dir/build
+make[1]: Entering directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec564097074.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=glXGetProcAddress   -o CMakeFiles/cmTryCompileExec564097074.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec564097074
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec564097074.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=glXGetProcAddress    CMakeFiles/cmTryCompileExec564097074.dir/CheckFunctionExists.c.o  -o cmTryCompileExec564097074 -rdynamic -lGL 
+make[1]: Leaving directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+
+
+Determining if the function glXGetProcAddressARB exists passed with the following output:
+Change Dir: /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec3528394526/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec3528394526.dir/build.make CMakeFiles/cmTryCompileExec3528394526.dir/build
+make[1]: Entering directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3528394526.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=glXGetProcAddressARB   -o CMakeFiles/cmTryCompileExec3528394526.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec3528394526
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3528394526.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=glXGetProcAddressARB    CMakeFiles/cmTryCompileExec3528394526.dir/CheckFunctionExists.c.o  -o cmTryCompileExec3528394526 -rdynamic -lGL 
+make[1]: Leaving directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+
+
+Determining if files pthread.h exist passed with the following output:
+Change Dir: /Users/squirrel_matrix/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec3704557797/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec3704557797.dir/build.make CMakeFiles/cmTryCompileExec3704557797.dir/build
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_progress_report /Users/squirrel_matrix/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3704557797.dir/CheckIncludeFiles.c.o
+/usr/bin/cc   -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk   -o CMakeFiles/cmTryCompileExec3704557797.dir/CheckIncludeFiles.c.o   -c /Users/squirrel_matrix/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
+Linking C executable cmTryCompileExec3704557797
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3704557797.dir/link.txt --verbose=1
+/usr/bin/cc    -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTryCompileExec3704557797.dir/CheckIncludeFiles.c.o  -o cmTryCompileExec3704557797  
+
+
+Determining if the pthread_create exist passed with the following output:
+Change Dir: /Users/squirrel_matrix/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec739809366/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec739809366.dir/build.make CMakeFiles/cmTryCompileExec739809366.dir/build
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_progress_report /Users/squirrel_matrix/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec739809366.dir/CheckSymbolExists.c.o
+/usr/bin/cc   -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk   -o CMakeFiles/cmTryCompileExec739809366.dir/CheckSymbolExists.c.o   -c /Users/squirrel_matrix/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTryCompileExec739809366
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec739809366.dir/link.txt --verbose=1
+/usr/bin/cc    -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTryCompileExec739809366.dir/CheckSymbolExists.c.o  -o cmTryCompileExec739809366  
+
+File /Users/squirrel_matrix/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function XOpenDisplay exists in the /usr/lib/x86_64-linux-gnu/libX11.so;/usr/lib/x86_64-linux-gnu/libXext.so passed with the following output:
+Change Dir: /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1943114423/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1943114423.dir/build.make CMakeFiles/cmTryCompileExec1943114423.dir/build
+make[1]: Entering directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1943114423.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=XOpenDisplay   -o CMakeFiles/cmTryCompileExec1943114423.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec1943114423
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1943114423.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=XOpenDisplay    CMakeFiles/cmTryCompileExec1943114423.dir/CheckFunctionExists.c.o  -o cmTryCompileExec1943114423 -rdynamic -lX11 -lXext 
+make[1]: Leaving directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+
+
+Determining if the function gethostbyname exists passed with the following output:
+Change Dir: /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1121605841/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1121605841.dir/build.make CMakeFiles/cmTryCompileExec1121605841.dir/build
+make[1]: Entering directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1121605841.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=gethostbyname   -o CMakeFiles/cmTryCompileExec1121605841.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec1121605841
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1121605841.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=gethostbyname    CMakeFiles/cmTryCompileExec1121605841.dir/CheckFunctionExists.c.o  -o cmTryCompileExec1121605841 -rdynamic 
+make[1]: Leaving directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+
+
+Determining if the function connect exists passed with the following output:
+Change Dir: /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1464952535/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1464952535.dir/build.make CMakeFiles/cmTryCompileExec1464952535.dir/build
+make[1]: Entering directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1464952535.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=connect   -o CMakeFiles/cmTryCompileExec1464952535.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec1464952535
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1464952535.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=connect    CMakeFiles/cmTryCompileExec1464952535.dir/CheckFunctionExists.c.o  -o cmTryCompileExec1464952535 -rdynamic 
+make[1]: Leaving directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+
+
+Determining if the function remove exists passed with the following output:
+Change Dir: /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec3062237391/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec3062237391.dir/build.make CMakeFiles/cmTryCompileExec3062237391.dir/build
+make[1]: Entering directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3062237391.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=remove   -o CMakeFiles/cmTryCompileExec3062237391.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec3062237391
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3062237391.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=remove    CMakeFiles/cmTryCompileExec3062237391.dir/CheckFunctionExists.c.o  -o cmTryCompileExec3062237391 -rdynamic 
+make[1]: Leaving directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+
+
+Determining if the function shmat exists passed with the following output:
+Change Dir: /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec166015475/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec166015475.dir/build.make CMakeFiles/cmTryCompileExec166015475.dir/build
+make[1]: Entering directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec166015475.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=shmat   -o CMakeFiles/cmTryCompileExec166015475.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec166015475
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec166015475.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=shmat    CMakeFiles/cmTryCompileExec166015475.dir/CheckFunctionExists.c.o  -o cmTryCompileExec166015475 -rdynamic 
+make[1]: Leaving directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+
+
+Determining if the function IceConnectionNumber exists in the ICE passed with the following output:
+Change Dir: /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec2859371222/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec2859371222.dir/build.make CMakeFiles/cmTryCompileExec2859371222.dir/build
+make[1]: Entering directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2859371222.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=IceConnectionNumber   -o CMakeFiles/cmTryCompileExec2859371222.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec2859371222
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2859371222.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=IceConnectionNumber    CMakeFiles/cmTryCompileExec2859371222.dir/CheckFunctionExists.c.o  -o cmTryCompileExec2859371222 -rdynamic -lICE 
+make[1]: Leaving directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+
+
+Determining if files pthread.h exist passed with the following output:
+Change Dir: /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1944771238/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1944771238.dir/build.make CMakeFiles/cmTryCompileExec1944771238.dir/build
+make[1]: Entering directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1944771238.dir/CheckIncludeFiles.c.o
+/usr/bin/cc    -o CMakeFiles/cmTryCompileExec1944771238.dir/CheckIncludeFiles.c.o   -c /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
+Linking C executable cmTryCompileExec1944771238
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1944771238.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTryCompileExec1944771238.dir/CheckIncludeFiles.c.o  -o cmTryCompileExec1944771238 -rdynamic 
+make[1]: Leaving directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+
+
+Determining if the function pthread_create exists in the pthread passed with the following output:
+Change Dir: /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec3925638906/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec3925638906.dir/build.make CMakeFiles/cmTryCompileExec3925638906.dir/build
+make[1]: Entering directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3925638906.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTryCompileExec3925638906.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec3925638906
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3925638906.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTryCompileExec3925638906.dir/CheckFunctionExists.c.o  -o cmTryCompileExec3925638906 -rdynamic -lpthread 
+make[1]: Leaving directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+
+
+Determining if the function glXGetProcAddress exists passed with the following output:
+Change Dir: /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1301166602/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1301166602.dir/build.make CMakeFiles/cmTryCompileExec1301166602.dir/build
+make[1]: Entering directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1301166602.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=glXGetProcAddress   -o CMakeFiles/cmTryCompileExec1301166602.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec1301166602
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1301166602.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=glXGetProcAddress    CMakeFiles/cmTryCompileExec1301166602.dir/CheckFunctionExists.c.o  -o cmTryCompileExec1301166602 -rdynamic -lGL 
+make[1]: Leaving directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+
+
+Determining if the function glXGetProcAddressARB exists passed with the following output:
+Change Dir: /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1866061298/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1866061298.dir/build.make CMakeFiles/cmTryCompileExec1866061298.dir/build
+make[1]: Entering directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1866061298.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=glXGetProcAddressARB   -o CMakeFiles/cmTryCompileExec1866061298.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec1866061298
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1866061298.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=glXGetProcAddressARB    CMakeFiles/cmTryCompileExec1866061298.dir/CheckFunctionExists.c.o  -o cmTryCompileExec1866061298 -rdynamic -lGL 
+make[1]: Leaving directory `/home/gsuspy/Desktop/Graphics/FinalProject/CMakeFiles/CMakeTmp'
+
+
+Determining if files pthread.h exist passed with the following output:
+Change Dir: /Users/squirrel_matrix/Desktop/graphics/FinalProject/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec2952156122/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec2952156122.dir/build.make CMakeFiles/cmTryCompileExec2952156122.dir/build
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_progress_report /Users/squirrel_matrix/Desktop/graphics/FinalProject/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2952156122.dir/CheckIncludeFiles.c.o
+/usr/bin/cc   -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk   -o CMakeFiles/cmTryCompileExec2952156122.dir/CheckIncludeFiles.c.o   -c /Users/squirrel_matrix/Desktop/graphics/FinalProject/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
+Linking C executable cmTryCompileExec2952156122
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2952156122.dir/link.txt --verbose=1
+/usr/bin/cc    -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTryCompileExec2952156122.dir/CheckIncludeFiles.c.o  -o cmTryCompileExec2952156122  
+
+
+Determining if the pthread_create exist passed with the following output:
+Change Dir: /Users/squirrel_matrix/Desktop/graphics/FinalProject/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec250345445/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec250345445.dir/build.make CMakeFiles/cmTryCompileExec250345445.dir/build
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_progress_report /Users/squirrel_matrix/Desktop/graphics/FinalProject/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec250345445.dir/CheckSymbolExists.c.o
+/usr/bin/cc   -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk   -o CMakeFiles/cmTryCompileExec250345445.dir/CheckSymbolExists.c.o   -c /Users/squirrel_matrix/Desktop/graphics/FinalProject/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTryCompileExec250345445
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec250345445.dir/link.txt --verbose=1
+/usr/bin/cc    -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTryCompileExec250345445.dir/CheckSymbolExists.c.o  -o cmTryCompileExec250345445  
+
+File /Users/squirrel_matrix/Desktop/graphics/FinalProject/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if files pthread.h exist passed with the following output:
+Change Dir: /Users/squirrel_matrix/Desktop/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec3259509605/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec3259509605.dir/build.make CMakeFiles/cmTryCompileExec3259509605.dir/build
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_progress_report /Users/squirrel_matrix/Desktop/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3259509605.dir/CheckIncludeFiles.c.o
+/usr/bin/cc    -o CMakeFiles/cmTryCompileExec3259509605.dir/CheckIncludeFiles.c.o   -c /Users/squirrel_matrix/Desktop/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
+Linking C executable cmTryCompileExec3259509605
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3259509605.dir/link.txt --verbose=1
+/usr/bin/cc    -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTryCompileExec3259509605.dir/CheckIncludeFiles.c.o  -o cmTryCompileExec3259509605  
+
+
+Determining if the pthread_create exist passed with the following output:
+Change Dir: /Users/squirrel_matrix/Desktop/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec1575964054/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec1575964054.dir/build.make CMakeFiles/cmTryCompileExec1575964054.dir/build
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_progress_report /Users/squirrel_matrix/Desktop/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1575964054.dir/CheckSymbolExists.c.o
+/usr/bin/cc    -o CMakeFiles/cmTryCompileExec1575964054.dir/CheckSymbolExists.c.o   -c /Users/squirrel_matrix/Desktop/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTryCompileExec1575964054
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1575964054.dir/link.txt --verbose=1
+/usr/bin/cc    -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTryCompileExec1575964054.dir/CheckSymbolExists.c.o  -o cmTryCompileExec1575964054  
+
+File /Users/squirrel_matrix/Desktop/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if files pthread.h exist passed with the following output:
+Change Dir: /Users/squirrel_matrix/Desktop/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec751729961/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec751729961.dir/build.make CMakeFiles/cmTryCompileExec751729961.dir/build
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_progress_report /Users/squirrel_matrix/Desktop/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec751729961.dir/CheckIncludeFiles.c.o
+/usr/bin/cc    -o CMakeFiles/cmTryCompileExec751729961.dir/CheckIncludeFiles.c.o   -c /Users/squirrel_matrix/Desktop/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
+Linking C executable cmTryCompileExec751729961
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec751729961.dir/link.txt --verbose=1
+/usr/bin/cc    -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTryCompileExec751729961.dir/CheckIncludeFiles.c.o  -o cmTryCompileExec751729961  
+
+
+Determining if the pthread_create exist passed with the following output:
+Change Dir: /Users/squirrel_matrix/Desktop/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec3582446289/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec3582446289.dir/build.make CMakeFiles/cmTryCompileExec3582446289.dir/build
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_progress_report /Users/squirrel_matrix/Desktop/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3582446289.dir/CheckSymbolExists.c.o
+/usr/bin/cc    -o CMakeFiles/cmTryCompileExec3582446289.dir/CheckSymbolExists.c.o   -c /Users/squirrel_matrix/Desktop/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTryCompileExec3582446289
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3582446289.dir/link.txt --verbose=1
+/usr/bin/cc    -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTryCompileExec3582446289.dir/CheckSymbolExists.c.o  -o cmTryCompileExec3582446289  
+
+File /Users/squirrel_matrix/Desktop/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if files pthread.h exist passed with the following output:
+Change Dir: /Users/squirrel_matrix/Desktop/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec1892661811/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec1892661811.dir/build.make CMakeFiles/cmTryCompileExec1892661811.dir/build
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_progress_report /Users/squirrel_matrix/Desktop/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1892661811.dir/CheckIncludeFiles.c.o
+/usr/bin/cc    -o CMakeFiles/cmTryCompileExec1892661811.dir/CheckIncludeFiles.c.o   -c /Users/squirrel_matrix/Desktop/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
+Linking C executable cmTryCompileExec1892661811
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1892661811.dir/link.txt --verbose=1
+/usr/bin/cc    -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTryCompileExec1892661811.dir/CheckIncludeFiles.c.o  -o cmTryCompileExec1892661811  
+
+
+Determining if the pthread_create exist passed with the following output:
+Change Dir: /Users/squirrel_matrix/Desktop/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec120578237/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec120578237.dir/build.make CMakeFiles/cmTryCompileExec120578237.dir/build
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_progress_report /Users/squirrel_matrix/Desktop/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec120578237.dir/CheckSymbolExists.c.o
+/usr/bin/cc    -o CMakeFiles/cmTryCompileExec120578237.dir/CheckSymbolExists.c.o   -c /Users/squirrel_matrix/Desktop/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTryCompileExec120578237
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec120578237.dir/link.txt --verbose=1
+/usr/bin/cc    -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTryCompileExec120578237.dir/CheckSymbolExists.c.o  -o cmTryCompileExec120578237  
+
+File /Users/squirrel_matrix/Desktop/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if files pthread.h exist passed with the following output:
+Change Dir: /Users/squirrel_matrix/Desktop/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec4169953373/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec4169953373.dir/build.make CMakeFiles/cmTryCompileExec4169953373.dir/build
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_progress_report /Users/squirrel_matrix/Desktop/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec4169953373.dir/CheckIncludeFiles.c.o
+/usr/bin/cc    -o CMakeFiles/cmTryCompileExec4169953373.dir/CheckIncludeFiles.c.o   -c /Users/squirrel_matrix/Desktop/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
+Linking C executable cmTryCompileExec4169953373
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec4169953373.dir/link.txt --verbose=1
+/usr/bin/cc    -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTryCompileExec4169953373.dir/CheckIncludeFiles.c.o  -o cmTryCompileExec4169953373  
+
+
+Determining if the pthread_create exist passed with the following output:
+Change Dir: /Users/squirrel_matrix/Desktop/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec3425492139/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec3425492139.dir/build.make CMakeFiles/cmTryCompileExec3425492139.dir/build
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_progress_report /Users/squirrel_matrix/Desktop/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3425492139.dir/CheckSymbolExists.c.o
+/usr/bin/cc    -o CMakeFiles/cmTryCompileExec3425492139.dir/CheckSymbolExists.c.o   -c /Users/squirrel_matrix/Desktop/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTryCompileExec3425492139
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3425492139.dir/link.txt --verbose=1
+/usr/bin/cc    -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTryCompileExec3425492139.dir/CheckSymbolExists.c.o  -o cmTryCompileExec3425492139  
+
+File /Users/squirrel_matrix/Desktop/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if files pthread.h exist passed with the following output:
+Change Dir: /Users/squirrel_matrix/Desktop/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec1472371110/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec1472371110.dir/build.make CMakeFiles/cmTryCompileExec1472371110.dir/build
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_progress_report /Users/squirrel_matrix/Desktop/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1472371110.dir/CheckIncludeFiles.c.o
+/usr/bin/cc    -o CMakeFiles/cmTryCompileExec1472371110.dir/CheckIncludeFiles.c.o   -c /Users/squirrel_matrix/Desktop/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
+Linking C executable cmTryCompileExec1472371110
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1472371110.dir/link.txt --verbose=1
+/usr/bin/cc    -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTryCompileExec1472371110.dir/CheckIncludeFiles.c.o  -o cmTryCompileExec1472371110  
+
+
+Determining if the pthread_create exist passed with the following output:
+Change Dir: /Users/squirrel_matrix/Desktop/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec2496129309/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTryCompileExec2496129309.dir/build.make CMakeFiles/cmTryCompileExec2496129309.dir/build
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_progress_report /Users/squirrel_matrix/Desktop/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2496129309.dir/CheckSymbolExists.c.o
+/usr/bin/cc    -o CMakeFiles/cmTryCompileExec2496129309.dir/CheckSymbolExists.c.o   -c /Users/squirrel_matrix/Desktop/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTryCompileExec2496129309
+/usr/local/Cellar/cmake/3.1.0/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2496129309.dir/link.txt --verbose=1
+/usr/bin/cc    -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTryCompileExec2496129309.dir/CheckSymbolExists.c.o  -o cmTryCompileExec2496129309  
+
+File /Users/squirrel_matrix/Desktop/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function XOpenDisplay exists in the /usr/lib/x86_64-linux-gnu/libX11.so;/usr/lib/x86_64-linux-gnu/libXext.so passed with the following output:
+Change Dir: /home/gsuspy/cpe476/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1180349109/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1180349109.dir/build.make CMakeFiles/cmTryCompileExec1180349109.dir/build
+make[1]: Entering directory `/home/gsuspy/cpe476/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/gsuspy/cpe476/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1180349109.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=XOpenDisplay   -o CMakeFiles/cmTryCompileExec1180349109.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec1180349109
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1180349109.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=XOpenDisplay    CMakeFiles/cmTryCompileExec1180349109.dir/CheckFunctionExists.c.o  -o cmTryCompileExec1180349109 -rdynamic -lX11 -lXext 
+make[1]: Leaving directory `/home/gsuspy/cpe476/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp'
+
+
+Determining if the function gethostbyname exists passed with the following output:
+Change Dir: /home/gsuspy/cpe476/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec2500985065/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec2500985065.dir/build.make CMakeFiles/cmTryCompileExec2500985065.dir/build
+make[1]: Entering directory `/home/gsuspy/cpe476/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/gsuspy/cpe476/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2500985065.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=gethostbyname   -o CMakeFiles/cmTryCompileExec2500985065.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec2500985065
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2500985065.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=gethostbyname    CMakeFiles/cmTryCompileExec2500985065.dir/CheckFunctionExists.c.o  -o cmTryCompileExec2500985065 -rdynamic 
+make[1]: Leaving directory `/home/gsuspy/cpe476/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp'
+
+
+Determining if the function connect exists passed with the following output:
+Change Dir: /home/gsuspy/cpe476/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1282382823/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1282382823.dir/build.make CMakeFiles/cmTryCompileExec1282382823.dir/build
+make[1]: Entering directory `/home/gsuspy/cpe476/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/gsuspy/cpe476/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1282382823.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=connect   -o CMakeFiles/cmTryCompileExec1282382823.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec1282382823
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1282382823.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=connect    CMakeFiles/cmTryCompileExec1282382823.dir/CheckFunctionExists.c.o  -o cmTryCompileExec1282382823 -rdynamic 
+make[1]: Leaving directory `/home/gsuspy/cpe476/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp'
+
+
+Determining if the function remove exists passed with the following output:
+Change Dir: /home/gsuspy/cpe476/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec2220492024/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec2220492024.dir/build.make CMakeFiles/cmTryCompileExec2220492024.dir/build
+make[1]: Entering directory `/home/gsuspy/cpe476/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/gsuspy/cpe476/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2220492024.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=remove   -o CMakeFiles/cmTryCompileExec2220492024.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec2220492024
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2220492024.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=remove    CMakeFiles/cmTryCompileExec2220492024.dir/CheckFunctionExists.c.o  -o cmTryCompileExec2220492024 -rdynamic 
+make[1]: Leaving directory `/home/gsuspy/cpe476/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp'
+
+
+Determining if the function shmat exists passed with the following output:
+Change Dir: /home/gsuspy/cpe476/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec3105908079/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec3105908079.dir/build.make CMakeFiles/cmTryCompileExec3105908079.dir/build
+make[1]: Entering directory `/home/gsuspy/cpe476/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/gsuspy/cpe476/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3105908079.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=shmat   -o CMakeFiles/cmTryCompileExec3105908079.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec3105908079
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3105908079.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=shmat    CMakeFiles/cmTryCompileExec3105908079.dir/CheckFunctionExists.c.o  -o cmTryCompileExec3105908079 -rdynamic 
+make[1]: Leaving directory `/home/gsuspy/cpe476/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp'
+
+
+Determining if the function IceConnectionNumber exists in the ICE passed with the following output:
+Change Dir: /home/gsuspy/cpe476/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec3314873067/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec3314873067.dir/build.make CMakeFiles/cmTryCompileExec3314873067.dir/build
+make[1]: Entering directory `/home/gsuspy/cpe476/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/gsuspy/cpe476/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3314873067.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=IceConnectionNumber   -o CMakeFiles/cmTryCompileExec3314873067.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec3314873067
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3314873067.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=IceConnectionNumber    CMakeFiles/cmTryCompileExec3314873067.dir/CheckFunctionExists.c.o  -o cmTryCompileExec3314873067 -rdynamic -lICE 
+make[1]: Leaving directory `/home/gsuspy/cpe476/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp'
+
+
+Determining if files pthread.h exist passed with the following output:
+Change Dir: /home/gsuspy/cpe476/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec2309591310/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec2309591310.dir/build.make CMakeFiles/cmTryCompileExec2309591310.dir/build
+make[1]: Entering directory `/home/gsuspy/cpe476/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/gsuspy/cpe476/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2309591310.dir/CheckIncludeFiles.c.o
+/usr/bin/cc    -o CMakeFiles/cmTryCompileExec2309591310.dir/CheckIncludeFiles.c.o   -c /home/gsuspy/cpe476/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
+Linking C executable cmTryCompileExec2309591310
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2309591310.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTryCompileExec2309591310.dir/CheckIncludeFiles.c.o  -o cmTryCompileExec2309591310 -rdynamic 
+make[1]: Leaving directory `/home/gsuspy/cpe476/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp'
+
+
+Determining if the function pthread_create exists in the pthread passed with the following output:
+Change Dir: /home/gsuspy/cpe476/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec3370667201/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec3370667201.dir/build.make CMakeFiles/cmTryCompileExec3370667201.dir/build
+make[1]: Entering directory `/home/gsuspy/cpe476/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/gsuspy/cpe476/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3370667201.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTryCompileExec3370667201.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec3370667201
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3370667201.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTryCompileExec3370667201.dir/CheckFunctionExists.c.o  -o cmTryCompileExec3370667201 -rdynamic -lpthread 
+make[1]: Leaving directory `/home/gsuspy/cpe476/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp'
+
+
+Determining if the function glXGetProcAddress exists passed with the following output:
+Change Dir: /home/gsuspy/cpe476/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1936863681/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1936863681.dir/build.make CMakeFiles/cmTryCompileExec1936863681.dir/build
+make[1]: Entering directory `/home/gsuspy/cpe476/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/gsuspy/cpe476/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1936863681.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=glXGetProcAddress   -o CMakeFiles/cmTryCompileExec1936863681.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec1936863681
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1936863681.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=glXGetProcAddress    CMakeFiles/cmTryCompileExec1936863681.dir/CheckFunctionExists.c.o  -o cmTryCompileExec1936863681 -rdynamic -lGL 
+make[1]: Leaving directory `/home/gsuspy/cpe476/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp'
+
+
+Determining if the function glXGetProcAddressARB exists passed with the following output:
+Change Dir: /home/gsuspy/cpe476/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec3673516025/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec3673516025.dir/build.make CMakeFiles/cmTryCompileExec3673516025.dir/build
+make[1]: Entering directory `/home/gsuspy/cpe476/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/gsuspy/cpe476/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3673516025.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=glXGetProcAddressARB   -o CMakeFiles/cmTryCompileExec3673516025.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec3673516025
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3673516025.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=glXGetProcAddressARB    CMakeFiles/cmTryCompileExec3673516025.dir/CheckFunctionExists.c.o  -o cmTryCompileExec3673516025 -rdynamic -lGL 
+make[1]: Leaving directory `/home/gsuspy/cpe476/CPE476Lab1/Lab1Template/CMakeFiles/CMakeTmp'
+
+

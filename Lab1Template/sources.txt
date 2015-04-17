@@ -1,0 +1,29 @@
+# List all .h files here
+set(HEADERS
+   GLIncludes.h
+   GLSL.h
+   tiny_obj_loader.h
+   RenderingHelper.h
+   Camera.h
+   MatrixStack.h
+   #Program.h
+   Shape.h
+   Terrain.h
+   TextureLoader.h
+   Wall.h
+)
+
+# List all .c / .cpp files here
+set(SOURCES
+   main.cpp
+   GLSL.cpp
+   tiny_obj_loader.cc
+   RenderingHelper.cpp
+   Camera.cpp
+   MatrixStack.cpp
+   #Program.cpp
+   Shape.cpp
+   Terrain.cpp
+   TextureLoader.cpp
+   Wall.cpp
+)

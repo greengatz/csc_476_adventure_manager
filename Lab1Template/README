@@ -1,0 +1,36 @@
+HOW-TO-RUN:
+
+	Alright, so if you don't have "CMake" for the terminal/command line, 
+	you need to download it now. The CalPoly machines should already
+	have this set up. Check in terminal to see if it is there!
+
+	Type "cmake ." in the terminal and hit enter.
+		(This builds us our own make file!)
+
+	Next, as per usual, type "make" and it will compile the program 
+	into an executable.
+
+	For now, run ./lab1 (this will be changed in a bit). 
+
+
+WHAT YOU NEED TO KNOW ABOUT THE CMAKE
+
+	You will have to run cmake command everytime you add a source file (you 
+	do not have to run it if you are only changing the file).
+
+	To make sure cmake recognizes the files, you will have to append your 
+	source file name into the "sources.txt" file. Make sure you place 
+	both .h and .cpp files if you have a header file. 
+
+	Once you finished adding files to sources.txt and source directory,
+	you can run cmake. 
+
+	IMPORTANT: Place our files in the source directory.
+
+
+IF THERE ARE ANY PROBLEMS RUNNING (or questions), 
+	email: bclarksoftware@gmail.com or text Brandon Clark (number in google docs). 
+
+
+
+ISSUES:

@@ -1,0 +1,2 @@
+In file dependencies/glad/include/glad/glad.h:
+   Commented out lines 4 - 6 and line 9. Uncomment if problems in the future!

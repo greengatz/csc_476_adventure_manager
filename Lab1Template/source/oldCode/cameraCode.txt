@@ -1,0 +1,156 @@
+/**
+ * Checks key presses for camera movement.
+ */
+/*void checkMovePress()
+{
+   vec3 view = lookAtPoint - theEye;
+   vec3 strafe = glm::cross(view, vec3(0.0, 1.0, 0.0));
+   if (glfwGetKey(window, GLFW_KEY_A ) == GLFW_PRESS)
+   {
+      theStrafe -= strafe * strafeSpeed;
+   }
+   if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+   {
+      theStrafe += strafe * strafeSpeed;
+   }
+   if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+   {
+      theZoom += view * sprintSpeed;
+   }
+   else if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+   {
+      theZoom += view * walkSpeed;
+   }
+   if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+   {
+      theZoom -= view * sprintSpeed;
+   }
+   else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+   {
+      theZoom -= view * walkSpeed;
+   }
+}*/
+
+   /* camera controls - do not change beyond the current set up to rotate*/
+/*void SetView() 
+{
+  static double xOld = 0;
+  static double yOld = 0;
+  // Get mouse position
+  double xpos, ypos;
+
+  glfwGetCursorPos(window, &xpos, &ypos);
+
+  // Compute new orientation
+  horizontalAngle += (mouseSpeed * (xpos - xOld));
+  verticalAngle -= (mouseSpeed * (ypos - yOld));
+  xOld = xpos;
+  yOld = ypos;
+
+  if (verticalAngle > (80.0 * (3.14f)/180.0))
+    verticalAngle = (80.0 * (3.14f)/180.0);
+  else if (verticalAngle < -(80.0 * (3.14f)/180.0))
+    verticalAngle = -(80.0 * (3.14f)/180.0);
+
+  //Updated look at point for pitch and yaw.
+  lookAtPoint.x = 1.0 * cos(verticalAngle) * cos(horizontalAngle);
+  lookAtPoint.y = 1.0 * sin(verticalAngle);
+  lookAtPoint.z = 1.0 * cos(verticalAngle) * cos(90.0 - horizontalAngle);
+
+  checkMovePress();
+
+  glm::mat4 View = glm::lookAt((theEye + theStrafe + theZoom), (lookAtPoint + theStrafe + theZoom), vec3(0, 1, 0));
+  safe_glUniformMatrix4fv(h_uViewMatrix, glm::value_ptr(View));
+}*/
+
+/* helper function to set projection matrix - don't touch */
+void SetProjectionMatrix() {
+  glm::mat4 Projection = glm::perspective(45.0f, (float)g_width/g_height, 0.1f, 10000.f);
+  safe_glUniformMatrix4fv(h_uProjMatrix, glm::value_ptr(Projection));
+}
+
+int main(int argc, char **argv)
+{
+  
+// Initialise GLFW
+    if( !glfwInit() )
+    {
+        fprintf( stderr, "Failed to initialize GLFW\n" );
+        return -1;
+    }
+
+    glfwWindowHint(GLFW_SAMPLES, 4);
+   glfwWindowHint(GLFW_RESIZABLE,GL_FALSE);
+   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+
+    // Open a window and create its OpenGL context
+   g_width = 1024;
+   g_height = 768;
+   window = glfwCreateWindow( g_width, g_height, "Final Project", NULL, NULL);
+   if( window == NULL ){
+      fprintf( stderr, "Failed to open GLFW window. If you have an Intel GPU, they are not 3.3 compatible. Try the 2.1 version of the tutorials.\n" );
+        glfwTerminate();
+        return -1;
+    }
+    glfwMakeContextCurrent(window);
+    glfwSetWindowSizeCallback(window, window_size_callback);
+    // Initialize GLEW
+   /*if (glewInit() != GLEW_OK) {
+      fprintf(stderr, "Failed to initialize GLEW\n");
+      return -1;
+   }*/
+    // Initialize glad
+   if (!gladLoadGL()) {
+      fprintf(stderr, "Unable to initialize glad");
+      glfwDestroyWindow(window);
+      glfwTerminate();
+      return 1;
+   }
+
+  // Ensure we can capture the escape key being pressed below
+  glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
+  glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+  glfwSetCursorPos(window, 0.0, 0.0);
+
+   glEnable (GL_BLEND);
+   glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+  loadShapes("assets/humvee.obj", humvee);
+  loadShapes("assets/hovercraft.obj", hovercraft);
+  loadShapes("assets/spano.obj", spano);
+  loadShapes("assets/trees/package2/tree1/tree1a_lod0.obj", tree1);
+  loadShapes("assets/Stones_Forest_1&3_Obj/Stone_Forest_1_Obj/Stone_Forest_1.obj", rock);
+
+   initGL();
+  initModels();
+   installShaders("vert.glsl", "frag.glsl");
+  LoadTexture((char *)"assets/green.bmp", 2);
+  LoadTexture((char *)"assets/skybox1.bmp", 3);
+  LoadTexture((char *)"assets/trees/package2/tree1/bark1.bmp", 4);
+  LoadTexture((char *)"assets/trees/package2/tree1/leafs1.bmp", 5);
+  LoadTexture((char *)"assets/Stones_Forest_1&3_Obj/Stone_Forest_1_Obj/S1Diffus.bmp", 6);
+  LoadTexture((char *)"assets/retroTex.bmp", 7);
+  imageData = (Image *) malloc(sizeof(Image));
+  LoadHeightMap((char *)"assets/terrain10.bmp", imageData);
+  initTerrain();
+  //This is where I initalize where the vehicle/player spawns
+  //g_vehicle_position = vec3(1.0 * MAP_SCALE, terrain[1][1][1], -1.0 * MAP_SCALE);
+  //printf("initial height: %lf\n", terrain[1][1][1]);
+  g_vehicle_position = vec3(100.0 * MAP_SCALE, terrain[100][100][1] + 3.0, -100.0*MAP_SCALE);
+  //printf("initial height: %lf\n", terrain[100][100][1]);
+    do{
+      drawGL();
+        // Swap buffers
+      glfwSwapBuffers(window);
+      glfwPollEvents();
+
+    } // Check if the ESC key was pressed or the window was closed
+   while( glfwGetKey(window, GLFW_KEY_ESCAPE ) != GLFW_PRESS &&
+         glfwWindowShouldClose(window) == 0 );
+
+    // Close OpenGL window and terminate GLFW
+    glfwTerminate();
+
+   return 0;
+}

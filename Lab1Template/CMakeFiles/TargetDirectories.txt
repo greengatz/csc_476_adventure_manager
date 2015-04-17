@@ -1,0 +1,2 @@
+/home/gsuspy/cpe476/CPE476Lab1/Lab1Template/dependencies/glfw/src/CMakeFiles/glfw.dir
+/home/gsuspy/cpe476/CPE476Lab1/Lab1Template/CMakeFiles/lab1.dir
