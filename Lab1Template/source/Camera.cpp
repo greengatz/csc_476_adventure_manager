@@ -21,11 +21,11 @@ float verticalAngle = 0.0f;
 //Mouse sensitivity
 float mouseSpeed = 0.005f;
 //Strafe speed
-float strafeSpeed = 1.5f;
+float strafeSpeed = 0.5f;
 //Walk speed
-float walkSpeed = 1.5f;
+float walkSpeed = 0.5f;
 //Sprint speed
-float sprintSpeed = 3.0f;
+float sprintSpeed = 1.0f;
 
 Camera::Camera() :
 	aspect(1.0f),
@@ -77,9 +77,9 @@ void Camera::updateStrafe(glm::vec3 dStrafe)
 		//v.z = 0 - v.z;
 
 	//The locked on y
-	if(theStrafe.x + theZoom.x + dStrafe.x < xBoundMax && theStrafe.x + theZoom.x + dStrafe.x > xBoundMin)
+	//if(theStrafe.x + theZoom.x + dStrafe.x < xBoundMax && theStrafe.x + theZoom.x + dStrafe.x > xBoundMin) //NO COLLISION
 		theStrafe.x += dStrafe.x * 0.4;
-	if(theStrafe.z + theZoom.z + dStrafe.z < zBoundMax && theStrafe.z + theZoom.z + dStrafe.z > zBoundMin)
+	//if(theStrafe.z + theZoom.z + dStrafe.z < zBoundMax && theStrafe.z + theZoom.z + dStrafe.z > zBoundMin)
 		theStrafe.z += dStrafe.z * 0.4;
 }
 
@@ -89,9 +89,9 @@ void Camera::updateZoom(glm::vec3 dZoom)
 	//theZoom += dZoom;
 
 	//The locked on y 
-	if(theZoom.x + theStrafe.x + dZoom.x < xBoundMax && theZoom.x + theStrafe.x + dZoom.x > xBoundMin)
+	//if(theZoom.x + theStrafe.x + dZoom.x < xBoundMax && theZoom.x + theStrafe.x + dZoom.x > xBoundMin) //NO COLLISION
 		theZoom.x += dZoom.x * 0.4;
-	if(theZoom.z + theStrafe.z + dZoom.z < zBoundMax && theZoom.z + theStrafe.z + dZoom.z > zBoundMin)
+	//if(theZoom.z + theStrafe.z + dZoom.z < zBoundMax && theZoom.z + theStrafe.z + dZoom.z > zBoundMin)
 		theZoom.z += dZoom.z * 0.4;
 }
 
