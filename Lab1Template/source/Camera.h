@@ -39,6 +39,7 @@ public:
 	glm::vec3 getPosition();
 	void updateStrafe(glm::vec3 dStrafe);
 	void updateZoom(glm::vec3 dZoom);
+	void toggleFreeRoam();
 	
 private:
 	float aspect;
@@ -49,6 +50,7 @@ private:
 	float pfactor;
 	float sfactor;
 	int state;
+	bool freeRoam;
 	glm::vec2 mousePrev;
 	glm::vec2 rotations;
 	glm::vec3 position;
