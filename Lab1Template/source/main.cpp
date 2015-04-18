@@ -443,9 +443,7 @@ void drawGL()
 
 	if(winCondition){
 		//reset bunnies & increase the count
-		printf("You won!\n");
 		points = 0;
-		printf("You have %d points!\n", points);
 		shapes.clear();
 		NUMOBJ += 10;
 	}
