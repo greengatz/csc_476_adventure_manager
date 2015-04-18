@@ -556,6 +556,10 @@ void checkUserInput()
    {
    	camera.toggleFreeRoam();
    }
+   if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
+   {
+   	terrain.createTrail();
+   }
 }
 
 void window_size_callback(GLFWwindow* window, int w, int h){
