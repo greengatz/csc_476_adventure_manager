@@ -12,11 +12,13 @@
 #include "GLSL.h"
 #define GRASS 3
 #define TRAIL 0
+#define RED 0
 
 using namespace std;
 
 int TERRAIN_TEX_ID = 100;
 int TERRAIN_TEX_DIRT_ID = 200;
+int TERRAIN_TEX_RED_ID = 200;
 
 //TextureLoader texLoader;
 
@@ -46,28 +48,28 @@ void Terrain::createTrail(){
     // srand(time(NULL));
     int changeInPath = (rand() % (maxShift - minShift)) + minShift;
     printf("Trail Map @ startingSpot %d{\n", startingSpot);
-    for (n = 0; n < MAP_X; n++){
+    for (n = 0; n < MAP_Z; n++){
         printf("New ChangeInPath %d |", changeInPath);
         // changeInPath = (n % 2 == 1) ? ((rand() % 3) - 1) + startingSpot : startingSpot;
         // printf("Shift %d |", changeInPath);
-        for (m = 0; m < MAP_Z; m++)
+        for (m = 0; m < MAP_X; m++)
         {
-            trailMap[n][m] = GRASS;
+            trailMap[m][n] = GRASS;
 
             if(n == 0 && m == startingSpot){
                 //Starting spot
-                trailMap[n][m]=TRAIL;
+                trailMap[m][n]=TRAIL;
             }else if(m == lastSpot - 1){
                 //Left Tile
-                trailMap[n][m]=TRAIL;
+                trailMap[m][n]=TRAIL;
             }else if(m == lastSpot + 1){
                 //Right Tile
-               trailMap[n][m]=TRAIL;
+               trailMap[m][n]=TRAIL;
             }else if(m == lastSpot){
                 //Center Tile
-                trailMap[n][m]=TRAIL;
+                trailMap[m][n]=TRAIL;
             }
-            printf("[%i]",trailMap[n][m]);
+            printf("[%i]",trailMap[m][n]);
         }
         if(lastSpot > MAP_X - 10 || lastSpot < 10){
             shiftTog = !shiftTog;     
@@ -204,6 +206,7 @@ void Terrain::init(TextureLoader* texLoader)
     //Load Texture
     texLoader->LoadTexture((char *)"assets/green.bmp", TERRAIN_TEX_ID);
     texLoader->LoadTexture((char *)"assets/dirt.bmp", TERRAIN_TEX_DIRT_ID);
+    texLoader->LoadTexture((char *)"assets/red.bmp", TERRAIN_TEX_RED_ID);
 
   	//unbind the arrays
   	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -245,16 +248,19 @@ void Terrain::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord)
    glVertexAttribPointer(h_aTexCoord, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
    int size = 0;
-   for (int index = 0; index < MAP_X - 1; index++)
+   for (int index = 0; index < MAP_X; index++)
    {
         for(int index2 = 0; index2 < MAP_Z; index2++){
-            if(trailMap[index][index2] == GRASS){
-                glBindTexture(GL_TEXTURE_2D, TERRAIN_TEX_ID);
+            if(trailMap[index][index2] == RED){
+                glBindTexture(GL_TEXTURE_2D, TERRAIN_TEX_RED_ID);
             }else if(trailMap[index][index2] == GRASS){
+                glBindTexture(GL_TEXTURE_2D, TERRAIN_TEX_ID);
+            }else if(trailMap[index][index2] == TRAIL){
                 glBindTexture(GL_TEXTURE_2D, TERRAIN_TEX_DIRT_ID);
             }
             glDrawArrays(GL_TRIANGLE_STRIP, size, 4);
             size +=  4;
+
         }
    }
 
