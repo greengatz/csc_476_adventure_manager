@@ -41,8 +41,8 @@ Camera::Camera() :
 	//Brandon Stuff
 	lookAtPoint(0.0f, 0.0f, 0.0f),
 	theEye(0.0f, 0.0f, 0.0f),
-	theStrafe(25.0f, 0.5f, 0.0f),
-	theZoom(0.0f, 0.5f, -25.0f)
+	theStrafe(25.0f, 1.0f, 0.0f),
+	theZoom(0.0f, 1.0f, -25.0f)
 {
 }
 
