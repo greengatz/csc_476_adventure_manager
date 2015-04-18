@@ -554,6 +554,10 @@ void checkUserInput()
       //theZoom -= view * walkSpeed;
       camera.updateZoom(-view);
    }
+   if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
+   {
+   	camera.toggleFreeRoam();
+   }
 }
 
 void window_size_callback(GLFWwindow* window, int w, int h){
