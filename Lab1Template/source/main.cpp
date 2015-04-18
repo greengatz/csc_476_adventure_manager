@@ -556,7 +556,7 @@ void checkUserInput()
    }
    if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
    {
-   	camera.toggleFreeRoam();
+   	//camera.toggleFreeRoam();
    }
 }
 
