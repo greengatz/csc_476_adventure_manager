@@ -35,13 +35,7 @@ inline void safe_glUniformMatrix4fv(const GLint handle, const GLfloat data[]) {
 
 void Obj3d::draw(GLint h_uModelMatrix, mat4 rot)
 {
-  //if (!done && !deadlock) // && locTime < 1.0)
-  //{
-  //  locTime += deltaTime * vel; 
-  //  printf("%f %f\n", locTime, vel);
-  //}
-  vec3 curPos = getCurSpot();
-  glm::mat4 trans = glm::translate(mat4(1.0f), curPos);
+  glm::mat4 trans = glm::translate(mat4(1.0f), pos);
   mat4 result = trans * rot * glm::scale(mat4(1.0f), scale);
   safe_glUniformMatrix4fv(h_uModelMatrix, glm::value_ptr(result));
   int nIndices = (int)((*cont).shape[0].mesh.indices.size());
@@ -66,5 +60,5 @@ void Obj3d::hit()
 
 vec3 Obj3d::getCurSpot()
 {
-  return pos + dir * locTime;
+  return pos;
 }

@@ -481,6 +481,7 @@ void drawGL()
 
 	// Pop stacks
 	proj.popMatrix();
+	tavern.drawTavern(h_ModelMatrix, h_vertPos, h_vertNor);
 }
 
 bool hasCollided(glm::vec3 incr)
@@ -675,7 +676,6 @@ int main(int argc, char **argv)
 			timeOldDraw += (1.0 / 60);
 			//Draw an image
 			drawGL();
-			tavern.drawTavern(h_ModelMatrix, h_vertPos, h_vertNor);
 		}
 		// Swap buffers
 		glfwSwapBuffers(window);

@@ -1,5 +1,29 @@
 #include "tavern.h"
 
+#define CUBE 0
+#define BARREL 1
+#define BOOKSHELF 2
+#define STOOL 3
+#define RECT_TABLE 4
+#define CIR_TABLE 5
+#define TABLEWARE 6
+#define MUG 7
+#define BOTTLE 8
+#define TORCH 9
+#define DOOR 10
+
+const string objFiles[] = {"assets/tavern/cube.obj",
+                           "assets/tavern/barrel.obj",
+                           "assets/tavern/bookshelf.obj",
+                           "assets/tavern/stool.obj",
+                           "assets/tavern/table.obj",
+                           "assets/tavern/diningtable.obj",
+                       	   "assets/tavern/tablware.obj",
+                       	   "assets/tavern/mug.obj",
+                       	   "assets/tavern/bottle.obj",
+                       	   "assets/tavern/torch.obj",
+                       	   "assets/tavern/door.obj"};
+
 Tavern::Tavern()//GLint *pos, GLint *nor)
 {
 	// h_vertPos = *pos;
@@ -23,8 +47,9 @@ void Tavern::addTavernItem(int index, glm::vec3 scale, glm::vec3 trans)
 
 void Tavern::loadTavernMeshes()
 {
-	addTavernMesh("assets/cube.obj");
-	addTavernItem(0, glm::vec3(.15, .35, .15), glm::vec3(0, .5, 0));
+	//load cubes
+	addTavernMesh(objFiles[CUBE]);
+	addTavernItem(CUBE, glm::vec3(1.5, 1.5, 1.5), glm::vec3(10, 1, -10));
 }
 
 void Tavern::enableBuff(GLint h_vertPos, GLint h_vertNor, GLuint posBuf, GLuint norBuf, GLuint indBuf) {
