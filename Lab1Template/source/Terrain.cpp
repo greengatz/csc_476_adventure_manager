@@ -3,6 +3,8 @@
  * @author Brandon Clark
  */
 
+#include <cstdlib>
+#include <time.h> 
 #include <iostream>
 #define GLM_FORCE_RADIANS
 #include "glm/glm.hpp"
@@ -26,6 +28,60 @@ Terrain::Terrain() :
 
 Terrain::~Terrain()
 {
+}
+
+void Terrain::createTrail(){
+    int minShift = 2, maxShift = 10;
+    //left for false, right for true.
+    bool shiftTog = false; 
+    int m, n, bound = 20;
+    int M[MAP_X][MAP_Z];
+      srand(time(NULL));
+    int startingSpot = ((rand() % (MAP_X - bound)) + (bound / 2));
+    int lastSpot = startingSpot;
+    // srand(time(NULL));
+    int changeInPath = (rand() % (maxShift - minShift)) + minShift;
+    printf("Trail Map @ startingSpot %d{\n", startingSpot);
+    for (n = 0; n < MAP_X; n++){
+        printf("New ChangeInPath %d |", changeInPath);
+
+
+    // changeInPath = (n % 2 == 1) ? ((rand() % 3) - 1) + startingSpot : startingSpot;
+    // printf("Shift %d |", changeInPath);
+    for (m = 0; m < MAP_Z; m++)
+    {
+        trailMap[n][m] = 3;
+        if(n == 0 && m == startingSpot){
+        trailMap[n][m]=0;
+        }else if(m == lastSpot - 1){
+        trailMap[n][m]=1;
+        }else if(m == lastSpot + 1){
+        trailMap[n][m]=2;
+        }else if(m == lastSpot){
+        trailMap[n][m]=0;
+        }
+        printf("[%i]",trailMap[n][m]);
+    }
+    if(lastSpot > MAP_X - 10 || lastSpot < 10){
+        shiftTog = !shiftTog;     
+    }
+
+    if(changeInPath == 0){
+        // srand(time(NULL));
+        changeInPath = (rand() % (maxShift - minShift)) + minShift;
+        shiftTog = !shiftTog;
+
+    }else{
+
+        changeInPath--;
+        if(shiftTog)
+        lastSpot++;
+        else
+        lastSpot--;
+    }
+        printf("\n");
+        // startingSpot = changeInPath;
+    }
 }
 
 void Terrain::init(TextureLoader* texLoader)
