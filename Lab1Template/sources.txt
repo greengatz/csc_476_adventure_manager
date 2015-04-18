@@ -11,6 +11,9 @@ set(HEADERS
    Terrain.h
    TextureLoader.h
    Wall.h
+   tavern.h
+   obj3d.h
+   obj3dcontainer.h
 )
 
 # List all .c / .cpp files here
@@ -26,4 +29,7 @@ set(SOURCES
    Terrain.cpp
    TextureLoader.cpp
    Wall.cpp
+   tavern.cpp
+   obj3d.cpp
+   obj3dcontainer.cpp
 )
