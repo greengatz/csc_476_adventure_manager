@@ -42,7 +42,8 @@ Camera::Camera() :
 	lookAtPoint(0.0f, 0.0f, 0.0f),
 	theEye(0.0f, 0.0f, 0.0f),
 	theStrafe(25.0f, 1.0f, 0.0f),
-	theZoom(0.0f, 1.0f, -25.0f)
+	theZoom(0.0f, 1.0f, -25.0f),
+	freeRoam(false)
 {
 }
 
@@ -66,10 +67,20 @@ glm::vec3 Camera::getPosition()
 	return theStrafe + theZoom;
 }
 
+void Camera::toggleFreeRoam()
+{
+	freeRoam = !freeRoam;
+}
+
 void Camera::updateStrafe(glm::vec3 dStrafe)
 {
 	//free camera
-	//theStrafe += dStrafe;
+	if (freeRoam)
+	{
+		theStrafe += dStrafe;
+	}
+	else
+	{
 
 	//if(x.x > xBoundMax || x.x < xBoundMin)
 		//v.x = 0 - v.x;
@@ -81,18 +92,25 @@ void Camera::updateStrafe(glm::vec3 dStrafe)
 		theStrafe.x += dStrafe.x * 0.4;
 	//if(theStrafe.z + theZoom.z + dStrafe.z < zBoundMax && theStrafe.z + theZoom.z + dStrafe.z > zBoundMin)
 		theStrafe.z += dStrafe.z * 0.4;
+	}
 }
 
 void Camera::updateZoom(glm::vec3 dZoom)
 {
 	//free camera
-	//theZoom += dZoom;
+	if (freeRoam)
+	{
+		theZoom += dZoom;
+	}
+	else
+	{
 
 	//The locked on y 
 	//if(theZoom.x + theStrafe.x + dZoom.x < xBoundMax && theZoom.x + theStrafe.x + dZoom.x > xBoundMin) //NO COLLISION
 		theZoom.x += dZoom.x * 0.4;
 	//if(theZoom.z + theStrafe.z + dZoom.z < zBoundMax && theZoom.z + theStrafe.z + dZoom.z > zBoundMin)
 		theZoom.z += dZoom.z * 0.4;
+	}
 }
 
 void Camera::mouseMoved(int x, int y)
