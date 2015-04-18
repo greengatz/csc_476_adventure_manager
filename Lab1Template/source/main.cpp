@@ -474,6 +474,8 @@ void drawGL()
 	drawWalls();
 	glUniform1i(terrainToggleID, 0);
 
+	tavern.drawTavern(h_ModelMatrix, h_vertPos, h_vertNor);
+
 	// tavern.drawTavern();
 	
 	// Unbind the program
@@ -481,7 +483,7 @@ void drawGL()
 
 	// Pop stacks
 	proj.popMatrix();
-	tavern.drawTavern(h_ModelMatrix, h_vertPos, h_vertNor);
+	
 }
 
 bool hasCollided(glm::vec3 incr)
