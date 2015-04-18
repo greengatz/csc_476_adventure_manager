@@ -29,8 +29,9 @@ class Obj3d
 		int material;
 		float locTime;
 		vec3 scale;
-		Obj3d(Obj3dContainer *newCont, vec3 newScale, int newMaterial, vec3 initPos);
-		void draw(GLint h_uModelMatrix, mat4 rot);
+		mat4 rot;
+		Obj3d(Obj3dContainer *newCont, vec3 newScale, int newMaterial, vec3 initPos, mat4 newRot);
+		void draw(GLint h_uModelMatrix);
 		void genPos(float mapRad);
 		void move(float deltaTime);
       void reverseDir();

@@ -22,7 +22,7 @@ class Obj3dContainer
 		Obj3dContainer();
 		Obj3dContainer(const string name);
 		GLuint posBuf, norBuf, indBuf;
-		void initBuffers();
+		void initBuffers(bool noNorms);
 		int getIndices();
 		void loadIntoTinyOBJ(const string name);
 		vector<tinyobj::shape_t> shape;

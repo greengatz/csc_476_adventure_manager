@@ -1,6 +1,6 @@
 #include "obj3d.h"
 
-Obj3d::Obj3d(Obj3dContainer *newCont, vec3 newScale, int newMaterial, vec3 initPos)
+Obj3d::Obj3d(Obj3dContainer *newCont, vec3 newScale, int newMaterial, vec3 initPos, mat4 newRot)
 {
   // num = objNum;
   locTime = 0;
@@ -11,6 +11,7 @@ Obj3d::Obj3d(Obj3dContainer *newCont, vec3 newScale, int newMaterial, vec3 initP
   scale = newScale;
   cont = newCont;
   material = newMaterial;
+  rot = newRot;
   // bound.createBounds((*cont).shape);
   // genPos();
 }
@@ -33,7 +34,7 @@ inline void safe_glUniformMatrix4fv(const GLint handle, const GLfloat data[]) {
     glUniformMatrix4fv(handle, 1, GL_FALSE, data);
 }
 
-void Obj3d::draw(GLint h_uModelMatrix, mat4 rot)
+void Obj3d::draw(GLint h_uModelMatrix)
 {
   glm::mat4 trans = glm::translate(mat4(1.0f), pos);
   mat4 result = trans * rot * glm::scale(mat4(1.0f), scale);
