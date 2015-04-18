@@ -10,12 +10,17 @@
 #include "glm/glm.hpp"
 #include "Terrain.h"
 #include "GLSL.h"
-
+#define GRASS 3
+#define TRAIL 0
 
 using namespace std;
 
 int TERRAIN_TEX_ID = 100;
+int TERRAIN_TEX_DIRT_ID = 200;
+
 //TextureLoader texLoader;
+
+
 
 Terrain::Terrain() :
 	x(0.0f, 0.0f, 0.0f),
@@ -43,44 +48,44 @@ void Terrain::createTrail(){
     printf("Trail Map @ startingSpot %d{\n", startingSpot);
     for (n = 0; n < MAP_X; n++){
         printf("New ChangeInPath %d |", changeInPath);
-    // changeInPath = (n % 2 == 1) ? ((rand() % 3) - 1) + startingSpot : startingSpot;
-    // printf("Shift %d |", changeInPath);
-    for (m = 0; m < MAP_Z; m++)
-    {
-        trailMap[n][m] = 3;
+        // changeInPath = (n % 2 == 1) ? ((rand() % 3) - 1) + startingSpot : startingSpot;
+        // printf("Shift %d |", changeInPath);
+        for (m = 0; m < MAP_Z; m++)
+        {
+            trailMap[n][m] = GRASS;
 
-        if(n == 0 && m == startingSpot){
-            //Starting spot
-            trailMap[n][m]=0;
-        }else if(m == lastSpot - 1){
-            //Left Tile
-            trailMap[n][m]=0;
-        }else if(m == lastSpot + 1){
-            //Right Tile
-           trailMap[n][m]=0;
-        }else if(m == lastSpot){
-            //Center Tile
-            trailMap[n][m]=0;
+            if(n == 0 && m == startingSpot){
+                //Starting spot
+                trailMap[n][m]=TRAIL;
+            }else if(m == lastSpot - 1){
+                //Left Tile
+                trailMap[n][m]=TRAIL;
+            }else if(m == lastSpot + 1){
+                //Right Tile
+               trailMap[n][m]=TRAIL;
+            }else if(m == lastSpot){
+                //Center Tile
+                trailMap[n][m]=TRAIL;
+            }
+            printf("[%i]",trailMap[n][m]);
         }
-        printf("[%i]",trailMap[n][m]);
-    }
-    if(lastSpot > MAP_X - 10 || lastSpot < 10){
-        shiftTog = !shiftTog;     
-    }
+        if(lastSpot > MAP_X - 10 || lastSpot < 10){
+            shiftTog = !shiftTog;     
+        }
 
-    if(changeInPath == 0){
-        // srand(time(NULL));
-        changeInPath = (rand() % (maxShift - minShift)) + minShift;
-        shiftTog = !shiftTog;
+        if(changeInPath == 0){
+            // srand(time(NULL));
+            changeInPath = (rand() % (maxShift - minShift)) + minShift;
+            shiftTog = !shiftTog;
 
-    }else{
+        }else{
 
-        changeInPath--;
-        if(shiftTog)
-        lastSpot++;
-        else
-        lastSpot--;
-    }
+            changeInPath--;
+            if(shiftTog)
+            lastSpot++;
+            else
+            lastSpot--;
+        }
         printf("\n");
         // startingSpot = changeInPath;
     }
@@ -198,6 +203,7 @@ void Terrain::init(TextureLoader* texLoader)
 
     //Load Texture
     texLoader->LoadTexture((char *)"assets/green.bmp", TERRAIN_TEX_ID);
+    texLoader->LoadTexture((char *)"assets/dirt.bmp", TERRAIN_TEX_DIRT_ID);
 
   	//unbind the arrays
   	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -211,9 +217,19 @@ void Terrain::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord)
     glEnable(GL_TEXTURE_2D);
     glActiveTexture(GL_TEXTURE0);
 
-    //glUniform1i(h_uTexUnit, 0);
+    // //glUniform1i(h_uTexUnit, 0);
+    // for (int n = 0; n < MAP_Z; n++)
+    // {
+    //     for (int m = 0; m < MAP_Z; m++)
+    //     {
+    //         if(trailMap[n][z] == GRASS){
+    //             glBindTexture(GL_TEXTURE_2D, TERRAIN_TEX_ID);
 
-    glBindTexture(GL_TEXTURE_2D, TERRAIN_TEX_ID);
+
+    //         }
+    //     }
+    // }
+    // glBindTexture(GL_TEXTURE_2D, TERRAIN_TEX_ID);
 
 	// Enable and bind normal array for drawing
    GLSL::enableVertexAttribArray(h_nor);
@@ -231,8 +247,15 @@ void Terrain::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord)
    int size = 0;
    for (int index = 0; index < MAP_X - 1; index++)
    {
-     glDrawArrays(GL_TRIANGLE_STRIP, size, (MAP_X - 1) * 4);
-     size += (MAP_X - 1) * 4;
+        for(int index2 = 0; index2 < MAP_Z; index2++){
+            if(trailMap[index][index2] == GRASS){
+                glBindTexture(GL_TEXTURE_2D, TERRAIN_TEX_ID);
+            }else if(trailMap[index][index2] == GRASS){
+                glBindTexture(GL_TEXTURE_2D, TERRAIN_TEX_DIRT_ID);
+            }
+            glDrawArrays(GL_TRIANGLE_STRIP, size, 4);
+            size +=  4;
+        }
    }
 
    GLSL::disableVertexAttribArray(h_pos);
