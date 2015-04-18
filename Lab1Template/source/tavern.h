@@ -26,8 +26,9 @@ class Tavern
 		void loadTavernMeshes();
 		void drawTavern(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor);
 	private:
-		void addTavernMesh(const string filename);
-		void addTavernItem(int index, glm::vec3 scale, glm::vec3 trans);
+		void createTable1(glm::vec3 initLoc, float ang);
+		void addTavernMesh(const string filename, bool noNorms);
+		void addTavernItem(int index, glm::vec3 scale, glm::vec3 trans, glm::mat4 rot);
 		void enableBuff(GLint h_vertPos, GLint h_vertNor, GLuint posBuf, GLuint norBuf, GLuint indBuf);
 		void disableBuff(GLint h_vertPos, GLint h_vertNor);
 };

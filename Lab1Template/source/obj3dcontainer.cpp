@@ -139,12 +139,25 @@ Obj3dContainer::Obj3dContainer(const string name)
   loadIntoTinyOBJ(name);
 }
 
-void Obj3dContainer::initBuffers() 
+void Obj3dContainer::initBuffers(bool noNorms) 
 {
 	const vector<float> &shapePos = shape[0].mesh.positions;
 	loadBuff(shapePos, &posBuf);
-	vector<float> shapeNor;
-	loadObjNorms(shape, &shapeNor, &norBuf);
+  
+  // const vector<float> &shapeNor = shape[0].mesh.normals;
+  // loadBuff(shapeNor, &norBuf);
+  vector<float> shapeNor;
+  if (noNorms)
+  {
+    loadObjNorms(shape, &shapeNor, &norBuf);
+  }
+  else
+  {
+    const vector<float> &shapeNorBuff = shape[0].mesh.normals;
+    loadBuff(shapeNorBuff, &norBuf);
+    shapeNor = shapeNorBuff;
+  }
+
 	const vector<unsigned int> &shapeInd = shape[0].mesh.indices;
 	loadBuff(shapeInd, &indBuf);
 }
