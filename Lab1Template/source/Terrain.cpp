@@ -35,8 +35,7 @@ void Terrain::createTrail(){
     //left for false, right for true.
     bool shiftTog = false; 
     int m, n, bound = 20;
-    int M[MAP_X][MAP_Z];
-      srand(time(NULL));
+    srand(time(NULL));
     int startingSpot = ((rand() % (MAP_X - bound)) + (bound / 2));
     int lastSpot = startingSpot;
     // srand(time(NULL));
@@ -44,21 +43,24 @@ void Terrain::createTrail(){
     printf("Trail Map @ startingSpot %d{\n", startingSpot);
     for (n = 0; n < MAP_X; n++){
         printf("New ChangeInPath %d |", changeInPath);
-
-
     // changeInPath = (n % 2 == 1) ? ((rand() % 3) - 1) + startingSpot : startingSpot;
     // printf("Shift %d |", changeInPath);
     for (m = 0; m < MAP_Z; m++)
     {
         trailMap[n][m] = 3;
+
         if(n == 0 && m == startingSpot){
-        trailMap[n][m]=0;
+            //Starting spot
+            trailMap[n][m]=0;
         }else if(m == lastSpot - 1){
-        trailMap[n][m]=1;
+            //Left Tile
+            trailMap[n][m]=0;
         }else if(m == lastSpot + 1){
-        trailMap[n][m]=2;
+            //Right Tile
+           trailMap[n][m]=0;
         }else if(m == lastSpot){
-        trailMap[n][m]=0;
+            //Center Tile
+            trailMap[n][m]=0;
         }
         printf("[%i]",trailMap[n][m]);
     }
@@ -90,7 +92,7 @@ void Terrain::init(TextureLoader* texLoader)
 	x.y = 0.0f;
 	x.z = 0.0f;
 	scale = 5.0f;
-
+    createTrail();
 	GLfloat terrain_buffer[(MAP_Z - 1) * (MAP_X - 1) * 12];
   	GLfloat terrain_norm[(MAP_Z - 1) * (MAP_X - 1) * 12];
   	GLfloat terrain_tex[(MAP_Z - 1) * (MAP_X - 1) * 8];
@@ -120,6 +122,7 @@ void Terrain::init(TextureLoader* texLoader)
   	{	
     	for (int x = 0; x < MAP_X - 1; x++, index++)
     	{
+
       	//Calculate normal
       	glm::vec3 v1 = glm::vec3(terrain[x][z][0], terrain[x][z][1], terrain[x][z][2]);
       	glm::vec3 v2 = glm::vec3(terrain[x+1][z][0], terrain[x+1][z][1], terrain[x+1][z][2]);
