@@ -12,13 +12,13 @@
 #include "GLSL.h"
 #define GRASS 3
 #define TRAIL 0
-#define RED 0
+#define RED 1
 
 using namespace std;
 
 int TERRAIN_TEX_ID = 100;
 int TERRAIN_TEX_DIRT_ID = 200;
-int TERRAIN_TEX_RED_ID = 200;
+int TERRAIN_TEX_RED_ID = 300;
 
 //TextureLoader texLoader;
 
@@ -41,35 +41,35 @@ void Terrain::createTrail(){
     int minShift = 2, maxShift = 10;
     //left for false, right for true.
     bool shiftTog = false; 
-    int m, n, bound = 20;
+    int indexX, indexZ, bound = 20;
     srand(time(NULL));
     int startingSpot = ((rand() % (MAP_X - bound)) + (bound / 2));
     int lastSpot = startingSpot;
     // srand(time(NULL));
     int changeInPath = (rand() % (maxShift - minShift)) + minShift;
     printf("Trail Map @ startingSpot %d{\n", startingSpot);
-    for (n = 0; n < MAP_Z; n++){
+    for (indexZ = 0; indexZ < MAP_Z; indexZ++){
         printf("New ChangeInPath %d |", changeInPath);
-        // changeInPath = (n % 2 == 1) ? ((rand() % 3) - 1) + startingSpot : startingSpot;
+        // changeInPath = (indexZ % 2 == 1) ? ((rand() % 3) - 1) + startingSpot : startingSpot;
         // printf("Shift %d |", changeInPath);
-        for (m = 0; m < MAP_X; m++)
+        for (indexX = 0; indexX < MAP_X; indexX++)
         {
-            trailMap[m][n] = GRASS;
+            trailMap[indexX][indexZ] = GRASS;
 
-            if(n == 0 && m == startingSpot){
+            if(indexZ == 0 && indexX == startingSpot){
                 //Starting spot
-                trailMap[m][n]=TRAIL;
-            }else if(m == lastSpot - 1){
+                trailMap[indexX][indexZ]=RED;
+            }else if(indexX == lastSpot - 1){
                 //Left Tile
-                trailMap[m][n]=TRAIL;
-            }else if(m == lastSpot + 1){
+                trailMap[indexX][indexZ]=TRAIL;
+            }else if(indexX == lastSpot + 1){
                 //Right Tile
-               trailMap[m][n]=TRAIL;
-            }else if(m == lastSpot){
+               trailMap[indexX][indexZ]=TRAIL;
+            }else if(indexX == lastSpot){
                 //Center Tile
-                trailMap[m][n]=TRAIL;
+                trailMap[indexX][indexZ]=TRAIL;
             }
-            printf("[%i]",trailMap[m][n]);
+            printf("[%i]",trailMap[indexX][indexZ]);
         }
         if(lastSpot > MAP_X - 10 || lastSpot < 10){
             shiftTog = !shiftTog;     
@@ -248,9 +248,9 @@ void Terrain::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord)
    glVertexAttribPointer(h_aTexCoord, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
    int size = 0;
-   for (int index = 0; index < MAP_X; index++)
+   for (int index = 0; index < MAP_X - 1; index++)
    {
-        for(int index2 = 0; index2 < MAP_Z; index2++){
+        for(int index2 = 0; index2 < MAP_Z - 1; index2++){
             if(trailMap[index][index2] == RED){
                 glBindTexture(GL_TEXTURE_2D, TERRAIN_TEX_RED_ID);
             }else if(trailMap[index][index2] == GRASS){
