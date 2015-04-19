@@ -1,4 +1,5 @@
 #include "tavern.h"
+#include <time.h>
 
 #define CUBE 0
 #define DOOR 1
@@ -40,6 +41,18 @@ Tavern::Tavern()//GLint *pos, GLint *nor)
 	// h_vertNor = *nor;
 }
 
+//between [1, limit]
+int getRandInt(int limit)
+{
+	return rand() % limit + 1;
+}
+//between [1, limit]
+float getRandFloat(float limit)
+{
+	return static_cast <float> (rand()) / static_cast <float> (RAND_MAX / limit);
+	// return rand() % limit + 1.0;
+}
+
 void Tavern::addTavernMesh(const string filename, bool noNorms)
 {
 	Obj3dContainer temp;
@@ -57,31 +70,62 @@ void Tavern::addTavernItem(int index, glm::vec3 scale, glm::vec3 trans, glm::mat
 
 void Tavern::createTable1(glm::vec3 initLoc, float ang)
 {
+	//index for chair translations
+	int multInd[] = {-1,  1,
+	                  1,  1,
+	                 -1, -1,
+	                  1, -1,
+	                  1, -1,
+	                  1,  1,
+	                 -1,  1,
+	                 -1, -1};
+
 	glm::mat4 rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 1.0f, 0));
 	addTavernItem(RECT_TABLE, glm::vec3(1.6, 1.6, 1.6), glm::vec3(initLoc.x, initLoc.y + 0.5, initLoc.z), rot);
-	//make chairs face the table
-	if (ang == 0)
-	{
-		addTavernItem(CHAIR, glm::vec3(0.75, 0.75, 0.75), glm::vec3(initLoc.x - 1, initLoc.y + 0.5, initLoc.z + 1), rot);
-		addTavernItem(CHAIR, glm::vec3(0.75, 0.75, 0.75), glm::vec3(initLoc.x + 1, initLoc.y + 0.5, initLoc.z + 1), rot);
-		ang += 180;
-		rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 1.0f, 0));
-		addTavernItem(CHAIR, glm::vec3(0.75, 0.75, 0.75), glm::vec3(initLoc.x - 1, initLoc.y + 0.5, initLoc.z - 1), rot);
-		addTavernItem(CHAIR, glm::vec3(0.75, 0.75, 0.75), glm::vec3(initLoc.x + 1, initLoc.y + 0.5, initLoc.z - 1), rot);
+	int numChairs = getRandInt(2);
+	glm::mat4 addedRot = glm::rotate(glm::mat4(1.0f), ang + 180, glm::vec3(0, 1.0f, 0));
+
+	if (numChairs == 2) { //4 chairs at table
+		int start = (ang == 0) ? 0 : 8;
+		for (int iter = start; iter < 4 + start; iter += 2) {
+			addTavernItem(CHAIR, glm::vec3(0.75, 0.75, 0.75), glm::vec3(initLoc.x + multInd[iter + 0], initLoc.y + 0.5, initLoc.z + multInd[iter + 1]), rot);
+			addTavernItem(CHAIR, glm::vec3(0.75, 0.75, 0.75), glm::vec3(initLoc.x + multInd[iter + 4], initLoc.y + 0.5, initLoc.z + multInd[iter + 5]), addedRot);
+		}
 	}
-	else
+	else //3 chairs
 	{
-		addTavernItem(CHAIR, glm::vec3(0.75, 0.75, 0.75), glm::vec3(initLoc.x + 1, initLoc.y + 0.5, initLoc.z - 1), rot);
-		addTavernItem(CHAIR, glm::vec3(0.75, 0.75, 0.75), glm::vec3(initLoc.x + 1, initLoc.y + 0.5, initLoc.z + 1), rot);
-		ang += 180;
-		rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 1.0f, 0));	
-		addTavernItem(CHAIR, glm::vec3(0.75, 0.75, 0.75), glm::vec3(initLoc.x - 1, initLoc.y + 0.5, initLoc.z + 1), rot);
-		addTavernItem(CHAIR, glm::vec3(0.75, 0.75, 0.75), glm::vec3(initLoc.x - 1, initLoc.y + 0.5, initLoc.z - 1), rot);
+		int start = (ang == 0) ? 0 : 8;
+
+		float space = getRandFloat(2) - 1.0;
+		int rotEdit = getRandInt(90) - 45;
+
+		if (ang == 0) {
+			glm::mat4 changedRot = glm::rotate(glm::mat4(1.0f), rotEdit + ang, glm::vec3(0, 1.0f, 0));
+			addTavernItem(CHAIR, glm::vec3(0.75, 0.75, 0.75), glm::vec3(initLoc.x + space, initLoc.y + 0.5, initLoc.z + multInd[start + 1]), changedRot);
+			addTavernItem(CHAIR, glm::vec3(0.75, 0.75, 0.75), glm::vec3(initLoc.x + multInd[start + 4], initLoc.y + 0.5, initLoc.z + multInd[start + 5]), addedRot);
+			addTavernItem(CHAIR, glm::vec3(0.75, 0.75, 0.75), glm::vec3(initLoc.x + multInd[start + 6], initLoc.y + 0.5, initLoc.z + multInd[start + 7]), addedRot);
+		}
+		else {
+			rotEdit -= 90;
+			glm::mat4 changedRot = glm::rotate(glm::mat4(1.0f), (float)rotEdit, glm::vec3(0, 1.0f, 0));
+			addTavernItem(CHAIR, glm::vec3(0.75, 0.75, 0.75), glm::vec3(initLoc.x + multInd[start], initLoc.y + 0.5, initLoc.z + multInd[start + 1]), rot);
+			addTavernItem(CHAIR, glm::vec3(0.75, 0.75, 0.75), glm::vec3(initLoc.x + multInd[start + 2], initLoc.y + 0.5, initLoc.z + multInd[start + 3]), rot);
+			addTavernItem(CHAIR, glm::vec3(0.75, 0.75, 0.75), glm::vec3(initLoc.x + multInd[start + 6], initLoc.y + 0.5, initLoc.z + space), changedRot);
+		}
+	}
+
+	if (getRandInt(3) > 1) {
+		float x = getRandFloat(1) - 0.5;
+		float z = getRandFloat(1) - 0.5;
+		float allDir = getRandFloat(360);
+		glm::mat4 newRot = glm::rotate(glm::mat4(1.0f), allDir, glm::vec3(0, 1.0f, 0));
+		addTavernItem(MUG, glm::vec3(0.075, 0.075, 0.075), glm::vec3(initLoc.x + x, initLoc.y + 1.04, initLoc.z + z), newRot);
 	}
 }
 
 void Tavern::loadTavernMeshes()
 {
+	srand(time(NULL));
 	float ang;
 	glm::mat4 rot;
 	for (int iter = 0; iter < NUMFILES - 1; iter++) {
@@ -90,9 +134,10 @@ void Tavern::loadTavernMeshes()
 	addTavernMesh("assets/tavern/stick.obj", true);
 	addTavernMesh("assets/tavern/pole.obj", true);
 	addTavernMesh("assets/tavern/fireplace.obj", true);
+	addTavernMesh("assets/tavern/tableware.obj", true);
 
 	//tavern house
-	addTavernItem(CUBE, glm::vec3(10.0, 10.0, 10.0), glm::vec3(20, 1, -20), glm::mat4(1.0f));
+	addTavernItem(CUBE, glm::vec3(10.0, 10.0, 10.0), glm::vec3(2000, 1, -20), glm::mat4(1.0f));
 	//counter
 	addTavernItem(CUBE, glm::vec3(5.0, 1, 0.5), glm::vec3(15, 0.2, -15), glm::mat4(1.0f));
 	addTavernItem(CUBE, glm::vec3(5.0, 0.1, 0.55), glm::vec3(15, 1.1, -15), glm::mat4(1.0f));
@@ -143,21 +188,21 @@ void Tavern::loadTavernMeshes()
 	createTable1(glm::vec3(36, 0, -23), 90);
 
 	//straight up 
-	addTavernItem(BARREL, glm::vec3(1.0, 1.2, 1.0), glm::vec3(10.0, 0, -13.0), glm::mat4(1.0f));
+	addTavernItem(BARREL, glm::vec3(0.5, 0.7, 0.5), glm::vec3(10.0, 1.0, -13.0), glm::mat4(1.0f));
 	//side barrel
 	ang = 90;
 	rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(1.0f, 0, 0));
-	addTavernItem(BARREL, glm::vec3(1.0, 1.0, 1.0), glm::vec3(35.0, 0, -35.0), rot);
-	addTavernItem(BARREL, glm::vec3(1.0, 1.0, 1.0), glm::vec3(33.6, 0, -35.0), rot);
-	addTavernItem(BARREL, glm::vec3(1.0, 1.0, 1.0), glm::vec3(34.3, 1.25, -35.0), rot);
+	addTavernItem(BARREL, glm::vec3(1.0, 1.0, 1.0), glm::vec3(35.0, 1.0, -35.0), rot);
+	addTavernItem(BARREL, glm::vec3(1.0, 1.0, 1.0), glm::vec3(33.6, 1.0, -35.0), rot);
+	addTavernItem(BARREL, glm::vec3(1.0, 1.0, 1.0), glm::vec3(34.3, 2.25, -35.0), rot);
 
 	//fireplace and roasting
-	addTavernItem(FIREPLACE, glm::vec3(0.6, 0.6, 0.6), glm::vec3(30, -.55, -29.7), glm::mat4(1.0f));
-	addTavernItem(FIREPLACE, glm::vec3(0.6, 0.6, 0.6), glm::vec3(30, -.55, -30.3), glm::mat4(1.0f));
-	addTavernItem(FIREPLACE, glm::vec3(0.6, 0.6, 0.6), glm::vec3(30, -.4, -30), glm::mat4(1.0f));
-	addTavernItem(STICK, glm::vec3(1.0, 1.5, 1.0), glm::vec3(29, 0, -30.075), glm::mat4(1.0f));
-	addTavernItem(STICK, glm::vec3(1.0, 1.5, 1.0), glm::vec3(31, 0, -30.075), glm::mat4(1.0f));
-	addTavernItem(POLE, glm::vec3(1.1, 1.2, 1.2), glm::vec3(30, 1, -30), glm::mat4(1.0f));
+	addTavernItem(FIREPLACE, glm::vec3(0.6, 0.6, 0.6), glm::vec3(30, -0.05, -29.7), glm::mat4(1.0f));
+	addTavernItem(FIREPLACE, glm::vec3(0.6, 0.6, 0.6), glm::vec3(30, -0.05, -30.3), glm::mat4(1.0f));
+	addTavernItem(FIREPLACE, glm::vec3(0.6, 0.6, 0.6), glm::vec3(30, 0.1, -30), glm::mat4(1.0f));
+	addTavernItem(STICK, glm::vec3(1.0, 1.5, 1.0), glm::vec3(29, 0.5, -30.075), glm::mat4(1.0f));
+	addTavernItem(STICK, glm::vec3(1.0, 1.5, 1.0), glm::vec3(31, 0.5, -30.075), glm::mat4(1.0f));
+	addTavernItem(POLE, glm::vec3(1.1, 1.2, 1.2), glm::vec3(30, 1.5, -30), glm::mat4(1.0f));
 }
 
 void Tavern::enableBuff(GLint h_vertPos, GLint h_vertNor, GLuint posBuf, GLuint norBuf, GLuint indBuf) {
