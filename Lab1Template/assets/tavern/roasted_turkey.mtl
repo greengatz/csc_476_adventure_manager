@@ -1,0 +1,11 @@
+# 3ds Max Wavefront OBJ Exporter v0.97b
+
+newmtl Roasted_Turkey
+	Ns 9.999999
+	Ni 1.500000
+	Ka 0.588235 0.588235 0.588235
+	Kd 0.588235 0.588235 0.588235
+	Ks 0.000000 0.000000 0.000000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka maps\roastturkey_color.jpg
+	map_Kd maps\roastturkey_color.jpg
