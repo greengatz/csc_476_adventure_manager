@@ -13,12 +13,20 @@
 #define GRASS 3
 #define TRAIL 0
 #define RED 1
+#define LBTRAIL 2
+#define RBTRAIL 4
+#define LTTRAIL 5
+#define RTTRAIL 6
 
 using namespace std;
 
 int TERRAIN_TEX_ID = 100;
 int TERRAIN_TEX_DIRT_ID = 200;
 int TERRAIN_TEX_RED_ID = 300;
+int TERRAIN_TEX_LBTRAIL_ID = 400;
+int TERRAIN_TEX_RBTRAIL_ID = 900;
+int TERRAIN_TEX_LTTRAIL_ID = 500;
+int TERRAIN_TEX_RTTRAIL_ID = 800;
 
 //TextureLoader texLoader;
 
@@ -61,24 +69,36 @@ void Terrain::createTrail(){
                 trailMap[indexX][indexZ]=RED;
             }else if(indexX == lastSpot - 1){
                 //Left Tile
-                trailMap[indexX][indexZ]=TRAIL;
+                if(!shiftTog){
+                    trailMap[indexX][indexZ]=LBTRAIL;
+                }else{
+                    trailMap[indexX][indexZ]=RBTRAIL;
+                }
             }else if(indexX == lastSpot + 1){
                 //Right Tile
-               trailMap[indexX][indexZ]=TRAIL;
+                if(!shiftTog){
+                    trailMap[indexX][indexZ]=LTTRAIL;
+                }else{
+                    trailMap[indexX][indexZ]=RTTRAIL;
+                }
             }else if(indexX == lastSpot){
                 //Center Tile
                 trailMap[indexX][indexZ]=TRAIL;
             }
             printf("[%i]",trailMap[indexX][indexZ]);
         }
-        if(lastSpot > MAP_X - 10 || lastSpot < 10){
-            shiftTog = !shiftTog;     
-        }
+        
 
         if(changeInPath == 0){
             // srand(time(NULL));
             changeInPath = (rand() % (maxShift - minShift)) + minShift;
-            shiftTog = !shiftTog;
+            if(lastSpot > MAP_X - 5){
+                shiftTog = false;
+            }else if(lastSpot < 5){
+                shiftTog = true;
+            }else{
+                shiftTog = !shiftTog;
+            }
 
         }else{
 
@@ -204,8 +224,12 @@ void Terrain::init(TextureLoader* texLoader)
   	glBufferData(GL_ARRAY_BUFFER, sizeof(terrain_tex), terrain_tex, GL_STATIC_DRAW);
 
     //Load Texture
-    texLoader->LoadTexture((char *)"assets/green.bmp", TERRAIN_TEX_ID);
-    texLoader->LoadTexture((char *)"assets/dirt.bmp", TERRAIN_TEX_DIRT_ID);
+    texLoader->LoadTexture((char *)"assets/grass2.bmp", TERRAIN_TEX_ID);
+    texLoader->LoadTexture((char *)"assets/trail2.bmp", TERRAIN_TEX_DIRT_ID);
+    texLoader->LoadTexture((char *)"assets/trailtopleft.bmp", TERRAIN_TEX_LBTRAIL_ID);
+    texLoader->LoadTexture((char *)"assets/trailbottomleft.bmp", TERRAIN_TEX_RBTRAIL_ID);
+    texLoader->LoadTexture((char *)"assets/trailbottomright.bmp", TERRAIN_TEX_RTTRAIL_ID);
+    texLoader->LoadTexture((char *)"assets/trailtopright.bmp", TERRAIN_TEX_LTTRAIL_ID);
     texLoader->LoadTexture((char *)"assets/red.bmp", TERRAIN_TEX_RED_ID);
 
   	//unbind the arrays
@@ -257,6 +281,14 @@ void Terrain::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord)
                 glBindTexture(GL_TEXTURE_2D, TERRAIN_TEX_ID);
             }else if(trailMap[index][index2] == TRAIL){
                 glBindTexture(GL_TEXTURE_2D, TERRAIN_TEX_DIRT_ID);
+            }else if(trailMap[index][index2] == LBTRAIL){
+                glBindTexture(GL_TEXTURE_2D, TERRAIN_TEX_LBTRAIL_ID);
+            }else if(trailMap[index][index2] == RBTRAIL){
+                glBindTexture(GL_TEXTURE_2D, TERRAIN_TEX_RBTRAIL_ID);
+            }else if(trailMap[index][index2] == RTTRAIL){
+                glBindTexture(GL_TEXTURE_2D, TERRAIN_TEX_RTTRAIL_ID);
+            }else if(trailMap[index][index2] == LTTRAIL){
+                glBindTexture(GL_TEXTURE_2D, TERRAIN_TEX_LTTRAIL_ID);
             }
             glDrawArrays(GL_TRIANGLE_STRIP, size, 4);
             size +=  4;
