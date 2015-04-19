@@ -16,6 +16,10 @@
 #define POLE 12
 #define FIREPLACE 13
 #define TABLEWARE 14
+#define TURKEY 15
+#define LANDLORD 16
+#define LUMBERJACK 17
+#define SAMURAI 18
 
 #define NUMFILES 12
 
@@ -33,7 +37,11 @@ const string objFiles[] = {"assets/tavern/cube.obj",
                            "assets/tavern/stick.obj",
                            "assets/tavern/pole.obj",
                            "assets/tavern/fireplace.obj",
-                           "assets/tavern/tablware.obj"};
+                           "assets/tavern/tablware.obj"
+                           "assets/tavern/turkey.obj",
+                      	   "assets/tavern/landlord.obj",
+                   		   "assets/tavern/lumberjack.obj",
+               			   "assets/tavern/samurai.obj",};
 
 Tavern::Tavern()//GLint *pos, GLint *nor)
 {
@@ -119,36 +127,61 @@ void Tavern::createTable1(glm::vec3 initLoc, float ang)
 		float z = getRandFloat(1) - 0.5;
 		float allDir = getRandFloat(360);
 		glm::mat4 newRot = glm::rotate(glm::mat4(1.0f), allDir, glm::vec3(0, 1.0f, 0));
-		addTavernItem(MUG, glm::vec3(0.075, 0.075, 0.075), glm::vec3(initLoc.x + x, initLoc.y + 1.04, initLoc.z + z), newRot);
+		addTavernItem(MUG, glm::vec3(0.075, 0.075, 0.075), glm::vec3(initLoc.x + x, initLoc.y + 1.02, initLoc.z + z), newRot);
+		addTavernItem(BOTTLE, glm::vec3(.15, .15, .15), glm::vec3(initLoc.x + x + .25, initLoc.y + 1.12, initLoc.z + z), newRot);
+
 	}
+
+	// if(getRandInt(2) > 1)
+	// {
+	// 	float x = getRandFloat(.5) - 0.25;
+	// 	float z = getRandFloat(.5) - 0.25;
+	// 	addTavernItem(TABLEWARE, glm::vec3(.5, .5, .5), glm::vec3(initLoc.x + x + .5, initLoc.y + 1.1, initLoc.z + z + .5), rot);
+	// }
 }
 
 void Tavern::loadTavernMeshes()
 {
 	srand(time(NULL));
 	float ang;
-	glm::mat4 rot;
+	ang = 180;
+	glm::mat4 rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 1.0f, 0));
 	for (int iter = 0; iter < NUMFILES - 1; iter++) {
 		addTavernMesh(objFiles[iter], false);
 	}
 	addTavernMesh("assets/tavern/stick.obj", true);
 	addTavernMesh("assets/tavern/pole.obj", true);
-	addTavernMesh("assets/tavern/fireplace.obj", true);
+	addTavernMesh("assets/tavern/fireplace.obj", false);
 	addTavernMesh("assets/tavern/tableware.obj", true);
+	addTavernMesh("assets/tavern/turkey.obj", false);
+	addTavernMesh("assets/tavern/landlord.obj", false);
+	addTavernMesh("assets/tavern/lumberjack.obj", false);
+	addTavernMesh("assets/tavern/samurai.obj", false);
 
 	//tavern house
 	addTavernItem(CUBE, glm::vec3(10.0, 10.0, 10.0), glm::vec3(2000, 1, -20), glm::mat4(1.0f));
 	//counter
 	addTavernItem(CUBE, glm::vec3(5.0, 1, 0.5), glm::vec3(15, 0.2, -15), glm::mat4(1.0f));
 	addTavernItem(CUBE, glm::vec3(5.0, 0.1, 0.55), glm::vec3(15, 1.1, -15), glm::mat4(1.0f));
+	addTavernItem(BOTTLE, glm::vec3(.15, .15, .15), glm::vec3(15, 1.33, -15), glm::mat4(1.0f));
+	addTavernItem(BOTTLE, glm::vec3(.15, .15, .15), glm::vec3(17, 1.33, -15.3), glm::mat4(1.0f));
+	addTavernItem(BOTTLE, glm::vec3(.15, .15, .15), glm::vec3(12, 1.33, -15.3), glm::mat4(1.0f));
+	addTavernItem(BOTTLE, glm::vec3(.15, .15, .15), glm::vec3(19, 1.33, -15.3), glm::mat4(1.0f));
+	addTavernItem(LANDLORD, glm::vec3(1, 1, 1), glm::vec3(15, 1.13, -13), rot);
+	addTavernItem(LUMBERJACK, glm::vec3(1, 1, 1), glm::vec3(15.5, .99, -16), glm::mat4(1.0f));
+
+
 	addTavernItem(CUBE, glm::vec3(0.5, 1, 2), glm::vec3(21.9, 0.2, -13.5), glm::mat4(1.0f));
 	addTavernItem(CUBE, glm::vec3(0.55, 0.1, 2), glm::vec3(21.9, 1.1, -13.5), glm::mat4(1.0f));
+	addTavernItem(BOTTLE, glm::vec3(.15, .15, .15), glm::vec3(21.9, 1.33, -13.5), glm::mat4(1.0f));
+	addTavernItem(BOTTLE, glm::vec3(.15, .15, .15), glm::vec3(21.5, 1.33, -14), glm::mat4(1.0f));
+
+
+
 	// addTavernItem(CUBE, glm::vec3(5.0, 0.1, 0.55), glm::vec3(15, 1.1, -15), glm::mat4(1.0f));
 	//door
 	addTavernItem(DOOR, glm::vec3(1.5, 1.5, 1.5), glm::vec3(5, 1.35, -23), glm::mat4(1.0f));
 	//adding bookshelves
-	ang = 180;
-	rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 1.0f, 0));
 	addTavernItem(BOOKSHELF, glm::vec3(1.0, 1.0, 1.0), glm::vec3(12.4, 1.75, -12.5), rot);
 	addTavernItem(BOOKSHELF, glm::vec3(1.0, 1.0, 1.0), glm::vec3(13.7, 1.75, -12.5), rot);
 	addTavernItem(BOOKSHELF, glm::vec3(1.0, 1.0, 1.0), glm::vec3(15, 1.75, -12.5), rot);
@@ -203,6 +236,10 @@ void Tavern::loadTavernMeshes()
 	addTavernItem(STICK, glm::vec3(1.0, 1.5, 1.0), glm::vec3(29, 0.5, -30.075), glm::mat4(1.0f));
 	addTavernItem(STICK, glm::vec3(1.0, 1.5, 1.0), glm::vec3(31, 0.5, -30.075), glm::mat4(1.0f));
 	addTavernItem(POLE, glm::vec3(1.1, 1.2, 1.2), glm::vec3(30, 1.5, -30), glm::mat4(1.0f));
+	addTavernItem(SAMURAI, glm::vec3(1, 1, 1), glm::vec3(28, 1.3, -30), glm::mat4(1.0f));
+
+	rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 1.0f, 0));
+	addTavernItem(TURKEY, glm::vec3(.45, .45, .45), glm::vec3(30, 1.5, -30), rot);
 }
 
 void Tavern::enableBuff(GLint h_vertPos, GLint h_vertNor, GLuint posBuf, GLuint norBuf, GLuint indBuf) {
