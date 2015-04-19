@@ -92,7 +92,7 @@ void Tavern::loadTavernMeshes()
 	addTavernMesh("assets/tavern/fireplace.obj", true);
 
 	//tavern house
-	addTavernItem(CUBE, glm::vec3(10.0, 10.0, 10.0), glm::vec3(2000, 1, -20), glm::mat4(1.0f));
+	addTavernItem(CUBE, glm::vec3(10.0, 10.0, 10.0), glm::vec3(20, 1, -20), glm::mat4(1.0f));
 	//counter
 	addTavernItem(CUBE, glm::vec3(5.0, 1, 0.5), glm::vec3(15, 0.2, -15), glm::mat4(1.0f));
 	addTavernItem(CUBE, glm::vec3(5.0, 0.1, 0.55), glm::vec3(15, 1.1, -15), glm::mat4(1.0f));
