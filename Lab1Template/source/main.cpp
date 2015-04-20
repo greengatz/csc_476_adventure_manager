@@ -23,6 +23,7 @@
 #include "obj3d.h"
 #include "obj3dcontainer.h"
 #include "tavern.h"
+#include "wagon.h"
 
 using namespace std;
 
@@ -48,6 +49,8 @@ Terrain terrain;
 GLint terrainToggleID;
 
 Wall wall;
+
+Wagon wagon;
 
 int NUMOBJ = 5;
 Camera camera;
@@ -209,7 +212,11 @@ void initModels()
 	//Initialize Terrain object
 	terrain.init(&texLoader);
 
+	//Initalize Wall
 	wall.init(&texLoader);
+
+	//Initalize Wagon
+	wagon.init(&texLoader);
 
 	//initialize the modeltrans matrix stack
    ModelTrans.useModelViewMatrix();
@@ -304,33 +311,7 @@ bool installShaders(const string &vShaderName, const string &fShaderName)
 	return true;
 }
 
-void drawScore()
-{
-	//set up the texture unit
-    glEnable(GL_TEXTURE_2D);
-    glActiveTexture(GL_TEXTURE0);
-
-    glBindTexture(GL_TEXTURE_2D, 101);
-
-   GLSL::enableVertexAttribArray(h_vertPos);
-   glBindBuffer(GL_ARRAY_BUFFER, NumBufObj);
-   glVertexAttribPointer(h_vertPos, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-   GLSL::enableVertexAttribArray(h_aTexCoord);
-   glBindBuffer(GL_ARRAY_BUFFER, NumTexBufObj);
-   glVertexAttribPointer(h_aTexCoord, 2, GL_FLOAT, GL_FALSE, 0, 0);
-
-   // Bind index array for drawing
-   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, NumIndBufObj);
-   glDrawElements(GL_TRIANGLES, g_GiboLen, GL_UNSIGNED_INT, 0);
-
-   GLSL::disableVertexAttribArray(h_vertPos);
-   GLSL::disableVertexAttribArray(h_aTexCoord);
-   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-   glBindBuffer(GL_ARRAY_BUFFER, 0);
-   glDisable(GL_TEXTURE_2D);
-}
-
+//This will be in wall class eventually....
 void drawWalls()
 {
 	ModelTrans.loadIdentity();
@@ -407,6 +388,7 @@ void drawGL()
 	//Still need to set position for terrain.
 	ModelTrans.popMatrix();
 
+	//Draw OUTSIDE SCENE
 	glUniform1i(terrainToggleID, 1);
 	glUniform1i(h_uTexUnit, 0);
 	ModelTrans.loadIdentity();
@@ -416,9 +398,13 @@ void drawGL()
 		ModelTrans.popMatrix();
 	terrain.draw(h_vertPos, h_vertNor, h_aTexCoord);
 	drawWalls();
+	wagon.draw(h_vertPos, h_vertNor, h_aTexCoord);
 	glUniform1i(terrainToggleID, 0);
 
-	//Draw Tavern Items here
+
+
+
+	//Draw TAVERN
 	tavern.drawTavern(h_ModelMatrix, h_vertPos, h_vertNor);
 	
 	// Unbind the program
