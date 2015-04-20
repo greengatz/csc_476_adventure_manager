@@ -52,7 +52,6 @@ Wall wall;
 int NUMOBJ = 5;
 Camera camera;
 bool cull = false;
-bool line = false;
 glm::vec2 mouse;
 int shapeCount = 1;
 std::vector<Shape> shapes;
@@ -395,18 +394,6 @@ void drawGL()
   	glfwGetCursorPos(window, &xpos, &ypos);
 	camera.update(xpos, ypos);
 
-	// Enable backface culling
-	if(cull) {
-		glEnable(GL_CULL_FACE);
-	} else {
-		glDisable(GL_CULL_FACE);
-	}
-	if(line) {
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	} else {
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	}
-
 	glUniform3fv(h_lightPos1, 1, glm::value_ptr(glm::vec3(1.0f, 1.0f, 1.0f)));
 	glUniform3fv(h_lightPos2, 1, glm::value_ptr(glm::vec3(-1.0f, 1.0f, 1.0f)));
 	glUniform1f(h_option, optionS);
@@ -509,57 +496,82 @@ bool hasCollided(glm::vec3 incr)
 /**
  * This will get called when any button on keyboard is pressed.
  */
-
 void checkUserInput()
 {
    vec3 view = camera.getLookAtPoint() - camera.getTheEye();
    vec3 strafe = glm::cross(view, vec3(0.0, 1.0, 0.0));
-   if (glfwGetKey(window, GLFW_KEY_C ) == GLFW_PRESS)
-   {
-      cull = !cull;
-   }
-   if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
-   {
-      line = !line;
-   }
    if (glfwGetKey(window, GLFW_KEY_A ) == GLFW_PRESS && !hasCollided(-strafe))
    {
-      //theStrafe -= strafe * strafeSpeed;
       camera.updateStrafe(-strafe);
    }
    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS && !hasCollided(strafe))
    {
-      //theStrafe += strafe * strafeSpeed;
       camera.updateStrafe(strafe);
    }
    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS && !hasCollided(view*1.2f))
    {
-      //theZoom += view * sprintSpeed;
       camera.updateZoom(view*1.2f);
    }
    else if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS && !hasCollided(view))
    {
-      //theZoom += view * walkSpeed;
       camera.updateZoom(view);
    }
    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS && !hasCollided(-view*1.2f))
    {
-      //theZoom -= view * sprintSpeed;
       camera.updateZoom(-view*1.2f);
    }
    else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS && !hasCollided(-view))
    {
-      //theZoom -= view * walkSpeed;
       camera.updateZoom(-view);
    }
-   if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
-   {
-   	camera.toggleFreeRoam();
-   }
-   if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
-   {
-   	terrain.createTrail();
-   }
+}
+
+/**
+ * Use this for debugging purposes for right now.
+ */
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	timeNew = glfwGetTime();
+	double dtKey = timeNew - timeOldDraw;
+
+	// Update every 60Hz
+	if(dtKey >= (1.0 / 60.0) ) {
+		//Free roam camera
+		if (key == GLFW_KEY_0 && action == GLFW_PRESS)
+   	{
+   		camera.toggleFreeRoam();
+   	}
+   	//Create a new trail
+   	if (key == GLFW_KEY_9 && action == GLFW_PRESS)
+   	{
+   		terrain.createTrail();
+   	}
+   	//Toggle between lines and filled polygons
+   	if (key == GLFW_KEY_L && action == GLFW_PRESS)
+   	{
+      	GLint polyType;
+      	glGetIntegerv(GL_POLYGON_MODE, &polyType);
+      	if(polyType == GL_FILL) {
+				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			} 
+			else 
+			{
+				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			}
+   	}
+   	//Toggle culling.
+   	if (glfwGetKey(window, GLFW_KEY_K ) == GLFW_PRESS)
+   	{
+      	cull = !cull;
+      	if(cull) {
+				glEnable(GL_CULL_FACE);
+			} 
+			else 
+			{
+				glDisable(GL_CULL_FACE);
+			}
+   	}
+	}
 }
 
 void window_size_callback(GLFWwindow* window, int w, int h){
@@ -627,7 +639,7 @@ int main(int argc, char **argv)
     }
     glfwMakeContextCurrent(window);
     glfwSetWindowSizeCallback(window, window_size_callback);
-    //glfwSetKeyCallback(window, key_callback);
+    glfwSetKeyCallback(window, key_callback);
 
     // Initialize glad
    if (!gladLoadGL()) {
@@ -653,35 +665,14 @@ int main(int argc, char **argv)
   	tavern.loadTavernMeshes();
    do{
    	timeNew = glfwGetTime();
-	double dtSpawn = timeNew - timeOldSpawn;
-
-	// // Update every 1s
-	// if(shapes.size() != NUMOBJ && dtSpawn >= timeOldSpawn) {
-	// 	float randomX = rF(10.0f, 40.0f);
-	// 	float randomZ = rF(-10.0f, -40.0f);
-	// 	for (std::vector<Shape>::iterator it = shapes.begin(); it != shapes.end(); ++it){
-	// 		glm::vec3 temp = it->getPosition();
-	// 		if((temp.x < randomX + 1 && temp.x > randomX - 1) || 
-	// 			(temp.z < randomZ + 1 && temp.z > randomZ - 1)){
-	// 			randomX = rF(10.0f, 40.0f);
-	// 			randomZ = rF(-10.0f, -40.0f);
-	// 			it = shapes.begin();
-	// 		}
-	// 	}
-	// 	spinOffNewShape(&str[0u], randomX, randomZ);
-	// 	timeOldSpawn += 1.0;
-	// }
 	
-	
-   	//Check for user input
-   	//checkUserInput();
 		double dtDraw = timeNew - timeOldDraw;
 		t += h;
 		// Update every 60Hz
-		if(dtDraw >= (1.0 / 60) ) {
+		if(dtDraw >= (1.0 / 60.0) ) {
 			checkUserInput();
 			checkCollisions();
-			timeOldDraw += (1.0 / 60);
+			timeOldDraw += (1.0 / 60.0);
 			//Draw an image
 			drawGL();
 		}

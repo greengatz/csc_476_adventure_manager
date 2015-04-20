@@ -25,7 +25,7 @@ float strafeSpeed = 0.5f;
 //Walk speed
 float walkSpeed = 0.5f;
 //Sprint speed
-float sprintSpeed = 1.0f;
+float sprintSpeed = 5.0f;
 
 Camera::Camera() :
 	aspect(1.0f),
