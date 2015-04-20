@@ -347,6 +347,7 @@ void drawWalls()
 {
 	ModelTrans.loadIdentity();
 	ModelTrans.pushMatrix();
+		ModelTrans.translate(glm::vec3(-100.0, 0.0, 0.0));
 		ModelTrans.translate(glm::vec3(3.0, 0.0, 0.0));
 		glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(ModelTrans.modelViewMatrix));
 		wall.draw(h_vertPos, h_vertNor, h_aTexCoord);
@@ -444,7 +445,14 @@ void drawGL()
 
 	glUniform1i(terrainToggleID, 1);
 	glUniform1i(h_uTexUnit, 0);
+	ModelTrans.loadIdentity();
+	ModelTrans.pushMatrix();
+		ModelTrans.translate(glm::vec3(-100.0, 0.0, 0.0));
+		glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(ModelTrans.modelViewMatrix));
+		ModelTrans.popMatrix();
 	terrain.draw(h_vertPos, h_vertNor, h_aTexCoord);
+	drawWalls();
+	glUniform1i(terrainToggleID, 0);
 
 
 	ModelTrans.loadIdentity();
@@ -454,10 +462,6 @@ void drawGL()
 		glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(ModelTrans.modelViewMatrix));
 		ModelTrans.popMatrix();
 	drawScore();
-
-
-	drawWalls();
-	glUniform1i(terrainToggleID, 0);
 
 	tavern.drawTavern(h_ModelMatrix, h_vertPos, h_vertNor);
 
