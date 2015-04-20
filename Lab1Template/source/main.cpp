@@ -189,12 +189,8 @@ void initShape(char * filename)
 {
 	t = 0.0f;
 	h = 0.001f;
-	// g = glm::vec3(0.0f, -0.01f, 0.0f);
 
-	//Load Shape object
-	// for (std::vector<Shape>::iterator it = shapes.begin(); it != shapes.end(); ++it){
-	// 	it->load(filename);
-	// }
+	//Initialize shapes here
 }
 
 /**
@@ -210,14 +206,6 @@ void spinOffNewShape(char * filename, float x, float z){
 
 void initModels()
 {
-	//Maybe later have a inheritance of Shape and go
-	// through each and init each one.
-
-	//Initialize Shape object
-	// for (std::vector<Shape>::iterator it = shapes.begin(); it != shapes.end(); ++it){
-	// 	it->init();
-	// }
-
 	//Initialize Terrain object
 	terrain.init(&texLoader);
 
@@ -410,32 +398,6 @@ void drawGL()
 	camera.applyViewMatrix(&view);
 	glUniformMatrix4fv(h_ViewMatrix, 1, GL_FALSE, glm::value_ptr(view.topMatrix()));
 
-	bool winCondition = true;
-	// Draw shapes
-	for (std::vector<Shape>::iterator it = shapes.begin(); it != shapes.end(); ++it){
-    // std::cout << ' ' << ;
-	// for(int i = 0; i < shapeCount; i++){
-		if(it->isGreen())
-			SetMaterial(1);
-		else{
-			winCondition = false;
-			SetMaterial(0);
-		}
-		ModelTrans.loadIdentity();
-		ModelTrans.pushMatrix();
-		ModelTrans.translate(it->getPosition());
-		glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(ModelTrans.modelViewMatrix));
-		ModelTrans.popMatrix();
-		it->draw(h_vertPos, h_vertNor);	
-	}
-
-	if(winCondition){
-		//reset bunnies & increase the count
-		points = 0;
-		shapes.clear();
-		NUMOBJ += 10;
-	}
-
 	SetMaterial(2);
 	ModelTrans.loadIdentity();
 	ModelTrans.pushMatrix();
@@ -454,15 +416,7 @@ void drawGL()
 	drawWalls();
 	glUniform1i(terrainToggleID, 0);
 
-
-	ModelTrans.loadIdentity();
-	ModelTrans.pushMatrix();
-		ModelTrans.translate(glm::vec3(20, 0, -20));
-		ModelTrans.scale(200.0, 200.0, 200.0);
-		glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(ModelTrans.modelViewMatrix));
-		ModelTrans.popMatrix();
-	drawScore();
-
+	//Draw Tavern Items here
 	tavern.drawTavern(h_ModelMatrix, h_vertPos, h_vertNor);
 
 	// tavern.drawTavern();
