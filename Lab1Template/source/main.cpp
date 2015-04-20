@@ -374,6 +374,8 @@ void drawGL()
 {
 	// Clear buffers
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	//Probably replace this sometime with different shaders....
 	glUseProgram(pid);
 
 	//Update Camera
@@ -418,15 +420,11 @@ void drawGL()
 
 	//Draw Tavern Items here
 	tavern.drawTavern(h_ModelMatrix, h_vertPos, h_vertNor);
-
-	// tavern.drawTavern();
 	
 	// Unbind the program
 	glUseProgram(0);
-
 	// Pop stacks
 	proj.popMatrix();
-	
 }
 
 bool hasCollided(glm::vec3 incr)
