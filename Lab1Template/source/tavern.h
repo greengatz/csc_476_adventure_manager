@@ -27,6 +27,7 @@ class Tavern
 		void loadTavernMeshes();
 		void drawTavern(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor);
 	private:
+		void loadBufferData();
 		void createTable1(glm::vec3 initLoc, float ang);
 		void createPillar(glm::vec3 initLoc);
 		void addTavernMesh(const string filename, bool noNorms);

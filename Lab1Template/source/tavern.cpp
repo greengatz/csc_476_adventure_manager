@@ -24,7 +24,7 @@
 
 #define NUMFILES 12
 
-const string objFiles[] = {"assets/tavern/cube.obj",
+const string tavObjFiles[] = {"assets/tavern/cube.obj",
                        	   "assets/tavern/door.obj",
                            "assets/tavern/bookshelf.obj",
                            "assets/tavern/stool.obj",
@@ -44,6 +44,8 @@ const string objFiles[] = {"assets/tavern/cube.obj",
                    		   "assets/tavern/lumberjack.obj",
                			   "assets/tavern/samurai.obj",
                			   "assets/tavern/rock.obj"};
+
+const string tavTextures[] = {"assets/tavern/tavernFloor.bmp"};
 
 Tavern::Tavern()//GLint *pos, GLint *nor)
 {
@@ -157,14 +159,10 @@ void Tavern::createPillar(glm::vec3 initLoc)
 	addTavernItem(TORCH, glm::vec3(0.4, 0.4, 0.4), glm::vec3(initLoc.x + 0.2, initLoc.y + 1.6, initLoc.z), rot);
 }
 
-void Tavern::loadTavernMeshes()
+void Tavern::loadBufferData()
 {
-	srand(time(NULL));
-	float ang;
-	ang = 180;
-	glm::mat4 rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 1.0f, 0));
 	for (int iter = 0; iter < NUMFILES - 1; iter++) {
-		addTavernMesh(objFiles[iter], false);
+		addTavernMesh(tavObjFiles[iter], false);
 	}
 	addTavernMesh("assets/tavern/stick.obj", true);
 	addTavernMesh("assets/tavern/pole.obj", true);
@@ -175,6 +173,18 @@ void Tavern::loadTavernMeshes()
 	addTavernMesh("assets/tavern/lumberjack.obj", false);
 	addTavernMesh("assets/tavern/samurai.obj", false);
 	addTavernMesh("assets/tavern/rock.obj", false);
+
+	// tavernMeshes[CUBE].loadTextureCoor();
+}
+
+void Tavern::loadTavernMeshes()
+{
+	srand(time(NULL));
+	float ang;
+	ang = 180;
+	glm::mat4 rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 1.0f, 0));
+
+	loadBufferData();
 
 	//tavern walls
 	addTavernItem(CUBE, glm::vec3(28, 5.0, 0.15), glm::vec3(25, 3, -12), glm::mat4(1.0f));
