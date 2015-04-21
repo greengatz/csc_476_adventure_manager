@@ -183,8 +183,12 @@ void Tavern::loadTavernMeshes()
 	addTavernMesh("assets/tavern/samurai.obj", false);
 	addTavernMesh("assets/tavern/rock.obj", false);
 
-	//tavern house
-	addTavernItem(CUBE, glm::vec3(20.0, 10.0, 13.0), glm::vec3(25, 1, -25.3), glm::mat4(1.0f));
+	//tavern walls
+	addTavernItem(CUBE, glm::vec3(28, 5.0, 0.15), glm::vec3(25, 3, -12), glm::mat4(1.0f));
+	addTavernItem(CUBE, glm::vec3(28, 5.0, 0.15), glm::vec3(25, 3, -35), glm::mat4(1.0f));
+	addTavernItem(CUBE, glm::vec3(0.15, 5.0, 28), glm::vec3(7, 3, -25), glm::mat4(1.0f));
+	addTavernItem(CUBE, glm::vec3(0.15, 5.0, 28), glm::vec3(39, 3, -25), glm::mat4(1.0f));
+	// addTavernItem(CUBE, glm::vec3(20.0, 10.0, 13.0), glm::vec3(25, 1, -25.3), glm::mat4(1.0f));
 	//pillars
 	createPillar(glm::vec3(21, 1, -27));
 	//counter
@@ -207,7 +211,7 @@ void Tavern::loadTavernMeshes()
 
 	// addTavernItem(CUBE, glm::vec3(5.0, 0.1, 0.55), glm::vec3(15, 1.1, -15), glm::mat4(1.0f));
 	//door
-	addTavernItem(DOOR, glm::vec3(1.5, 1.5, 1.5), glm::vec3(5, 1.35, -23), glm::mat4(1.0f));
+	addTavernItem(DOOR, glm::vec3(1.5, 1.5, 1.5), glm::vec3(7.5, 1.35, -23), glm::mat4(1.0f));
 	//adding bookshelves
 	addTavernItem(BOOKSHELF, glm::vec3(1.0, 1.0, 1.0), glm::vec3(12.4, 1.75, -12.5), rot);
 	addTavernItem(BOOKSHELF, glm::vec3(1.0, 1.0, 1.0), glm::vec3(13.7, 1.75, -12.5), rot);
