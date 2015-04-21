@@ -25,6 +25,7 @@
 #include "tavern.h"
 #include "Wagon.h"
 #include "manager.h"
+#include "TavernTerrain.h"
 #include <string>
 
 using namespace std;
@@ -112,6 +113,7 @@ GLuint NumBufObj, NumIndBufObj, NumTexBufObj;
 RenderingHelper ModelTrans;
 Tavern tavern;
 Manager manager("The Dude", camera);
+TavernTerrain tavTerr;
 
 /**
  * Helper function to send materials to the shader - create below.
@@ -214,6 +216,7 @@ void initModels()
 {
 	//Initialize Terrain object
 	terrain.init(&texLoader);
+	tavTerr.init(&texLoader);
 
 	//Initalize Wall
 	wall.init(&texLoader);
@@ -405,6 +408,12 @@ void drawGL()
 
 
 	//Draw TAVERN
+	glUniform1i(terrainToggleID, 1);
+	glUniform1i(h_uTexUnit, 0);
+	ModelTrans.loadIdentity();
+	ModelTrans.pushMatrix();
+	tavTerr.draw(h_vertPos, h_vertNor, h_aTexCoord, h_ModelMatrix, &ModelTrans);
+	ModelTrans.popMatrix();
 	tavern.drawTavern(h_ModelMatrix, h_vertPos, h_vertNor);
 	
 	// Unbind the program
