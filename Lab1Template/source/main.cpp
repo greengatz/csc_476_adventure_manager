@@ -23,7 +23,9 @@
 #include "obj3d.h"
 #include "obj3dcontainer.h"
 #include "tavern.h"
-#include "wagon.h"
+#include "Wagon.h"
+#include "manager.h"
+#include <string>
 
 using namespace std;
 
@@ -49,7 +51,7 @@ Terrain terrain;
 GLint terrainToggleID;
 
 Wall wall;
-
+Manager manager("The Dude");
 Wagon wagon;
 
 int NUMOBJ = 5;
