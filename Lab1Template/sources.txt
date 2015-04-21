@@ -14,6 +14,8 @@ set(HEADERS
    tavern.h
    obj3d.h
    obj3dcontainer.h
+   Wagon.h
+   manager.h
 )
 
 # List all .c / .cpp files here
@@ -32,4 +34,6 @@ set(SOURCES
    tavern.cpp
    obj3d.cpp
    obj3dcontainer.cpp
+   Wagon.cpp
+   manager.cpp
 )

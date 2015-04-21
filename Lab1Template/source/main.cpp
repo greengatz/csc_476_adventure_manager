@@ -1,5 +1,5 @@
 /**
- * Lab 1
+ * Mercenary Manager
  * @author Brandon Clark
  */
 
@@ -23,6 +23,9 @@
 #include "obj3d.h"
 #include "obj3dcontainer.h"
 #include "tavern.h"
+#include "Wagon.h"
+#include "manager.h"
+#include <string>
 
 using namespace std;
 
@@ -49,10 +52,11 @@ GLint terrainToggleID;
 
 Wall wall;
 
+Wagon wagon;
+
 int NUMOBJ = 5;
 Camera camera;
 bool cull = false;
-bool line = false;
 glm::vec2 mouse;
 int shapeCount = 1;
 std::vector<Shape> shapes;
@@ -107,6 +111,7 @@ GLuint NumBufObj, NumIndBufObj, NumTexBufObj;
 //Rendering Helper
 RenderingHelper ModelTrans;
 Tavern tavern;
+Manager manager("The Dude", camera);
 
 /**
  * Helper function to send materials to the shader - create below.
@@ -190,12 +195,8 @@ void initShape(char * filename)
 {
 	t = 0.0f;
 	h = 0.001f;
-	// g = glm::vec3(0.0f, -0.01f, 0.0f);
 
-	//Load Shape object
-	// for (std::vector<Shape>::iterator it = shapes.begin(); it != shapes.end(); ++it){
-	// 	it->load(filename);
-	// }
+	//Initialize shapes here
 }
 
 /**
@@ -211,18 +212,14 @@ void spinOffNewShape(char * filename, float x, float z){
 
 void initModels()
 {
-	//Maybe later have a inheritance of Shape and go
-	// through each and init each one.
-
-	//Initialize Shape object
-	// for (std::vector<Shape>::iterator it = shapes.begin(); it != shapes.end(); ++it){
-	// 	it->init();
-	// }
-
 	//Initialize Terrain object
 	terrain.init(&texLoader);
 
+	//Initalize Wall
 	wall.init(&texLoader);
+
+	//Initalize Wagon
+	wagon.init(&texLoader, &terrain);
 
 	//initialize the modeltrans matrix stack
    ModelTrans.useModelViewMatrix();
@@ -317,36 +314,9 @@ bool installShaders(const string &vShaderName, const string &fShaderName)
 	return true;
 }
 
-void drawScore()
-{
-	//set up the texture unit
-    glEnable(GL_TEXTURE_2D);
-    glActiveTexture(GL_TEXTURE0);
-
-    glBindTexture(GL_TEXTURE_2D, 101);
-
-   GLSL::enableVertexAttribArray(h_vertPos);
-   glBindBuffer(GL_ARRAY_BUFFER, NumBufObj);
-   glVertexAttribPointer(h_vertPos, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-   GLSL::enableVertexAttribArray(h_aTexCoord);
-   glBindBuffer(GL_ARRAY_BUFFER, NumTexBufObj);
-   glVertexAttribPointer(h_aTexCoord, 2, GL_FLOAT, GL_FALSE, 0, 0);
-
-   // Bind index array for drawing
-   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, NumIndBufObj);
-   glDrawElements(GL_TRIANGLES, g_GiboLen, GL_UNSIGNED_INT, 0);
-
-   GLSL::disableVertexAttribArray(h_vertPos);
-   GLSL::disableVertexAttribArray(h_aTexCoord);
-   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-   glBindBuffer(GL_ARRAY_BUFFER, 0);
-   glDisable(GL_TEXTURE_2D);
-}
-
+//This will be in wall class eventually....
 void drawWalls()
 {
-	ModelTrans.loadIdentity();
 	ModelTrans.pushMatrix();
 		ModelTrans.translate(glm::vec3(3.0, 0.0, 0.0));
 		glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(ModelTrans.modelViewMatrix));
@@ -386,6 +356,8 @@ void drawGL()
 {
 	// Clear buffers
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	//Probably replace this sometime with different shaders....
 	glUseProgram(pid);
 
 	//Update Camera
@@ -394,18 +366,6 @@ void drawGL()
 
   	glfwGetCursorPos(window, &xpos, &ypos);
 	camera.update(xpos, ypos);
-
-	// Enable backface culling
-	if(cull) {
-		glEnable(GL_CULL_FACE);
-	} else {
-		glDisable(GL_CULL_FACE);
-	}
-	if(line) {
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	} else {
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	}
 
 	glUniform3fv(h_lightPos1, 1, glm::value_ptr(glm::vec3(1.0f, 1.0f, 1.0f)));
 	glUniform3fv(h_lightPos2, 1, glm::value_ptr(glm::vec3(-1.0f, 1.0f, 1.0f)));
@@ -422,66 +382,35 @@ void drawGL()
 	camera.applyViewMatrix(&view);
 	glUniformMatrix4fv(h_ViewMatrix, 1, GL_FALSE, glm::value_ptr(view.topMatrix()));
 
-	bool winCondition = true;
-	// Draw shapes
-	for (std::vector<Shape>::iterator it = shapes.begin(); it != shapes.end(); ++it){
-    // std::cout << ' ' << ;
-	// for(int i = 0; i < shapeCount; i++){
-		if(it->isGreen())
-			SetMaterial(1);
-		else{
-			winCondition = false;
-			SetMaterial(0);
-		}
-		ModelTrans.loadIdentity();
-		ModelTrans.pushMatrix();
-		ModelTrans.translate(it->getPosition());
-		glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(ModelTrans.modelViewMatrix));
-		ModelTrans.popMatrix();
-		it->draw(h_vertPos, h_vertNor);	
-	}
-
-	if(winCondition){
-		//reset bunnies & increase the count
-		points = 0;
-		shapes.clear();
-		NUMOBJ += 10;
-	}
-
 	SetMaterial(2);
-	ModelTrans.loadIdentity();
-	ModelTrans.pushMatrix();
-	glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(ModelTrans.modelViewMatrix));
-	//Still need to set position for terrain.
-	ModelTrans.popMatrix();
+
+	//========================== DRAW OUTSIDE SCENE ====================
 
 	glUniform1i(terrainToggleID, 1);
 	glUniform1i(h_uTexUnit, 0);
-	terrain.draw(h_vertPos, h_vertNor, h_aTexCoord);
-
-
 	ModelTrans.loadIdentity();
 	ModelTrans.pushMatrix();
-		ModelTrans.translate(glm::vec3(20, 0, -20));
-		ModelTrans.scale(200.0, 200.0, 200.0);
+		ModelTrans.translate(glm::vec3(-100.0, 0.0, 0.0));
 		glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(ModelTrans.modelViewMatrix));
+		//ModelTrans.popMatrix();
+		ModelTrans.pushMatrix();
+			terrain.draw(h_vertPos, h_vertNor, h_aTexCoord);
+			drawWalls();
+			wagon.draw(h_vertPos, h_vertNor, h_aTexCoord, h_ModelMatrix, &ModelTrans);
 		ModelTrans.popMatrix();
-	drawScore();
-
-
-	drawWalls();
+	ModelTrans.popMatrix();
 	glUniform1i(terrainToggleID, 0);
 
-	tavern.drawTavern(h_ModelMatrix, h_vertPos, h_vertNor);
+	//========================= END OUTSIDE SCENE =======================
 
-	// tavern.drawTavern();
+
+	//Draw TAVERN
+	tavern.drawTavern(h_ModelMatrix, h_vertPos, h_vertNor);
 	
 	// Unbind the program
 	glUseProgram(0);
-
 	// Pop stacks
 	proj.popMatrix();
-	
 }
 
 bool hasCollided(glm::vec3 incr)
@@ -509,57 +438,83 @@ bool hasCollided(glm::vec3 incr)
 /**
  * This will get called when any button on keyboard is pressed.
  */
-
 void checkUserInput()
 {
    vec3 view = camera.getLookAtPoint() - camera.getTheEye();
    vec3 strafe = glm::cross(view, vec3(0.0, 1.0, 0.0));
-   if (glfwGetKey(window, GLFW_KEY_C ) == GLFW_PRESS)
-   {
-      cull = !cull;
-   }
-   if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
-   {
-      line = !line;
-   }
    if (glfwGetKey(window, GLFW_KEY_A ) == GLFW_PRESS && !hasCollided(-strafe))
    {
-      //theStrafe -= strafe * strafeSpeed;
       camera.updateStrafe(-strafe);
    }
    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS && !hasCollided(strafe))
    {
-      //theStrafe += strafe * strafeSpeed;
       camera.updateStrafe(strafe);
    }
    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS && !hasCollided(view*1.2f))
    {
-      //theZoom += view * sprintSpeed;
       camera.updateZoom(view*1.2f);
    }
    else if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS && !hasCollided(view))
    {
-      //theZoom += view * walkSpeed;
       camera.updateZoom(view);
    }
    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS && !hasCollided(-view*1.2f))
    {
-      //theZoom -= view * sprintSpeed;
       camera.updateZoom(-view*1.2f);
    }
    else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS && !hasCollided(-view))
    {
-      //theZoom -= view * walkSpeed;
       camera.updateZoom(-view);
    }
-   if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
-   {
-   	camera.toggleFreeRoam();
-   }
-   if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
-   {
-   	terrain.createTrail();
-   }
+}
+
+/**
+ * Use this for debugging purposes for right now.
+ */
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	timeNew = glfwGetTime();
+	double dtKey = timeNew - timeOldDraw;
+
+	// Update every 60Hz
+	if(dtKey >= (1.0 / 60.0) ) {
+		//Free roam camera
+		if (key == GLFW_KEY_0 && action == GLFW_PRESS)
+   	{
+   		camera.toggleFreeRoam();
+   	}
+   	//Create a new trail
+   	if (key == GLFW_KEY_9 && action == GLFW_PRESS)
+   	{
+   		terrain.createTrail();
+   		wagon.resetWagon();
+   	}
+   	//Toggle between lines and filled polygons
+   	if (key == GLFW_KEY_L && action == GLFW_PRESS)
+   	{
+      	GLint polyType;
+      	glGetIntegerv(GL_POLYGON_MODE, &polyType);
+      	if(polyType == GL_FILL) {
+				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			} 
+			else 
+			{
+				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			}
+   	}
+   	//Toggle culling.
+   	if (glfwGetKey(window, GLFW_KEY_K ) == GLFW_PRESS)
+   	{
+      	cull = !cull;
+      	if(cull) {
+				glEnable(GL_CULL_FACE);
+			} 
+			else 
+			{
+				glDisable(GL_CULL_FACE);
+			}
+   	}
+	}
 }
 
 void window_size_callback(GLFWwindow* window, int w, int h){
@@ -619,7 +574,7 @@ int main(int argc, char **argv)
     // Open a window and create its OpenGL context
    g_width = 1024;
    g_height = 768;
-   window = glfwCreateWindow( g_width, g_height, "CPE476 Lab1 [ Clark | Harper ]", NULL, NULL);
+   window = glfwCreateWindow( g_width, g_height, "Mercenary Manager", NULL, NULL);
    if( window == NULL ){
       fprintf( stderr, "Failed to open GLFW window. If you have an Intel GPU, they are not 3.3 compatible. Try the 2.1 version of the tutorials.\n" );
         glfwTerminate();
@@ -627,7 +582,7 @@ int main(int argc, char **argv)
     }
     glfwMakeContextCurrent(window);
     glfwSetWindowSizeCallback(window, window_size_callback);
-    //glfwSetKeyCallback(window, key_callback);
+    glfwSetKeyCallback(window, key_callback);
 
     // Initialize glad
    if (!gladLoadGL()) {
@@ -653,35 +608,14 @@ int main(int argc, char **argv)
   	tavern.loadTavernMeshes();
    do{
    	timeNew = glfwGetTime();
-	double dtSpawn = timeNew - timeOldSpawn;
-
-	// // Update every 1s
-	// if(shapes.size() != NUMOBJ && dtSpawn >= timeOldSpawn) {
-	// 	float randomX = rF(10.0f, 40.0f);
-	// 	float randomZ = rF(-10.0f, -40.0f);
-	// 	for (std::vector<Shape>::iterator it = shapes.begin(); it != shapes.end(); ++it){
-	// 		glm::vec3 temp = it->getPosition();
-	// 		if((temp.x < randomX + 1 && temp.x > randomX - 1) || 
-	// 			(temp.z < randomZ + 1 && temp.z > randomZ - 1)){
-	// 			randomX = rF(10.0f, 40.0f);
-	// 			randomZ = rF(-10.0f, -40.0f);
-	// 			it = shapes.begin();
-	// 		}
-	// 	}
-	// 	spinOffNewShape(&str[0u], randomX, randomZ);
-	// 	timeOldSpawn += 1.0;
-	// }
 	
-	
-   	//Check for user input
-   	//checkUserInput();
 		double dtDraw = timeNew - timeOldDraw;
 		t += h;
 		// Update every 60Hz
-		if(dtDraw >= (1.0 / 60) ) {
+		if(dtDraw >= (1.0 / 60.0) ) {
 			checkUserInput();
 			checkCollisions();
-			timeOldDraw += (1.0 / 60);
+			timeOldDraw += (1.0 / 60.0);
 			//Draw an image
 			drawGL();
 		}

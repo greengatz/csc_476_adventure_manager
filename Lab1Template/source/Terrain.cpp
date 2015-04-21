@@ -28,16 +28,14 @@ int TERRAIN_TEX_RBTRAIL_ID = 900;
 int TERRAIN_TEX_LTTRAIL_ID = 500;
 int TERRAIN_TEX_RTTRAIL_ID = 800;
 
-//TextureLoader texLoader;
-
-
-
 Terrain::Terrain() :
 	x(0.0f, 0.0f, 0.0f),
 	scale(5.0f),
 	posBufID(0),
 	norBufID(0),
-	texBufID(0)
+	texBufID(0),
+  beginPosition(0.0f, 0.0f, 0.0f),
+  criticalPoints(std::vector<glm::vec3>())
 {
 }
 
@@ -45,7 +43,36 @@ Terrain::~Terrain()
 {
 }
 
+glm::vec3 Terrain::getStartPosition()
+{
+   return beginPosition;
+}
+
+glm::vec3 Terrain::nextCriticalPoint(glm::vec3 aPos)
+{
+   for (std::vector<glm::vec3>::iterator itr = criticalPoints.begin(); 
+      itr != criticalPoints.end(); itr++)
+   {
+      if (aPos.z < itr->z)
+      {
+         return *itr;
+      }
+   }
+   return glm::vec3(-1.0, -1.0, -1.0);
+}
+
+bool Terrain::atEnd(glm::vec3 aPos)
+{
+   if (aPos.z >= (MAP_Z - 1) * MAP_SCALE)
+   {
+      return true;
+   }
+   return false;
+}
+
 void Terrain::createTrail(){
+   criticalPoints.clear();
+
     int minShift = 2, maxShift = 10;
     //left for false, right for true.
     bool shiftTog = false; 
@@ -67,21 +94,29 @@ void Terrain::createTrail(){
             if(indexZ == 0 && indexX == startingSpot){
                 //Starting spot
                 trailMap[indexX][indexZ]=RED;
-            }else if(indexX == lastSpot - 1){
+            }
+            else if(indexX == lastSpot - 1)
+            {
                 //Left Tile
                 if(!shiftTog){
                     trailMap[indexX][indexZ]=LBTRAIL;
                 }else{
                     trailMap[indexX][indexZ]=RBTRAIL;
                 }
-            }else if(indexX == lastSpot + 1){
+                criticalPoints.push_back(glm::vec3(indexX, indexZ, 0.0));
+            }
+            else if(indexX == lastSpot + 1)
+            {
                 //Right Tile
                 if(!shiftTog){
                     trailMap[indexX][indexZ]=LTTRAIL;
                 }else{
                     trailMap[indexX][indexZ]=RTTRAIL;
                 }
-            }else if(indexX == lastSpot){
+                criticalPoints.push_back(glm::vec3(indexX, indexZ, 0.0));
+            }
+            else if(indexX == lastSpot)
+            {
                 //Center Tile
                 trailMap[indexX][indexZ]=TRAIL;
             }
@@ -110,6 +145,9 @@ void Terrain::createTrail(){
         }
         printf("\n");
         // startingSpot = changeInPath;
+
+        //Relative to the world
+        beginPosition = glm::vec3(0.0, 0.0, -startingSpot);
     }
 }
 
