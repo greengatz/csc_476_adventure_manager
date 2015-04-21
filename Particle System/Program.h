@@ -1,0 +1,49 @@
+//
+// sueda
+// October, 2014
+//
+
+#ifndef __Program__
+#define __Program__
+
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#endif
+#ifdef __unix__
+#include <GL/glut.h>
+#endif
+#include <map>
+#include <string>
+
+class Texture;
+
+class Program
+{
+public:
+	Program();
+	virtual ~Program();
+	
+	void setShaderNames(const std::string &v, const std::string &f);
+	virtual bool init();
+	virtual void bind();
+	virtual void unbind();
+
+	void addAttribute(const std::string &name);
+	void addUniform(const std::string &name);
+	void addTexture(Texture *texture);
+	GLint getAttribute(const std::string &name) const;
+	GLint getUniform(const std::string &name) const;
+	Texture *getTexture(const std::string &name) const;
+	
+protected:
+	std::string vShaderName;
+	std::string fShaderName;
+	
+private:
+	GLuint pid;
+	std::map<std::string,GLint> attributes;
+	std::map<std::string,GLint> uniforms;
+	std::map<std::string,Texture*> textures;
+};
+
+#endif
