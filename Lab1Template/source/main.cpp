@@ -1,5 +1,5 @@
 /**
- * Lab 1
+ * Mercenary Manager
  * @author Brandon Clark
  */
 
@@ -317,9 +317,7 @@ bool installShaders(const string &vShaderName, const string &fShaderName)
 //This will be in wall class eventually....
 void drawWalls()
 {
-	ModelTrans.loadIdentity();
 	ModelTrans.pushMatrix();
-		ModelTrans.translate(glm::vec3(-100.0, 0.0, 0.0));
 		ModelTrans.translate(glm::vec3(3.0, 0.0, 0.0));
 		glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(ModelTrans.modelViewMatrix));
 		wall.draw(h_vertPos, h_vertNor, h_aTexCoord);
@@ -398,13 +396,14 @@ void drawGL()
 	ModelTrans.pushMatrix();
 		ModelTrans.translate(glm::vec3(-100.0, 0.0, 0.0));
 		glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(ModelTrans.modelViewMatrix));
+		//ModelTrans.popMatrix();
+		ModelTrans.pushMatrix();
+			terrain.draw(h_vertPos, h_vertNor, h_aTexCoord);
+			drawWalls();
+			wagon.draw(h_vertPos, h_vertNor, h_aTexCoord, h_ModelMatrix, &ModelTrans);
 		ModelTrans.popMatrix();
-	terrain.draw(h_vertPos, h_vertNor, h_aTexCoord);
-	drawWalls();
-	wagon.draw(h_vertPos, h_vertNor, h_aTexCoord, &ModelTrans);
+	ModelTrans.popMatrix();
 	glUniform1i(terrainToggleID, 0);
-
-
 
 
 	//Draw TAVERN

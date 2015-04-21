@@ -5,6 +5,8 @@
 
 #include <iostream>
 #include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/type_ptr.hpp"
 #include "Wagon.h"
 #include "GLSL.h"
 
@@ -103,8 +105,15 @@ void Wagon::init(TextureLoader* texLoader)
 	 assert(glGetError() == GL_NO_ERROR);
 }
 
-void Wagon::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, RenderingHelper *modelTrans)
+void Wagon::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMatrix, RenderingHelper *modelTrans)
 {
+   //Position Wagon along the trail
+   modelTrans->pushMatrix();
+      modelTrans->translate(position);
+      modelTrans->scale(0.5, 0.5, 0.5);
+      glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(modelTrans->modelViewMatrix));
+   modelTrans->popMatrix();
+
   //set up the texture unit
     glEnable(GL_TEXTURE_2D);
     glActiveTexture(GL_TEXTURE0);

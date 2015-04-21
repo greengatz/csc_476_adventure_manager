@@ -18,7 +18,7 @@ public:
 	Wagon();
 	virtual ~Wagon();
 	void init(TextureLoader* texLoader);
-	void draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, RenderingHelper* modelTrans);
+	void draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMatrix, RenderingHelper* modelTrans);
 	void setPosition(float x, float y, float z);
 	void setScale(float aScale);
 	void setRotation(float aRotation);
