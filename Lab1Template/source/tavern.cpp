@@ -24,7 +24,7 @@
 
 #define NUMFILES 12
 
-const string objFiles[] = {"assets/tavern/cube.obj",
+const string tavObjFiles[] = {"assets/tavern/cube.obj",
                        	   "assets/tavern/door.obj",
                            "assets/tavern/bookshelf.obj",
                            "assets/tavern/stool.obj",
@@ -45,10 +45,11 @@ const string objFiles[] = {"assets/tavern/cube.obj",
                			   "assets/tavern/samurai.obj",
                			   "assets/tavern/rock.obj"};
 
-Tavern::Tavern()//GLint *pos, GLint *nor)
+const string tavTextures[] = {"assets/tavern/tavernFloor.bmp"};
+
+Tavern::Tavern()
 {
-	// h_vertPos = *pos;
-	// h_vertNor = *nor;
+
 }
 
 //between [1, limit]
@@ -60,7 +61,6 @@ int getRandInt(int limit)
 float getRandFloat(float limit)
 {
 	return static_cast <float> (rand()) / static_cast <float> (RAND_MAX / limit);
-	// return rand() % limit + 1.0;
 }
 
 void Tavern::addTavernMesh(const string filename, bool noNorms)
@@ -131,6 +131,7 @@ void Tavern::createTable1(glm::vec3 initLoc, float ang)
 		}
 	}
 
+	//stuff on the table
 	if (getRandInt(3) > 1) {
 		float x = getRandFloat(1) - 0.5;
 		float z = getRandFloat(1) - 0.5;
@@ -164,14 +165,10 @@ void Tavern::createPillar(glm::vec3 initLoc)
 	addTavernItem(TORCH, glm::vec3(0.4, 0.4, 0.4), glm::vec3(initLoc.x + 0.2, initLoc.y + 1.6, initLoc.z), rot);
 }
 
-void Tavern::loadTavernMeshes()
+void Tavern::loadBufferData()
 {
-	srand(time(NULL));
-	float ang;
-	ang = 180;
-	glm::mat4 rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 1.0f, 0));
 	for (int iter = 0; iter < NUMFILES - 1; iter++) {
-		addTavernMesh(objFiles[iter], false);
+		addTavernMesh(tavObjFiles[iter], false);
 	}
 	addTavernMesh("assets/tavern/stick.obj", true);
 	addTavernMesh("assets/tavern/pole.obj", true);
@@ -182,6 +179,18 @@ void Tavern::loadTavernMeshes()
 	addTavernMesh("assets/tavern/lumberjack.obj", false);
 	addTavernMesh("assets/tavern/samurai.obj", false);
 	addTavernMesh("assets/tavern/rock.obj", false);
+
+	// tavernMeshes[CUBE].loadTextureCoor();
+}
+
+void Tavern::loadTavernMeshes()
+{
+	srand(time(NULL));
+	float ang;
+	ang = 180;
+	glm::mat4 rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 1.0f, 0));
+
+	loadBufferData();
 
 	//tavern walls
 	addTavernItem(CUBE, glm::vec3(28, 5.0, 0.15), glm::vec3(25, 3, -12), glm::mat4(1.0f));
@@ -303,25 +312,36 @@ void Tavern::enableBuff(GLint h_vertPos, GLint h_vertNor, GLuint posBuf, GLuint 
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indBuf);
 }
 
-void Tavern::disableBuff(GLint h_vertPos, GLint h_vertNor) {
+void Tavern::disableBuff(GLint h_vertPos, GLint h_vertNor, GLint h_aTexCoord) {
   GLSL::disableVertexAttribArray(h_vertPos);
   GLSL::disableVertexAttribArray(h_vertNor);
+  GLSL::disableVertexAttribArray(h_aTexCoord);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void Tavern::drawTavern(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor)
+void Tavern::enableTextureBuffer(int index, GLint h_aTexCoord, GLuint texBuf)
+{
+  GLSL::enableVertexAttribArray(h_aTexCoord);
+  glBindBuffer(GL_ARRAY_BUFFER, texBuf);
+  glVertexAttribPointer(h_aTexCoord, 2, GL_FLOAT, GL_FALSE, 0, 0);
+}
+
+void Tavern::drawTavern(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor, GLint h_aTexCoord)
 {
 	for (int iter = 0; iter < tavernItems.size(); iter++) {
 		enableBuff(h_vertPos, h_vertNor, (*tavernItems[iter].cont).posBuf, (*tavernItems[iter].cont).norBuf, (*tavernItems[iter].cont).indBuf);
+		if ((*tavernItems[iter].cont).hasTexture) {
+			// enableTextureBuffer(h_aTexCoord);
+		}
 		tavernItems[iter].draw(h_ModelMatrix);
-		disableBuff(h_vertPos, h_vertNor);
+		disableBuff(h_vertPos, h_vertNor, h_aTexCoord);
 	}
 	
 	for (int iter = 0; iter < tavernCharacters.size(); iter++) {
 		enableBuff(h_vertPos, h_vertNor, (*tavernCharacters[iter].mesh.cont).posBuf, (*tavernCharacters[iter].mesh.cont).norBuf, (*tavernCharacters[iter].mesh.cont).indBuf);
 		tavernCharacters[iter].draw(h_ModelMatrix);
-		disableBuff(h_vertPos, h_vertNor);
+		disableBuff(h_vertPos, h_vertNor, h_aTexCoord);
 	}
 }
 

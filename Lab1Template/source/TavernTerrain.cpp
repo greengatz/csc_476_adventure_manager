@@ -39,9 +39,9 @@ TavernTerrain::~TavernTerrain()
 
 void TavernTerrain::init(TextureLoader* texLoader)
 {
-	x.x = -10.0f;
+	x.x = 5.0f;
 	x.y = 0.0f;
-	x.z = 10.0f;
+	x.z = -5.0f;
 	scale = 0.75f;
 	GLfloat terrain_buffer[(MAP_Z - 1) * (MAP_X - 1) * 12];
   	GLfloat terrain_norm[(MAP_Z - 1) * (MAP_X - 1) * 12];
