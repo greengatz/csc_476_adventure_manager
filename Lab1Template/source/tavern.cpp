@@ -20,6 +20,7 @@
 #define LANDLORD 16
 #define LUMBERJACK 17
 #define SAMURAI 18
+#define ROCK 19
 
 #define NUMFILES 12
 
@@ -41,7 +42,8 @@ const string objFiles[] = {"assets/tavern/cube.obj",
                            "assets/tavern/turkey.obj",
                       	   "assets/tavern/landlord.obj",
                    		   "assets/tavern/lumberjack.obj",
-               			   "assets/tavern/samurai.obj",};
+               			   "assets/tavern/samurai.obj",
+               			   "assets/tavern/rock.obj"};
 
 Tavern::Tavern()//GLint *pos, GLint *nor)
 {
@@ -140,6 +142,21 @@ void Tavern::createTable1(glm::vec3 initLoc, float ang)
 	// }
 }
 
+void Tavern::createPillar(glm::vec3 initLoc)
+{
+	addTavernItem(CUBE, glm::vec3(0.2, 10.0, 0.2), initLoc, glm::mat4(1.0f));
+	float ang = 45;
+	glm::mat4 rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(1.0f, 0, 0));
+	addTavernItem(TORCH, glm::vec3(0.4, 0.4, 0.4), glm::vec3(initLoc.x, initLoc.y + 1.6, initLoc.z + 0.2), rot);
+	rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 0, 1.0f));
+	addTavernItem(TORCH, glm::vec3(0.4, 0.4, 0.4), glm::vec3(initLoc.x - 0.2, initLoc.y + 1.6, initLoc.z), rot);
+	ang = -45;
+	rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(1.0f, 0, 0));
+	addTavernItem(TORCH, glm::vec3(0.4, 0.4, 0.4), glm::vec3(initLoc.x, initLoc.y + 1.6, initLoc.z - 0.2), rot);
+	rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 0, 1.0f));
+	addTavernItem(TORCH, glm::vec3(0.4, 0.4, 0.4), glm::vec3(initLoc.x + 0.2, initLoc.y + 1.6, initLoc.z), rot);
+}
+
 void Tavern::loadTavernMeshes()
 {
 	srand(time(NULL));
@@ -157,9 +174,12 @@ void Tavern::loadTavernMeshes()
 	addTavernMesh("assets/tavern/landlord.obj", false);
 	addTavernMesh("assets/tavern/lumberjack.obj", false);
 	addTavernMesh("assets/tavern/samurai.obj", false);
+	addTavernMesh("assets/tavern/rock.obj", false);
 
 	//tavern house
-	addTavernItem(CUBE, glm::vec3(10.0, 10.0, 10.0), glm::vec3(2000, 1, -20), glm::mat4(1.0f));
+	addTavernItem(CUBE, glm::vec3(20.0, 10.0, 13.0), glm::vec3(25, 1, -25.3), glm::mat4(1.0f));
+	//pillars
+	createPillar(glm::vec3(21, 1, -27));
 	//counter
 	addTavernItem(CUBE, glm::vec3(5.0, 1, 0.5), glm::vec3(15, 0.2, -15), glm::mat4(1.0f));
 	addTavernItem(CUBE, glm::vec3(5.0, 0.1, 0.55), glm::vec3(15, 1.1, -15), glm::mat4(1.0f));
@@ -233,10 +253,27 @@ void Tavern::loadTavernMeshes()
 	addTavernItem(FIREPLACE, glm::vec3(0.6, 0.6, 0.6), glm::vec3(30, -0.05, -29.7), glm::mat4(1.0f));
 	addTavernItem(FIREPLACE, glm::vec3(0.6, 0.6, 0.6), glm::vec3(30, -0.05, -30.3), glm::mat4(1.0f));
 	addTavernItem(FIREPLACE, glm::vec3(0.6, 0.6, 0.6), glm::vec3(30, 0.1, -30), glm::mat4(1.0f));
-	addTavernItem(STICK, glm::vec3(1.0, 1.5, 1.0), glm::vec3(29, 0.5, -30.075), glm::mat4(1.0f));
-	addTavernItem(STICK, glm::vec3(1.0, 1.5, 1.0), glm::vec3(31, 0.5, -30.075), glm::mat4(1.0f));
-	addTavernItem(POLE, glm::vec3(1.1, 1.2, 1.2), glm::vec3(30, 1.5, -30), glm::mat4(1.0f));
-	addTavernItem(SAMURAI, glm::vec3(1, 1, 1), glm::vec3(28, 1.3, -30), glm::mat4(1.0f));
+	addTavernItem(STICK, glm::vec3(1.0, 1.5, 1.0), glm::vec3(28.7, 0.5, -30.075), glm::mat4(1.0f));
+	addTavernItem(STICK, glm::vec3(1.0, 1.5, 1.0), glm::vec3(31.3, 0.5, -30.075), glm::mat4(1.0f));
+	addTavernItem(POLE, glm::vec3(1.5, 1.2, 1.4), glm::vec3(30, 1.5, -30), glm::mat4(1.0f));
+	addTavernItem(SAMURAI, glm::vec3(1, 1, 1), glm::vec3(27, 1.3, -30), glm::mat4(1.0f));
+
+	//rock circle
+	ang = 90;
+	rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(1.0f, 0, 0));
+	addTavernItem(ROCK, glm::vec3(0.35, 0.35, 0.35), glm::vec3(29, 0, -29.5), rot);
+	addTavernItem(ROCK, glm::vec3(0.35, 0.35, 0.35), glm::vec3(29, 0, -30), rot);
+	addTavernItem(ROCK, glm::vec3(0.35, 0.35, 0.35), glm::vec3(29, 0, -30.5), rot);
+	addTavernItem(ROCK, glm::vec3(0.35, 0.35, 0.35), glm::vec3(31, 0, -29.5), rot);
+	addTavernItem(ROCK, glm::vec3(0.35, 0.35, 0.35), glm::vec3(31, 0, -30), rot);
+	addTavernItem(ROCK, glm::vec3(0.35, 0.35, 0.35), glm::vec3(31, 0, -30.5), rot);
+	rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 0, 1.0f));
+	addTavernItem(ROCK, glm::vec3(0.35, 0.35, 0.35), glm::vec3(29.5, 0, -29.3), rot);
+	addTavernItem(ROCK, glm::vec3(0.35, 0.35, 0.35), glm::vec3(30, 0, -29.3), rot);
+	addTavernItem(ROCK, glm::vec3(0.35, 0.35, 0.35), glm::vec3(30.5, 0, -29.3), rot);
+	addTavernItem(ROCK, glm::vec3(0.35, 0.35, 0.35), glm::vec3(29.5, 0, -30.9), rot);
+	addTavernItem(ROCK, glm::vec3(0.35, 0.35, 0.35), glm::vec3(30, 0, -30.9), rot);
+	addTavernItem(ROCK, glm::vec3(0.35, 0.35, 0.35), glm::vec3(30.5, 0, -30.9), rot);
 
 	rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 1.0f, 0));
 	addTavernItem(TURKEY, glm::vec3(.45, .45, .45), glm::vec3(30, 1.5, -30), rot);
