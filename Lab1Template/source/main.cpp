@@ -51,7 +51,7 @@ Terrain terrain;
 GLint terrainToggleID;
 
 Wall wall;
-Manager manager("The Dude");
+
 Wagon wagon;
 
 int NUMOBJ = 5;
@@ -111,6 +111,7 @@ GLuint NumBufObj, NumIndBufObj, NumTexBufObj;
 //Rendering Helper
 RenderingHelper ModelTrans;
 Tavern tavern;
+Manager manager("The Dude", camera);
 
 /**
  * Helper function to send materials to the shader - create below.
