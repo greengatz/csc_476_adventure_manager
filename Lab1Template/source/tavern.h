@@ -12,6 +12,7 @@
 #include "glm/gtc/type_ptr.hpp" //value_ptr
 #include "obj3dcontainer.h"
 #include "obj3d.h"
+#include "mercenary.h"
 
 using namespace std;
 using namespace glm;

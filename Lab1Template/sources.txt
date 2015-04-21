@@ -16,6 +16,7 @@ set(HEADERS
    obj3dcontainer.h
    Wagon.h
    manager.h
+   mercenary.h
 )
 
 # List all .c / .cpp files here
@@ -36,4 +37,6 @@ set(SOURCES
    obj3dcontainer.cpp
    Wagon.cpp
    manager.cpp
+   mercenary.cpp
+   nameGenerator.cpp
 )

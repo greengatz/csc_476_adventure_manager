@@ -8,6 +8,7 @@ Manager::Manager(string newName, Camera cam)
 	food = 0;
 	beer = 0;
 	mercs = 0;
+	// this should be a list of an abstract type
 
 	reportStats();
 }
