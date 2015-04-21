@@ -27,13 +27,15 @@ class Manager
 		Manager(string name, Camera camera);
 		// void loadTavernMeshes();
 		// void drawTavern(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor);
-	private:
-		Camera camera;
-		vec3 position;
+
 		double gold;
 		int food;
 		int beer;
 		int mercs;
+
+	private:
+		Camera camera;
+		vec3 position;
 		string name;
 
 		void reportStats();
