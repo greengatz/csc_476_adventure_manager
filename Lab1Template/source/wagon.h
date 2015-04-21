@@ -21,7 +21,6 @@ public:
 	void setPosition(float x, float y, float z);
 	void setScale(float aScale);
 	void setRotation(float aRotation);
-	void startWagon();
 	
 private:
 	std::vector<tinyobj::shape_t> shapes;
@@ -32,7 +31,6 @@ private:
 	glm::vec3 position;
 	float scale;
 	float rotate;
-	float startTime;
 };
 
 #endif

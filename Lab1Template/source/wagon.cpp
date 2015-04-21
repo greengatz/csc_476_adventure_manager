@@ -19,18 +19,12 @@ Wagon::Wagon() :
 	posBufID(0),
 	norBufID(0),
   indBufID(0),
-	texBufID(0),
-  startTime(0.0f)
+	texBufID(0)
 {
 }
 
 Wagon::~Wagon()
 {
-}
-
-void Wagon::startWagon()
-{
-   startTime = glfwGetTime();
 }
 
 void Wagon::setPosition(float x, float y, float z)

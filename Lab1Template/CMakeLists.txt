@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
-project(lab1)
+project(Mercenary Manager)
 
 set(SRC_DIR "${PROJECT_SOURCE_DIR}/source")
 set(DEP_DIR "${PROJECT_SOURCE_DIR}/dependencies")
