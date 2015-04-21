@@ -19,12 +19,18 @@ Wagon::Wagon() :
 	posBufID(0),
 	norBufID(0),
   indBufID(0),
-	texBufID(0)
+	texBufID(0),
+   startTime(0)
 {
 }
 
 Wagon::~Wagon()
 {
+}
+
+void Wagon::startWagon()
+{
+   startTime = glfwGetTime();
 }
 
 void Wagon::setPosition(float x, float y, float z)
@@ -97,7 +103,7 @@ void Wagon::init(TextureLoader* texLoader)
 	 assert(glGetError() == GL_NO_ERROR);
 }
 
-void Wagon::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord)
+void Wagon::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, RenderingHelper *modelTrans)
 {
   //set up the texture unit
     glEnable(GL_TEXTURE_2D);

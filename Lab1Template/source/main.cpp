@@ -401,7 +401,7 @@ void drawGL()
 		ModelTrans.popMatrix();
 	terrain.draw(h_vertPos, h_vertNor, h_aTexCoord);
 	drawWalls();
-	wagon.draw(h_vertPos, h_vertNor, h_aTexCoord);
+	wagon.draw(h_vertPos, h_vertNor, h_aTexCoord, &ModelTrans);
 	glUniform1i(terrainToggleID, 0);
 
 
