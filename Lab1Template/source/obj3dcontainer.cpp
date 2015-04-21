@@ -131,12 +131,12 @@ void loadObjNorms(vector<tinyobj::shape_t> objShape, vector<float> *norObjBuf, G
 
 Obj3dContainer::Obj3dContainer()
 {
-  hasText = false;
+  hasTexture = false;
 }
 
 Obj3dContainer::Obj3dContainer(const string name)
 {
-  hasText = false;
+  hasTexture = false;
   loadIntoTinyOBJ(name);
 }
 

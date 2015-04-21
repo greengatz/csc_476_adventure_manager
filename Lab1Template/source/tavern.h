@@ -25,15 +25,16 @@ class Tavern
 		vector<Obj3d> tavernItems; //data for each obj in the tavern - position, rotation, etc
 		Tavern();
 		void loadTavernMeshes();
-		void drawTavern(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor);
+		void drawTavern(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor, GLint h_aTexCoord);
 	private:
 		void loadBufferData();
 		void createTable1(glm::vec3 initLoc, float ang);
 		void createPillar(glm::vec3 initLoc);
 		void addTavernMesh(const string filename, bool noNorms);
 		void addTavernItem(int index, glm::vec3 scale, glm::vec3 trans, glm::mat4 rot);
+		void enableTextureBuffer(int index, GLint h_aTexCoord, GLuint texBuf);
 		void enableBuff(GLint h_vertPos, GLint h_vertNor, GLuint posBuf, GLuint norBuf, GLuint indBuf);
-		void disableBuff(GLint h_vertPos, GLint h_vertNor);
+		void disableBuff(GLint h_vertPos, GLint h_vertNor, GLint h_aTexCoord);
 };
 
 #endif

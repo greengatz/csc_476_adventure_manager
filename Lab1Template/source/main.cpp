@@ -414,7 +414,7 @@ void drawGL()
 	ModelTrans.pushMatrix();
 	tavTerr.draw(h_vertPos, h_vertNor, h_aTexCoord, h_ModelMatrix, &ModelTrans);
 	ModelTrans.popMatrix();
-	tavern.drawTavern(h_ModelMatrix, h_vertPos, h_vertNor);
+	tavern.drawTavern(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord);
 	
 	// Unbind the program
 	glUseProgram(0);

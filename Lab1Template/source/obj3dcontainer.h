@@ -23,7 +23,7 @@ class Obj3dContainer
 		Obj3dContainer(const string name);
 		vector<tinyobj::shape_t> shape;
 		vector<tinyobj::material_t> material;
-		bool hasText;
+		bool hasTexture;
 		GLuint posBuf, norBuf, indBuf, texBuf;
 		void initBuffers(bool noNorms);
 		int getIndices();
