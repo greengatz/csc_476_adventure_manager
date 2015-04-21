@@ -1,5 +1,6 @@
 #include "mercenary.h"
 
+// name generation tools
 string First[] = {"Ricky", "Zdislav", "Dick", "Bryn", "Omari", 
 		"Sizzle"};
 int firstCount = 6;
@@ -23,11 +24,13 @@ string randTitle() {
 	return Title[rand() % titleCount];
 }
 
+
 Mercenary::Mercenary(Obj3d m) :
 	mesh(m),
 	firstName(randFirstName()),
 	lastName(randLastName()),
-	title(randTitle())
+	title(randTitle()),
+	cost(30)
 {
 	cout << firstName + " " + lastName + ", the " + title + "\n";
 }

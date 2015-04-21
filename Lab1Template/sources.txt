@@ -17,6 +17,7 @@ set(HEADERS
    Wagon.h
    manager.h
    mercenary.h
+   TavernTerrain.h
 )
 
 # List all .c / .cpp files here
@@ -38,4 +39,5 @@ set(SOURCES
    Wagon.cpp
    manager.cpp
    mercenary.cpp
+   TavernTerrain.cpp
 )

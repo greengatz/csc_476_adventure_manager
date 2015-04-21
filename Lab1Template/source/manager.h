@@ -26,6 +26,7 @@ class Manager
 		// vector<Obj3dContainer> tavernMeshes; //obj meshes holding image data
 		// vector<Obj3d> tavernItems; //data for each obj in the tavern - position, rotation, etc
 		Manager(string name, Camera camera);
+		void reportStats();
 		// void loadTavernMeshes();
 		// void drawTavern(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor);
 
@@ -38,8 +39,6 @@ class Manager
 		Camera camera;
 		vec3 position;
 		string name;
-
-		void reportStats();
 };
 
 #endif

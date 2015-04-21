@@ -324,3 +324,14 @@ void Tavern::drawTavern(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor)
 		disableBuff(h_vertPos, h_vertNor);
 	}
 }
+
+void Tavern::buyMercenary(int mercenaryID, Manager* purchaser)
+{
+	if(tavernCharacters.size() >= mercenaryID && tavernCharacters[mercenaryID].cost <= purchaser->gold)
+	{
+		cout << "buying " + tavernCharacters[mercenaryID].firstName + "\n";
+		purchaser->mercs.push_back(tavernCharacters[mercenaryID]);
+		purchaser->gold -= tavernCharacters[mercenaryID].cost;
+		tavernCharacters.erase(tavernCharacters.begin() + mercenaryID);
+	}
+}

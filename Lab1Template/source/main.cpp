@@ -492,12 +492,49 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
    	{
    		camera.toggleFreeRoam();
    	}
+
    	//Create a new trail
    	if (key == GLFW_KEY_9 && action == GLFW_PRESS)
    	{
    		terrain.createTrail();
    		wagon.resetWagon();
    	}
+
+	//Print Manager status
+	if (key == GLFW_KEY_M && action == GLFW_PRESS)
+	{
+		manager.reportStats();
+	}
+	
+	//Buy food
+	if (key == GLFW_KEY_F && action == GLFW_PRESS)
+	{
+		//add food
+		if (manager.gold >= 5)
+		{
+			manager.food++;
+			manager.gold -= 5;
+			cout << "bought 1 food for 5 gold\n";
+		}
+	}
+
+	//Buy beer
+	if (key == GLFW_KEY_B && action == GLFW_PRESS)
+	{
+		//add beer
+		if (manager.gold >= 2)
+		{
+			manager.beer++;
+			manager.gold -= 2;
+			cout << "bought 1 beer for 2 gold\n";
+		}
+	}
+	
+	if (key >= GLFW_KEY_1 && key <= GLFW_KEY_5 && action == GLFW_PRESS)
+	{
+		tavern.buyMercenary(key - GLFW_KEY_1, &manager);
+	}
+
    	//Toggle between lines and filled polygons
    	if (key == GLFW_KEY_L && action == GLFW_PRESS)
    	{
@@ -511,6 +548,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 			}
    	}
+
    	//Toggle culling.
    	if (glfwGetKey(window, GLFW_KEY_K ) == GLFW_PRESS)
    	{

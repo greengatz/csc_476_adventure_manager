@@ -13,6 +13,7 @@
 #include "obj3dcontainer.h"
 #include "obj3d.h"
 #include "mercenary.h"
+#include "manager.h"
 
 using namespace std;
 using namespace glm;
@@ -27,6 +28,7 @@ class Tavern
 		Tavern();
 		void loadTavernMeshes();
 		void drawTavern(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor);
+		void buyMercenary(int mercenaryID, Manager* purchaser);
 	private:
 		void createTable1(glm::vec3 initLoc, float ang);
 		void createPillar(glm::vec3 initLoc);
