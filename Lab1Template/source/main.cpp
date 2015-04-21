@@ -219,7 +219,7 @@ void initModels()
 	wall.init(&texLoader);
 
 	//Initalize Wagon
-	wagon.init(&texLoader);
+	wagon.init(&texLoader, &terrain);
 
 	//initialize the modeltrans matrix stack
    ModelTrans.useModelViewMatrix();
@@ -383,13 +383,9 @@ void drawGL()
 	glUniformMatrix4fv(h_ViewMatrix, 1, GL_FALSE, glm::value_ptr(view.topMatrix()));
 
 	SetMaterial(2);
-	ModelTrans.loadIdentity();
-	ModelTrans.pushMatrix();
-	glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(ModelTrans.modelViewMatrix));
-	//Still need to set position for terrain.
-	ModelTrans.popMatrix();
 
-	//Draw OUTSIDE SCENE
+	//========================== DRAW OUTSIDE SCENE ====================
+
 	glUniform1i(terrainToggleID, 1);
 	glUniform1i(h_uTexUnit, 0);
 	ModelTrans.loadIdentity();
@@ -404,6 +400,8 @@ void drawGL()
 		ModelTrans.popMatrix();
 	ModelTrans.popMatrix();
 	glUniform1i(terrainToggleID, 0);
+
+	//========================= END OUTSIDE SCENE =======================
 
 
 	//Draw TAVERN
@@ -489,6 +487,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
    	if (key == GLFW_KEY_9 && action == GLFW_PRESS)
    	{
    		terrain.createTrail();
+   		wagon.resetWagon();
    	}
    	//Toggle between lines and filled polygons
    	if (key == GLFW_KEY_L && action == GLFW_PRESS)

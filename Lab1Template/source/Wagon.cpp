@@ -15,19 +15,25 @@ using namespace std;
 int WAGON_TEX_ID = 111;
 
 Wagon::Wagon() :
-	position(0.0f, 0.0f, 0.0f),
-	scale(5.0f),
-  rotate(0.0f),
+	position(0.6f, 0.05f, -0.5f),
+	scale(0.03f, 0.03f, 0.03f),
+  rotate(90.0f),
 	posBufID(0),
 	norBufID(0),
   indBufID(0),
 	texBufID(0),
-   startTime(0)
+   startTime(0),
+   terrain(0)
 {
 }
 
 Wagon::~Wagon()
 {
+}
+
+void Wagon::resetWagon()
+{
+   position = terrain->getStartPosition() + glm::vec3(0.6, 0.05, -0.5);
 }
 
 void Wagon::startWagon()
@@ -42,7 +48,7 @@ void Wagon::setPosition(float x, float y, float z)
    position.z = z;
 }
 
-void Wagon::setScale(float aScale)
+void Wagon::setScale(glm::vec3 aScale)
 {
    scale = aScale;
 }
@@ -52,12 +58,11 @@ void Wagon::setRotation(float aRotation)
    rotate = aRotation;
 }
 
-void Wagon::init(TextureLoader* texLoader)
+void Wagon::init(TextureLoader* texLoader, Terrain* aTerrain)
 {
-	 position.x = 0.0f;
-	 position.y = 0.0f;
-	 position.z = 0.0f;
-	 scale = 5.0f;
+   terrain = aTerrain;
+   //aPos relative to terrain generation
+   resetWagon();
 
    // Load geometry
   // Some obj files contain material information.
@@ -110,7 +115,8 @@ void Wagon::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMatri
    //Position Wagon along the trail
    modelTrans->pushMatrix();
       modelTrans->translate(position);
-      modelTrans->scale(0.5, 0.5, 0.5);
+      modelTrans->rotate(rotate, glm::vec3(0, 1, 0));
+      modelTrans->scale(scale.x, scale.y, scale.z);
       glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(modelTrans->modelViewMatrix));
    modelTrans->popMatrix();
 

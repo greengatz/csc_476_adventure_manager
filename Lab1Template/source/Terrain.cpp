@@ -146,7 +146,8 @@ void Terrain::createTrail(){
         printf("\n");
         // startingSpot = changeInPath;
 
-        beginPosition = glm::vec3(startingSpot, 0.0, 0.0);
+        //Relative to the world
+        beginPosition = glm::vec3(0.0, 0.0, -startingSpot);
     }
 }
 
