@@ -576,7 +576,7 @@ int main(int argc, char **argv)
     // Open a window and create its OpenGL context
    g_width = 1024;
    g_height = 768;
-   window = glfwCreateWindow( g_width, g_height, "CPE476 Lab1 [ Clark | Harper ]", NULL, NULL);
+   window = glfwCreateWindow( g_width, g_height, "Mercenary Manager", NULL, NULL);
    if( window == NULL ){
       fprintf( stderr, "Failed to open GLFW window. If you have an Intel GPU, they are not 3.3 compatible. Try the 2.1 version of the tutorials.\n" );
         glfwTerminate();
