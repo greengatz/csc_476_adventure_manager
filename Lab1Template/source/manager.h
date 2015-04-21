@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
+#include "Camera.h"
 #include <iostream>
 #include "tiny_obj_loader.h"
 #include "glm/glm.hpp"
@@ -23,10 +24,12 @@ class Manager
 		// GLint *h_vertPos, *h_norPos; //buffers to draw to
 		// vector<Obj3dContainer> tavernMeshes; //obj meshes holding image data
 		// vector<Obj3d> tavernItems; //data for each obj in the tavern - position, rotation, etc
-		Manager(string name);
+		Manager(string name, Camera camera);
 		// void loadTavernMeshes();
 		// void drawTavern(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor);
 	private:
+		Camera camera;
+		vec3 position;
 		double gold;
 		int food;
 		int beer;
