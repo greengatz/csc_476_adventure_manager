@@ -38,5 +38,4 @@ set(SOURCES
    Wagon.cpp
    manager.cpp
    mercenary.cpp
-   nameGenerator.cpp
 )

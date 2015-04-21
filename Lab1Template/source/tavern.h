@@ -23,6 +23,7 @@ class Tavern
 		// GLint *h_vertPos, *h_norPos; //buffers to draw to
 		vector<Obj3dContainer> tavernMeshes; //obj meshes holding image data
 		vector<Obj3d> tavernItems; //data for each obj in the tavern - position, rotation, etc
+		vector<Mercenary> tavernCharacters;
 		Tavern();
 		void loadTavernMeshes();
 		void drawTavern(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor);
@@ -31,6 +32,7 @@ class Tavern
 		void createPillar(glm::vec3 initLoc);
 		void addTavernMesh(const string filename, bool noNorms);
 		void addTavernItem(int index, glm::vec3 scale, glm::vec3 trans, glm::mat4 rot);
+		void addTavernCharacter(int index, glm::vec3 scale, glm::vec3 trans, glm::mat4 rot);
 		void enableBuff(GLint h_vertPos, GLint h_vertNor, GLuint posBuf, GLuint norBuf, GLuint indBuf);
 		void disableBuff(GLint h_vertPos, GLint h_vertNor);
 };

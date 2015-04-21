@@ -78,6 +78,13 @@ void Tavern::addTavernItem(int index, glm::vec3 scale, glm::vec3 trans, glm::mat
 	tavernItems.push_back(temp);
 }
 
+//index is the index of buffer info in tavernMeshes
+void Tavern::addTavernCharacter(int index, glm::vec3 scale, glm::vec3 trans, glm::mat4 rot)
+{
+	Obj3d temp(&(tavernMeshes[index]), scale, 0, trans, rot);
+	tavernCharacters.push_back(*(new Mercenary(temp)));
+}
+
 void Tavern::createTable1(glm::vec3 initLoc, float ang)
 {
 	//index for chair translations
@@ -256,7 +263,10 @@ void Tavern::loadTavernMeshes()
 	addTavernItem(STICK, glm::vec3(1.0, 1.5, 1.0), glm::vec3(28.7, 0.5, -30.075), glm::mat4(1.0f));
 	addTavernItem(STICK, glm::vec3(1.0, 1.5, 1.0), glm::vec3(31.3, 0.5, -30.075), glm::mat4(1.0f));
 	addTavernItem(POLE, glm::vec3(1.5, 1.2, 1.4), glm::vec3(30, 1.5, -30), glm::mat4(1.0f));
-	addTavernItem(SAMURAI, glm::vec3(1, 1, 1), glm::vec3(27, 1.3, -30), glm::mat4(1.0f));
+	
+	addTavernCharacter(SAMURAI, glm::vec3(1, 1, 1), glm::vec3(27, 1.3, -30), glm::mat4(1.0f));
+	addTavernCharacter(SAMURAI, glm::vec3(1, 1, 1), glm::vec3(29, 1.3, -32), glm::mat4(1.0f));
+	addTavernCharacter(SAMURAI, glm::vec3(1, 1, 1), glm::vec3(28, 1.3, -29), glm::mat4(1.0f));
 
 	//rock circle
 	ang = 90;
@@ -301,6 +311,12 @@ void Tavern::drawTavern(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor)
 	for (int iter = 0; iter < tavernItems.size(); iter++) {
 		enableBuff(h_vertPos, h_vertNor, (*tavernItems[iter].cont).posBuf, (*tavernItems[iter].cont).norBuf, (*tavernItems[iter].cont).indBuf);
 		tavernItems[iter].draw(h_ModelMatrix);
+		disableBuff(h_vertPos, h_vertNor);
+	}
+	
+	for (int iter = 0; iter < tavernCharacters.size(); iter++) {
+		enableBuff(h_vertPos, h_vertNor, (*tavernCharacters[iter].mesh.cont).posBuf, (*tavernCharacters[iter].mesh.cont).norBuf, (*tavernCharacters[iter].mesh.cont).indBuf);
+		tavernCharacters[iter].draw(h_ModelMatrix);
 		disableBuff(h_vertPos, h_vertNor);
 	}
 }

@@ -14,6 +14,7 @@
 #include "glm/gtc/type_ptr.hpp" //value_ptr
 #include "obj3dcontainer.h"
 #include "obj3d.h"
+#include "mercenary.h"
 
 using namespace std;
 using namespace glm;
@@ -31,7 +32,7 @@ class Manager
 		double gold;
 		int food;
 		int beer;
-		int mercs;
+		vector<Mercenary> mercs;
 
 	private:
 		Camera camera;
