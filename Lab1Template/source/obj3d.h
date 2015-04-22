@@ -2,7 +2,7 @@
 #define OBJ3D_H
 
 #include "GLSL.h"
-// #include "bounding.h"
+#include "bounding.h"
 #include "tiny_obj_loader.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp" //perspective, trans etc
@@ -23,20 +23,23 @@ class Obj3d
 		vec3 pos;
 		vec3 dir;
 		float vel;
-		// BoundingBox bound;
+		BoundingBox bound;
 		bool deadlock;
 		bool done;
 		int material;
 		float locTime;
 		vec3 scale;
 		mat4 rot;
+		GLuint texBuf;
+		bool hasTexture;
+		int textureNdx;
 		Obj3d(Obj3dContainer *newCont, vec3 newScale, int newMaterial, vec3 initPos, mat4 newRot);
 		void draw(GLint h_uModelMatrix);
-		void genPos(float mapRad);
 		void move(float deltaTime);
-      void reverseDir();
-      void hit();
+      	void reverseDir();
+      	void hit();
 		vec3 getCurSpot();
+		void loadTextureCoor(int ndx);
 };
 
 #endif

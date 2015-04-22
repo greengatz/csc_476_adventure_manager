@@ -355,7 +355,7 @@ void TavernTerrain::init(TextureLoader* texLoader)
 
     loadWalls();
     //Load Texture
-    texLoader->LoadTexture((char *)"assets/tavern/stonefloor.bmp", TERRAIN_TEX_TAVERN_FLOOR_ID);
+    texLoader->LoadTexture((char *)"assets/tavern/stoneFloorTex.bmp", TERRAIN_TEX_TAVERN_FLOOR_ID);
     texLoader->LoadTexture((char *)"assets/tavern/tavernFloor.bmp", TERRAIN_TEX_TAVERN_WALL_ID);
 
   	//unbind the arrays

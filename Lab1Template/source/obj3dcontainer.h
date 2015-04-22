@@ -23,12 +23,11 @@ class Obj3dContainer
 		Obj3dContainer(const string name);
 		vector<tinyobj::shape_t> shape;
 		vector<tinyobj::material_t> material;
-		bool hasTexture;
-		GLuint posBuf, norBuf, indBuf, texBuf;
+		GLuint posBuf, norBuf, indBuf;
 		void initBuffers(bool noNorms);
 		int getIndices();
 		void loadIntoTinyOBJ(const string name);
-		void loadTextureCoor();
+
 };
 
 #endif

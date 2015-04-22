@@ -13,6 +13,7 @@
 #define xBoundMin 0.5
 #define zBoundMax -0.5
 #define zBoundMin -48.5
+#include "bounding.h"
 
 class MatrixStack;
 
@@ -42,6 +43,18 @@ public:
 	void toggleFreeRoam();
 	void setTavernView();
 	void setTrailView();
+	BoundingBox bound;
+	float horizontalAngle = -3.14f/2.0f;
+	// vertical angle : 0, look at the horizon
+	float verticalAngle = 0.0f;
+	//Mouse sensitivity
+	float mouseSpeed = 0.005f;
+	//Strafe speed
+	float strafeSpeed = 0.5f;
+	//Walk speed
+	float walkSpeed = 0.5f;
+	//Sprint speed
+	float sprintSpeed = 5.0f;
 	
 private:
 	float aspect;

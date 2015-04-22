@@ -131,12 +131,11 @@ void loadObjNorms(vector<tinyobj::shape_t> objShape, vector<float> *norObjBuf, G
 
 Obj3dContainer::Obj3dContainer()
 {
-  hasTexture = false;
+  
 }
 
 Obj3dContainer::Obj3dContainer(const string name)
 {
-  hasTexture = false;
   loadIntoTinyOBJ(name);
 }
 
@@ -166,13 +165,4 @@ void Obj3dContainer::initBuffers(bool noNorms)
 int Obj3dContainer::getIndices() 
 {
 	return (int)shape[0].mesh.indices.size();
-}
-
-void Obj3dContainer::loadTextureCoor()
-{
-   const vector<float> &shapeTexBuff = shape[0].mesh.texcoords;
-   glGenBuffers(1, &texBuf);
-   glBindBuffer(GL_ARRAY_BUFFER, texBuf);
-   glBufferData(GL_ARRAY_BUFFER, shapeTexBuff.size()*sizeof(float), &shapeTexBuff[0], GL_STATIC_DRAW);
-   hasTexture = true;
 }

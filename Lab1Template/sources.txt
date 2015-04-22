@@ -18,6 +18,7 @@ set(HEADERS
    manager.h
    mercenary.h
    TavernTerrain.h
+   bounding.h
 )
 
 # List all .c / .cpp files here
@@ -40,4 +41,5 @@ set(SOURCES
    manager.cpp
    mercenary.cpp
    TavernTerrain.cpp
+   bounding.cpp
 )
