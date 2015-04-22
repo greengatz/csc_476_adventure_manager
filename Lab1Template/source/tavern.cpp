@@ -213,7 +213,7 @@ void Tavern::loadBufferData(TextureLoader* texLoader)
 	texLoader->LoadTexture((char *)"assets/tavern/marbletopTex.bmp", TAV_MARBLE_ID);
 	texLoader->LoadTexture((char *)"assets/tavern/branchTex.bmp", TAV_BRANCHES_ID);
 	texLoader->LoadTexture((char *)"assets/tavern/roofTex.bmp", TAV_ROOF_ID);
-	texLoader->LoadTexture((char *)"assets/tavern/roofTex.bmp", TAV_TORCH_ID);
+	texLoader->LoadTexture((char *)"assets/tavern/torchTex.bmp", TAV_TORCH_ID);
 
 }
 
