@@ -27,32 +27,32 @@
 #define NUMFILES 12
 
 const string tavObjFiles[] = {"assets/tavern/cube.obj",
-                       	   "assets/tavern/door.obj",
-                           "assets/tavern/bookshelf.obj",
-                           "assets/tavern/stool.obj",
-                           "assets/tavern/chair.obj",
-                           "assets/tavern/table.obj",
-                           "assets/tavern/diningtable.obj",
-                       	   "assets/tavern/mug.obj",
-                       	   "assets/tavern/bottle.obj",
-                       	   "assets/tavern/torch.obj",
-                           "assets/tavern/barrel.obj",   ///this is the barrel
-                           "assets/tavern/stick.obj",
-                           "assets/tavern/pole.obj",
-                           "assets/tavern/fireplace.obj",
-                           "assets/tavern/tablware.obj"
-                           "assets/tavern/turkey.obj",
-                      	   "assets/tavern/landlord.obj",
-                   		   "assets/tavern/lumberjack.obj",
-               			   "assets/tavern/samurai.obj",
-               			   "assets/tavern/rock.obj",
-               			   "assets/tavern/box.obj",
-               			   "assets/tavern/cube.obj" //currently a cube until can find a good balustrade.obj
+                       	      "assets/tavern/door.obj",
+                              "assets/tavern/bookshelf.obj",
+                              "assets/tavern/stool.obj",
+                              "assets/tavern/chair.obj",
+                              "assets/tavern/table.obj",
+                              "assets/tavern/diningtable.obj",
+                       	      "assets/tavern/mug.obj",
+                       	      "assets/tavern/bottle.obj",
+                       	      "assets/tavern/torch.obj",
+                              "assets/tavern/barrel.obj",   ///this is the barrel
+                              "assets/tavern/stick.obj",
+                              "assets/tavern/pole.obj",
+                              "assets/tavern/fireplace.obj",
+                              "assets/tavern/tablware.obj"
+                              "assets/tavern/turkey.obj",
+                      	      "assets/tavern/landlord.obj",
+                   		      "assets/tavern/lumberjack.obj",
+               			      "assets/tavern/samurai.obj",
+               			      "assets/tavern/rock.obj",
+               			      "assets/tavern/box.obj",
+               			      "assets/tavern/cube.obj" //currently a cube until can find a good balustrade.obj
                			};
 
 const string tavTextures[] = {"assets/tavern/countertop.bmp"};
 
-int TAV_WALL_ID = 5000;
+int TAV_COUNTER_ID = 5000;
 
 Obj3dContainer containers[std::extent<decltype(tavObjFiles)>::value];
 
@@ -193,9 +193,9 @@ void Tavern::loadBufferData(TextureLoader* texLoader)
 	addTavernMesh("assets/tavern/box.obj", false);
 	addTavernMesh("assets/tavern/cube.obj", true); //currently a cube until find a good balustrade...
 
-	texLoader->LoadTexture((char *)"assets/tavern/countertop.bmp", TAV_WALL_ID);
+	//load textures
+	texLoader->LoadTexture((char *)"assets/tavern/countertop.bmp", TAV_COUNTER_ID);
 
-	tavernMeshes[CRATE].loadTextureCoor();
 }
 
 void Tavern::createFirePlace(glm::vec3 init)
@@ -354,6 +354,7 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 	addTavernItem(BARREL, glm::vec3(1.0, 1.0, 1.0), glm::vec3(8.0, 2.2, -15.2), rot);
 	addTavernItem(BARREL, glm::vec3(1.0, 1.0, 1.0), glm::vec3(8.0, 0.82, -16), rot);
 	addTavernItem(CRATE, glm::vec3(0.95, 0.95, 0.95), glm::vec3(8.0, 1.0, -17.75), glm::mat4(1.0f));
+	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_COUNTER_ID);
 	// addTavernItem(BARREL, glm::vec3(1.0, 1.0, 1.0), glm::vec3(35.0, 1.0, -35.0), rot);
 	// addTavernItem(BARREL, glm::vec3(1.0, 1.0, 1.0), glm::vec3(33.6, 1.0, -35.0), rot);
 	// addTavernItem(BARREL, glm::vec3(1.0, 1.0, 1.0), glm::vec3(34.3, 2.25, -35.0), rot);
@@ -399,8 +400,8 @@ void Tavern::drawTavern(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor, G
 {
 	for (int iter = 0; iter < tavernItems.size(); iter++) {
 		enableBuff(h_vertPos, h_vertNor, (*tavernItems[iter].cont).posBuf, (*tavernItems[iter].cont).norBuf, (*tavernItems[iter].cont).indBuf);
-		if ((*tavernItems[iter].cont).hasTexture) {
-			enableTextureBuffer(h_aTexCoord, (*tavernItems[iter].cont).texBuf, TAV_WALL_ID);
+		if (tavernItems[iter].hasTexture) {
+			enableTextureBuffer(h_aTexCoord, tavernItems[iter].texBuf, tavernItems[iter].textureNdx);
 		}
 		tavernItems[iter].draw(h_ModelMatrix);
 		disableBuff(h_vertPos, h_vertNor, h_aTexCoord);
