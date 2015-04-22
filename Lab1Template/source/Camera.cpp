@@ -155,9 +155,9 @@ void Camera::update(double xpos, double ypos, glm::vec3 wagonPos)
  		else if (horizontalAngle < -(45 * (3.14f/180.0)))
     		horizontalAngle = -(45 * (3.14f/180.0));*/
 
-  		lookAtPoint.x = 3.0 * -sinf(horizontalAngle) + cosf(verticalAngle);
-  		lookAtPoint.y = 3.0 * -sinf(verticalAngle);
-  		lookAtPoint.z = 3.0 * cosf(horizontalAngle) + cosf(horizontalAngle);
+  		lookAtPoint.x = 2.0 * -sinf(horizontalAngle) + cosf(verticalAngle);
+  		lookAtPoint.y = 2.0 * -sinf(verticalAngle);
+  		lookAtPoint.z = 2.0 * cosf(horizontalAngle) + cosf(90.0 - horizontalAngle);
   		lookAtPoint += wagonPos;
    }
 }
@@ -177,7 +177,7 @@ void Camera::applyViewMatrix(MatrixStack *MV, glm::vec3 wagonPos) const
 	}
 	else
 	{
-		glm::mat4 View = glm::lookAt(lookAtPoint, (wagonPos), glm::vec3(0, 1, 0));
+		glm::mat4 View = glm::lookAt(lookAtPoint, wagonPos, glm::vec3(0, 1, 0));
 		MV->multMatrix(View);
 	}
   	
