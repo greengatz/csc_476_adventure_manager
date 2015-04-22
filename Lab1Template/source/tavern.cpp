@@ -47,6 +47,8 @@ const string tavObjFiles[] = {"assets/tavern/cube.obj",
 
 const string tavTextures[] = {"assets/tavern/tavernFloor.bmp"};
 
+Obj3dContainer containers[std::extent<decltype(tavObjFiles)>::value];
+
 Tavern::Tavern()
 {
 	doorLoc = vec3(7.5, 1.35, -23);
