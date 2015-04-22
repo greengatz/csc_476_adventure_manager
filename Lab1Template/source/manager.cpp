@@ -22,9 +22,8 @@ void Manager::reportStats()
 	cout << "Mercenaries: " + to_string(static_cast<long long int>(mercs.size())) << endl;
 	for (i = 0; i < mercs.size(); i++)
 	{
-		cout << "   " + mercs[i].firstName + " " + mercs[i].lastName +
-			" the " + mercs[i].title + "\n";
-	}
+	    mercs[i].printDetails();
+    }
 }
 
 void Manager::buyFood()

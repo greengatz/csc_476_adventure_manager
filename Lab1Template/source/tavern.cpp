@@ -486,3 +486,13 @@ vec3 Tavern::getFoodLoc()
 {
 	return foodLoc;
 }
+
+void Tavern::showMercsForSale()
+{
+    cout << "Mercs for sale: " + to_string(static_cast<long long int>(tavernCharacters.size())) + "\n";
+    for(int i = 0; i < tavernCharacters.size(); i++)
+    {
+        cout << "mercenary " + to_string(static_cast<long long int>(i)) + ": ";
+        tavernCharacters[i].printDetails();
+    }
+}
