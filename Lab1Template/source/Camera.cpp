@@ -15,17 +15,7 @@ using namespace std;
 //Global variables for now ......
 //Camera
 // horizontal angle : toward -Z
-float horizontalAngle = -3.14f/2.0f;
-// vertical angle : 0, look at the horizon
-float verticalAngle = 0.0f;
-//Mouse sensitivity
-float mouseSpeed = 0.005f;
-//Strafe speed
-float strafeSpeed = 0.5f;
-//Walk speed
-float walkSpeed = 0.5f;
-//Sprint speed
-float sprintSpeed = 5.0f;
+
 
 Camera::Camera() :
 	aspect(1.0f),
@@ -44,7 +34,9 @@ Camera::Camera() :
 	theStrafe(25.0f, 1.0f, 0.0f),
 	theZoom(0.0f, 1.0f, -25.0f),
 	freeRoam(false)
+
 {
+	bound.createBounds(vec2(-0.75, 0.75), vec2(0, 1.0), vec2(-0.75, 0.75));
 }
 
 Camera::~Camera()
@@ -89,9 +81,9 @@ void Camera::updateStrafe(glm::vec3 dStrafe)
 
 	//The locked on y
 	//if(theStrafe.x + theZoom.x + dStrafe.x < xBoundMax && theStrafe.x + theZoom.x + dStrafe.x > xBoundMin) //NO COLLISION
-		theStrafe.x += dStrafe.x * 0.4;
+		theStrafe.x += dStrafe.x * 0.15;
 	//if(theStrafe.z + theZoom.z + dStrafe.z < zBoundMax && theStrafe.z + theZoom.z + dStrafe.z > zBoundMin)
-		theStrafe.z += dStrafe.z * 0.4;
+		theStrafe.z += dStrafe.z * 0.15;
 	}
 }
 
@@ -107,9 +99,9 @@ void Camera::updateZoom(glm::vec3 dZoom)
 
 	//The locked on y 
 	//if(theZoom.x + theStrafe.x + dZoom.x < xBoundMax && theZoom.x + theStrafe.x + dZoom.x > xBoundMin) //NO COLLISION
-		theZoom.x += dZoom.x * 0.4;
+		theZoom.x += dZoom.x * 0.2;
 	//if(theZoom.z + theStrafe.z + dZoom.z < zBoundMax && theZoom.z + theStrafe.z + dZoom.z > zBoundMin)
-		theZoom.z += dZoom.z * 0.4;
+		theZoom.z += dZoom.z * 0.2;
 	}
 }
 

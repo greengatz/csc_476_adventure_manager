@@ -425,31 +425,60 @@ void drawGL()
 
 bool hasCollided(glm::vec3 incr)
 {
-	for (std::vector<Shape>::iterator it1 = shapes.begin(); it1 != shapes.end(); ++it1)
-	{
-		glm::vec3 pos1 = it1 ->getPosition();
-		glm::vec3 camPos = camera.getPosition() + incr;
-		float d = sqrt(((pos1.x - camPos.x) * (pos1.x - camPos.x)) + ((pos1.z - camPos.z) * (pos1.z - camPos.z)));
+	vector<Obj3d> temp = tavern.tavernItems;
+	glm::vec3 camPos = camera.getPosition() + incr;
 
-		if (d <= it1->getRadius() * 2)
+	float curCam[6] = {
+    camera.bound.minX + camPos.x,
+    camera.bound.maxX + camPos.x,
+    camera.bound.minY,
+    camera.bound.maxY,
+    camera.bound.minZ + camPos.z,
+    camera.bound.maxZ + camPos.z};
+
+	bool validMove = (curCam[0] < -50.0 || curCam[1] > 50.0 || curCam[4] < -50.0 || curCam[5] > 50.0);
+
+	for (std::vector<Obj3d>::iterator it1 = temp.begin(); it1 != temp.end(); ++it1)
+	{
+		glm::vec3 pos1 = it1 ->getCurSpot();
+		if(it1->bound.checkCollision(curCam, it1->scale, pos1))
 		{
-			it1->freezeShape();
-			if (!it1->isGreen())
-			{
-				printf("You have %d points!\n", ++points);
-			}
-			it1->setColorGreen();
-			return true;
+			validMove = true;
 		}
+		
 	}
-	return false;
+	return validMove;
 }
+
+// bool hasCollided(glm::vec3 incr)
+// {
+// 	for (std::vector<Shape>::iterator it1 = shapes.begin(); it1 != shapes.end(); ++it1)
+// 	{
+// 		glm::vec3 pos1 = it1 ->getPosition();
+// 		glm::vec3 camPos = camera.getPosition() + incr;
+// 		float d = sqrt(((pos1.x - camPos.x) * (pos1.x - camPos.x)) + ((pos1.z - camPos.z) * (pos1.z - camPos.z)));
+
+// 		if (d <= it1->getRadius() * 2)
+// 		{
+// 			it1->freezeShape();
+// 			if (!it1->isGreen())
+// 			{
+// 				printf("You have %d points!\n", ++points);
+// 			}
+// 			it1->setColorGreen();
+// 			return true;
+// 		}
+// 	}
+// 	return false;
+// }
 
 /**
  * This will get called when any button on keyboard is pressed.
  */
 void checkUserInput()
 {
+   float attemptX = numeric_limits<int>::min();
+   float attemptZ = numeric_limits<int>::min();
    vec3 view = camera.getLookAtPoint() - camera.getTheEye();
    vec3 strafe = glm::cross(view, vec3(0.0, 1.0, 0.0));
    if (glfwGetKey(window, GLFW_KEY_A ) == GLFW_PRESS && !hasCollided(-strafe))

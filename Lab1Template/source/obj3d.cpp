@@ -2,7 +2,6 @@
 
 Obj3d::Obj3d(Obj3dContainer *newCont, vec3 newScale, int newMaterial, vec3 initPos, mat4 newRot)
 {
-  // num = objNum;
   locTime = 0;
   deadlock = false;
   done = false;
@@ -12,20 +11,7 @@ Obj3d::Obj3d(Obj3dContainer *newCont, vec3 newScale, int newMaterial, vec3 initP
   cont = newCont;
   material = newMaterial;
   rot = newRot;
-  // bound.createBounds((*cont).shape);
-  // genPos();
-}
-
-void Obj3d::genPos(float mapRad)
-{
-  pos = dir = vec3(0);
-  pos.x = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) * mapRad * 2 - mapRad;
-  pos.z = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) * mapRad * 2 - mapRad;
-  glm::vec3 dest = glm::vec3(0, 0, 0);
-  dest.x = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) * mapRad * 2 - mapRad;
-  dest.z = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) * mapRad * 2 - mapRad;
-  dir.x = dest.x - pos.x;
-  dir.z = dest.z - pos.z;
+  bound.createBounds((*cont).shape);
 }
 
 /* helper function to make sure your matrix handle is correct */
