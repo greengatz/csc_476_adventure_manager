@@ -415,6 +415,7 @@ void drawGL()
 	tavTerr.draw(h_vertPos, h_vertNor, h_aTexCoord, h_ModelMatrix, &ModelTrans);
 	ModelTrans.popMatrix();
 	tavern.drawTavern(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord);
+	glUniform1i(terrainToggleID, 0);
 	
 	// Unbind the program
 	glUseProgram(0);
@@ -549,7 +550,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
    	}
 
    	//Toggle culling.
-   	if (glfwGetKey(window, GLFW_KEY_K ) == GLFW_PRESS)
+   	if (key == GLFW_KEY_K && action == GLFW_PRESS)
    	{
       	cull = !cull;
       	if(cull) {
@@ -560,6 +561,11 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 				glDisable(GL_CULL_FACE);
 			}
    	}
+   	//Start wagon
+   	if (key == GLFW_KEY_8 && action == GLFW_PRESS)
+		{
+			wagon.startWagon();
+		}
 	}
 }
 
@@ -568,6 +574,14 @@ void window_size_callback(GLFWwindow* window, int w, int h){
 	g_width = w;
 	g_height = h;
 	camera.setWindowSize(w, h);
+}
+
+/**
+ * Models that use animation should use this udpate function.
+ **/
+void updateModels()
+{
+	wagon.updateWagon(t);
 }
 
 void checkCollisions(){
@@ -661,6 +675,7 @@ int main(int argc, char **argv)
 		if(dtDraw >= (1.0 / 60.0) ) {
 			checkUserInput();
 			checkCollisions();
+			updateModels();
 			timeOldDraw += (1.0 / 60.0);
 			//Draw an image
 			drawGL();

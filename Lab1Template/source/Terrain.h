@@ -24,7 +24,8 @@ public:
 	glm::vec3 getStartPosition();
 	bool atEnd(glm::vec3 aPos);
 	glm::vec3 nextCriticalPoint(glm::vec3 aPos);
-	
+	void printCriticalPoints();
+
 private:
 
 	static const int MAP_X = 50;
