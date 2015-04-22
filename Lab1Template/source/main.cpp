@@ -25,6 +25,7 @@
 #include "tavern.h"
 #include "Wagon.h"
 #include "manager.h"
+#include "TavernTerrain.h"
 #include <string>
 
 using namespace std;
@@ -111,7 +112,8 @@ GLuint NumBufObj, NumIndBufObj, NumTexBufObj;
 //Rendering Helper
 RenderingHelper ModelTrans;
 Tavern tavern;
-Manager manager("The Dude", camera);
+Manager manager("The Dude");
+TavernTerrain tavTerr;
 
 /**
  * Helper function to send materials to the shader - create below.
@@ -214,6 +216,7 @@ void initModels()
 {
 	//Initialize Terrain object
 	terrain.init(&texLoader);
+	tavTerr.init(&texLoader);
 
 	//Initalize Wall
 	wall.init(&texLoader);
@@ -405,8 +408,18 @@ void drawGL()
 
 
 	//Draw TAVERN
+<<<<<<< HEAD
 	glUniform1i(h_uTexUnit, 0);
 	tavern.drawTavern(h_ModelMatrix, h_vertPos, h_vertNor);
+=======
+	glUniform1i(terrainToggleID, 1);
+	glUniform1i(h_uTexUnit, 0);
+	ModelTrans.loadIdentity();
+	ModelTrans.pushMatrix();
+	tavTerr.draw(h_vertPos, h_vertNor, h_aTexCoord, h_ModelMatrix, &ModelTrans);
+	ModelTrans.popMatrix();
+	tavern.drawTavern(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord);
+>>>>>>> 5a113a3e940eb70a4ec92ccfd256ad3e124a19cd
 	
 	// Unbind the program
 	glUseProgram(0);
@@ -484,12 +497,48 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
    	{
    		camera.toggleFreeRoam();
    	}
+
    	//Create a new trail
    	if (key == GLFW_KEY_9 && action == GLFW_PRESS)
    	{
    		terrain.createTrail();
    		wagon.resetWagon();
    	}
+
+	//Print Manager status
+	if (key == GLFW_KEY_M && action == GLFW_PRESS)
+	{
+		manager.reportStats();
+	}
+	
+	//Buy food
+	if (key == GLFW_KEY_F && action == GLFW_PRESS)
+	{
+		manager.buyFood();
+	}
+
+	//Buy beer
+	if (key == GLFW_KEY_B && action == GLFW_PRESS)
+	{
+		manager.buyBeer();
+	}
+	
+	if (key >= GLFW_KEY_1 && key <= GLFW_KEY_5 && action == GLFW_PRESS)
+	{
+		// tavern.buyMercenary(key - GLFW_KEY_1, &manager);
+		manager.buyMercenary(key - GLFW_KEY_1, &tavern);
+	}
+
+	//Leave Tavern
+	if (key == GLFW_KEY_X && action == GLFW_PRESS)
+	{
+		if(manager.inTavern)
+		{
+			manager.inTavern = false;
+			camera.setTrailView();
+		}
+	}
+
    	//Toggle between lines and filled polygons
    	if (key == GLFW_KEY_L && action == GLFW_PRESS)
    	{
@@ -503,6 +552,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 			}
    	}
+
    	//Toggle culling.
    	if (key == GLFW_KEY_K && action == GLFW_PRESS)
    	{

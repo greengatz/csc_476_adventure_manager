@@ -24,7 +24,7 @@
 
 #define NUMFILES 12
 
-const string objFiles[] = {"assets/tavern/cube.obj",
+const string tavObjFiles[] = {"assets/tavern/cube.obj",
                        	   "assets/tavern/door.obj",
                            "assets/tavern/bookshelf.obj",
                            "assets/tavern/stool.obj",
@@ -45,10 +45,13 @@ const string objFiles[] = {"assets/tavern/cube.obj",
                			   "assets/tavern/samurai.obj",
                			   "assets/tavern/rock.obj"};
 
-Tavern::Tavern()//GLint *pos, GLint *nor)
+const string tavTextures[] = {"assets/tavern/tavernFloor.bmp"};
+
+Tavern::Tavern()
 {
-	// h_vertPos = *pos;
-	// h_vertNor = *nor;
+	doorLoc = vec3(7.5, 1.35, -23);
+	beerLoc = vec3(35.0, 1.0, -35.0);
+	foodLoc = vec3(30, 1.5, -30);
 }
 
 //between [1, limit]
@@ -60,7 +63,6 @@ int getRandInt(int limit)
 float getRandFloat(float limit)
 {
 	return static_cast <float> (rand()) / static_cast <float> (RAND_MAX / limit);
-	// return rand() % limit + 1.0;
 }
 
 void Tavern::addTavernMesh(const string filename, bool noNorms)
@@ -76,6 +78,13 @@ void Tavern::addTavernItem(int index, glm::vec3 scale, glm::vec3 trans, glm::mat
 {
 	Obj3d temp(&(tavernMeshes[index]), scale, 0, trans, rot);
 	tavernItems.push_back(temp);
+}
+
+//index is the index of buffer info in tavernMeshes
+void Tavern::addTavernCharacter(int index, glm::vec3 scale, glm::vec3 trans, glm::mat4 rot)
+{
+	Obj3d temp(&(tavernMeshes[index]), scale, 0, trans, rot);
+	tavernCharacters.push_back(*(new Mercenary(temp)));
 }
 
 void Tavern::createTable1(glm::vec3 initLoc, float ang)
@@ -124,6 +133,7 @@ void Tavern::createTable1(glm::vec3 initLoc, float ang)
 		}
 	}
 
+	//stuff on the table
 	if (getRandInt(3) > 1) {
 		float x = getRandFloat(1) - 0.5;
 		float z = getRandFloat(1) - 0.5;
@@ -157,14 +167,10 @@ void Tavern::createPillar(glm::vec3 initLoc)
 	addTavernItem(TORCH, glm::vec3(0.4, 0.4, 0.4), glm::vec3(initLoc.x + 0.2, initLoc.y + 1.6, initLoc.z), rot);
 }
 
-void Tavern::loadTavernMeshes()
+void Tavern::loadBufferData()
 {
-	srand(time(NULL));
-	float ang;
-	ang = 180;
-	glm::mat4 rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 1.0f, 0));
 	for (int iter = 0; iter < NUMFILES - 1; iter++) {
-		addTavernMesh(objFiles[iter], false);
+		addTavernMesh(tavObjFiles[iter], false);
 	}
 	addTavernMesh("assets/tavern/stick.obj", true);
 	addTavernMesh("assets/tavern/pole.obj", true);
@@ -176,8 +182,24 @@ void Tavern::loadTavernMeshes()
 	addTavernMesh("assets/tavern/samurai.obj", false);
 	addTavernMesh("assets/tavern/rock.obj", false);
 
-	//tavern house
-	addTavernItem(CUBE, glm::vec3(20.0, 10.0, 13.0), glm::vec3(25, 1, -25.3), glm::mat4(1.0f));
+	// tavernMeshes[CUBE].loadTextureCoor();
+}
+
+void Tavern::loadTavernMeshes()
+{
+	srand(time(NULL));
+	float ang;
+	ang = 180;
+	glm::mat4 rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 1.0f, 0));
+
+	loadBufferData();
+
+	//tavern walls
+	addTavernItem(CUBE, glm::vec3(28, 5.0, 0.15), glm::vec3(25, 3, -12), glm::mat4(1.0f));
+	addTavernItem(CUBE, glm::vec3(28, 5.0, 0.15), glm::vec3(25, 3, -35), glm::mat4(1.0f));
+	addTavernItem(CUBE, glm::vec3(0.15, 5.0, 28), glm::vec3(7, 3, -25), glm::mat4(1.0f));
+	addTavernItem(CUBE, glm::vec3(0.15, 5.0, 28), glm::vec3(39, 3, -25), glm::mat4(1.0f));
+	// addTavernItem(CUBE, glm::vec3(20.0, 10.0, 13.0), glm::vec3(25, 1, -25.3), glm::mat4(1.0f));
 	//pillars
 	createPillar(glm::vec3(21, 1, -27));
 	//counter
@@ -200,7 +222,7 @@ void Tavern::loadTavernMeshes()
 
 	// addTavernItem(CUBE, glm::vec3(5.0, 0.1, 0.55), glm::vec3(15, 1.1, -15), glm::mat4(1.0f));
 	//door
-	addTavernItem(DOOR, glm::vec3(1.5, 1.5, 1.5), glm::vec3(5, 1.35, -23), glm::mat4(1.0f));
+	addTavernItem(DOOR, glm::vec3(1.5, 1.5, 1.5), glm::vec3(7.5, 1.35, -23), glm::mat4(1.0f));
 	//adding bookshelves
 	addTavernItem(BOOKSHELF, glm::vec3(1.0, 1.0, 1.0), glm::vec3(12.4, 1.75, -12.5), rot);
 	addTavernItem(BOOKSHELF, glm::vec3(1.0, 1.0, 1.0), glm::vec3(13.7, 1.75, -12.5), rot);
@@ -256,7 +278,10 @@ void Tavern::loadTavernMeshes()
 	addTavernItem(STICK, glm::vec3(1.0, 1.5, 1.0), glm::vec3(28.7, 0.5, -30.075), glm::mat4(1.0f));
 	addTavernItem(STICK, glm::vec3(1.0, 1.5, 1.0), glm::vec3(31.3, 0.5, -30.075), glm::mat4(1.0f));
 	addTavernItem(POLE, glm::vec3(1.5, 1.2, 1.4), glm::vec3(30, 1.5, -30), glm::mat4(1.0f));
-	addTavernItem(SAMURAI, glm::vec3(1, 1, 1), glm::vec3(27, 1.3, -30), glm::mat4(1.0f));
+	
+	addTavernCharacter(SAMURAI, glm::vec3(1, 1, 1), glm::vec3(27, 1.3, -30), glm::mat4(1.0f));
+	addTavernCharacter(SAMURAI, glm::vec3(1, 1, 1), glm::vec3(29, 1.3, -32), glm::mat4(1.0f));
+	addTavernCharacter(SAMURAI, glm::vec3(1, 1, 1), glm::vec3(28, 1.3, -29), glm::mat4(1.0f));
 
 	//rock circle
 	ang = 90;
@@ -289,18 +314,50 @@ void Tavern::enableBuff(GLint h_vertPos, GLint h_vertNor, GLuint posBuf, GLuint 
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indBuf);
 }
 
-void Tavern::disableBuff(GLint h_vertPos, GLint h_vertNor) {
+void Tavern::disableBuff(GLint h_vertPos, GLint h_vertNor, GLint h_aTexCoord) {
   GLSL::disableVertexAttribArray(h_vertPos);
   GLSL::disableVertexAttribArray(h_vertNor);
+  GLSL::disableVertexAttribArray(h_aTexCoord);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void Tavern::drawTavern(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor)
+void Tavern::enableTextureBuffer(int index, GLint h_aTexCoord, GLuint texBuf)
+{
+  GLSL::enableVertexAttribArray(h_aTexCoord);
+  glBindBuffer(GL_ARRAY_BUFFER, texBuf);
+  glVertexAttribPointer(h_aTexCoord, 2, GL_FLOAT, GL_FALSE, 0, 0);
+}
+
+void Tavern::drawTavern(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor, GLint h_aTexCoord)
 {
 	for (int iter = 0; iter < tavernItems.size(); iter++) {
 		enableBuff(h_vertPos, h_vertNor, (*tavernItems[iter].cont).posBuf, (*tavernItems[iter].cont).norBuf, (*tavernItems[iter].cont).indBuf);
+		if ((*tavernItems[iter].cont).hasTexture) {
+			// enableTextureBuffer(h_aTexCoord);
+		}
 		tavernItems[iter].draw(h_ModelMatrix);
-		disableBuff(h_vertPos, h_vertNor);
+		disableBuff(h_vertPos, h_vertNor, h_aTexCoord);
 	}
+	
+	for (int iter = 0; iter < tavernCharacters.size(); iter++) {
+		enableBuff(h_vertPos, h_vertNor, (*tavernCharacters[iter].mesh.cont).posBuf, (*tavernCharacters[iter].mesh.cont).norBuf, (*tavernCharacters[iter].mesh.cont).indBuf);
+		tavernCharacters[iter].draw(h_ModelMatrix);
+		disableBuff(h_vertPos, h_vertNor, h_aTexCoord);
+	}
+}
+
+vec3 Tavern::getDoorLoc()
+{
+	return doorLoc;
+}
+
+vec3 Tavern::getBeerLoc()
+{
+	return beerLoc;
+}
+
+vec3 Tavern::getFoodLoc()
+{
+	return foodLoc;
 }
