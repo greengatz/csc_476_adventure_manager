@@ -26,6 +26,7 @@
 #include "Wagon.h"
 #include "manager.h"
 #include "TavernTerrain.h"
+#include "Materials.h"
 #include <string>
 
 using namespace std;
@@ -114,46 +115,47 @@ RenderingHelper ModelTrans;
 Tavern tavern;
 Manager manager("The Dude");
 TavernTerrain tavTerr;
+Materials matSetter;
 
 /**
  * Helper function to send materials to the shader - create below.
  */
-void SetMaterial(int i)
-{
-	glUseProgram(pid);
-	switch(i) {
-		case 0: //Red Default
-			glUniform3f(h_ka, 0.15, 0.15, 0.15);
-			glUniform3f(h_kd, 0.8, 0.2, 0.2);
-			glUniform3f(h_ks, 0.2, 0.2, 0.2);
-			glUniform1f(h_s, 50.0);
-			break;
-		case 1: //Green
-			glUniform3f(h_ka, 0.15, 0.15, 0.15);
-			glUniform3f(h_kd, 0.2, 0.8, 0.2);
-			glUniform3f(h_ks, 0.2, 0.2, 0.2);
-			glUniform1f(h_s, 50.0);
-			break;
-		case 2: //Default light
-			glUniform3f(h_ka, 0.15, 0.15, 0.15);
-			glUniform3f(h_kd, 0.3, 0.3, 0.3);
-			glUniform3f(h_ks, 0.2, 0.2, 0.2);
-			glUniform1f(h_s, 50.0);
-			break;
-		case 3: //Wood
-			glUniform3f(h_ka, 0.35, 0.35, 0.35);
-			glUniform3f(h_kd, 0.804, 0.666, 0.49);
-			glUniform3f(h_ks, 0.1, 0.1, 0.1);
-			glUniform1f(h_s, 0.01);
-			break;
-		case 4: //not specular Wood
-			glUniform3f(h_ka, 0.1, 0.1, 0.1);
-			glUniform3f(h_kd, 0.404, 0.366, 0.29);
-			glUniform3f(h_ks, 0.051, 0.051, 0.051);
-			glUniform1f(h_s, 0.01);
-			break;
-	}
-}
+// void SetMaterial(int i)
+// {
+// 	glUseProgram(pid);
+// 	switch(i) {
+// 		case 0: //Red Default
+// 			glUniform3f(h_ka, 0.15, 0.15, 0.15);
+// 			glUniform3f(h_kd, 0.8, 0.2, 0.2);
+// 			glUniform3f(h_ks, 0.2, 0.2, 0.2);
+// 			glUniform1f(h_s, 50.0);
+// 			break;
+// 		case 1: //Green
+// 			glUniform3f(h_ka, 0.15, 0.15, 0.15);
+// 			glUniform3f(h_kd, 0.2, 0.8, 0.2);
+// 			glUniform3f(h_ks, 0.2, 0.2, 0.2);
+// 			glUniform1f(h_s, 50.0);
+// 			break;
+// 		case 2: //Default light
+// 			glUniform3f(h_ka, 0.15, 0.15, 0.15);
+// 			glUniform3f(h_kd, 0.3, 0.3, 0.3);
+// 			glUniform3f(h_ks, 0.2, 0.2, 0.2);
+// 			glUniform1f(h_s, 50.0);
+// 			break;
+// 		case 3: //Wood
+// 			glUniform3f(h_ka, 0.35, 0.35, 0.35);
+// 			glUniform3f(h_kd, 0.804, 0.666, 0.49);
+// 			glUniform3f(h_ks, 0.1, 0.1, 0.1);
+// 			glUniform1f(h_s, 0.01);
+// 			break;
+// 		case 4: //not specular Wood
+// 			glUniform3f(h_ka, 0.1, 0.1, 0.1);
+// 			glUniform3f(h_kd, 0.404, 0.366, 0.29);
+// 			glUniform3f(h_ks, 0.051, 0.051, 0.051);
+// 			glUniform1f(h_s, 0.01);
+// 			break;
+// 	}
+// }
 
 static void initNumPlane() {
 
@@ -323,6 +325,8 @@ bool installShaders(const string &vShaderName, const string &fShaderName)
 	/*Toggle for plane coloring*/
     terrainToggleID = GLSL::getUniformLocation(pid, "terrainToggle");
 
+    matSetter.init(&pid, &h_ka, &h_kd, &h_ks, &h_s);
+
 	// Check GLSL
 	GLSL::checkVersion();
 	assert(glGetError() == GL_NO_ERROR);
@@ -397,7 +401,7 @@ void drawGL()
 	camera.applyViewMatrix(&view, wagon.getPosition());
 	glUniformMatrix4fv(h_ViewMatrix, 1, GL_FALSE, glm::value_ptr(view.topMatrix()));
 
-	SetMaterial(2);
+	matSetter.setMaterial(2);
 
 	//========================== DRAW OUTSIDE SCENE ====================
 
@@ -424,10 +428,10 @@ void drawGL()
 	glUniform1i(h_uTexUnit, 0);
 	ModelTrans.loadIdentity();
 	ModelTrans.pushMatrix();
-	SetMaterial(4);
+	matSetter.setMaterial(4);
 	tavTerr.draw(h_vertPos, h_vertNor, h_aTexCoord, h_ModelMatrix, &ModelTrans);
 	ModelTrans.popMatrix();
-	SetMaterial(3);
+	matSetter.setMaterial(3);
 	tavern.drawTavern(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord);
 	glUniform1i(terrainToggleID, 0);
 	
