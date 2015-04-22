@@ -23,7 +23,7 @@ class Bounding
 	public:
 		virtual void createBounds(vec2 xSize, vec2 ySize, vec2 zSize) {}
 		virtual void createBounds(vector<tinyobj::shape_t> objShape) {}
-		virtual bool checkCollision(float cam[], vec3 scale, vec3 trans) {}
+		virtual bool checkCollision(float cam[], vec3 scale, vec3 trans) {return false;}
 };
 
 class BoundingBox : public Bounding

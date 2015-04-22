@@ -61,6 +61,7 @@ int TAV_SHELF_ID = 5900;
 int TAV_MARBLE_ID = 6000;
 int TAV_BRANCHES_ID = 6100;
 int TAV_ROOF_ID = 6200;
+int TAV_TORCH_ID = 6300;
 
 Obj3dContainer containers[std::extent<decltype(tavObjFiles)>::value];
 
@@ -212,6 +213,8 @@ void Tavern::loadBufferData(TextureLoader* texLoader)
 	texLoader->LoadTexture((char *)"assets/tavern/marbletopTex.bmp", TAV_MARBLE_ID);
 	texLoader->LoadTexture((char *)"assets/tavern/branchTex.bmp", TAV_BRANCHES_ID);
 	texLoader->LoadTexture((char *)"assets/tavern/roofTex.bmp", TAV_ROOF_ID);
+	texLoader->LoadTexture((char *)"assets/tavern/roofTex.bmp", TAV_TORCH_ID);
+
 }
 
 void Tavern::createFirePlace(glm::vec3 init)
