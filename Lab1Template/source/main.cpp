@@ -408,10 +408,6 @@ void drawGL()
 
 
 	//Draw TAVERN
-<<<<<<< HEAD
-	glUniform1i(h_uTexUnit, 0);
-	tavern.drawTavern(h_ModelMatrix, h_vertPos, h_vertNor);
-=======
 	glUniform1i(terrainToggleID, 1);
 	glUniform1i(h_uTexUnit, 0);
 	ModelTrans.loadIdentity();
@@ -419,7 +415,7 @@ void drawGL()
 	tavTerr.draw(h_vertPos, h_vertNor, h_aTexCoord, h_ModelMatrix, &ModelTrans);
 	ModelTrans.popMatrix();
 	tavern.drawTavern(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord);
->>>>>>> 5a113a3e940eb70a4ec92ccfd256ad3e124a19cd
+	glUniform1i(terrainToggleID, 0);
 	
 	// Unbind the program
 	glUseProgram(0);
