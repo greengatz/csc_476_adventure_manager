@@ -540,6 +540,11 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		manager.buyMercenary(key - GLFW_KEY_1, &tavern);
 	}
 
+	if (key == GLFW_KEY_T && action == GLFW_PRESS)
+    {
+        tavern.showMercsForSale();
+    }
+
 	//Leave Tavern
 	if (key == GLFW_KEY_X && action == GLFW_PRESS)
 	{

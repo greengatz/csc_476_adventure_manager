@@ -7,8 +7,17 @@ unlocking z-axis:
 randoming a new path:
 9
 
+switch camera view:
+x
+
+starting wagon:
+8
+
 buying mercs:
 1-5
+
+report mercs in the tavern:
+t
 
 reporting stats:
 m

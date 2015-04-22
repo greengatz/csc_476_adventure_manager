@@ -11,6 +11,17 @@
 using namespace std;
 using namespace glm;
 
+// class definitions
+enum classes {
+    berzerker, // dps melee
+    barbarian, // tank melee
+    ranger, // generic ranged
+    cleric, // healer
+    papiromancer, // melee wizard
+    magician, // wizard, hairy
+    size
+};
+
 class Mercenary
 {
 	public:
@@ -22,6 +33,7 @@ class Mercenary
 		string lastName;
 		string title;
 		// character class
+        int job;
 		// Class, enum?
 		int cost;
 
@@ -42,6 +54,7 @@ class Mercenary
 		Mercenary(Obj3d mesh);
 		void draw(GLint h_uModelMatrix);
 		void update();
+        void printDetails();
 };
 
 #endif
