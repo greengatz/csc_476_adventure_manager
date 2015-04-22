@@ -79,15 +79,22 @@ bool Terrain::atEnd(glm::vec3 aPos)
 }
 
 void Terrain::checkEvents(glm::vec3 aPos){
-    int spot = floor(aPos.z);
-    if(eventsMap[spot] == MERCHANT)
+
+    int spot = floor(aPos.x);
+    if(eventsMap[spot] == MERCHANT){
         printf("%s\n", "You stumbled upon a merchant.");
-    if(eventsMap[spot] == AMBUSH)
+    }
+    if(eventsMap[spot] == AMBUSH){
         printf("%s\n", "Bandits are ambushing your party!");
-    if(eventsMap[spot] == WANDERER)
+    }
+    if(eventsMap[spot] == WANDERER){
         printf("%s\n", "A lone wanderer joins your party.");
-    if(eventsMap[spot] == SICKNESS)
+    }
+    if(eventsMap[spot] == SICKNESS){
         printf("%s\n", "One of you troops just caught the plague!");
+    }
+
+    eventsMap[spot] = 0;
 }
 
 void Terrain::createEvents(){
@@ -112,7 +119,6 @@ void Terrain::createEvents(){
             i--;
     }
 
-
     //Place Wanderer
     int wandCount = (rand() % (maxWand - minWand + 1)) + minWand;
     for(int i = 0; i <= wandCount; i++){
@@ -122,7 +128,6 @@ void Terrain::createEvents(){
         else
             i--;
     }
-
 
     //Place Ambush
     int ambushCount = (rand() % (maxAmbush - minAmbush + 1)) + minAmbush;
@@ -134,7 +139,6 @@ void Terrain::createEvents(){
             i--;
     }
 
-
     //Place Sickness
     int sickCount = (rand() % (maxSick - minSick + 1)) + minSick;
     for(int i = 0; i <= sickCount ; i++){
@@ -144,16 +148,10 @@ void Terrain::createEvents(){
         else
             i--;
     }
-
-    for(int i = 0; i < MAP_X; i++){
-        printf("[%d]", eventsMap[i]);
-    }
-
-
 }
 
 void Terrain::createTrail(){
-   criticalPoints.clear();
+    criticalPoints.clear();
 
     int minShift = 2, maxShift = 10;
     //left for false, right for true.
