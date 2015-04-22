@@ -42,7 +42,7 @@ const string tavObjFiles[] = {"assets/tavern/cube.obj",
                               "assets/tavern/stick.obj",
                               "assets/tavern/pole.obj",
                               "assets/tavern/fireplace.obj",
-                              "assets/tavern/tablware.obj"
+                              "assets/tavern/tableware.obj",
                               "assets/tavern/turkey.obj",
                       	      "assets/tavern/landlord.obj",
                    		      "assets/tavern/lumberjack.obj",
@@ -176,6 +176,7 @@ void Tavern::createTable1(glm::vec3 initLoc, float ang)
 void Tavern::loadBufferData(TextureLoader* texLoader)
 {
 	for (int iter = 0; iter < NUMFILES; iter++) {
+		printf("iter is %d\n", iter);
 		addTavernMesh(tavObjFiles[iter], false);
 	}
 	// addTavernMesh("assets/tavern/stick.obj", false);
