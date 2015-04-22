@@ -10,6 +10,10 @@
 #include "glm/glm.hpp"
 #include "Terrain.h"
 #include "GLSL.h"
+#define MERCHANT 1
+#define WANDERER 2
+#define AMBUSH 3
+#define SICKNESS 4
 #define GRASS 3
 #define TRAIL 0
 #define RED 1
@@ -34,8 +38,8 @@ Terrain::Terrain() :
 	posBufID(0),
 	norBufID(0),
 	texBufID(0),
-  beginPosition(0.0f, 0.0f, 0.0f),
-  criticalPoints(std::vector<glm::vec3>())
+    beginPosition(0.0f, 0.0f, 0.0f),
+    criticalPoints(std::vector<glm::vec3>())
 {
 }
 
@@ -70,6 +74,79 @@ bool Terrain::atEnd(glm::vec3 aPos)
    return false;
 }
 
+void Terrain::checkEvents(glm::vec3 aPos){
+    if(eventsMap[aPos.z] == MERCHANT)
+        printf("%s\n", "You stumbled upon a merchant.");
+    if(eventsMap[aPos.z] == AMBUSH)
+        printf("%s\n", "Bandits are ambushing your party!");
+    if(eventsMap[aPos.z] == WANDERER)
+        printf("%s\n", "A lone wanderer joins your party.");
+    if(eventsMap[aPos.z] == SICKNESS)
+        printf("%s\n", "One of you troops just caught the plague!");
+}
+
+void Terrain::createEvents(){
+    int minMerch = 1, maxMerch = 2,      //Min max chance of Merchant event
+        minWand = 1, maxWand = 2,        //Min max chance of Random Wanderer event
+        minAmbush = 1, maxAmbush = 3,    //Min max chance of Ambush event
+        minSick = 2, maxSick = 5;        //Min max chance of Sickness event 
+    int startingOffset = 3;
+
+    for(int i = 0; i < MAP_X; i++){
+        eventsMap[i] = 0;
+    }
+    srand(time(NULL));
+
+    //Place Merchant
+    int merchCount = (rand() % (maxMerch - minMerch + 1)) + minMerch;
+    for(int i = 0; i <= merchCount; i++){
+        int random = ((rand() % (MAP_X - startingOffset)) +  startingOffset);
+        if(eventsMap[random] == 0 && eventsMap[random + 1] == 0 && eventsMap[random - 1] == 0)
+            eventsMap[random] = MERCHANT; 
+        else
+            i--;
+    }
+
+
+    //Place Wanderer
+    int wandCount = (rand() % (maxWand - minWand + 1)) + minWand;
+    for(int i = 0; i <= wandCount; i++){
+        int random = ((rand() % (MAP_X - startingOffset)) +  startingOffset);
+        if(eventsMap[random] == 0 && eventsMap[random + 1] == 0 && eventsMap[random - 1] == 0)
+            eventsMap[random] = WANDERER; 
+        else
+            i--;
+    }
+
+
+    //Place Ambush
+    int ambushCount = (rand() % (maxAmbush - minAmbush + 1)) + minAmbush;
+    for(int i = 0; i <= ambushCount; i++){
+        int random = ((rand() % (MAP_X - startingOffset)) +  startingOffset);
+        if(eventsMap[random] == 0 && eventsMap[random + 1] == 0 && eventsMap[random - 1] == 0)
+            eventsMap[random] = AMBUSH; 
+        else
+            i--;
+    }
+
+
+    //Place Sickness
+    int sickCount = (rand() % (maxSick - minSick + 1)) + minSick;
+    for(int i = 0; i <= sickCount ; i++){
+        int random = ((rand() % (MAP_X - startingOffset)) +  startingOffset);
+        if(eventsMap[random] == 0 && eventsMap[random + 1] == 0 && eventsMap[random - 1] == 0)
+            eventsMap[random] = SICKNESS; 
+        else
+            i--;
+    }
+
+    for(int i = 0; i < MAP_X; i++){
+        printf("[%d]", eventsMap[i]);
+    }
+
+
+}
+
 void Terrain::createTrail(){
    criticalPoints.clear();
 
@@ -82,9 +159,9 @@ void Terrain::createTrail(){
     int lastSpot = startingSpot;
     // srand(time(NULL));
     int changeInPath = (rand() % (maxShift - minShift)) + minShift;
-    printf("Trail Map @ startingSpot %d{\n", startingSpot);
+    // printf("Trail Map @ startingSpot %d{\n", startingSpot);
     for (indexZ = 0; indexZ < MAP_Z; indexZ++){
-        printf("New ChangeInPath %d |", changeInPath);
+        // printf("New ChangeInPath %d |", changeInPath);
         // changeInPath = (indexZ % 2 == 1) ? ((rand() % 3) - 1) + startingSpot : startingSpot;
         // printf("Shift %d |", changeInPath);
         for (indexX = 0; indexX < MAP_X; indexX++)
@@ -120,7 +197,7 @@ void Terrain::createTrail(){
                 //Center Tile
                 trailMap[indexX][indexZ]=TRAIL;
             }
-            printf("[%i]",trailMap[indexX][indexZ]);
+            // printf("[%i]",trailMap[indexX][indexZ]);
         }
         
 
@@ -134,9 +211,7 @@ void Terrain::createTrail(){
             }else{
                 shiftTog = !shiftTog;
             }
-
         }else{
-
             changeInPath--;
             if(shiftTog)
             lastSpot++;
@@ -145,7 +220,6 @@ void Terrain::createTrail(){
         }
         printf("\n");
         // startingSpot = changeInPath;
-
         //Relative to the world
         beginPosition = glm::vec3(0.0, 0.0, -startingSpot);
     }
@@ -157,6 +231,7 @@ void Terrain::init(TextureLoader* texLoader)
 	x.y = 0.0f;
 	x.z = 0.0f;
 	scale = 5.0f;
+    createEvents();
     createTrail();
 	GLfloat terrain_buffer[(MAP_Z - 1) * (MAP_X - 1) * 12];
   	GLfloat terrain_norm[(MAP_Z - 1) * (MAP_X - 1) * 12];
@@ -272,7 +347,6 @@ void Terrain::init(TextureLoader* texLoader)
 
   	//unbind the arrays
   	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	
 	assert(glGetError() == GL_NO_ERROR);
 }
 

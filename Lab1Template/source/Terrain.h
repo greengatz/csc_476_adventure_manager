@@ -21,6 +21,7 @@ public:
 	void init(TextureLoader* texLoader);
 	void draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord);
 	void createTrail();
+	void createEvents();
 	glm::vec3 getStartPosition();
 	bool atEnd(glm::vec3 aPos);
 	glm::vec3 nextCriticalPoint(glm::vec3 aPos);
@@ -37,7 +38,9 @@ private:
 	glm::vec3 x; // position
 	float scale;
 	typedef int TArray[MAP_X][MAP_Z];
+	typedef int EArray[MAP_X];
 	TArray trailMap;
+	EArray eventsMap;
 	glm::vec3 beginPosition;
 	std::vector<glm::vec3> criticalPoints;
 
