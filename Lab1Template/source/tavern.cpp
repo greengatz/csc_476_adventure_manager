@@ -26,7 +26,7 @@
 #define ROOF 22
 #define PLANK 23
 
-#define NUMFILES 12
+#define NUMFILES 24
 
 const string tavObjFiles[] = {"assets/tavern/cube.obj",
                        	      "assets/tavern/door.obj",
@@ -175,22 +175,22 @@ void Tavern::createTable1(glm::vec3 initLoc, float ang)
 
 void Tavern::loadBufferData(TextureLoader* texLoader)
 {
-	for (int iter = 0; iter < NUMFILES - 1; iter++) {
+	for (int iter = 0; iter < NUMFILES; iter++) {
 		addTavernMesh(tavObjFiles[iter], false);
 	}
-	addTavernMesh("assets/tavern/stick.obj", true);
-	addTavernMesh("assets/tavern/pole.obj", true);
-	addTavernMesh("assets/tavern/fireplace.obj", false);
-	addTavernMesh("assets/tavern/tableware.obj", true);
-	addTavernMesh("assets/tavern/turkey.obj", false);
-	addTavernMesh("assets/tavern/landlord.obj", false);
-	addTavernMesh("assets/tavern/lumberjack.obj", false);
-	addTavernMesh("assets/tavern/samurai.obj", false);
-	addTavernMesh("assets/tavern/rock.obj", false);
-	addTavernMesh("assets/tavern/box.obj", false);
-	addTavernMesh("assets/tavern/cube.obj", true); //currently a cube until find a good balustrade...
-	addTavernMesh("assets/tavern/roof.obj", false);
-	addTavernMesh("assets/tavern/plank.obj", false);
+	// addTavernMesh("assets/tavern/stick.obj", false);
+	// addTavernMesh("assets/tavern/pole.obj", false);
+	// addTavernMesh("assets/tavern/fireplace.obj", false);
+	// addTavernMesh("assets/tavern/tableware.obj", false);
+	// addTavernMesh("assets/tavern/turkey.obj", false);
+	// addTavernMesh("assets/tavern/landlord.obj", false);
+	// addTavernMesh("assets/tavern/lumberjack.obj", false);
+	// addTavernMesh("assets/tavern/samurai.obj", false);
+	// addTavernMesh("assets/tavern/rock.obj", false);
+	// addTavernMesh("assets/tavern/box.obj", false);
+	// addTavernMesh("assets/tavern/cube.obj", false); //currently a cube until find a good balustrade...
+	// addTavernMesh("assets/tavern/roof.obj", false);
+	// addTavernMesh("assets/tavern/plank.obj", false);
 
 	//load textures
 	texLoader->LoadTexture((char *)"assets/tavern/crateTex.bmp", TAV_CRATE_ID);
