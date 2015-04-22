@@ -90,16 +90,7 @@ void Camera::updateStrafe(glm::vec3 dStrafe)
 	}
 	else
 	{
-
-	//if(x.x > xBoundMax || x.x < xBoundMin)
-		//v.x = 0 - v.x;
-	//if(x.z > zBoundMax || x.z < zBoundMin)
-		//v.z = 0 - v.z;
-
-	//The locked on y
-	//if(theStrafe.x + theZoom.x + dStrafe.x < xBoundMax && theStrafe.x + theZoom.x + dStrafe.x > xBoundMin) //NO COLLISION
 		theStrafe.x += dStrafe.x * 0.15;
-	//if(theStrafe.z + theZoom.z + dStrafe.z < zBoundMax && theStrafe.z + theZoom.z + dStrafe.z > zBoundMin)
 		theStrafe.z += dStrafe.z * 0.15;
 	}
 }
@@ -113,11 +104,7 @@ void Camera::updateZoom(glm::vec3 dZoom)
 	}
 	else
 	{
-
-	//The locked on y 
-	//if(theZoom.x + theStrafe.x + dZoom.x < xBoundMax && theZoom.x + theStrafe.x + dZoom.x > xBoundMin) //NO COLLISION
 		theZoom.x += dZoom.x * 0.2;
-	//if(theZoom.z + theStrafe.z + dZoom.z < zBoundMax && theZoom.z + theStrafe.z + dZoom.z > zBoundMin)
 		theZoom.z += dZoom.z * 0.2;
 	}
 }

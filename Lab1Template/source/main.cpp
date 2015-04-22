@@ -515,8 +515,9 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	timeNew = glfwGetTime();
 	double dtKey = timeNew - timeOldDraw;
 
+	//This time step is causing issues for key inputs right now.
 	// Update every 60Hz
-	if(dtKey >= (1.0 / 60.0) ) {
+	//if(dtKey >= (1.0 / 60.0) ) {
 		//Free roam camera
 		if (key == GLFW_KEY_0 && action == GLFW_PRESS)
    	{
@@ -565,9 +566,12 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		if(manager.inTavern)
 		{
 			manager.inTavern = false;
-			//camera.setTrailView();
-			camera.toggleGameViews();
 		}
+		else
+		{
+			manager.inTavern = true;
+		}
+		camera.toggleGameViews();
 	}
 
    	//Toggle between lines and filled polygons
@@ -601,7 +605,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		{
 			wagon.startWagon();
 		}
-	}
+	//}
 }
 
 void window_size_callback(GLFWwindow* window, int w, int h){
