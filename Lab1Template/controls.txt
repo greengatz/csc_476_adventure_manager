@@ -1,0 +1,20 @@
+movement:
+wasd
+
+unlocking z-axis:
+0
+
+randoming a new path:
+9
+
+buying mercs:
+1-5
+
+reporting stats:
+m
+
+buying food:
+f
+
+buying beer:
+b

@@ -4,29 +4,24 @@
  */
 
 #pragma once
-#ifndef _TERRAIN_H_
-#define _TERRAIN_H_
+#ifndef _TAVERNTERRAIN_H_
+#define _TAVERNTERRAIN_H_
 
 #include "GLSL.h"
 #include "tiny_obj_loader.h"
 #include "TextureLoader.h"
+#include "RenderingHelper.h"
 #include <vector>
 
 
-class Terrain
+class TavernTerrain
 {
 public:
-	Terrain();
-	virtual ~Terrain();
+	TavernTerrain();
+	virtual ~TavernTerrain();
 	void init(TextureLoader* texLoader);
-	void draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord);
-	void createTrail();
-	void createEvents();
-	glm::vec3 getStartPosition();
-	bool atEnd(glm::vec3 aPos);
-	glm::vec3 nextCriticalPoint(glm::vec3 aPos);
-	void printCriticalPoints();
-
+	void draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMatrix, RenderingHelper *modelTrans);
+	
 private:
 
 	static const int MAP_X = 50;
@@ -38,12 +33,6 @@ private:
 	GLuint texBufID;
 	glm::vec3 x; // position
 	float scale;
-	typedef int TArray[MAP_X][MAP_Z];
-	typedef int EArray[MAP_X];
-	TArray trailMap;
-	EArray eventsMap;
-	glm::vec3 beginPosition;
-	std::vector<glm::vec3> criticalPoints;
 
 
 };

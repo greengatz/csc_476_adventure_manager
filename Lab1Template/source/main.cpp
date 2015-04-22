@@ -25,6 +25,7 @@
 #include "tavern.h"
 #include "Wagon.h"
 #include "manager.h"
+#include "TavernTerrain.h"
 #include <string>
 
 using namespace std;
@@ -111,7 +112,8 @@ GLuint NumBufObj, NumIndBufObj, NumTexBufObj;
 //Rendering Helper
 RenderingHelper ModelTrans;
 Tavern tavern;
-Manager manager("The Dude", camera);
+Manager manager("The Dude");
+TavernTerrain tavTerr;
 
 /**
  * Helper function to send materials to the shader - create below.
@@ -214,6 +216,7 @@ void initModels()
 {
 	//Initialize Terrain object
 	terrain.init(&texLoader);
+	tavTerr.init(&texLoader);
 
 	//Initalize Wall
 	wall.init(&texLoader);
@@ -405,7 +408,14 @@ void drawGL()
 
 
 	//Draw TAVERN
-	tavern.drawTavern(h_ModelMatrix, h_vertPos, h_vertNor);
+	glUniform1i(terrainToggleID, 1);
+	glUniform1i(h_uTexUnit, 0);
+	ModelTrans.loadIdentity();
+	ModelTrans.pushMatrix();
+	tavTerr.draw(h_vertPos, h_vertNor, h_aTexCoord, h_ModelMatrix, &ModelTrans);
+	ModelTrans.popMatrix();
+	tavern.drawTavern(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord);
+	glUniform1i(terrainToggleID, 0);
 	
 	// Unbind the program
 	glUseProgram(0);
@@ -483,12 +493,48 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
    	{
    		camera.toggleFreeRoam();
    	}
+
    	//Create a new trail
    	if (key == GLFW_KEY_9 && action == GLFW_PRESS)
    	{
    		terrain.createTrail();
    		wagon.resetWagon();
    	}
+
+	//Print Manager status
+	if (key == GLFW_KEY_M && action == GLFW_PRESS)
+	{
+		manager.reportStats();
+	}
+	
+	//Buy food
+	if (key == GLFW_KEY_F && action == GLFW_PRESS)
+	{
+		manager.buyFood();
+	}
+
+	//Buy beer
+	if (key == GLFW_KEY_B && action == GLFW_PRESS)
+	{
+		manager.buyBeer();
+	}
+	
+	if (key >= GLFW_KEY_1 && key <= GLFW_KEY_5 && action == GLFW_PRESS)
+	{
+		// tavern.buyMercenary(key - GLFW_KEY_1, &manager);
+		manager.buyMercenary(key - GLFW_KEY_1, &tavern);
+	}
+
+	//Leave Tavern
+	if (key == GLFW_KEY_X && action == GLFW_PRESS)
+	{
+		if(manager.inTavern)
+		{
+			manager.inTavern = false;
+			camera.setTrailView();
+		}
+	}
+
    	//Toggle between lines and filled polygons
    	if (key == GLFW_KEY_L && action == GLFW_PRESS)
    	{
@@ -502,8 +548,9 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 			}
    	}
+
    	//Toggle culling.
-   	if (glfwGetKey(window, GLFW_KEY_K ) == GLFW_PRESS)
+   	if (key == GLFW_KEY_K && action == GLFW_PRESS)
    	{
       	cull = !cull;
       	if(cull) {
@@ -514,6 +561,11 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 				glDisable(GL_CULL_FACE);
 			}
    	}
+   	//Start wagon
+   	if (key == GLFW_KEY_8 && action == GLFW_PRESS)
+		{
+			wagon.startWagon();
+		}
 	}
 }
 
@@ -522,6 +574,14 @@ void window_size_callback(GLFWwindow* window, int w, int h){
 	g_width = w;
 	g_height = h;
 	camera.setWindowSize(w, h);
+}
+
+/**
+ * Models that use animation should use this udpate function.
+ **/
+void updateModels()
+{
+	wagon.updateWagon(t);
 }
 
 void checkCollisions(){
@@ -615,6 +675,7 @@ int main(int argc, char **argv)
 		if(dtDraw >= (1.0 / 60.0) ) {
 			checkUserInput();
 			checkCollisions();
+			updateModels();
 			timeOldDraw += (1.0 / 60.0);
 			//Draw an image
 			drawGL();

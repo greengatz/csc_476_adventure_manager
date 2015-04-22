@@ -158,3 +158,15 @@ void Camera::applyViewMatrix(MatrixStack *MV) const
 		(lookAtPoint + theStrafe + theZoom), glm::vec3(0, 1, 0));
   	MV->multMatrix(View);
 }
+
+//TODO
+void Camera::setTavernView()
+{
+
+}
+
+//TODO
+void Camera::setTrailView()
+{
+	
+}
