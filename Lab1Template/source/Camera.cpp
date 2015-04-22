@@ -33,7 +33,8 @@ Camera::Camera() :
 	theEye(0.0f, 0.0f, 0.0f),
 	theStrafe(25.0f, 1.0f, 0.0f),
 	theZoom(0.0f, 1.0f, -25.0f),
-	freeRoam(false)
+	freeRoam(false),
+	tavernView(true)
 
 {
 	bound.createBounds(vec2(-0.75, 0.75), vec2(0, 1.0), vec2(-0.75, 0.75));
@@ -57,6 +58,22 @@ glm::vec3 Camera::getTheEye()
 glm::vec3 Camera::getPosition()
 {
 	return theStrafe + theZoom;
+}
+
+bool Camera::isTavernView()
+{
+	return tavernView;
+}
+
+bool Camera::isFreeRoam()
+{
+	return freeRoam;
+}
+
+void Camera::toggleGameViews()
+{
+	tavernView = !tavernView;
+	freeRoam = false;
 }
 
 void Camera::toggleFreeRoam()
@@ -117,7 +134,7 @@ void Camera::setWindowSize(float w, float h)
 }
 
 //void Camera::update(const bool *keys, const glm::vec2 &mouse)
-void Camera::update(double xpos, double ypos)
+void Camera::update(double xpos, double ypos, glm::vec3 wagonPos)
 {
 	static double xOld = 0;
   	static double yOld = 0;
@@ -128,15 +145,34 @@ void Camera::update(double xpos, double ypos)
   	xOld = xpos;
   	yOld = ypos;
 
-  	if (verticalAngle > (80.0 * (3.14f)/180.0))
-    	verticalAngle = (80.0 * (3.14f)/180.0);
-  	else if (verticalAngle < -(80.0 * (3.14f)/180.0))
-    	verticalAngle = -(80.0 * (3.14f)/180.0);
+  	if (tavernView)
+  	{
+  		if (verticalAngle > (80.0 * (3.14f)/180.0))
+    		verticalAngle = (80.0 * (3.14f)/180.0);
+  		else if (verticalAngle < -(80.0 * (3.14f)/180.0))
+    		verticalAngle = -(80.0 * (3.14f)/180.0);
 
-  	//Updated look at point for pitch and yaw.
-  	lookAtPoint.x = 1.0 * cos(verticalAngle) * cos(horizontalAngle);
-  	lookAtPoint.y = 1.0 * sin(verticalAngle);
-  	lookAtPoint.z = 1.0 * cos(verticalAngle) * cos(90.0 - horizontalAngle);
+    	//Updated look at point for pitch and yaw.
+  		lookAtPoint.x = 1.0 * cos(verticalAngle) * cos(horizontalAngle);
+  		lookAtPoint.y = 1.0 * sin(verticalAngle);
+  		lookAtPoint.z = 1.0 * cos(verticalAngle) * cos(90.0 - horizontalAngle);
+   }
+   else
+   {
+   	if (verticalAngle > -(5.0 * (3.14f)/180.0))
+    		verticalAngle = -(5.0 * (3.14f)/180.0);
+  		else if (verticalAngle < -(20.0 * (3.14f)/180.0))
+    		verticalAngle = -(20.0 * (3.14f)/180.0);
+  		if (horizontalAngle > (45 * (3.14f)/180.0))
+    		horizontalAngle = (45 * (3.14f)/180.0);
+ 		else if (horizontalAngle < -(45 * (3.14f/180.0)))
+    		horizontalAngle = -(45 * (3.14f/180.0));
+
+  		lookAtPoint.x = 3.0 * -sinf(horizontalAngle) + cosf(verticalAngle);
+  		lookAtPoint.y = 3.0 * -sinf(verticalAngle);
+  		lookAtPoint.z = 3.0 * cosf(horizontalAngle) + cosf(horizontalAngle);
+  		lookAtPoint += wagonPos;
+   }
 }
 
 void Camera::applyProjectionMatrix(MatrixStack *P) const
@@ -144,11 +180,20 @@ void Camera::applyProjectionMatrix(MatrixStack *P) const
 	P->perspective(fovy, aspect, znear, zfar);
 }
 
-void Camera::applyViewMatrix(MatrixStack *MV) const
+void Camera::applyViewMatrix(MatrixStack *MV, glm::vec3 wagonPos) const
 {
-	glm::mat4 View = glm::lookAt((theEye + theStrafe + theZoom), 
-		(lookAtPoint + theStrafe + theZoom), glm::vec3(0, 1, 0));
-  	MV->multMatrix(View);
+	if (tavernView)
+	{
+		glm::mat4 View = glm::lookAt((theEye + theStrafe + theZoom), 
+			(lookAtPoint + theStrafe + theZoom), glm::vec3(0, 1, 0));
+		MV->multMatrix(View);
+	}
+	else
+	{
+		glm::mat4 View = glm::lookAt(lookAtPoint, (wagonPos), glm::vec3(0, 1, 0));
+		MV->multMatrix(View);
+	}
+  	
 }
 
 //TODO

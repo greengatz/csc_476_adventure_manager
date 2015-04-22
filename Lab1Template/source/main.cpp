@@ -368,10 +368,10 @@ void drawGL()
   	double xpos, ypos;
 
   	glfwGetCursorPos(window, &xpos, &ypos);
-	camera.update(xpos, ypos);
+	camera.update(xpos, ypos, wagon.getPosition());
 
-	glUniform3fv(h_lightPos1, 1, glm::value_ptr(glm::vec3(1.0f, 1.0f, 1.0f)));
-	glUniform3fv(h_lightPos2, 1, glm::value_ptr(glm::vec3(-1.0f, 1.0f, 1.0f)));
+	glUniform3fv(h_lightPos1, 1, glm::value_ptr(glm::vec3(23.05f, 4.0f, -23.5f)));
+	glUniform3fv(h_lightPos2, 1, glm::value_ptr(glm::vec3(-125.0f, 4.0f, 25.0f)));
 	glUniform1f(h_option, optionS);
 	
 	// Bind the program
@@ -382,7 +382,7 @@ void drawGL()
 	camera.applyProjectionMatrix(&proj);
 	glUniformMatrix4fv( h_ProjMatrix, 1, GL_FALSE, glm::value_ptr( proj.topMatrix()));
 	proj.pushMatrix();
-	camera.applyViewMatrix(&view);
+	camera.applyViewMatrix(&view, wagon.getPosition());
 	glUniformMatrix4fv(h_ViewMatrix, 1, GL_FALSE, glm::value_ptr(view.topMatrix()));
 
 	SetMaterial(2);
@@ -447,30 +447,16 @@ bool hasCollided(glm::vec3 incr)
 		}
 		
 	}
-	return validMove;
+
+	if (camera.isFreeRoam())
+	{
+		return false;
+	}
+	else
+	{
+		return validMove;
+	}
 }
-
-// bool hasCollided(glm::vec3 incr)
-// {
-// 	for (std::vector<Shape>::iterator it1 = shapes.begin(); it1 != shapes.end(); ++it1)
-// 	{
-// 		glm::vec3 pos1 = it1 ->getPosition();
-// 		glm::vec3 camPos = camera.getPosition() + incr;
-// 		float d = sqrt(((pos1.x - camPos.x) * (pos1.x - camPos.x)) + ((pos1.z - camPos.z) * (pos1.z - camPos.z)));
-
-// 		if (d <= it1->getRadius() * 2)
-// 		{
-// 			it1->freezeShape();
-// 			if (!it1->isGreen())
-// 			{
-// 				printf("You have %d points!\n", ++points);
-// 			}
-// 			it1->setColorGreen();
-// 			return true;
-// 		}
-// 	}
-// 	return false;
-// }
 
 /**
  * This will get called when any button on keyboard is pressed.
@@ -560,7 +546,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		if(manager.inTavern)
 		{
 			manager.inTavern = false;
-			camera.setTrailView();
+			//camera.setTrailView();
+			camera.toggleGameViews();
 		}
 	}
 
@@ -703,7 +690,10 @@ int main(int argc, char **argv)
 		// Update every 60Hz
 		if(dtDraw >= (1.0 / 60.0) ) {
 			checkUserInput();
-			checkCollisions();
+			if (camera.isTavernView() && !camera.isFreeRoam())
+			{
+				checkCollisions();
+			}
 			updateModels();
 			timeOldDraw += (1.0 / 60.0);
 			//Draw an image

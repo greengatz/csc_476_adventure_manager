@@ -21,6 +21,7 @@ public:
 	void init(TextureLoader* texLoader, Terrain* aTerrain);
 	void draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMatrix, RenderingHelper* modelTrans);
 	void setPosition(float x, float y, float z);
+	glm::vec3 getPosition();
 	void setScale(glm::vec3 aScale);
 	void setRotation(float aRotation);
 	void resetWagon();

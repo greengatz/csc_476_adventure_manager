@@ -30,10 +30,10 @@ public:
 	Camera();
 	virtual ~Camera();
 	void setWindowSize(float w, float h);
-	void update(double xpos, double ypos);
+	void update(double xpos, double ypos, glm::vec3 wagonPos);
 	void mouseMoved(int x, int y);
 	void applyProjectionMatrix(MatrixStack *P) const;
-	void applyViewMatrix(MatrixStack *MV) const;
+	void applyViewMatrix(MatrixStack *MV, glm::vec3 wagonPos) const;
 	//Brandon stuff
 	glm::vec3 getLookAtPoint();
 	glm::vec3 getTheEye();
@@ -43,6 +43,10 @@ public:
 	void toggleFreeRoam();
 	void setTavernView();
 	void setTrailView();
+	bool isTavernView();
+	bool isFreeRoam();
+	void toggleGameViews();
+
 	BoundingBox bound;
 	float horizontalAngle = -3.14f/2.0f;
 	// vertical angle : 0, look at the horizon
@@ -66,6 +70,7 @@ private:
 	float sfactor;
 	int state;
 	bool freeRoam;
+	bool tavernView;
 	glm::vec2 mousePrev;
 	glm::vec2 rotations;
 	glm::vec3 position;

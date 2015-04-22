@@ -78,6 +78,11 @@ void Wagon::setPosition(float x, float y, float z)
    position.z = z;
 }
 
+glm::vec3 Wagon::getPosition()
+{
+   return glm::vec3(position.x - 100, position.y, position.z);
+}
+
 void Wagon::setScale(glm::vec3 aScale)
 {
    scale = aScale;
