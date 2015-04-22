@@ -28,7 +28,7 @@ Wagon::Wagon() :
    wagonStart(false),
    terrain(0),
    deltaTime(0.0f),
-   velocity(0.002f),
+   velocity(0.00001f),
    nextPoint(0.0f, 0.0f, 0.0f)
 {
 }

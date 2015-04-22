@@ -620,36 +620,7 @@ void updateModels()
 }
 
 void checkCollisions(){
-	for (std::vector<Shape>::iterator it1 = shapes.begin(); it1 != shapes.end(); ++it1){
-		glm::vec3 pos1 = it1->getPosition();
-		for (std::vector<Shape>::iterator it2 = shapes.begin(); it2 != shapes.end(); ++it2){
-			glm::vec3 pos2 = it2->getPosition();
-			float d = sqrt(((pos1.x - pos2.x) * (pos1.x - pos2.x)) + ((pos1.z - pos2.z) * (pos1.z - pos2.z)));
-			int index1 = std::distance(shapes.begin(), it1);
-			int index2 = std::distance(shapes.begin(), it2);
-			if(index1 != index2 && d <= it1->getRadius() + it2->getRadius()){
-				it1->freezeShape();
-				it2->freezeShape();
-			}
-		}
-	}
-
-	for (std::vector<Shape>::iterator it1 = shapes.begin(); it1 != shapes.end(); ++it1)
-	{
-		glm::vec3 pos1 = it1 ->getPosition();
-		glm::vec3 camPos = camera.getPosition();
-		float d = sqrt(((pos1.x - camPos.x) * (pos1.x - camPos.x)) + ((pos1.z - camPos.z) * (pos1.z - camPos.z)));
-
-		if (d <= it1->getRadius() * 2)
-		{
-			it1->freezeShape();
-			if (!it1->isGreen())
-			{
-				printf("You have %d points!\n", ++points);
-			}
-			it1->setColorGreen();
-		}
-	}
+	//Check collisions here.
 }
 
 int main(int argc, char **argv)

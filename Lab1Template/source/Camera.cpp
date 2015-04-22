@@ -163,10 +163,10 @@ void Camera::update(double xpos, double ypos, glm::vec3 wagonPos)
     		verticalAngle = -(5.0 * (3.14f)/180.0);
   		else if (verticalAngle < -(20.0 * (3.14f)/180.0))
     		verticalAngle = -(20.0 * (3.14f)/180.0);
-  		if (horizontalAngle > (45 * (3.14f)/180.0))
+  		/*if (horizontalAngle > (45 * (3.14f)/180.0))
     		horizontalAngle = (45 * (3.14f)/180.0);
  		else if (horizontalAngle < -(45 * (3.14f/180.0)))
-    		horizontalAngle = -(45 * (3.14f/180.0));
+    		horizontalAngle = -(45 * (3.14f/180.0));*/
 
   		lookAtPoint.x = 3.0 * -sinf(horizontalAngle) + cosf(verticalAngle);
   		lookAtPoint.y = 3.0 * -sinf(verticalAngle);
