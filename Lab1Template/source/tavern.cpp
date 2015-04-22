@@ -36,7 +36,7 @@ const string tavObjFiles[] = {"assets/tavern/cube.obj",
                        	   "assets/tavern/mug.obj",
                        	   "assets/tavern/bottle.obj",
                        	   "assets/tavern/torch.obj",
-                           "assets/tavern/cube.obj",   ///this is the barrel
+                           "assets/tavern/barrel.obj",   ///this is the barrel
                            "assets/tavern/stick.obj",
                            "assets/tavern/pole.obj",
                            "assets/tavern/fireplace.obj",
