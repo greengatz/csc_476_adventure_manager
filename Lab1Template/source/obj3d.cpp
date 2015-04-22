@@ -12,6 +12,7 @@ Obj3d::Obj3d(Obj3dContainer *newCont, vec3 newScale, int newMaterial, vec3 initP
   cont = newCont;
   material = newMaterial;
   rot = newRot;
+  hasTexture = false;
   // bound.createBounds((*cont).shape);
   // genPos();
 }
@@ -62,4 +63,14 @@ void Obj3d::hit()
 vec3 Obj3d::getCurSpot()
 {
   return pos;
+}
+
+void Obj3d::loadTextureCoor(int ndx)
+{
+   const vector<float> &shapeTexBuff = (*cont).shape[0].mesh.texcoords;
+   glGenBuffers(1, &texBuf);
+   glBindBuffer(GL_ARRAY_BUFFER, texBuf);
+   glBufferData(GL_ARRAY_BUFFER, shapeTexBuff.size()*sizeof(float), &shapeTexBuff[0], GL_STATIC_DRAW);
+   hasTexture = true;
+   textureNdx = ndx;
 }
