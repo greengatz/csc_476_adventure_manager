@@ -13,6 +13,7 @@ Obj3d::Obj3d(Obj3dContainer *newCont, vec3 newScale, int newMaterial, vec3 initP
   rot = newRot;
   bound.createBounds((*cont).shape);
   hasTexture = false;
+  materialNdx = -1;
   // bound.createBounds((*cont).shape);
   // genPos();
 }
@@ -73,4 +74,9 @@ void Obj3d::loadTextureCoor(int ndx)
    glBufferData(GL_ARRAY_BUFFER, shapeTexBuff.size()*sizeof(float), &shapeTexBuff[0], GL_STATIC_DRAW);
    hasTexture = true;
    textureNdx = ndx;
+}
+
+void Obj3d::chooseMaterial(int ndx)
+{
+  materialNdx = ndx;
 }

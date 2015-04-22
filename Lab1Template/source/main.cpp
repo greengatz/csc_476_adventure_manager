@@ -676,6 +676,7 @@ int main(int argc, char **argv)
 
 	initGL();
 	installShaders("lab7_vert.glsl", "lab7_frag.glsl");
+	tavern.init(&matSetter);
 	std::string str = "assets/bunny.obj";
 	// initShape(&str[0u]); //initShape(argv[0]);
   	initModels();

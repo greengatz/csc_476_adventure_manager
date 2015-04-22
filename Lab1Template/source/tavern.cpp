@@ -75,6 +75,11 @@ Tavern::Tavern()
 	foodLoc = vec3(30, 1.5, -30);
 }
 
+void Tavern::init(Materials *newMatSetter)
+{
+	matSetter = newMatSetter;
+}
+
 //between [1, limit]
 int getRandInt(int limit)
 {

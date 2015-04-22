@@ -14,6 +14,7 @@
 #include "obj3d.h"
 #include "mercenary.h"
 #include "TextureLoader.h"
+#include "Materials.h"
 
 using namespace std;
 using namespace glm;
@@ -30,13 +31,14 @@ class Tavern
 		vec3 getBeerLoc();
 		vec3 getFoodLoc();
 		Tavern();
+		void init(Materials *newMatSetter);
 		void loadTavernMeshes(TextureLoader* texLoader);
 		void showMercsForSale();
         //void buyMercenary(int mercenaryID, Manager* purchaser);
 		void drawTavern(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor, GLint h_aTexCoord);
 
 	private:
-		
+		Materials *matSetter;
 		vec3 doorLoc;
 		vec3 beerLoc;
 		vec3 foodLoc;
