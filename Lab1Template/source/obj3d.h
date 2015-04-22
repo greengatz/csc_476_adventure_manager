@@ -30,12 +30,16 @@ class Obj3d
 		float locTime;
 		vec3 scale;
 		mat4 rot;
+		GLuint texBuf;
+		bool hasTexture;
+		int textureNdx;
 		Obj3d(Obj3dContainer *newCont, vec3 newScale, int newMaterial, vec3 initPos, mat4 newRot);
 		void draw(GLint h_uModelMatrix);
 		void move(float deltaTime);
       	void reverseDir();
       	void hit();
 		vec3 getCurSpot();
+		void loadTextureCoor(int ndx);
 };
 
 #endif
