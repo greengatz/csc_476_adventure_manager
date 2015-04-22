@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include <time.h> 
 #include <iostream>
+#include <cmath>
 #define GLM_FORCE_RADIANS
 #include "glm/glm.hpp"
 #include "Terrain.h"
@@ -78,13 +79,14 @@ bool Terrain::atEnd(glm::vec3 aPos)
 }
 
 void Terrain::checkEvents(glm::vec3 aPos){
-    if(eventsMap[aPos.z] == MERCHANT)
+    int spot = floor(aPos.z);
+    if(eventsMap[spot] == MERCHANT)
         printf("%s\n", "You stumbled upon a merchant.");
-    if(eventsMap[aPos.z] == AMBUSH)
+    if(eventsMap[spot] == AMBUSH)
         printf("%s\n", "Bandits are ambushing your party!");
-    if(eventsMap[aPos.z] == WANDERER)
+    if(eventsMap[spot] == WANDERER)
         printf("%s\n", "A lone wanderer joins your party.");
-    if(eventsMap[aPos.z] == SICKNESS)
+    if(eventsMap[spot] == SICKNESS)
         printf("%s\n", "One of you troops just caught the plague!");
 }
 

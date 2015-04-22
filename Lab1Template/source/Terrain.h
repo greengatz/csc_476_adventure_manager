@@ -26,6 +26,7 @@ public:
 	bool atEnd(glm::vec3 aPos);
 	glm::vec3 nextCriticalPoint(glm::vec3 aPos);
 	void printCriticalPoints();
+	void checkEvents(glm::vec3 aPos);
 
 private:
 
