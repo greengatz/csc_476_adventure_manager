@@ -20,7 +20,7 @@ varying vec3 normal;
 void main()
 {
 	vec3 n,e,l1,l2,h1,h2,color,light1,light2;
-	float intensity = 0.8, result;
+	float intensity = 1.0, result;
 	n = normalize(normal);
 	e = normalize((vec3(0.0,0.0,0.0) - pos.xyz));
 	l1 = normalize(lightPos1 - pos.xyz);

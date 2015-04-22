@@ -140,6 +140,12 @@ void SetMaterial(int i)
 			glUniform3f(h_ks, 0.2, 0.2, 0.2);
 			glUniform1f(h_s, 50.0);
 			break;
+		case 3: //Wood
+			glUniform3f(h_ka, 0.4, 0.4, 0.4);
+			glUniform3f(h_kd, 0.804, 0.666, 0.49);
+			glUniform3f(h_ks, 0.1, 0.1, 0.1);
+			glUniform1f(h_s, 0.01);
+			break;
 	}
 }
 
@@ -406,14 +412,16 @@ void drawGL()
 
 	//========================= END OUTSIDE SCENE =======================
 
-
+	
 	//Draw TAVERN
 	glUniform1i(terrainToggleID, 1);
 	glUniform1i(h_uTexUnit, 0);
 	ModelTrans.loadIdentity();
 	ModelTrans.pushMatrix();
+	SetMaterial(2);
 	tavTerr.draw(h_vertPos, h_vertNor, h_aTexCoord, h_ModelMatrix, &ModelTrans);
 	ModelTrans.popMatrix();
+	SetMaterial(3);
 	tavern.drawTavern(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord);
 	glUniform1i(terrainToggleID, 0);
 	
