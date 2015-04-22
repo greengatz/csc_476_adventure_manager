@@ -9,6 +9,7 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "Wagon.h"
 #include "GLSL.h"
+#include <math.h>
 
 using namespace std;
 
@@ -17,13 +18,18 @@ int WAGON_TEX_ID = 111;
 Wagon::Wagon() :
 	position(0.6f, 0.05f, -0.5f),
 	scale(0.03f, 0.03f, 0.03f),
+  direction(0.0f, 0.0f, 0.0f),
   rotate(90.0f),
 	posBufID(0),
 	norBufID(0),
   indBufID(0),
 	texBufID(0),
-   startTime(0),
-   terrain(0)
+   startTime(0.0f),
+   wagonStart(false),
+   terrain(0),
+   deltaTime(0.0f),
+   velocity(0.002f),
+   nextPoint(0.0f, 0.0f, 0.0f)
 {
 }
 
@@ -33,12 +39,34 @@ Wagon::~Wagon()
 
 void Wagon::resetWagon()
 {
+   wagonStart = false;
    position = terrain->getStartPosition() + glm::vec3(0.6, 0.05, -0.5);
+   nextPoint = terrain->nextCriticalPoint(position);
+   direction = glm::normalize(nextPoint - position);
+   printf("Starting Position: <%lf, %lf, %lf>\n", position.x, position.y, position.z);
+   terrain->printCriticalPoints();
 }
 
 void Wagon::startWagon()
 {
    startTime = glfwGetTime();
+   wagonStart = true;
+}
+
+void Wagon::updateWagon(float globalTime)
+{
+  if (wagonStart && !terrain->atEnd(position))
+  {
+    deltaTime = globalTime - startTime;
+    if (position.x >= nextPoint.x)
+    {
+      nextPoint = terrain->nextCriticalPoint(position);
+      direction = glm::normalize(nextPoint - position);
+    }
+    //printf("Position Before: <%lf, %lf, %lf>\n", position.x, position.y, position.z);
+    position += direction * deltaTime * velocity;
+    //printf("Position After: <%lf, %lf, %lf>\n", position.x, position.y, position.z);
+  }
 }
 
 void Wagon::setPosition(float x, float y, float z)

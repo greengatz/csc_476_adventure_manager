@@ -25,6 +25,7 @@ public:
 	void setRotation(float aRotation);
 	void resetWagon();
 	void startWagon();
+	void updateWagon(float globalTime);
 	
 private:
 	std::vector<tinyobj::shape_t> shapes;
@@ -37,6 +38,11 @@ private:
 	float rotate;
 	float startTime;
 	Terrain* terrain;
+	float deltaTime;
+	bool wagonStart;
+	float velocity;
+	glm::vec3 direction;
+	glm::vec3 nextPoint;
 };
 
 #endif
