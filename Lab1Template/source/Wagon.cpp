@@ -57,9 +57,11 @@ void Wagon::updateWagon(float globalTime)
 {
   if (wagonStart && !terrain->atEnd(position))
   {
+    terrain->checkEvents(position);
     deltaTime = globalTime - startTime;
     if (position.x >= nextPoint.x)
     {
+
       nextPoint = terrain->nextCriticalPoint(position);
       direction = glm::normalize(nextPoint - position);
     }
