@@ -31,7 +31,8 @@ class Tavern
 		vec3 getFoodLoc();
 		Tavern();
 		void loadTavernMeshes(TextureLoader* texLoader);
-		//void buyMercenary(int mercenaryID, Manager* purchaser);
+		void showMercsForSale();
+        //void buyMercenary(int mercenaryID, Manager* purchaser);
 		void drawTavern(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor, GLint h_aTexCoord);
 
 	private:
