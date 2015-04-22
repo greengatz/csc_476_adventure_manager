@@ -112,7 +112,7 @@ GLuint NumBufObj, NumIndBufObj, NumTexBufObj;
 //Rendering Helper
 RenderingHelper ModelTrans;
 Tavern tavern;
-Manager manager("The Dude", camera);
+Manager manager("The Dude");
 TavernTerrain tavTerr;
 
 /**
@@ -509,30 +509,29 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	//Buy food
 	if (key == GLFW_KEY_F && action == GLFW_PRESS)
 	{
-		//add food
-		if (manager.gold >= 5)
-		{
-			manager.food++;
-			manager.gold -= 5;
-			cout << "bought 1 food for 5 gold\n";
-		}
+		manager.buyFood();
 	}
 
 	//Buy beer
 	if (key == GLFW_KEY_B && action == GLFW_PRESS)
 	{
-		//add beer
-		if (manager.gold >= 2)
-		{
-			manager.beer++;
-			manager.gold -= 2;
-			cout << "bought 1 beer for 2 gold\n";
-		}
+		manager.buyBeer();
 	}
 	
 	if (key >= GLFW_KEY_1 && key <= GLFW_KEY_5 && action == GLFW_PRESS)
 	{
-		tavern.buyMercenary(key - GLFW_KEY_1, &manager);
+		// tavern.buyMercenary(key - GLFW_KEY_1, &manager);
+		manager.buyMercenary(key - GLFW_KEY_1, &tavern);
+	}
+
+	//Leave Tavern
+	if (key == GLFW_KEY_X && action == GLFW_PRESS)
+	{
+		if(manager.inTavern)
+		{
+			manager.inTavern = false;
+			camera.setTrailView();
+		}
 	}
 
    	//Toggle between lines and filled polygons

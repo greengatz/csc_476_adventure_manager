@@ -49,7 +49,9 @@ const string tavTextures[] = {"assets/tavern/tavernFloor.bmp"};
 
 Tavern::Tavern()
 {
-
+	doorLoc = vec3(7.5, 1.35, -23);
+	beerLoc = vec3(35.0, 1.0, -35.0);
+	foodLoc = vec3(30, 1.5, -30);
 }
 
 //between [1, limit]
@@ -345,13 +347,17 @@ void Tavern::drawTavern(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor, G
 	}
 }
 
-void Tavern::buyMercenary(int mercenaryID, Manager* purchaser)
+vec3 Tavern::getDoorLoc()
 {
-	if(tavernCharacters.size() >= mercenaryID && tavernCharacters[mercenaryID].cost <= purchaser->gold)
-	{
-		cout << "buying " + tavernCharacters[mercenaryID].firstName + "\n";
-		purchaser->mercs.push_back(tavernCharacters[mercenaryID]);
-		purchaser->gold -= tavernCharacters[mercenaryID].cost;
-		tavernCharacters.erase(tavernCharacters.begin() + mercenaryID);
-	}
+	return doorLoc;
+}
+
+vec3 Tavern::getBeerLoc()
+{
+	return beerLoc;
+}
+
+vec3 Tavern::getFoodLoc()
+{
+	return foodLoc;
 }

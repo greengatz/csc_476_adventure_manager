@@ -13,7 +13,6 @@
 #include "obj3dcontainer.h"
 #include "obj3d.h"
 #include "mercenary.h"
-#include "manager.h"
 
 using namespace std;
 using namespace glm;
@@ -21,15 +20,24 @@ using namespace glm;
 class Tavern
 {
 	public:
+		
 		// GLint *h_vertPos, *h_norPos; //buffers to draw to
 		vector<Obj3dContainer> tavernMeshes; //obj meshes holding image data
 		vector<Obj3d> tavernItems; //data for each obj in the tavern - position, rotation, etc
 		vector<Mercenary> tavernCharacters;
+		vec3 getDoorLoc();
+		vec3 getBeerLoc();
+		vec3 getFoodLoc();
 		Tavern();
 		void loadTavernMeshes();
-		void buyMercenary(int mercenaryID, Manager* purchaser);
+		//void buyMercenary(int mercenaryID, Manager* purchaser);
 		void drawTavern(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor, GLint h_aTexCoord);
+
 	private:
+		
+		vec3 doorLoc;
+		vec3 beerLoc;
+		vec3 foodLoc;
 		void loadBufferData();
 		void createTable1(glm::vec3 initLoc, float ang);
 		void createPillar(glm::vec3 initLoc);
@@ -39,6 +47,7 @@ class Tavern
 		void enableTextureBuffer(int index, GLint h_aTexCoord, GLuint texBuf);
 		void enableBuff(GLint h_vertPos, GLint h_vertNor, GLuint posBuf, GLuint norBuf, GLuint indBuf);
 		void disableBuff(GLint h_vertPos, GLint h_vertNor, GLint h_aTexCoord);
+		
 };
 
 #endif

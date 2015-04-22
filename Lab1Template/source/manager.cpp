@@ -1,14 +1,12 @@
 #include "manager.h"
 
-Manager::Manager(string newName, Camera cam)
+Manager::Manager(string newName)
 {
-	camera = cam;
+	inTavern = true;
 	name = newName;
 	gold = 100.00;
 	food = 0;
 	beer = 0;
-	//mercs = 0;
-	// this should be a list of an abstract type
 
 	reportStats();
 }
@@ -27,4 +25,49 @@ void Manager::reportStats()
 		cout << "   " + mercs[i].firstName + " " + mercs[i].lastName +
 			" the " + mercs[i].title + "\n";
 	}
+}
+
+void Manager::buyFood()
+{
+	//add food
+	if (gold >= 5)
+	{
+		food++;
+		gold -= 5;
+		cout << "Bought 1 food for 5 gold" << endl;
+	}
+	else
+	{
+		cout << "Insufficient Funds" << endl;
+	}
+
+	reportStats();
+}
+
+void Manager::buyBeer()
+{
+	//add beer
+	if (gold >= 2)
+	{
+		beer++;
+		gold -= 2;
+		cout << "Bought 1 beer for 2 gold\n";
+	}
+	else
+	{
+		cout << "Insufficient Funds" << endl;
+	}
+}
+
+void Manager::buyMercenary(int mercenaryID, Tavern* tav)
+{
+	if(tav->tavernCharacters.size() >= mercenaryID && tav->tavernCharacters[mercenaryID].cost <= gold)
+	{
+		cout << "Buying " + tav->tavernCharacters[mercenaryID].firstName + "\n";
+		mercs.push_back(tav->tavernCharacters[mercenaryID]);
+		gold -= tav->tavernCharacters[mercenaryID].cost;
+		tav->tavernCharacters.erase(tav->tavernCharacters.begin() + mercenaryID);
+	}
+
+	reportStats();
 }

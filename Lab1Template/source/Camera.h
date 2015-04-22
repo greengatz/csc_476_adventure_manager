@@ -40,6 +40,8 @@ public:
 	void updateStrafe(glm::vec3 dStrafe);
 	void updateZoom(glm::vec3 dZoom);
 	void toggleFreeRoam();
+	void setTavernView();
+	void setTrailView();
 	
 private:
 	float aspect;
