@@ -174,4 +174,5 @@ void Obj3dContainer::loadTextureCoor()
    glGenBuffers(1, &texBuf);
    glBindBuffer(GL_ARRAY_BUFFER, texBuf);
    glBufferData(GL_ARRAY_BUFFER, shapeTexBuff.size()*sizeof(float), &shapeTexBuff[0], GL_STATIC_DRAW);
+   hasTexture = true;
 }

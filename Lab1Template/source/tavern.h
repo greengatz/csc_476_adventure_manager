@@ -13,6 +13,7 @@
 #include "obj3dcontainer.h"
 #include "obj3d.h"
 #include "mercenary.h"
+#include "TextureLoader.h"
 
 using namespace std;
 using namespace glm;
@@ -29,7 +30,7 @@ class Tavern
 		vec3 getBeerLoc();
 		vec3 getFoodLoc();
 		Tavern();
-		void loadTavernMeshes();
+		void loadTavernMeshes(TextureLoader* texLoader);
 		//void buyMercenary(int mercenaryID, Manager* purchaser);
 		void drawTavern(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor, GLint h_aTexCoord);
 
@@ -38,13 +39,14 @@ class Tavern
 		vec3 doorLoc;
 		vec3 beerLoc;
 		vec3 foodLoc;
-		void loadBufferData();
+		void loadBufferData(TextureLoader* texLoader);
 		void createTable1(glm::vec3 initLoc, float ang);
 		void createPillar(glm::vec3 initLoc);
+		void createFirePlace(glm::vec3 init);
 		void addTavernMesh(const string filename, bool noNorms);
 		void addTavernItem(int index, glm::vec3 scale, glm::vec3 trans, glm::mat4 rot);
 		void addTavernCharacter(int index, glm::vec3 scale, glm::vec3 trans, glm::mat4 rot);
-		void enableTextureBuffer(int index, GLint h_aTexCoord, GLuint texBuf);
+		void enableTextureBuffer(GLint h_aTexCoord, GLuint texBuf,int id);
 		void enableBuff(GLint h_vertPos, GLint h_vertNor, GLuint posBuf, GLuint norBuf, GLuint indBuf);
 		void disableBuff(GLint h_vertPos, GLint h_vertNor, GLint h_aTexCoord);
 		

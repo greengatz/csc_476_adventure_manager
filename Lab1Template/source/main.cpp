@@ -665,7 +665,7 @@ int main(int argc, char **argv)
 	std::string str = "assets/bunny.obj";
 	// initShape(&str[0u]); //initShape(argv[0]);
   	initModels();
-  	tavern.loadTavernMeshes();
+  	tavern.loadTavernMeshes(&texLoader);
    do{
    	timeNew = glfwGetTime();
 	
