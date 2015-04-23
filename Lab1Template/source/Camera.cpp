@@ -37,7 +37,7 @@ Camera::Camera() :
 	tavernView(true)
 
 {
-	bound.createBounds(vec2(-0.75, 0.75), vec2(0, 1.0), vec2(-0.75, 0.75));
+	bound.createBounds(vec2(-0.7, 0.7), vec2(0, 1.0), vec2(-0.7, 0.7));
 }
 
 Camera::~Camera()
@@ -90,8 +90,8 @@ void Camera::updateStrafe(glm::vec3 dStrafe)
 	}
 	else
 	{
-		theStrafe.x += dStrafe.x * 0.15;
-		theStrafe.z += dStrafe.z * 0.15;
+		theStrafe.x += dStrafe.x * 0.1;
+		theStrafe.z += dStrafe.z * 0.1;
 	}
 }
 
@@ -104,8 +104,8 @@ void Camera::updateZoom(glm::vec3 dZoom)
 	}
 	else
 	{
-		theZoom.x += dZoom.x * 0.2;
-		theZoom.z += dZoom.z * 0.2;
+		theZoom.x += dZoom.x * 0.1;
+		theZoom.z += dZoom.z * 0.1;
 	}
 }
 
@@ -181,16 +181,4 @@ void Camera::applyViewMatrix(MatrixStack *MV, glm::vec3 wagonPos) const
 		MV->multMatrix(View);
 	}
   	
-}
-
-//TODO
-void Camera::setTavernView()
-{
-
-}
-
-//TODO
-void Camera::setTrailView()
-{
-	
 }
