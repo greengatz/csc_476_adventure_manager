@@ -35,8 +35,8 @@ bool BoundingBox::checkCollision(float cam[], vec3 scale, vec3 trans)
   float box[6] = {
     minX * scale.x + trans.x,
     maxX * scale.x + trans.x,
-    minY * scale.y + trans.y,
-    maxY * scale.y + trans.y,
+    1,
+    1,
     minZ * scale.z + trans.z,
     maxZ * scale.z + trans.z,
   };

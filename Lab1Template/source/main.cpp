@@ -449,12 +449,12 @@ bool hasCollided(glm::vec3 incr)
 	float curCam[6] = {
     camera.bound.minX + camPos.x,
     camera.bound.maxX + camPos.x,
-    camera.bound.minY,
-    camera.bound.maxY,
+    camera.bound.minY + 1,
+    camera.bound.maxY + 1,
     camera.bound.minZ + camPos.z,
     camera.bound.maxZ + camPos.z};
 
-	bool validMove = (curCam[0] < -50.0 || curCam[1] > 50.0 || curCam[4] < -50.0 || curCam[5] > 50.0);
+	bool validMove = (curCam[0] < 6.75 || curCam[1] > 39.5 || curCam[4] < -36.0 || curCam[5] > -11.4);
 
 	for (std::vector<Obj3d>::iterator it1 = temp.begin(); it1 != temp.end(); ++it1)
 	{
@@ -463,7 +463,6 @@ bool hasCollided(glm::vec3 incr)
 		{
 			validMove = true;
 		}
-		
 	}
 
 	if (camera.isFreeRoam())
