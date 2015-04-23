@@ -91,6 +91,10 @@ void Camera::toggleGameViews()
 
 void Camera::toggleFreeRoam()
 {
+	if (!tavernView)
+	{
+		toggleGameViews();
+	}
 	freeRoam = !freeRoam;
 }
 

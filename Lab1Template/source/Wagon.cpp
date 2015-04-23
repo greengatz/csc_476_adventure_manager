@@ -70,6 +70,7 @@ void Wagon::updateWagon(float globalTime)
       direction = glm::normalize(nextPoint - position);
     }
     position += direction * deltaTime * velocity;
+    position.y = 0.05;
     startTime += deltaTime;
 
     rotate = acos((glm::dot(glm::vec3(1.0, 0.0, 0.0), direction))/(glm::length(glm::vec3(1.0, 0.0, 0.0)) * glm::length(direction))) * (180.0/3.14);
