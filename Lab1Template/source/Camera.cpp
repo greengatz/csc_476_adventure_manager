@@ -37,7 +37,7 @@ Camera::Camera() :
 	tavernView(true)
 
 {
-	bound.createBounds(vec2(-0.7, 0.7), vec2(0, 1.0), vec2(-0.7, 0.7));
+	bound.createBounds(vec2(-0.6, 0.6), vec2(0, 1.0), vec2(-0.6, 0.6));
 }
 
 Camera::~Camera()
