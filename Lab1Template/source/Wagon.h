@@ -45,6 +45,7 @@ private:
 	float velocity;
 	glm::vec3 direction;
 	glm::vec3 nextPoint;
+	glm::vec3 orientation;
 };
 
 #endif
