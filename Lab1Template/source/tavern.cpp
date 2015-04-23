@@ -38,7 +38,7 @@ const string tavObjFiles[] = {"assets/tavern/cube.obj",
                        	      "assets/tavern/mug.obj",
                        	      "assets/tavern/bottle.obj",
                        	      "assets/tavern/torch.obj",
-                              "assets/tavern/cube.obj",   ///this is the barrel
+                              "assets/tavern/barrel.obj",   ///this is the barrel
                               "assets/tavern/stick.obj",
                               "assets/tavern/pole.obj",
                               "assets/tavern/fireplace.obj",
@@ -189,19 +189,6 @@ void Tavern::loadBufferData(TextureLoader* texLoader)
 		// printf("iter is %d\n", iter);
 		addTavernMesh(tavObjFiles[iter], false);
 	}
-	// addTavernMesh("assets/tavern/stick.obj", false);
-	// addTavernMesh("assets/tavern/pole.obj", false);
-	// addTavernMesh("assets/tavern/fireplace.obj", false);
-	// addTavernMesh("assets/tavern/tableware.obj", false);
-	// addTavernMesh("assets/tavern/turkey.obj", false);
-	// addTavernMesh("assets/tavern/landlord.obj", false);
-	// addTavernMesh("assets/tavern/lumberjack.obj", false);
-	// addTavernMesh("assets/tavern/samurai.obj", false);
-	// addTavernMesh("assets/tavern/rock.obj", false);
-	// addTavernMesh("assets/tavern/box.obj", false);
-	// addTavernMesh("assets/tavern/cube.obj", false); //currently a cube until find a good balustrade...
-	// addTavernMesh("assets/tavern/roof.obj", false);
-	// addTavernMesh("assets/tavern/plank.obj", false);
 
 	//load textures
 	texLoader->LoadTexture((char *)"assets/tavern/crateTex.bmp", TAV_CRATE_ID);
