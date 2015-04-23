@@ -46,6 +46,7 @@ public:
 	bool isTavernView();
 	bool isFreeRoam();
 	void toggleGameViews();
+	void setPosition(glm::vec3 aPos);
 
 	BoundingBox bound;
 	float horizontalAngle = -3.14f/2.0f;

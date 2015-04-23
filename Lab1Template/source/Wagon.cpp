@@ -28,7 +28,7 @@ Wagon::Wagon() :
    wagonStart(false),
    terrain(0),
    deltaTime(0.0f),
-   velocity(0.00001f),
+   velocity(0.5f),
    nextPoint(0.0f, 0.0f, 0.0f)
 {
 }
@@ -45,12 +45,17 @@ void Wagon::resetWagon()
    direction = glm::normalize(nextPoint - position);
    printf("Starting Position: <%lf, %lf, %lf>\n", position.x, position.y, position.z);
    terrain->printCriticalPoints();
+
+   rotate = acos((glm::dot(glm::vec3(1.0, 0.0, 0.0), direction))/(glm::length(glm::vec3(1.0, 0.0, 0.0)) * glm::length(direction))) * (180.0/3.14);
 }
 
 void Wagon::startWagon()
 {
-   startTime = glfwGetTime();
-   wagonStart = true;
+  if (!wagonStart)
+  {
+    startTime = glfwGetTime();
+    wagonStart = true;
+  }
 }
 
 void Wagon::updateWagon(float globalTime)
@@ -58,17 +63,23 @@ void Wagon::updateWagon(float globalTime)
   if (wagonStart && !terrain->atEnd(position))
   {
     terrain->checkEvents(position);
-    deltaTime = globalTime - startTime;
+    deltaTime = glfwGetTime() - startTime;
     if (position.x >= nextPoint.x)
     {
-
       nextPoint = terrain->nextCriticalPoint(position);
       direction = glm::normalize(nextPoint - position);
     }
-    //printf("Position Before: <%lf, %lf, %lf>\n", position.x, position.y, position.z);
     position += direction * deltaTime * velocity;
-    //printf("Position After: <%lf, %lf, %lf>\n", position.x, position.y, position.z);
+    startTime += deltaTime;
+
+    rotate = acos((glm::dot(glm::vec3(1.0, 0.0, 0.0), direction))/(glm::length(glm::vec3(1.0, 0.0, 0.0)) * glm::length(direction))) * (180.0/3.14);
+    //printf("Rotate: %lf\n", rotate);
   }
+}
+
+bool Wagon::hasStarted()
+{
+  return wagonStart;
 }
 
 void Wagon::setPosition(float x, float y, float z)

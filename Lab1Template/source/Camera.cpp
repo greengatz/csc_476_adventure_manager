@@ -60,6 +60,12 @@ glm::vec3 Camera::getPosition()
 	return theStrafe + theZoom;
 }
 
+void Camera::setPosition(glm::vec3 aPos)
+{
+	theStrafe = glm::vec3(aPos.x/2.0, aPos.y/2.0, aPos.z/2.0);
+	theZoom = glm::vec3(aPos.x/2.0, aPos.y/2.0, aPos.z/2.0);
+}
+
 bool Camera::isTavernView()
 {
 	return tavernView;
@@ -73,6 +79,13 @@ bool Camera::isFreeRoam()
 void Camera::toggleGameViews()
 {
 	tavernView = !tavernView;
+	if (tavernView)
+	{
+		//When going back to tavern, set position at door.
+		theStrafe = glm::vec3(23.15, 1.0, 5.82);
+		theZoom = glm::vec3(-14.51, 1.0, -27.94);
+	}
+
 	freeRoam = false;
 }
 

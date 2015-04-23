@@ -404,36 +404,40 @@ void drawGL()
 	matSetter.setMaterial(2);
 
 	//========================== DRAW OUTSIDE SCENE ====================
-
-	glUniform1i(terrainToggleID, 1);
-	glUniform1i(h_uTexUnit, 0);
-	ModelTrans.loadIdentity();
-	ModelTrans.pushMatrix();
-		ModelTrans.translate(glm::vec3(-100.0, 0.0, 0.0));
-		glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(ModelTrans.modelViewMatrix));
-		//ModelTrans.popMatrix();
+	if (!camera.isTavernView() || camera.isFreeRoam())
+	{
+		glUniform1i(terrainToggleID, 1);
+		glUniform1i(h_uTexUnit, 0);
+		ModelTrans.loadIdentity();
 		ModelTrans.pushMatrix();
-			terrain.draw(h_vertPos, h_vertNor, h_aTexCoord);
-			drawWalls();
-			wagon.draw(h_vertPos, h_vertNor, h_aTexCoord, h_ModelMatrix, &ModelTrans);
+			ModelTrans.translate(glm::vec3(-100.0, 0.0, 0.0));
+			glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(ModelTrans.modelViewMatrix));
+			//ModelTrans.popMatrix();
+			ModelTrans.pushMatrix();
+				terrain.draw(h_vertPos, h_vertNor, h_aTexCoord);
+				drawWalls();
+				wagon.draw(h_vertPos, h_vertNor, h_aTexCoord, h_ModelMatrix, &ModelTrans);
+			ModelTrans.popMatrix();
 		ModelTrans.popMatrix();
-	ModelTrans.popMatrix();
-	glUniform1i(terrainToggleID, 0);
+		glUniform1i(terrainToggleID, 0);
+	}
 
 	//========================= END OUTSIDE SCENE =======================
 
-	
-	//Draw TAVERN
-	glUniform1i(terrainToggleID, 1);
-	glUniform1i(h_uTexUnit, 0);
-	ModelTrans.loadIdentity();
-	ModelTrans.pushMatrix();
-	matSetter.setMaterial(4);
-	tavTerr.draw(h_vertPos, h_vertNor, h_aTexCoord, h_ModelMatrix, &ModelTrans);
-	ModelTrans.popMatrix();
-	matSetter.setMaterial(3);
-	tavern.drawTavern(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord);
-	glUniform1i(terrainToggleID, 0);
+	if (camera.isTavernView() || camera.isFreeRoam())
+	{
+		//Draw TAVERN
+		glUniform1i(terrainToggleID, 1);
+		glUniform1i(h_uTexUnit, 0);
+		ModelTrans.loadIdentity();
+		ModelTrans.pushMatrix();
+		matSetter.setMaterial(4);
+		tavTerr.draw(h_vertPos, h_vertNor, h_aTexCoord, h_ModelMatrix, &ModelTrans);
+		ModelTrans.popMatrix();
+		matSetter.setMaterial(3);
+		tavern.drawTavern(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord);
+		glUniform1i(terrainToggleID, 0);
+	}
 	
 	// Unbind the program
 	glUseProgram(0);
