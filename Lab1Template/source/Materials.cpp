@@ -48,5 +48,29 @@ void Materials::setMaterial(int i)
 			glUniform3f(*h_ks, 0.051, 0.051, 0.051);
 			glUniform1f(*h_s, 0.01);
 			break;
+		case 5: //supposedly red
+			glUniform3f(*h_ka, 0.17, 0.11, 0.11);
+			glUniform3f(*h_kd, 0.604, 0.04, 0.04);
+			glUniform3f(*h_ks, 0.076, 0.051, 0.051);
+			glUniform1f(*h_s, 0.01);
+			break;
+		case 6: //dark brown
+			glUniform3f(*h_ka, 0.185, 0.1, 0.045);
+			glUniform3f(*h_kd, 0.361, 0.2, 0.09);
+			glUniform3f(*h_ks, 0.076, 0.051, 0.051);
+			glUniform1f(*h_s, 0.01);
+			break;
+		case 7: //grey
+			glUniform3f(*h_ka, 0.1, 0.1, 0.1);
+			glUniform3f(*h_kd, 0.4, 0.4, 0.04);
+			glUniform3f(*h_ks, 0.05, 0.05, 0.05);
+			glUniform1f(*h_s, 0.01);
+			break;
+		case 8: //white
+			glUniform3f(*h_ka, 0.1, 0.1, 0.1);
+			glUniform3f(*h_kd, 1.0, 1.0, 1.0);
+			glUniform3f(*h_ks, 0.05, 0.05, 0.05);
+			glUniform1f(*h_s, 0.01);
+			break;
 	}
 }
