@@ -13,6 +13,9 @@ x
 starting wagon:
 8
 
+make a merc wave:
+h
+
 buying mercs:
 1-5
 

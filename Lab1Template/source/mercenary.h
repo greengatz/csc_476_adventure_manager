@@ -7,6 +7,7 @@
 #include "glm/gtc/matrix_transform.hpp" //perspective, trans etc
 #include "glm/gtc/type_ptr.hpp" //value_ptr
 #include "obj3d.h"
+#include <time.h>
 
 using namespace std;
 using namespace glm;
@@ -25,16 +26,15 @@ enum classes {
 class Mercenary
 {
 	public:
-		Obj3d mesh;
-		// TODO make this a vector of meshes to hierarchically model
-		// this can come from class
+		vector<Obj3d> meshes;
+		// TODO load these from our classes
 
 		string firstName;
 		string lastName;
 		string title;
-		// character class
+		
+        // character class
         int job;
-		// Class, enum?
 		int cost;
 
 		// these are temporary, edit them as you need
@@ -49,12 +49,17 @@ class Mercenary
 		int maxHappiness;
 		int currentHappiness;
 		int beerRate;
-	
 
-		Mercenary(Obj3d mesh);
-		void draw(GLint h_uModelMatrix);
+        // method prototypes
+		Mercenary(vector<Obj3d> mesh);
+		void draw(GLint h_uModelMatrix, int meshIndex);
 		void update();
         void printDetails();
+        void wave();
+
+    private:
+        clock_t animationStart;
+        bool isWaving;
 };
 
 #endif

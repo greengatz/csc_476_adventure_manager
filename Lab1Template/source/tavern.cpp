@@ -19,7 +19,7 @@
 #define TURKEY 15
 #define LANDLORD 16
 #define LUMBERJACK 17
-#define SAMURAI 18
+#define SAMURAI 18 // being given a box for an arm right now
 #define ROCK 19
 #define CRATE 20
 #define BALUSTRADE 21
@@ -109,8 +109,15 @@ void Tavern::addTavernItem(int index, glm::vec3 scale, glm::vec3 trans, glm::mat
 //index is the index of buffer info in tavernMeshes
 void Tavern::addTavernCharacter(int index, glm::vec3 scale, glm::vec3 trans, glm::mat4 rot)
 {
-	Obj3d temp(&(tavernMeshes[index]), scale, 0, trans, rot);
-	tavernCharacters.push_back(*(new Mercenary(temp)));
+    vector<Obj3d> bodyParts;
+	Obj3d torso(&(tavernMeshes[index]), scale, 0, trans, rot);
+    // TODO our arm's translation should be based off rotation
+	Obj3d arm(&(tavernMeshes[CUBE]), glm::vec3(0.1, 0.5, 0.1), 0, trans + glm::vec3(-0.3, 0.6, 0), rot);
+    arm.preTrans = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, -0.4, 0.0));
+    bodyParts.push_back(torso);
+    bodyParts.push_back(arm);
+    
+	tavernCharacters.push_back(*(new Mercenary(bodyParts)));
 }
 
 void Tavern::createTable1(glm::vec3 initLoc, float ang)
@@ -418,11 +425,11 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 
 	//fireplace and roasting
 	addTavernCharacter(SAMURAI, glm::vec3(1, 1, 1), glm::vec3(20.05, 1.3, -23.5), glm::mat4(1.0f));
-	tavernCharacters[tavernCharacters.size() - 1].mesh.loadTextureCoor(TAV_SAMURAI_ID);
+	tavernCharacters[tavernCharacters.size() - 1].meshes[0].loadTextureCoor(TAV_SAMURAI_ID);
 	addTavernCharacter(SAMURAI, glm::vec3(1, 1, 1), glm::vec3(22.05, 1.3, -25.5), glm::mat4(1.0f));
-	tavernCharacters[tavernCharacters.size() - 1].mesh.loadTextureCoor(TAV_SAMURAI_ID);
+	tavernCharacters[tavernCharacters.size() - 1].meshes[0].loadTextureCoor(TAV_SAMURAI_ID);
 	addTavernCharacter(SAMURAI, glm::vec3(1, 1, 1), glm::vec3(21.05, 1.3, -22.5), glm::mat4(1.0f));
-	tavernCharacters[tavernCharacters.size() - 1].mesh.loadTextureCoor(TAV_SAMURAI_ID);
+	tavernCharacters[tavernCharacters.size() - 1].meshes[0].loadTextureCoor(TAV_SAMURAI_ID);
 	createFirePlace(glm::vec3(23.05, 1.5, -23.5));
 	
 }
@@ -469,12 +476,14 @@ void Tavern::drawTavern(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor, G
 	}
 	
 	for (int iter = 0; iter < tavernCharacters.size(); iter++) {
-		enableBuff(h_vertPos, h_vertNor, (*tavernCharacters[iter].mesh.cont).posBuf, (*tavernCharacters[iter].mesh.cont).norBuf, (*tavernCharacters[iter].mesh.cont).indBuf);
-		if (tavernCharacters[iter].mesh.hasTexture) {
-			enableTextureBuffer(h_aTexCoord, tavernCharacters[iter].mesh.texBuf, tavernCharacters[iter].mesh.textureNdx);
-		}
-		tavernCharacters[iter].draw(h_ModelMatrix);
-		disableBuff(h_vertPos, h_vertNor, h_aTexCoord);
+        for(int meshIter = 0; meshIter < tavernCharacters[iter].meshes.size(); meshIter++) {
+		    enableBuff(h_vertPos, h_vertNor, (*tavernCharacters[iter].meshes[meshIter].cont).posBuf, (*tavernCharacters[iter].meshes[meshIter].cont).norBuf, (*tavernCharacters[iter].meshes[meshIter].cont).indBuf);
+		    if (tavernCharacters[iter].meshes[meshIter].hasTexture) {
+		    	enableTextureBuffer(h_aTexCoord, tavernCharacters[iter].meshes[meshIter].texBuf, tavernCharacters[iter].meshes[meshIter].textureNdx);
+		    }
+		    tavernCharacters[iter].draw(h_ModelMatrix, meshIter);
+		    disableBuff(h_vertPos, h_vertNor, h_aTexCoord);
+        }
 	}
 }
 

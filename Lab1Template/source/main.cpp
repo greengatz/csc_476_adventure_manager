@@ -558,6 +558,12 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		// tavern.buyMercenary(key - GLFW_KEY_1, &manager);
 		manager.buyMercenary(key - GLFW_KEY_1, &tavern);
 	}
+	
+    if (key == GLFW_KEY_H && action == GLFW_PRESS)
+	{
+		//manager.buyMercenary(key - GLFW_KEY_1, &tavern);
+        tavern.tavernCharacters[0].wave();
+	}
 
 	if (key == GLFW_KEY_T && action == GLFW_PRESS)
     {
@@ -567,14 +573,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	//Leave Tavern
 	if (key == GLFW_KEY_X && action == GLFW_PRESS)
 	{
-		if(manager.inTavern)
-		{
-			manager.inTavern = false;
-		}
-		else
-		{
-			manager.inTavern = true;
-		}
+        manager.inTavern = manager.inTavern ? false : true;
 		camera.toggleGameViews();
 	}
 

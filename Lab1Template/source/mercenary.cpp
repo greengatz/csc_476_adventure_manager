@@ -11,16 +11,17 @@ string JobNames[] = {"berzerker", "barbarian", "ranger", "cleric", "papiromancer
 
 
 // name generation tools
-string First[] = {"Zdislav", "Richard", "Bryn", "Omari", 
-		"Sizzle", "Victoria", "Victor"};
-int firstCount = 5;
+string First[] = {"Zdislav", "Richard", "Bryn", "Omari", "Sizzle", 
+                "Victoria", "Victor", "Florence", "Napolean"};
+int firstCount = 9;
 
-string Last[] = {"Bobby", "Andrzejewski", "Zdrojewski", "Copperhordes", "Hugehair"};
-int lastCount = 5;
+string Last[] = {"Bobby", "Andrzejewski", "Zdrojewski", "Copperhordes", "Hugehair"
+                "Bourchier", "Cardonell", "de La Chapagne", "Dreux"};
+int lastCount = 9;
 
 string Title[] = {"Driver", "Bear-Hugger", "God", "Lord-Commander", "Pestilent", 
-		"Determined", "Steadfast"};
-int titleCount = 7;
+		"Determined", "Steadfast", "Untrustworthy", "Too-Friendly"};
+int titleCount = 9;
 
 
 // base stats
@@ -45,8 +46,8 @@ string randTitle() {
 }
 
 
-Mercenary::Mercenary(Obj3d m) :
-	mesh(m),
+Mercenary::Mercenary(vector<Obj3d> m) :
+	meshes(m),
 	firstName(randFirstName()),
 	lastName(randLastName()),
 	title(randTitle()),
@@ -58,23 +59,55 @@ Mercenary::Mercenary(Obj3d m) :
     hungerRate(BaseHungerRate[job] + rand() % HUNGER_VARIANCE),
     beerRate(BaseBeerRate[job] + rand() % BEER_VARIANCE),
 
-	cost(30)
+	cost(BaseCost[job]),
+
+    isWaving(false)
 {
-    printDetails();
+    cost += maxHealth - BaseHealth[job];
+    cost += damage - BaseDamage[job];
+    cost -= hungerRate - BaseHungerRate[job];
+    cost -= beerRate - BaseBeerRate[job];
+
+    curHealth = maxHealth;
 }
 
-void Mercenary::draw(GLint h_uModelMatrix)
+void Mercenary::draw(GLint h_uModelMatrix, int meshIndex)
 {
-	mesh.draw(h_uModelMatrix);
+    // animate here
+    clock_t delta = clock();
+
+    if((delta - animationStart) > 1000000 && isWaving) {
+        isWaving = false;
+    }
+
+    if(isWaving) {
+        float armAngle = 0.0f;
+        if((delta - animationStart) < 500000) {
+            armAngle = ((float) (delta - animationStart)) / 5000.0f;
+        } else {
+            armAngle = (100.0f) - (((float) (delta - animationStart - 500000)) / 5000.0f);
+        }
+        meshes[1].rot = glm::rotate(glm::mat4(1.0f), -armAngle, glm::vec3(0, 0, 1.0f));
+    }
+
+    meshes[meshIndex].draw(h_uModelMatrix);
 }
 
 void Mercenary::printDetails()
 {
 	cout << firstName + " " + lastName + ", the " + title + "\n";
 	cout << "   class: " + JobNames[job] + "\n";
-	cout << "   health: " + to_string(static_cast<long long int>(maxHealth)) + "\n";
+	cout << "   health: " + to_string(static_cast<long long int>(curHealth)) + "/" + to_string(static_cast<long long int>(maxHealth)) + "\n";
 	cout << "   damage: " +  to_string(static_cast<long long int>(damage)) + "\n";
 	cout << "   hunger rate: " +  to_string(static_cast<long long int>(hungerRate)) + "\n";
 	cout << "   beer rate: " + to_string(static_cast<long long int>(beerRate)) + "\n";
 	cout << "   cost: " +  to_string(static_cast<long long int>(cost)) + "\n";
+}
+
+void Mercenary::wave() {
+    if(!isWaving) {
+        meshes[1].rot = glm::rotate(glm::mat4(1.0f), -50.0f, glm::vec3(0, 0, 1.0f));
+        animationStart = clock();
+        isWaving = true;
+    }
 }

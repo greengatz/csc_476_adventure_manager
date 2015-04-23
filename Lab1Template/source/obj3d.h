@@ -30,10 +30,12 @@ class Obj3d
 		float locTime;
 		vec3 scale;
 		mat4 rot;
+        mat4 preTrans;
 		GLuint texBuf;
 		bool hasTexture;
 		int textureNdx;
 		int materialNdx;
+
 		Obj3d(Obj3dContainer *newCont, vec3 newScale, int newMaterial, vec3 initPos, mat4 newRot);
 		void draw(GLint h_uModelMatrix);
 		void move(float deltaTime);
