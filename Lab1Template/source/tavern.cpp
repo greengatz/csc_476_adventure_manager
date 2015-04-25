@@ -77,9 +77,10 @@ Tavern::Tavern()
 	foodLoc = vec3(30, 1.5, -30);
 }
 
-void Tavern::init(Materials *newMatSetter)
+void Tavern::init(Materials *newMatSetter, FrustumCull *newCuller)
 {
 	matSetter = newMatSetter;
+	fCuller = newCuller;
 }
 
 //between [1, limit]
@@ -476,15 +477,20 @@ void Tavern::enableTextureBuffer(GLint h_aTexCoord, GLuint texBuf, int id)
 void Tavern::drawTavern(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor, GLint h_aTexCoord)
 {
 	for (int iter = 0; iter < tavernItems.size(); iter++) {
-		enableBuff(h_vertPos, h_vertNor, (*tavernItems[iter].cont).posBuf, (*tavernItems[iter].cont).norBuf, (*tavernItems[iter].cont).indBuf);
-		if (tavernItems[iter].hasTexture) {
-			enableTextureBuffer(h_aTexCoord, tavernItems[iter].texBuf, tavernItems[iter].textureNdx);
+		if ((*fCuller).checkCull(tavernItems[iter])) {
+			enableBuff(h_vertPos, h_vertNor, (*tavernItems[iter].cont).posBuf, (*tavernItems[iter].cont).norBuf, (*tavernItems[iter].cont).indBuf);
+			if (tavernItems[iter].hasTexture) {
+				enableTextureBuffer(h_aTexCoord, tavernItems[iter].texBuf, tavernItems[iter].textureNdx);
+			}
+			if (tavernItems[iter].materialNdx != -1) {
+				(*matSetter).setMaterial(tavernItems[iter].materialNdx);
+			}
+			tavernItems[iter].draw(h_ModelMatrix);
+			disableBuff(h_vertPos, h_vertNor, h_aTexCoord);
 		}
-		if (tavernItems[iter].materialNdx != -1) {
-			(*matSetter).setMaterial(tavernItems[iter].materialNdx);
+		else {
+			printf("skipping tavernItem %d\n", iter);
 		}
-		tavernItems[iter].draw(h_ModelMatrix);
-		disableBuff(h_vertPos, h_vertNor, h_aTexCoord);
 	}
 	
 	for (int iter = 0; iter < tavernCharacters.size(); iter++) {

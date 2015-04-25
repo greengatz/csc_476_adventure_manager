@@ -27,6 +27,7 @@
 #include "manager.h"
 #include "TavernTerrain.h"
 #include "Materials.h"
+#include "FrustumCull.h"
 #include <string>
 
 using namespace std;
@@ -116,6 +117,7 @@ Tavern tavern;
 Manager manager("The Dude");
 TavernTerrain tavTerr;
 Materials matSetter;
+FrustumCull fCuller;
 
 /**
  * Helper function to send materials to the shader - create below.
@@ -396,6 +398,9 @@ void drawGL()
 	MatrixStack proj, view;
 	proj.pushMatrix();
 	camera.applyProjectionMatrix(&proj);
+
+	fCuller.setProjMat(proj.topMatrix()); //hopefully this is the right matrix??????
+
 	glUniformMatrix4fv( h_ProjMatrix, 1, GL_FALSE, glm::value_ptr( proj.topMatrix()));
 	proj.pushMatrix();
 	camera.applyViewMatrix(&view, wagon.getPosition());
@@ -612,6 +617,12 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 			wagon.startWagon();
 		}
 	//}
+		//testing frustum culling
+	if (key == GLFW_KEY_C && action == GLFW_PRESS)
+	{
+		fCuller.toggleMode();
+		//will be using this to toggle it on and off at a specified points, maybe others too....
+	}
 }
 
 void window_size_callback(GLFWwindow* window, int w, int h){
@@ -678,7 +689,8 @@ int main(int argc, char **argv)
 
 	initGL();
 	installShaders("lab7_vert.glsl", "lab7_frag.glsl");
-	tavern.init(&matSetter);
+	fCuller.init();
+	tavern.init(&matSetter, &fCuller);
 	std::string str = "assets/bunny.obj";
 	// initShape(&str[0u]); //initShape(argv[0]);
   	initModels();

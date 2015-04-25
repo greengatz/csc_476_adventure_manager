@@ -15,6 +15,7 @@
 #include "mercenary.h"
 #include "TextureLoader.h"
 #include "Materials.h"
+#include "FrustumCull.h"
 
 using namespace std;
 using namespace glm;
@@ -31,7 +32,7 @@ class Tavern
 		vec3 getBeerLoc();
 		vec3 getFoodLoc();
 		Tavern();
-		void init(Materials *newMatSetter);
+		void init(Materials *newMatSetter, FrustumCull *newCuller);
 		void loadTavernMeshes(TextureLoader* texLoader);
 		void showMercsForSale();
         //void buyMercenary(int mercenaryID, Manager* purchaser);
@@ -39,6 +40,7 @@ class Tavern
 
 	private:
 		Materials *matSetter;
+		FrustumCull *fCuller;
 		vec3 doorLoc;
 		vec3 beerLoc;
 		vec3 foodLoc;
