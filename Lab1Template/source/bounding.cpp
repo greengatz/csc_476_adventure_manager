@@ -44,7 +44,13 @@ void BoundingBox::calcSphere(vec3 scale, vec3 pos)
   center.x = (box[1] - box[0]) / 2.0 + box[0];
   center.y = (box[3] - box[2]) / 2.0 + box[2];
   center.z = (box[5] - box[4]) / 2.0 + box[4];
-  radius = glm::distance(center, glm::vec3(box[0], box[1], box[2]));
+  radius = glm::distance(center, glm::vec3(box[0], box[2], box[4]));
+}
+
+void BoundingBox::calcSphere(vec3 newCenter, float newRad) 
+{
+  center = newCenter;
+  radius = newRad;
 }
 
 bool BoundingBox::checkCollision(float cam[], vec3 scale, vec3 trans)

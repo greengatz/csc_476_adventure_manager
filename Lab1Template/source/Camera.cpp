@@ -199,3 +199,12 @@ void Camera::applyViewMatrix(MatrixStack *MV, glm::vec3 wagonPos) const
 	}
   	
 }
+
+//creates bounding sphere around camera frustum
+void Camera::updateBounds()
+{
+	vec3 viewVec = lookAtPoint - theEye;
+	float diff = zfar - znear / 2.0;
+	vec3 frustumCenter = vec3(viewVec.x * diff, viewVec.y * diff, viewVec.z * diff);
+	bound.calcSphere(frustumCenter, diff);
+}

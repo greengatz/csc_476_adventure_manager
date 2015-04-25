@@ -12,15 +12,16 @@ FrustumCull::~FrustumCull()
 
 void FrustumCull::init()
 {
-	toggled = false;
+	toggled = true;
 	hold = false;
 	center = vec3(0, 0, 0);
 	radius = 0;
 }
-
+//turns on and off frustum culling and in the process also turns hold off
 void FrustumCull::toggleMode()
 {
 	toggled = !toggled;
+	hold = false;
 	printf("toggled frustum culling to %d\n", toggled);
 }
 
@@ -30,7 +31,7 @@ void FrustumCull::holdView()
 	printf("toggled hold to %d\n", hold);
 }
 
-void FrustumCull::setProjMat(mat4 projMat, mat4 viewMat)
+void FrustumCull::setProjMat(mat4 projMat, mat4 viewMat, vec3 newCent, float newRad)
 {
 	if (!hold) {
 		const float* proj = (const float*)value_ptr(projMat);
@@ -46,6 +47,10 @@ void FrustumCull::setProjMat(mat4 projMat, mat4 viewMat)
 			curProjMat[iter * 4 + 2] = temp1 * proj[2] + temp2 * proj[6] + temp1 * proj[10] + temp4 * proj[14];
 			curProjMat[iter * 4 + 3] = temp1 * proj[3] + temp2 * proj[7] + temp3 * proj[11] + temp4 * proj[15];
 		}
+
+		center = newCent;
+		radius = newRad;
+		// printf("saving center %f %f %f and radius as %f\n", center.x, center.y, center.z, radius);
 	}
 
 	// for (int iter = 0; iter < 4; iter++) {
@@ -66,7 +71,7 @@ void FrustumCull::setProjMat(mat4 projMat, mat4 viewMat)
 }
 
 //returns true if good, false if object should be culled
-bool FrustumCull::checkCull(Obj3d target)
+bool FrustumCull::checkCull(Obj3d target, int ndx)
 {
 	// float test[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
 	// projMat = make_mat4(test);
@@ -84,25 +89,37 @@ bool FrustumCull::checkCull(Obj3d target)
 
 	//calculate the Obj3d's current bounding sphere
 	target.bound.calcSphere(target.scale, target.pos);
+	// if (ndx < 6 || ndx > 200) {
+	// 	printf("%f %f %f %f %f\n", target.bound.minX, target.bound.maxX, target.bound.minY, target.bound.maxY, target.bound.minZ, target.bound.maxZ);
+	// 	printf("scale: %f %f %f, pos:%f, %f, %f, center: %f %f %f, radius %f\n", target.scale.x, target.scale.y, target.scale.z, target.pos.x, target.pos.y, target.pos.z, target.bound.center.x, target.bound.center.y, target.bound.center.z, target.bound.radius);
+	// }
+
+	// printf("pos: %f %f %f\n", vert.x, vert.y, vert.z);
+	// printf("cen: %f %f %f\n", target.bound.center.x, target.bound.center.y, target.bound.center.z);
 
 	bool draw = true;
 	for (int iter = 0; draw && iter < 6; iter++) {
-		if(checkPlane(&projMatIterator, vert, iter / 2, iter % 2, target.bound.center, target.bound.radius)) {
+		if(checkPlane(&projMatIterator, vert, iter / 2, iter % 2, target.bound.center, target.bound.radius, ndx)) {
 			draw = false;
 		}
 	}
 
-	if (!draw) {
-		printf("would have checked distance between sphere and the target but... not sure how\n");
-	}
+	// if (!draw) {
+	// 	// printf("would have checked distance between sphere and the target but... not sure how\n");
+	// 	float dist = glm::distance(center, target.bound.center);
+	// 	// printf("center was %f vs the object %f\n", center, target.bound.center);
+	// 	draw = dist > radius + target.bound.radius;
+	// 	// printf("dist was %f vs the combined radii %f\n", dist, radius + target.bound.radius);
+	// }
 	return draw;
 }
 
 //sign: 0 means (-) and 1 means (+)
 //returns true yes to culling
-bool FrustumCull::checkPlane(const float** matIter, vec4 vert, int row, int sign, vec3 center, float radius) //may not need these last 2 parameters
+bool FrustumCull::checkPlane(const float** matIter, vec4 vert, int row, int sign, vec3 tCenter, float tRadius, int ndx) //may not need these last 2 parameters
 {
 	float result = 0;
+	//calculsteas the plane coefficients
 	vec4 planeCoef = vec4(0.0, 0.0, 0.0, 0.0);
 	for (int iter = 0; iter < 4; iter++)
 	{
@@ -112,7 +129,10 @@ bool FrustumCull::checkPlane(const float** matIter, vec4 vert, int row, int sign
 		// result *= vert[iter];
 	}
 
+	
 	//normalize
+
+	float dist = planeCoef.x * tCenter.x + planeCoef.y * tCenter.y + planeCoef.z * tCenter.z + planeCoef.w;
 	float magn = sqrt(planeCoef.x * planeCoef.x + planeCoef.y * planeCoef.y + planeCoef.z * planeCoef.z);
 	planeCoef.x /= magn;
 	planeCoef.y /= magn;
@@ -135,9 +155,26 @@ bool FrustumCull::checkPlane(const float** matIter, vec4 vert, int row, int sign
 	// 	planeCoef.w /= magn;
 
 	// 	//
-	// 	float dist = planeCoef.x * center.x + planeCoef.y * center.y + planeCoef.z * center.z + planeCoef.w;
+	// float dist = planeCoef.x * center.x + planeCoef.y * center.y + planeCoef.z * center.z + planeCoef.w;
 	// 	return distance > radius;
 	// }
 
-	return result < 0;
+	// if (dist <= tRadius) {
+	// 	// printf("dist is %f and radius is %f\n", dist, tRadius);
+	// }
+
+	// float dist = planeCoef.x * tCenter.x + planeCoef.y * tCenter.y + planeCoef.z * tCenter.z + planeCoef.w;
+	dist /= magn;
+
+	if (result < 0)
+	{
+		dist *= -1;
+	}
+
+	// if (ndx < 6 || ndx > 200) {
+	// 	printf("%d) result: %f, dist: %f, radius: %f bool: %d, %d, %d\n", ndx, result, dist, tRadius, result < 0, dist < tRadius, result < 0 && dist >= tRadius);
+	// }
+
+
+	return result < 0 && dist >= tRadius;
 }

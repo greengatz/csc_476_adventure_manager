@@ -33,6 +33,7 @@ class BoundingBox : public Bounding
 		void createBounds(vec2 xSize, vec2 ySize, vec2 zSize);
 		bool checkCollision(float cam[], vec3 scale, vec3 trans);
 		void calcSphere(vec3 scale, vec3 pos);
+		void calcSphere(vec3 newCenter, float newRad);
 		float minX, maxX;
 		float minY, maxY;
 		float minZ, maxZ;

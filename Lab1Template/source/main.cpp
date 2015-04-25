@@ -402,8 +402,9 @@ void drawGL()
 	proj.pushMatrix();
 	camera.applyViewMatrix(&view, wagon.getPosition());
 	glUniformMatrix4fv(h_ViewMatrix, 1, GL_FALSE, glm::value_ptr(view.topMatrix()));
-
-	fCuller.setProjMat(proj.topMatrix(), view.topMatrix()); //hopefully this is the right matrix??????
+	
+	camera.updateBounds();
+	fCuller.setProjMat(proj.topMatrix(), view.topMatrix(), camera.bound.center, camera.bound.radius); //hopefully this is the right matrix??????
 	
 	matSetter.setMaterial(2);
 

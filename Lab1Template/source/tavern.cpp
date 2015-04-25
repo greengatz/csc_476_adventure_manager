@@ -309,9 +309,13 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 
 	//2nd floor
 	addTavernItem(CUBE, glm::vec3(28, 0.5, 8.0), glm::vec3(25, 7, -12), glm::mat4(1.0f));
+	// printf("iter: %d\n", tavernItems.size() -1); //delete this once frustum culling works
 	addTavernItem(CUBE, glm::vec3(28, 0.5, 8.0), glm::vec3(25, 7, -35), glm::mat4(1.0f));
+	// printf("iter: %d\n", tavernItems.size() -1); //delete this once frustum culling works
 	addTavernItem(CUBE, glm::vec3(11.0, 0.5, 28.0), glm::vec3(7, 7, -25), glm::mat4(1.0f));
+	// printf("iter: %d\n", tavernItems.size() -1); //delete this once frustum culling works
 	addTavernItem(CUBE, glm::vec3(11.0, 0.5, 28.0), glm::vec3(39, 7, -25), glm::mat4(1.0f));
+	// printf("iter: %d\n", tavernItems.size() -1); //delete this once frustum culling works
 
 	// addTavernItem(PLANK, glm::vec3(1.0, 1.0, 1.0), glm::vec3(25, 0, -25), glm::mat4(1.0f));
 
@@ -321,10 +325,12 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 	// addTavernItem(ROOF, glm::vec3(28, 35.0, 0.15), glm::vec3(25, 9, -12), rot);
 	addTavernItem(ROOF, glm::vec3(28.0, 5.0, 28.0), glm::vec3(25, 9, -12), rot);
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_ROOF_ID);
+	// printf("iter: %d\n", tavernItems.size() -1); //delete this once frustum culling works
 	ang = -45;
 	rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(1.0f, 0, 0));
 	addTavernItem(ROOF, glm::vec3(28, 5.0, 28.0), glm::vec3(25, 9, -35), rot);
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_ROOF_ID);
+	// printf("iter: %d\n", tavernItems.size() -1); //delete this once frustum culling works
 
 	//pillars
 	createPillar(glm::vec3(18.5, 1, -27.2));
@@ -419,15 +425,18 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 
 	//straight up 
 	addTavernItem(BARREL, glm::vec3(0.5, 0.7, 0.5), glm::vec3(10.0, 1.0, -13.0), glm::mat4(1.0f));
+	// printf("iter: %d\n", tavernItems.size() -1); //delete this once frustum culling works
 	//side barrel
 	ang = 90;
 	rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 0, 1.0f));
 	addTavernItem(BARREL, glm::vec3(1.0, 1.0, 1.0), glm::vec3(8.0, 0.82, -12.8), rot);
+	// printf("iter: %d\n", tavernItems.size() -1); //delete this once frustum culling works
 	addTavernItem(BARREL, glm::vec3(1.0, 1.0, 1.0), glm::vec3(8.0, 2.2, -13.6), rot);
 	addTavernItem(BARREL, glm::vec3(1.0, 1.0, 1.0), glm::vec3(8.0, 0.82, -14.4), rot);
 	addTavernItem(BARREL, glm::vec3(1.0, 1.0, 1.0), glm::vec3(8.0, 2.2, -15.2), rot);
 	addTavernItem(BARREL, glm::vec3(1.0, 1.0, 1.0), glm::vec3(8.0, 0.82, -16), rot);
 	addTavernItem(CRATE, glm::vec3(0.95, 0.95, 0.95), glm::vec3(8.0, 1.0, -17.75), glm::mat4(1.0f));
+	// printf("iter: %d\n", tavernItems.size() -1); //delete this once frustum culling works
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_CRATE_ID);
 	// addTavernItem(BARREL, glm::vec3(1.0, 1.0, 1.0), glm::vec3(35.0, 1.0, -35.0), rot);
 	// addTavernItem(BARREL, glm::vec3(1.0, 1.0, 1.0), glm::vec3(33.6, 1.0, -35.0), rot);
@@ -477,7 +486,7 @@ void Tavern::enableTextureBuffer(GLint h_aTexCoord, GLuint texBuf, int id)
 void Tavern::drawTavern(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor, GLint h_aTexCoord)
 {
 	for (int iter = 0; iter < tavernItems.size(); iter++) {
-		if ((*fCuller).checkCull(tavernItems[iter])) {
+		if ((*fCuller).checkCull(tavernItems[iter], iter)) {
 			enableBuff(h_vertPos, h_vertNor, (*tavernItems[iter].cont).posBuf, (*tavernItems[iter].cont).norBuf, (*tavernItems[iter].cont).indBuf);
 			if (tavernItems[iter].hasTexture) {
 				enableTextureBuffer(h_aTexCoord, tavernItems[iter].texBuf, tavernItems[iter].textureNdx);
@@ -489,7 +498,9 @@ void Tavern::drawTavern(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor, G
 			disableBuff(h_vertPos, h_vertNor, h_aTexCoord);
 		}
 		else {
-			printf("skipping tavernItem %d\n", iter);
+			// if (iter < 6) {
+				// printf("skipping tavernItem %d\n", iter);
+			// }
 		}
 	}
 	
