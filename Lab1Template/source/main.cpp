@@ -398,14 +398,13 @@ void drawGL()
 	MatrixStack proj, view;
 	proj.pushMatrix();
 	camera.applyProjectionMatrix(&proj);
-
-	fCuller.setProjMat(proj.topMatrix()); //hopefully this is the right matrix??????
-
 	glUniformMatrix4fv( h_ProjMatrix, 1, GL_FALSE, glm::value_ptr( proj.topMatrix()));
 	proj.pushMatrix();
 	camera.applyViewMatrix(&view, wagon.getPosition());
 	glUniformMatrix4fv(h_ViewMatrix, 1, GL_FALSE, glm::value_ptr(view.topMatrix()));
 
+	fCuller.setProjMat(proj.topMatrix(), view.topMatrix()); //hopefully this is the right matrix??????
+	
 	matSetter.setMaterial(2);
 
 	//========================== DRAW OUTSIDE SCENE ====================
@@ -622,6 +621,11 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	{
 		fCuller.toggleMode();
 		//will be using this to toggle it on and off at a specified points, maybe others too....
+	}
+	//freezes current projection matrix in for frustum culling
+	if (key == GLFW_KEY_V && action == GLFW_PRESS)
+	{
+		fCuller.holdView();
 	}
 }
 
