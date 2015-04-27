@@ -18,29 +18,23 @@ using namespace glm;
 class Obj3d
 {
 	public:
-		int num; //this is 
 		Obj3dContainer *cont;
 		vec3 pos;
-		vec3 dir;
-		float vel;
+		vec3 dir; //currently not used
+		float vel; //currently not used
 		BoundingBox bound;
-		bool deadlock;
-		bool done;
-		int material;
 		float locTime;
 		vec3 scale;
 		mat4 rot;
         mat4 preTrans;
 		GLuint texBuf;
+		//texture and material data
 		bool hasTexture;
 		int textureNdx;
 		int materialNdx;
 
-		Obj3d(Obj3dContainer *newCont, vec3 newScale, int newMaterial, vec3 initPos, mat4 newRot);
+		Obj3d(Obj3dContainer *newCont, vec3 newScale, vec3 initPos, mat4 newRot);
 		void draw(GLint h_uModelMatrix);
-		void move(float deltaTime);
-      	void reverseDir();
-      	void hit();
 		vec3 getCurSpot();
 		void loadTextureCoor(int ndx);
 		void chooseMaterial(int ndx);

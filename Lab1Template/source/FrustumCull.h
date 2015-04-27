@@ -18,17 +18,15 @@ public:
 	FrustumCull();
 	virtual ~FrustumCull();
 	void init();
-	bool checkCull(Obj3d target, int ndx);
+	bool checkCull(Obj3d target);
 	void toggleMode();
-	void setProjMat(mat4 projMat, mat4 viewMat, vec3 newCent, float newRad);
+	void setProjMat(mat4 projMat, mat4 viewMat);
 	void holdView();
 private:
-	vec3 center;
-	float radius;
 	float curProjMat[16];
 	bool toggled; //true means cull
 	bool hold; //freezes current view so projection matrix is not updated
-	bool checkPlane(const float** matIter, vec4 vert, int row, int sign, vec3 center, float radius, int ndx);
+	bool checkPlane(vec4 vert, int row, int sign, vec3 center, float radius);
 };
 
 #endif
