@@ -3,6 +3,7 @@
 using namespace std;
 using namespace glm;
 
+//normal creation of bounds
 void BoundingBox::createBounds(vector<tinyobj::shape_t> objShape) {
   minX = maxX = objShape[0].mesh.positions[objShape[0].mesh.indices[0]];
   minY = maxY = objShape[0].mesh.positions[objShape[0].mesh.indices[1]];
@@ -19,6 +20,7 @@ void BoundingBox::createBounds(vector<tinyobj::shape_t> objShape) {
   }
 }
 
+//used for setting size of camera
 void BoundingBox::createBounds(vec2 xSize, vec2 ySize, vec2 zSize) {
   minX = xSize.x;
   maxX = xSize.y;
@@ -26,6 +28,29 @@ void BoundingBox::createBounds(vec2 xSize, vec2 ySize, vec2 zSize) {
   maxY = ySize.y;
   minZ = zSize.x;
   maxZ = zSize.y;
+}
+
+void BoundingBox::calcSphere(vec3 scale, vec3 pos)
+{
+  float box[6] = {
+    minX * scale.x + pos.x,
+    maxX * scale.x + pos.x,
+    minY * scale.y + pos.y,
+    maxY * scale.y + pos.y,
+    minZ * scale.z + pos.z,
+    maxZ * scale.z + pos.z,
+  };
+
+  center.x = (box[1] - box[0]) / 2.0 + box[0];
+  center.y = (box[3] - box[2]) / 2.0 + box[2];
+  center.z = (box[5] - box[4]) / 2.0 + box[4];
+  radius = glm::distance(center, glm::vec3(box[0], box[2], box[4]));
+}
+
+void BoundingBox::calcSphere(vec3 newCenter, float newRad) 
+{
+  center = newCenter;
+  radius = newRad;
 }
 
 bool BoundingBox::checkCollision(float cam[], vec3 scale, vec3 trans)

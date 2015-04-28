@@ -1,12 +1,5 @@
 #include "obj3dcontainer.h"
 
-// void loadIntoTinyOBJ(vector<tinyobj::shape_t> *shape, vector<tinyobj::material_t> *material, const string name);
-// void loadBuff(vector<float> buff, GLuint *objBuff);
-// void loadBuff(vector<unsigned int> buff, GLuint *objBuff);
-// void loadObjNorms(vector<tinyobj::shape_t> objShape, vector<float> *norObjBuf, GLuint *objBuff);
-
-
-
 //Given a vector of shapes which has already been read from an obj file
 // resize all vertices to the range [-1, 1]
 void resize_obj(std::vector<tinyobj::shape_t> &shapes){
@@ -139,13 +132,12 @@ Obj3dContainer::Obj3dContainer(const string name)
   loadIntoTinyOBJ(name);
 }
 
+//noNorms is true if the obj files has not norms already in it
 void Obj3dContainer::initBuffers(bool noNorms) 
 {
 	const vector<float> &shapePos = shape[0].mesh.positions;
 	loadBuff(shapePos, &posBuf);
   
-  // const vector<float> &shapeNor = shape[0].mesh.normals;
-  // loadBuff(shapeNor, &norBuf);
   vector<float> shapeNor;
   if (noNorms)
   {
