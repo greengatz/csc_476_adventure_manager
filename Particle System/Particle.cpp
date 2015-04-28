@@ -1,4 +1,3 @@
-//
 // sueda
 // November, 2014
 //
@@ -21,8 +20,7 @@ float randFloat(float l, float h)
 }
 
 Particle::Particle() :
-	charge(1.0f),
-	m(1.0f),
+	m(0.01f),
 	d(0.0f),
 	x(0.0f, 0.0f, 0.0f),
 	v(0.0f, 0.0f, 0.0f),
@@ -81,6 +79,7 @@ void Particle::init(Program *prog)
 {
 	this->prog = prog;
 	
+	m = 0.01f;
 	// Send the position array to the GPU
 	glGenBuffers(1, &posBufID);
 	glBindBuffer(GL_ARRAY_BUFFER, posBufID);
@@ -147,24 +146,19 @@ void Particle::draw(MatrixStack *MV) const
 
 void Particle::rebirth(float t)
 {	
-	if(randFloat(0.0f, 1.0f) > 0.5f)
-		charge = 1.0f;
-	else
-		charge = -1.0f;
-	m = 1.0f;
-	d = randFloat(0.0f, 0.00001f);
-	x.x = randFloat(-1.0f, 1.0f);
-	x.y = randFloat(-1.0f, 1.0f);
-	x.z = randFloat(-1.0f, 1.0f);
-	v.x = randFloat(-0.1f, 0.1f);
-	v.y = randFloat(-0.1f, 0.1f);
-	v.z = randFloat(-0.1f, 0.1f);
-	lifespan = randFloat(25.0f, 75.0f);
+	d = randFloat(0.0f, 0.01f);
+	x.x = randFloat(-0.15f, 0.15f);
+	x.y = randFloat(-0.15f, 0.15f);
+	x.z = randFloat(-0.15f, 0.15f);
+	v.x = randFloat(0.0f, 0.00000001f);
+	v.y = randFloat(0.0f, 0.00000001f);
+	v.z = randFloat(0.0f, 0.00000001f);
+	lifespan = randFloat(5.0f, 20.0f);
 	tEnd = t + lifespan;
-	scale = randFloat(0.5f, 1.5f);
-	color.x = randFloat(0.0f, 1.0f);
-	color.y = randFloat(0.0f, 1.0f);
-	color.z = randFloat(0.0f, 1.0f);
+	scale = randFloat(0.45f, 0.65f);
+	color.x = 1.0f;
+	color.y = randFloat(0.25f, 0.65f);
+	color.z = 0.0f;
 	color.w = randFloat(0.0f, 1.0f);
 }
 
@@ -173,14 +167,22 @@ void Particle::update(float t, float h, const glm::vec3 &g, const bool *keyToggl
 	int C = -1;
 	glm::vec3 f = m * g;
 	f = f + (-d * v);
-	if(keyToggles['g']){
-		float r = sqrt(x.x * x.x + x.y * x.y + x.z * x.z);
-		if(r > 0.001f)
-			f = ((C * m) / r * r) * (x / r) * charge;
-	}
-	if(t > tEnd) {
+	float r = sqrt(x.x * x.x + x.y * x.y + x.z * x.z) / 2;
+	
+	if( t > tEnd) {
 		rebirth(t);
 	}
+
+	if(keyToggles['v']){
+		m -= 0.01;
+	}
+	if(scale - (r / 100000) > 0){
+		scale -=  r / 100000;
+	}
+	if(r*3 <= 1){
+		color.y = 1 - r*3;
+	}
+	
 	v += (h / m) * f;
 	x += h*v;
 	color.w = (tEnd-t)/lifespan;

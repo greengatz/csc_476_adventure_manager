@@ -36,14 +36,16 @@ void loadScene()
 {
 	t = 0.0f;
 	h = 0.001f;
-	g = glm::vec3(0.0f, -0.01f, 0.0f);
+	g = glm::vec3(0.0f, 0.05f, 0.0f);
 	
-	int n = 100;
+	//One Fire ***
+	int n = 10;
 	for(int i = 0; i < n; ++i) {
 		auto particle = make_shared<Particle>(); // !C++11: Particle *particle = new Particle();
 		particles.push_back(particle);
 		particle->load();
 	}
+
 	
 	prog.setShaderNames("lab10_vert.glsl", "lab10_frag.glsl");
 	texture.setFilename("alpha.bmp");
@@ -133,7 +135,8 @@ void drawGL()
 	prog.bind();
 	glUniformMatrix4fv(prog.getUniform("P"), 1, GL_FALSE, glm::value_ptr(P.topMatrix()));
 	
-	// Draw particles
+	
+	//One Fire ***
 	for(auto particle : particles) {
 		particle->draw(&MV);
 	}
@@ -196,6 +199,8 @@ ParticleSorter sorter;
 void idleGL()
 {
 	if(keyToggles[' ']) {
+
+		//One Fire ***
 		for(auto particle : particles) {
 			particle->update(t, h, g, keyToggles);
 		}

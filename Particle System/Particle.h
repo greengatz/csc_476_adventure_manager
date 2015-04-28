@@ -35,7 +35,6 @@ public:
 	const glm::vec3 &getVelocity() const { return v; };
 	
 private:
-	float charge; // +1 or -1
 	float m; // mass
 	float d; // viscous damping
 	glm::vec3 x; // position
