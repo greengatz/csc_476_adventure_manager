@@ -20,6 +20,7 @@ set(HEADERS
    TavernTerrain.h
    bounding.h
    Materials.h
+   FrustumCull.h
 )
 
 # List all .c / .cpp files here
@@ -44,4 +45,5 @@ set(SOURCES
    TavernTerrain.cpp
    bounding.cpp
    Materials.cpp
+   FrustumCull.cpp
 )
