@@ -39,6 +39,7 @@ Terrain::Terrain() :
 	posBufID(0),
 	norBufID(0),
 	texBufID(0),
+  oldTextureID(0),
     beginPosition(0.0f, 0.0f, 0.0f),
     criticalPoints(std::vector<glm::vec3>())
 {
@@ -395,7 +396,7 @@ void Terrain::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord)
    GLSL::enableVertexAttribArray(h_aTexCoord);
    glBindBuffer(GL_ARRAY_BUFFER, texBufID);
    glVertexAttribPointer(h_aTexCoord, 2, GL_FLOAT, GL_FALSE, 0, 0);
-
+   //glHint(GL_GENERATE_MIPMAP_HINT, GL_FASTEST);
    int size = 0;
    for (int index = 0; index < MAP_X - 1; index++)
    {
@@ -415,9 +416,21 @@ void Terrain::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord)
             }else if(trailMap[index][index2] == LTTRAIL){
                 glBindTexture(GL_TEXTURE_2D, TERRAIN_TEX_LTTRAIL_ID);
             }
+
+            printf("1. OldTexture: %d, 2. CurrentTexture: %d\n", oldTextureID, trailMap[index][index2]);
+            if (trailMap[index][index2] != oldTextureID)
+            {
+               oldTextureID = trailMap[index][index2];
+               //mipmap creation
+               glGenerateMipmap(GL_TEXTURE_2D);
+               glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+               glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+               glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+               glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+            }
+
             glDrawArrays(GL_TRIANGLE_STRIP, size, 4);
             size +=  4;
-
         }
    }
 

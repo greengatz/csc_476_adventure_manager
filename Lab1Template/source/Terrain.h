@@ -45,7 +45,7 @@ private:
 	EArray eventsMap;
 	glm::vec3 beginPosition;
 	std::vector<glm::vec3> criticalPoints;
-
+	int oldTextureID;
 
 };
 
