@@ -75,7 +75,7 @@ bool FrustumCull::checkCull(Obj3d target)
 
 //sign: 0 means (-) and 1 means (+)
 //returns true yes to culling
-bool FrustumCull::checkPlane(vec4 vert, int row, int sign, vec3 tCenter, float tRadius) //may not need these last 2 parameters
+bool FrustumCull::checkPlane(vec4 vert, int row, int sign, vec3 tCenter, float tRadius)
 {
 	//calculates the plane coefficients
 	vec4 planeCoef = vec4(0.0, 0.0, 0.0, 0.0);

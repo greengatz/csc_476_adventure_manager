@@ -435,8 +435,8 @@ void drawGL()
 		glUniform1i(h_uTexUnit, 0);
 		ModelTrans.loadIdentity();
 		ModelTrans.pushMatrix();
-		matSetter.setMaterial(4);
 		tavTerr.draw(h_vertPos, h_vertNor, h_aTexCoord, h_ModelMatrix, &ModelTrans);
+		matSetter.setMaterial(4);
 		ModelTrans.popMatrix();
 		matSetter.setMaterial(3);
 		tavern.drawTavern(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord);

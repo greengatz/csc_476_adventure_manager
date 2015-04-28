@@ -211,7 +211,16 @@ void TavernTerrain::drawATex(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint 
    glBindBuffer(GL_ARRAY_BUFFER, texBuffer);
    glVertexAttribPointer(h_aTexCoord, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
+   glEnable(GL_TEXTURE_2D);
+   glActiveTexture(GL_TEXTURE0);
    glBindTexture(GL_TEXTURE_2D, targetTex);
+
+   //mipmap creation
+   glGenerateMipmap(GL_TEXTURE_2D);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 
    int size = 0;
    for (int index = 0; index < MAP_X - 1; index++)

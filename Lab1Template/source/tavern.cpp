@@ -448,7 +448,15 @@ void Tavern::enableTextureBuffer(GLint h_aTexCoord, GLuint texBuf, int id)
   glEnable(GL_TEXTURE_2D);
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, id);
+  //mipmap
+  glGenerateMipmap(GL_TEXTURE_2D);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+  
   GLSL::enableVertexAttribArray(h_aTexCoord);
+
   glBindBuffer(GL_ARRAY_BUFFER, texBuf);
   glVertexAttribPointer(h_aTexCoord, 2, GL_FLOAT, GL_FALSE, 0, 0);
 }
@@ -471,12 +479,14 @@ void Tavern::drawTavern(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor, G
 	
 	for (int iter = 0; iter < tavernCharacters.size(); iter++) {
         for(int meshIter = 0; meshIter < tavernCharacters[iter].meshes.size(); meshIter++) {
-		    enableBuff(h_vertPos, h_vertNor, (*tavernCharacters[iter].meshes[meshIter].cont).posBuf, (*tavernCharacters[iter].meshes[meshIter].cont).norBuf, (*tavernCharacters[iter].meshes[meshIter].cont).indBuf);
-		    if (tavernCharacters[iter].meshes[meshIter].hasTexture) {
-		    	enableTextureBuffer(h_aTexCoord, tavernCharacters[iter].meshes[meshIter].texBuf, tavernCharacters[iter].meshes[meshIter].textureNdx);
-		    }
-		    tavernCharacters[iter].draw(h_ModelMatrix, meshIter);
-		    disableBuff(h_vertPos, h_vertNor, h_aTexCoord);
+        	if ((*fCuller).checkCull(tavernCharacters[iter].meshes[meshIter])) {
+			    enableBuff(h_vertPos, h_vertNor, (*tavernCharacters[iter].meshes[meshIter].cont).posBuf, (*tavernCharacters[iter].meshes[meshIter].cont).norBuf, (*tavernCharacters[iter].meshes[meshIter].cont).indBuf);
+			    if (tavernCharacters[iter].meshes[meshIter].hasTexture) {
+			    	enableTextureBuffer(h_aTexCoord, tavernCharacters[iter].meshes[meshIter].texBuf, tavernCharacters[iter].meshes[meshIter].textureNdx);
+			    }
+			    tavernCharacters[iter].draw(h_ModelMatrix, meshIter);
+			    disableBuff(h_vertPos, h_vertNor, h_aTexCoord);
+			}
         }
 	}
 }
