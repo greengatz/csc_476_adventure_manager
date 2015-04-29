@@ -23,6 +23,7 @@ void FrustumCull::toggleMode()
 	printf("toggled frustum culling to %d\n", toggled);
 }
 
+//if hold is true than the frustum does not update the latest projection matrix
 void FrustumCull::holdView()
 {
 	hold = !hold;
@@ -63,6 +64,7 @@ bool FrustumCull::checkCull(Obj3d target)
 	//calculate the Obj3d's current bounding sphere
 	target.bound.calcSphere(target.scale, target.pos);
 
+	//tests Obj3d against the 6 planes
 	bool draw = true;
 	for (int iter = 0; draw && iter < 6; iter++) {
 		if(checkPlane(vert, iter / 2, iter % 2, target.bound.center, target.bound.radius)) {
@@ -92,20 +94,15 @@ bool FrustumCull::checkPlane(vec4 vert, int row, int sign, vec3 tCenter, float t
 	planeCoef.y /= magn;
 	planeCoef.z /= magn;
 	planeCoef.w /= magn;
-
-	float result = planeCoef.x * vert.x + planeCoef.y * vert.y + planeCoef.z * vert.z + planeCoef.w;
-
 	dist /= magn;
 
-	if (result < 0)
-	{
+	//saves which side of the plane the object iss
+	float result = planeCoef.x * vert.x + planeCoef.y * vert.y + planeCoef.z * vert.z + planeCoef.w;	
+
+	//if the center of the object is on the wrong side of the plane make dist to compare it against the radius
+	if (result < 0) {
 		dist *= -1;
 	}
-
-	// if (ndx < 6 || ndx > 200) {
-	// 	printf("%d) result: %f, dist: %f, radius: %f bool: %d, %d, %d\n", ndx, result, dist, tRadius, result < 0, dist < tRadius, result < 0 && dist >= tRadius);
-	// }
-
 
 	return result < 0 && dist >= tRadius;
 }

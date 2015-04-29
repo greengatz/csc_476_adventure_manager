@@ -72,5 +72,11 @@ void Materials::setMaterial(int i)
 			glUniform3f(*h_ks, 0.05, 0.05, 0.05);
 			glUniform1f(*h_s, 0.01);
 			break;
+		case 9: //default color
+			glUniform3f(*h_ka, 0.25, 0.25, 0.25);
+			glUniform3f(*h_kd, 0.4, 0.4, 0.4);
+			glUniform3f(*h_ks, 0.01, 0.01, 0.01);
+			glUniform1f(*h_s, 0.00001);
+			break;
 	}
 }
