@@ -49,7 +49,7 @@ const string tavObjFiles[] = {"assets/tavern/cube.obj",
                			      "assets/tavern/samurai.obj",
                			      "assets/tavern/rock.obj",
                			      "assets/tavern/box.obj",
-               			      "assets/tavern/cube.obj", //currently a cube until can find a good balustrade.obj
+               			      "assets/tavern/balustrade.obj", //currently a cube until can find a good balustrade.obj
                			      "assets/tavern/roof.obj",
                			      "assets/tavern/plank.obj"
                			};
@@ -330,6 +330,18 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 	//door
 	addTavernItem(DOOR, glm::vec3(1.5, 1.5, 1.5), glm::vec3(7.5, 1.35, -23), glm::mat4(1.0f));
 	tavernItems[tavernItems.size() - 1].materialNdx = 5;
+
+	addTavernItem(BALUSTRADE, glm::vec3(4.5, 7.0, 4.0), glm::vec3(23.0, 8.0, -27.2), glm::mat4(1.0f));
+	tavernItems[tavernItems.size() - 1].materialNdx = 6;
+	addTavernItem(BALUSTRADE, glm::vec3(4.5, 7.0, 4.0), glm::vec3(23.0, 8.0, -19.8), glm::mat4(1.0f));
+	tavernItems[tavernItems.size() - 1].materialNdx = 6;
+	ang = 90;
+	rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 1.0f, 0));
+	addTavernItem(BALUSTRADE, glm::vec3(4.5, 7.0, 4.0), glm::vec3(17.9, 8.0, -23.5), rot);
+	tavernItems[tavernItems.size() - 1].materialNdx = 6;
+	addTavernItem(BALUSTRADE, glm::vec3(4.5, 7.0, 4.0), glm::vec3(28.2, 8.0, -23.5), rot);
+	tavernItems[tavernItems.size() - 1].materialNdx = 6;
+	// addTavernItem(BALUSTRADE, glm::vec3(4.5, 7.0, 4.0), glm::vec3(18.5, 8.0, -19.8), rot);
 
 	//bar stools
 	addTavernItem(STOOL, glm::vec3(0.35, 0.32, 0.35), glm::vec3(11, .35, -16), glm::mat4(1.0f));
