@@ -648,17 +648,15 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	{
 		fCuller.holdView();
 	}
-<<<<<<< HEAD
 	if (key == GLFW_KEY_J && action == GLFW_PRESS)
 	{
 		// audio.loadFile(TAV_MUSIC);
 		// audio.play();
-=======
+	}
 	//Toggle hud
 	if (key == GLFW_KEY_G && action == GLFW_PRESS)
 	{
 		hud.on = -hud.on + 1;
->>>>>>> e884c4a2772aad49c8d469a24dee0063b233d4f5
 	}
 }
 
