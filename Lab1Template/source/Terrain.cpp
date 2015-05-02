@@ -22,6 +22,10 @@
 #define RBTRAIL 4
 #define LTTRAIL 5
 #define RTTRAIL 6
+#define LNEARTRAIL 7
+#define RNEARTRAIL 8
+#define LFARTRAIL 9
+#define RFARTRAIL 10
 
 using namespace std;
 
@@ -32,6 +36,10 @@ int TERRAIN_TEX_LBTRAIL_ID = 400;
 int TERRAIN_TEX_RBTRAIL_ID = 900;
 int TERRAIN_TEX_LTTRAIL_ID = 500;
 int TERRAIN_TEX_RTTRAIL_ID = 800;
+int TERRAIN_TEX_LNEARTRAIL_ID = 600;
+int TERRAIN_TEX_RNEARTRAIL_ID = 1000;
+int TERRAIN_TEX_LFARTRAIL_ID = 1100;
+int TERRAIN_TEX_RFARTRAIL_ID = 1200;
 
 Terrain::Terrain() :
 	x(0.0f, 0.0f, 0.0f),
@@ -154,11 +162,11 @@ void Terrain::createEvents(){
 void Terrain::createTrail(){
     criticalPoints.clear();
 
+    srand(time(NULL));
     int minShift = 2, maxShift = 10;
     //left for false, right for true.
-    bool shiftTog = false; 
+    bool shiftTog = (rand() % 2) == 0 ? false : true; 
     int indexX, indexZ, bound = 20;
-    srand(time(NULL));
     int startingSpot = ((rand() % (MAP_X - bound)) + (bound / 2));
     int lastSpot = startingSpot;
     // srand(time(NULL));
@@ -178,20 +186,36 @@ void Terrain::createTrail(){
             }
             else if(indexX == lastSpot - 1)
             {
-                //Left Tile
-                if(!shiftTog){
-                    trailMap[indexX][indexZ]=LBTRAIL;
+                if(changeInPath == 0){
+                    if(!shiftTog){
+                        trailMap[indexX][indexZ]=LNEARTRAIL;
+                    }else{
+                        trailMap[indexX][indexZ]=LFARTRAIL;
+                    }
                 }else{
-                    trailMap[indexX][indexZ]=RBTRAIL;
+                    //Left Tile
+                    if(!shiftTog){
+                        trailMap[indexX][indexZ]=LBTRAIL;
+                    }else{
+                        trailMap[indexX][indexZ]=RBTRAIL;
+                    }
                 }
             }
             else if(indexX == lastSpot + 1)
             {
-                //Right Tile
-                if(!shiftTog){
-                    trailMap[indexX][indexZ]=LTTRAIL;
+                if(changeInPath == 0){
+                    if(!shiftTog){
+                        trailMap[indexX][indexZ]=RNEARTRAIL;
+                    }else{
+                        trailMap[indexX][indexZ]=RFARTRAIL;
+                    }
                 }else{
-                    trailMap[indexX][indexZ]=RTTRAIL;
+                    //Right Tile
+                    if(!shiftTog){
+                        trailMap[indexX][indexZ]=LTTRAIL;
+                    }else{
+                        trailMap[indexX][indexZ]=RTTRAIL;
+                    }
                 }
             }
             else if(indexX == lastSpot)
@@ -200,7 +224,7 @@ void Terrain::createTrail(){
                 trailMap[indexX][indexZ]=TRAIL;
                 //criticalPoints.push_back(glm::vec3(indexX, 0.0, indexZ));
             }
-            // printf("[%i]",trailMap[indexX][indexZ]);
+            printf("[%i]",trailMap[indexX][indexZ]);
 
 
         }
@@ -221,6 +245,8 @@ void Terrain::createTrail(){
             }else{
                 shiftTog = !shiftTog;
             }
+        }else if(changeInPath == 1){
+            changeInPath--;
         }else{
             changeInPath--;
             if(shiftTog)
@@ -358,6 +384,10 @@ void Terrain::init(TextureLoader* texLoader)
     texLoader->LoadTexture((char *)"assets/trailbottomright.bmp", TERRAIN_TEX_RTTRAIL_ID);
     texLoader->LoadTexture((char *)"assets/trailtopright.bmp", TERRAIN_TEX_LTTRAIL_ID);
     texLoader->LoadTexture((char *)"assets/red.bmp", TERRAIN_TEX_RED_ID);
+    texLoader->LoadTexture((char *)"assets/trailfarleft.bmp", TERRAIN_TEX_LFARTRAIL_ID);
+    texLoader->LoadTexture((char *)"assets/trailfarright.bmp", TERRAIN_TEX_RFARTRAIL_ID);
+    texLoader->LoadTexture((char *)"assets/trailnearleft.bmp", TERRAIN_TEX_LNEARTRAIL_ID);
+    texLoader->LoadTexture((char *)"assets/trailnearright.bmp", TERRAIN_TEX_RNEARTRAIL_ID);
 
   	//unbind the arrays
   	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -415,6 +445,14 @@ void Terrain::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord)
                 glBindTexture(GL_TEXTURE_2D, TERRAIN_TEX_RTTRAIL_ID);
             }else if(trailMap[index][index2] == LTTRAIL){
                 glBindTexture(GL_TEXTURE_2D, TERRAIN_TEX_LTTRAIL_ID);
+            }else if(trailMap[index][index2] == RFARTRAIL){
+                glBindTexture(GL_TEXTURE_2D, TERRAIN_TEX_RFARTRAIL_ID);
+            }else if(trailMap[index][index2] == LFARTRAIL){
+                glBindTexture(GL_TEXTURE_2D, TERRAIN_TEX_LFARTRAIL_ID);
+            }else if(trailMap[index][index2] == RNEARTRAIL){
+                glBindTexture(GL_TEXTURE_2D, TERRAIN_TEX_RNEARTRAIL_ID);
+            }else if(trailMap[index][index2] == LNEARTRAIL){
+                glBindTexture(GL_TEXTURE_2D, TERRAIN_TEX_LNEARTRAIL_ID);
             }
 
             // printf("1. OldTexture: %d, 2. CurrentTexture: %d\n", oldTextureID, trailMap[index][index2]);
