@@ -1,39 +1,74 @@
 #include "hud.h"
+int HUD_ID = 4000;
+int g_GiboLen;
 
 HUD::HUD(Manager *newMan)
 {
 	man = newMan;
 	posBufObjHUD = 0;
 	colorBufObjHUD = 0;
+	GrndTexBuffObj = 0;
+	GIndxBuffObj = 0;
 }
 
-void HUD::initHUD()
+void HUD::initHUD(TextureLoader *texLoader)
 {
-	GLuint temp;
-	// Initialize the VBO data
-	float vert[9], colr[9]; // array variables to hold vertex data
-	 
-	// These values are according to screen size of 1920p width and 1080p height
-	vert[0] = 960.0f; vert[1] = 540.0f; vert[2] = 1.0f; // TOP
-	vert[3] = 900.0f; vert[4] = 10.0f; vert[5] = 1.0f; // LEFT
-	vert[6] = 500.0f; vert[7] = 540.0f; vert[8] = 1.0f; // RIGHT
+	texLoader->LoadTexture((char *)"assets/tavern/crateTex.bmp", HUD_ID);
+
+	// GLfloat vert[] = {
+	// 	0.0f, 0.0f, 1.0f,
+	// 	1024.0f, 0.0f, 1.0f,
+	// 	0.0f, 50.0f, 1.0f,
+	// 	0.0f, 50.0f, 1.0f,
+	// 	1024.0f, 0.0f, 1.0f,
+	// 	1024.0f, 50.0f, 1.0f,
+	// };
+
+	GLfloat vert[] = {
+		0, 0, 1.0f,
+		0, 50.0f, 1.0f,
+		1024.0f, 50.0f, 1.0f,
+		1024.0f, 0, 1.0f
+	};
 
     glGenBuffers(1, &posBufObjHUD);
     glBindBuffer(GL_ARRAY_BUFFER, posBufObjHUD);
-	glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(GLfloat), vert, GL_STATIC_DRAW);
-	 
-	colr[0] = 1.0f; colr[1] = 0.0f; colr[2] = 0.0f; // TOP
-	colr[3] = 0.0f; colr[4] = 1.0f; colr[5] = 0.0f; // LEFT
-	colr[6] = 0.0f; colr[7] = 0.0f; colr[8] = 1.0f; // RIGHT
-	// COLOR VBO
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vert), vert, GL_STATIC_DRAW);
+
+	GLfloat colr[] = {
+		0.583f,  0.771f,  0.014f,
+		0.609f,  0.115f,  0.436f,
+		0.327f,  0.483f,  0.844f,
+		0.822f,  0.569f,  0.201f,
+		0.435f,  0.602f,  0.223f,
+		0.310f,  0.747f,  0.185f,
+	};
 	glGenBuffers(1, &colorBufObjHUD);
 	glBindBuffer(GL_ARRAY_BUFFER, colorBufObjHUD);
-	glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(GLfloat), colr, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(colr), colr, GL_STATIC_DRAW);
+
+
+	  static GLfloat GrndTex[] = {
+      0, 0, // back
+      0, 1,
+      1, 1,
+      1, 0 };
+
+    unsigned short idx[] = {0, 1, 2, 0, 2, 3};
+
+    g_GiboLen = 6;
+    glGenBuffers(1, &GrndTexBuffObj);
+    glBindBuffer(GL_ARRAY_BUFFER, GrndTexBuffObj);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GrndTex), GrndTex, GL_STATIC_DRAW);
+
+    glGenBuffers(1, &GIndxBuffObj);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, GIndxBuffObj);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(idx), idx, GL_STATIC_DRAW);
 }
 
-void HUD::drawHud(GLint h_ModelMatrix, GLint h_vertPos, GLint h_hudColor, int width, int height)
+void HUD::drawHud(GLint h_ModelMatrix, GLint h_vertPos, GLint h_hudColor, int width, int height, GLint h_aTexCoord)
 {
-	enableBuff(h_vertPos, h_hudColor);
+	enableBuff(h_vertPos, h_hudColor, h_aTexCoord);
 
 	mat4 Ortho = glm::ortho(0.0f, (float)width, (float)height, 0.0f);
  
@@ -43,27 +78,36 @@ void HUD::drawHud(GLint h_ModelMatrix, GLint h_vertPos, GLint h_hudColor, int wi
 	_guiMVP = Ortho * glm::mat4(1.0f); // Identity Matrix
 	 
 	glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(_guiMVP));
-	 
-	glDrawArrays(GL_TRIANGLES, 0, 3); // draw first object
+	
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0); // draw first object
+	//glDrawArrays(GL_TRIANGLES, 0, 6);
 	 
 	glEnable(GL_DEPTH_TEST); // Enable the Depth-testing
 
-	disableBuff(h_vertPos, h_hudColor);
+	disableBuff(h_vertPos, h_hudColor, h_aTexCoord);
 }
 
-void HUD::enableBuff(GLint h_vertPos, GLint h_hudColor) {
+void HUD::enableBuff(GLint h_vertPos, GLint h_hudColor, GLint h_aTexCoord) {
   GLSL::enableVertexAttribArray(h_vertPos); //position
   glBindBuffer(GL_ARRAY_BUFFER, posBufObjHUD);
-  glVertexAttribPointer(h_vertPos, 3, GL_FLOAT, GL_FALSE, 0, 0);
+  glVertexAttribPointer(h_vertPos, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
   GLSL::enableVertexAttribArray(h_hudColor);
   glBindBuffer(GL_ARRAY_BUFFER, colorBufObjHUD);
-  glVertexAttribPointer(h_hudColor, 3, GL_FLOAT, GL_FALSE, 0, 0);
+  glVertexAttribPointer(h_hudColor, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+
+  glBindTexture(GL_TEXTURE_2D, HUD_ID);
+  GLSL::enableVertexAttribArray(h_aTexCoord);
+  glBindBuffer(GL_ARRAY_BUFFER, GrndTexBuffObj);
+  glVertexAttribPointer(h_aTexCoord, 2, GL_FLOAT ,GL_FALSE, 0, 0);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, GIndxBuffObj);
+
 }
 
-void HUD::disableBuff(GLint h_vertPos, GLint h_hudColor) {
+void HUD::disableBuff(GLint h_vertPos, GLint h_hudColor, GLint h_aTexCoord) {
   GLSL::disableVertexAttribArray(h_vertPos);
   GLSL::disableVertexAttribArray(h_hudColor);
+  GLSL::disableVertexAttribArray(h_aTexCoord);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }

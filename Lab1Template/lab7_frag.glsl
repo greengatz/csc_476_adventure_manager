@@ -17,6 +17,7 @@ uniform int terrainToggle;
 varying vec3 color; // passed from the vertex shader
 varying vec4 pos;
 varying vec3 normal;
+varying vec3 hudCol;
 
 void main()
 {
@@ -32,15 +33,22 @@ void main()
 	intensity = 0.2;
 	light2 = (ka + (kd * max(dot(l2,n), 0.0)) + (ks * pow(max(dot(h2,n), 0.0), s))) * intensity;
 	color = light1 + light2;
-
-
-	if (terrainToggle == 1)
+	if(flag == 0)
 	{
-		vec4 texColor1 = texture2D(uTexUnit, vTexCoord);
-		gl_FragColor = texColor1 * 2.0 * vec4(color.r, color.g, color.b, 1.0);
+		if (terrainToggle == 1)
+		{
+			vec4 texColor1 = texture2D(uTexUnit, vTexCoord);
+			gl_FragColor = texColor1 * 2.0 * vec4(color.r, color.g, color.b, 1.0);
+		}
+		else
+		{
+			gl_FragColor = vec4(color.r, color.g, color.b, 1.0);
+		}
 	}
 	else
 	{
-		gl_FragColor = vec4(color.r, color.g, color.b, 1.0);
+		//gl_FragColor = vec4(hudCol.r, hudCol.g, hudCol.b, 1);
+		vec4 texColor1 = texture2D(uTexUnit, vTexCoord);
+		gl_FragColor = texColor1 * 2.0 * vec4(color.r, color.g, color.b, 1.0);
 	}
 }
