@@ -489,15 +489,20 @@ void Tavern::drawTavern(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor, G
 			(*matSetter).setMaterial(9);
 			// printf("material is now 9");
 		}
+		enableBuff(h_vertPos, h_vertNor, (*tavernItems[iter].cont).posBuf, (*tavernItems[iter].cont).norBuf, (*tavernItems[iter].cont).indBuf);
+		if (tavernItems[iter].hasTexture) {
+			enableTextureBuffer(h_aTexCoord, tavernItems[iter].texBuf, tavernItems[iter].textureNdx);
+		}
 		//decide whether to cull
 		if ((*fCuller).checkCull(tavernItems[iter])) {
-			enableBuff(h_vertPos, h_vertNor, (*tavernItems[iter].cont).posBuf, (*tavernItems[iter].cont).norBuf, (*tavernItems[iter].cont).indBuf);
-			if (tavernItems[iter].hasTexture) {
-				enableTextureBuffer(h_aTexCoord, tavernItems[iter].texBuf, tavernItems[iter].textureNdx);
-			}
+			// enableBuff(h_vertPos, h_vertNor, (*tavernItems[iter].cont).posBuf, (*tavernItems[iter].cont).norBuf, (*tavernItems[iter].cont).indBuf);
+			// if (tavernItems[iter].hasTexture) {
+			// 	enableTextureBuffer(h_aTexCoord, tavernItems[iter].texBuf, tavernItems[iter].textureNdx);
+			// }
 			tavernItems[iter].draw(h_ModelMatrix);
-			disableBuff(h_vertPos, h_vertNor, h_aTexCoord);
+			// disableBuff(h_vertPos, h_vertNor, h_aTexCoord);
 		}
+		disableBuff(h_vertPos, h_vertNor, h_aTexCoord);
 	}
 	
 	for (int iter = 0; iter < tavernCharacters.size(); iter++) {
