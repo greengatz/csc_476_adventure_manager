@@ -112,7 +112,7 @@ typedef struct{
 
 int matCount = 2;
 float optionS = 0.0f;
-int g_GiboLen;
+// int g_GiboLen;
 GLuint NumBufObj, NumIndBufObj, NumTexBufObj;
 
 //Rendering Helper
@@ -454,8 +454,12 @@ void drawGL()
 	}
 
 	//**************Draw HUD START*********************
-	glUniform1i(h_flag, 1);
-	hud.drawHud(h_ModelMatrix, h_vertPos, h_hudColor, g_width, g_width);
+
+	if(hud.on)
+	{
+		glUniform1i(h_flag, 1);
+		hud.drawHud(h_ModelMatrix, h_vertPos, h_hudColor, g_width, g_height, h_aTexCoord);
+	}
 
 	//**************Draw HUD FINISH********************
 	
@@ -532,6 +536,7 @@ void checkUserInput()
    {
       camera.updateZoom(-view);
    }
+
 }
 
 /**
@@ -643,10 +648,17 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	{
 		fCuller.holdView();
 	}
+<<<<<<< HEAD
 	if (key == GLFW_KEY_J && action == GLFW_PRESS)
 	{
 		// audio.loadFile(TAV_MUSIC);
 		// audio.play();
+=======
+	//Toggle hud
+	if (key == GLFW_KEY_G && action == GLFW_PRESS)
+	{
+		hud.on = -hud.on + 1;
+>>>>>>> e884c4a2772aad49c8d469a24dee0063b233d4f5
 	}
 }
 
@@ -720,7 +732,7 @@ int main(int argc, char **argv)
 	// initShape(&str[0u]); //initShape(argv[0]);
   	initModels();
   	tavern.loadTavernMeshes(&texLoader);
-  	hud.initHUD();
+  	hud.initHUD(&texLoader);
    do{
    	timeNew = glfwGetTime();
 	
