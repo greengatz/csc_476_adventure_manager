@@ -417,16 +417,16 @@ void Terrain::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord)
                 glBindTexture(GL_TEXTURE_2D, TERRAIN_TEX_LTTRAIL_ID);
             }
 
-            printf("1. OldTexture: %d, 2. CurrentTexture: %d\n", oldTextureID, trailMap[index][index2]);
+            // printf("1. OldTexture: %d, 2. CurrentTexture: %d\n", oldTextureID, trailMap[index][index2]);
             if (trailMap[index][index2] != oldTextureID)
             {
                oldTextureID = trailMap[index][index2];
                //mipmap creation
-               glGenerateMipmap(GL_TEXTURE_2D);
-               glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-               glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-               glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-               glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+               // glGenerateMipmap(GL_TEXTURE_2D);
+               // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+               // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+               // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+               // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
             }
 
             glDrawArrays(GL_TRIANGLE_STRIP, size, 4);
