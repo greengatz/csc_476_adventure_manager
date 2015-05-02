@@ -9,6 +9,9 @@ uniform mat4 uModelMatrix;
 //Switch toggle for coloring
 uniform int terrainToggle;
 
+//GUI toggle
+uniform int flag;
+
 varying vec3 color; // Pass to fragment shader
 varying vec4 pos;
 varying vec3 normal;	
@@ -19,7 +22,14 @@ void main()
 	vec4 norm = (uViewMatrix * uModelMatrix) * vec4(vertNor, 0.0);
 	normal = norm.xyz;
 	pos = uViewMatrix * uModelMatrix * vertPos;
-	gl_Position = uProjMatrix * uViewMatrix * uModelMatrix * vertPos;
+	if(flag == 1)
+	{
+		gl_Position = uModelMatrix * vertPos;
+	}
+	else
+	{
+		gl_Position = uProjMatrix * uViewMatrix * uModelMatrix * vertPos;
+	}
 
 	if (terrainToggle == 1)
 	{

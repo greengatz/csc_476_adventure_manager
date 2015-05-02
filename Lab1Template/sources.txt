@@ -21,6 +21,7 @@ set(HEADERS
    bounding.h
    Materials.h
    FrustumCull.h
+   hud.h
 )
 
 # List all .c / .cpp files here
@@ -46,4 +47,5 @@ set(SOURCES
    bounding.cpp
    Materials.cpp
    FrustumCull.cpp
+   hud.cpp
 )

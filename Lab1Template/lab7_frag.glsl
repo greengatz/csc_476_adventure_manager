@@ -9,6 +9,7 @@ uniform vec3 kd;
 uniform vec3 ks;
 uniform float s;
 uniform float option;
+uniform int flag;
 
 //Switch toggle for coloring
 uniform int terrainToggle;

@@ -13,6 +13,7 @@
 #include "Shape.h"
 #include "Terrain.h"
 #include "Wall.h"
+#include "hud.h"
 #include "MatrixStack.h"
 #include "tiny_obj_loader.h"
 #include "glm/glm.hpp"
@@ -81,6 +82,8 @@ GLint h_kd;
 GLint h_ks;
 GLint h_s;
 GLint h_option;
+GLint h_flag;
+GLint h_hudColor;
 
 bool keyToggles[256] = {false};
 float t = 0.0f;
@@ -118,6 +121,7 @@ Manager manager("The Dude");
 TavernTerrain tavTerr;
 Materials matSetter;
 FrustumCull fCuller;
+HUD hud(&manager);
 
 /**
  * Helper function to send materials to the shader - create below.
@@ -159,50 +163,50 @@ FrustumCull fCuller;
 // 	}
 // }
 
-static void initNumPlane() {
+// static void initNumPlane() {
 
-   float g_groundSize = 1;
+//    float g_groundSize = 1;
 
-  // A x-z plane at y = g_groundY of dimension [-g_groundSize, g_groundSize]^2
-    float GrndPos[] = {
-    -g_groundSize, -g_groundSize, 0.0,
-    -g_groundSize, g_groundSize, 0.0,
-     g_groundSize, g_groundSize, 0.0, 
-     g_groundSize, -g_groundSize, 0.0
-    };
+//   // A x-z plane at y = g_groundY of dimension [-g_groundSize, g_groundSize]^2
+//     float GrndPos[] = {
+//     -g_groundSize, -g_groundSize, 0.0,
+//     -g_groundSize, g_groundSize, 0.0,
+//      g_groundSize, g_groundSize, 0.0, 
+//      g_groundSize, -g_groundSize, 0.0
+//     };
 
-    float GrndNorm[] = {
-     0, 0, 1,
-     0, 0, 1,
-     0, 0, 1,
-     0, 0, 1,
-     0, 0, 1,
-     0, 0, 1
-    };
+//     float GrndNorm[] = {
+//      0, 0, 1,
+//      0, 0, 1,
+//      0, 0, 1,
+//      0, 0, 1,
+//      0, 0, 1,
+//      0, 0, 1
+//     };
 
 
-  static GLfloat GrndTex[] = {
-      0, 0, // back
-      0, 1,
-      1, 1,
-      1, 0 };
+//   static GLfloat GrndTex[] = {
+//       0, 0, // back
+//       0, 1,
+//       1, 1,
+//       1, 0 };
 
-    unsigned short idx[] = {0, 1, 2, 0, 2, 3};
+//     unsigned short idx[] = {0, 1, 2, 0, 2, 3};
 
-    g_GiboLen = 6;
-    glGenBuffers(1, &NumBufObj);
-    glBindBuffer(GL_ARRAY_BUFFER, NumBufObj);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(GrndPos), GrndPos, GL_STATIC_DRAW);
+//     g_GiboLen = 6;
+//     glGenBuffers(1, &NumBufObj);
+//     glBindBuffer(GL_ARRAY_BUFFER, NumBufObj);
+//     glBufferData(GL_ARRAY_BUFFER, sizeof(GrndPos), GrndPos, GL_STATIC_DRAW);
 
-    glGenBuffers(1, &NumTexBufObj);
-    glBindBuffer(GL_ARRAY_BUFFER, NumTexBufObj);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(GrndTex), GrndTex, GL_STATIC_DRAW);
+//     glGenBuffers(1, &NumTexBufObj);
+//     glBindBuffer(GL_ARRAY_BUFFER, NumTexBufObj);
+//     glBufferData(GL_ARRAY_BUFFER, sizeof(GrndTex), GrndTex, GL_STATIC_DRAW);
 
-    glGenBuffers(1, &NumIndBufObj);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, NumIndBufObj);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(idx), idx, GL_STATIC_DRAW);
+//     glGenBuffers(1, &NumIndBufObj);
+//     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, NumIndBufObj);
+//     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(idx), idx, GL_STATIC_DRAW);
 
-}
+// }
 
 /**
  * For now, this just initializes the Shape object.
@@ -323,6 +327,8 @@ bool installShaders(const string &vShaderName, const string &fShaderName)
 	h_ks = GLSL::getUniformLocation(pid, "ks");
 	h_s = GLSL::getUniformLocation(pid, "s");
 	h_option = GLSL::getUniformLocation(pid, "option");
+	h_flag = GLSL::getUniformLocation(pid, "flag");
+	h_hudColor = GLSL::getUniformLocation(pid, "hudColor");
 
 	/*Toggle for plane coloring*/
     terrainToggleID = GLSL::getUniformLocation(pid, "terrainToggle");
@@ -375,11 +381,13 @@ void drawWalls()
 
 void drawGL()
 {
+
 	// Clear buffers
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	//Probably replace this sometime with different shaders....
 	glUseProgram(pid);
+	glUniform1i(h_flag, 0);
 
 	//Update Camera
 	// Get mouse position
@@ -442,6 +450,12 @@ void drawGL()
 		tavern.drawTavern(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord);
 		glUniform1i(terrainToggleID, 0);
 	}
+
+	//**************Draw HUD START*********************
+	glUniform1i(h_flag, 1);
+	hud.drawHud(h_ModelMatrix, h_vertPos, h_hudColor, g_width, g_width);
+
+	//**************Draw HUD FINISH********************
 	
 	// Unbind the program
 	glUseProgram(0);
@@ -699,6 +713,7 @@ int main(int argc, char **argv)
 	// initShape(&str[0u]); //initShape(argv[0]);
   	initModels();
   	tavern.loadTavernMeshes(&texLoader);
+  	hud.initHUD();
    do{
    	timeNew = glfwGetTime();
 	
