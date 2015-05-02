@@ -30,6 +30,7 @@
 #include "Materials.h"
 #include "FrustumCull.h"
 #include <string>
+// #include "SoundPlayer.h"
 
 using namespace std;
 
@@ -122,6 +123,7 @@ TavernTerrain tavTerr;
 Materials matSetter;
 FrustumCull fCuller;
 HUD hud(&manager);
+// SoundPlayer audio;
 
 /**
  * Helper function to send materials to the shader - create below.
@@ -640,6 +642,11 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	if (key == GLFW_KEY_V && action == GLFW_PRESS)
 	{
 		fCuller.holdView();
+	}
+	if (key == GLFW_KEY_J && action == GLFW_PRESS)
+	{
+		// audio.loadFile(TAV_MUSIC);
+		// audio.play();
 	}
 }
 
