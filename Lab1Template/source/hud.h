@@ -30,7 +30,7 @@ class HUD
 		GLuint colorBufObjHUD;
 		GLuint GrndTexBuffObj;
 		GLuint GIndxBuffObj;
-		int on = 1;
+		bool on;
 
 	private:
 		Manager *man;

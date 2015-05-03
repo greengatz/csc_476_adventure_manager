@@ -656,7 +656,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	//Toggle hud
 	if (key == GLFW_KEY_G && action == GLFW_PRESS)
 	{
-		hud.on = -hud.on + 1;
+		hud.on = !hud.on;
 	}
 }
 
