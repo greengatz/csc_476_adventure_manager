@@ -24,14 +24,11 @@ void main()
 	normal = norm.xyz;
 	pos = uViewMatrix * uModelMatrix * vertPos;
    gl_Position = uProjMatrix * uViewMatrix * uModelMatrix * vertPos;
+   
 	if(flag == 1)
 	{
 		gl_Position = uModelMatrix * vertPos;
 		vTexCoord = aTexCoord;
-	}
-	else
-	{
-		//gl_Position = uProjMatrix * uViewMatrix * uModelMatrix * vertPos;
 	}
 
 	if (terrainToggle == 1)
