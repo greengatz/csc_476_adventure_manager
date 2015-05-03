@@ -16,15 +16,6 @@ void HUD::initHUD(TextureLoader *texLoader)
 {
 	texLoader->LoadTexture((char *)"assets/hud.bmp", HUD_ID);
 
-	// GLfloat vert[] = {
-	// 	0.0f, 0.0f, 1.0f,
-	// 	1024.0f, 0.0f, 1.0f,
-	// 	0.0f, 50.0f, 1.0f,
-	// 	0.0f, 50.0f, 1.0f,
-	// 	1024.0f, 0.0f, 1.0f,
-	// 	1024.0f, 50.0f, 1.0f,
-	// };
-
 	GLfloat vert[] = {
 		0, 0, 1.0f,
 		0, 64.0f, 1.0f,
@@ -80,10 +71,8 @@ void HUD::drawHud(GLint h_ModelMatrix, GLint h_vertPos, int width, int height, G
 	glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(_guiMVP));
 	
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0); // draw first object
-	//glDrawArrays(GL_TRIANGLES, 0, 6);
-	 
+	
 	glEnable(GL_DEPTH_TEST); // Enable the Depth-testing
-
 	disableBuff(h_vertPos, h_aTexCoord);
 }
 
@@ -96,11 +85,12 @@ void HUD::enableBuff(GLint h_vertPos, GLint h_aTexCoord) {
   glVertexAttribPointer(h_vertPos, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
   glBindTexture(GL_TEXTURE_2D, HUD_ID);
+
   GLSL::enableVertexAttribArray(h_aTexCoord);
   glBindBuffer(GL_ARRAY_BUFFER, GrndTexBuffObj);
   glVertexAttribPointer(h_aTexCoord, 2, GL_FLOAT ,GL_FALSE, 0, 0);
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, GIndxBuffObj);
 
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, GIndxBuffObj);
 }
 
 void HUD::disableBuff(GLint h_vertPos, GLint h_aTexCoord) {
