@@ -459,6 +459,7 @@ void drawGL()
 	{
 		glUniform1i(h_flag, 1);
 		hud.drawHud(h_ModelMatrix, h_vertPos, g_width, g_height, h_aTexCoord);
+		glUniform1i(h_flag, 0);
 	}
 
 	//**************Draw HUD FINISH********************
