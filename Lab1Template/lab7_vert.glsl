@@ -12,8 +12,6 @@ uniform int terrainToggle;
 
 //GUI toggle
 uniform int flag;
-attribute vec3 hudColor;
-varying vec3 hudCol;
 
 varying vec3 color; // Pass to fragment shader
 varying vec4 pos;
@@ -28,13 +26,11 @@ void main()
 	if(flag == 1)
 	{
 		gl_Position = uModelMatrix * vertPos;
-		hudCol = hudColor;
 		vTexCoord = aTexCoord;
 	}
 	else
 	{
 		gl_Position = uProjMatrix * uViewMatrix * uModelMatrix * vertPos;
-		hudCol = vec3(1.0f, 0, 0);
 	}
 
 	if (terrainToggle == 1)

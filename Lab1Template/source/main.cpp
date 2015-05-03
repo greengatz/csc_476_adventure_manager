@@ -30,9 +30,11 @@
 #include "Materials.h"
 #include "FrustumCull.h"
 #include <string>
+//#include "text2D.hpp"
 // #include "SoundPlayer.h"
 
 using namespace std;
+using namespace glm;
 
 void idleGL();
 
@@ -84,7 +86,6 @@ GLint h_ks;
 GLint h_s;
 GLint h_option;
 GLint h_flag;
-GLint h_hudColor;
 
 bool keyToggles[256] = {false};
 float t = 0.0f;
@@ -330,7 +331,6 @@ bool installShaders(const string &vShaderName, const string &fShaderName)
 	h_s = GLSL::getUniformLocation(pid, "s");
 	h_option = GLSL::getUniformLocation(pid, "option");
 	h_flag = GLSL::getUniformLocation(pid, "flag");
-	h_hudColor = GLSL::getUniformLocation(pid, "hudColor");
 
 	/*Toggle for plane coloring*/
     terrainToggleID = GLSL::getUniformLocation(pid, "terrainToggle");
@@ -458,7 +458,7 @@ void drawGL()
 	if(hud.on)
 	{
 		glUniform1i(h_flag, 1);
-		hud.drawHud(h_ModelMatrix, h_vertPos, h_hudColor, g_width, g_height, h_aTexCoord);
+		hud.drawHud(h_ModelMatrix, h_vertPos, g_width, g_height, h_aTexCoord);
 	}
 
 	//**************Draw HUD FINISH********************
@@ -731,6 +731,7 @@ int main(int argc, char **argv)
   	initModels();
   	tavern.loadTavernMeshes(&texLoader);
   	hud.initHUD(&texLoader);
+  	//initText2D( "Holstein.DDS" );
    do{
    	timeNew = glfwGetTime();
 	

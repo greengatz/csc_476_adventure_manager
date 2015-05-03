@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string>
 #include <iostream>
+#include "text2D.hpp"
 #include "GLSL.h"
 #include "Camera.h"
 #include "glm/glm.hpp"
@@ -22,10 +23,10 @@ class HUD
 	public:
 		
 		HUD(Manager *newMan);
-		void drawHud(GLint h_ModelMatrix, GLint h_vertPos, GLint h_hudColor, int width, int height, GLint h_aTexCoord);
+		void drawHud(GLint h_ModelMatrix, GLint h_vertPos, int width, int height, GLint h_aTexCoord);
 		void initHUD(TextureLoader *texLoader);
-		void enableBuff(GLint h_vertPos, GLint h_hudColor, GLint h_aTexCoord);
-		void disableBuff(GLint h_vertPos, GLint h_hudColor, GLint h_aTexCoord);
+		void enableBuff(GLint h_vertPos, GLint h_aTexCoord);
+		void disableBuff(GLint h_vertPos, GLint h_aTexCoord);
 		GLuint posBufObjHUD;
 		GLuint colorBufObjHUD;
 		GLuint GrndTexBuffObj;

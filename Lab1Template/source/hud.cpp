@@ -55,7 +55,6 @@ void HUD::initHUD(TextureLoader *texLoader)
 
     unsigned short idx[] = {0, 1, 2, 0, 2, 3};
 
-
     g_GiboLen = 6;
     glGenBuffers(1, &GrndTexBuffObj);
     glBindBuffer(GL_ARRAY_BUFFER, GrndTexBuffObj);
@@ -66,9 +65,9 @@ void HUD::initHUD(TextureLoader *texLoader)
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(idx), idx, GL_STATIC_DRAW);
 }
 
-void HUD::drawHud(GLint h_ModelMatrix, GLint h_vertPos, GLint h_hudColor, int width, int height, GLint h_aTexCoord)
+void HUD::drawHud(GLint h_ModelMatrix, GLint h_vertPos, int width, int height, GLint h_aTexCoord)
 {
-	enableBuff(h_vertPos, h_hudColor, h_aTexCoord);
+	enableBuff(h_vertPos, h_aTexCoord);
 
 	mat4 Ortho = glm::ortho(0.0f, (float)width, (float)height, 0.0f);
  
@@ -84,17 +83,13 @@ void HUD::drawHud(GLint h_ModelMatrix, GLint h_vertPos, GLint h_hudColor, int wi
 	 
 	glEnable(GL_DEPTH_TEST); // Enable the Depth-testing
 
-	disableBuff(h_vertPos, h_hudColor, h_aTexCoord);
+	disableBuff(h_vertPos, h_aTexCoord);
 }
 
-void HUD::enableBuff(GLint h_vertPos, GLint h_hudColor, GLint h_aTexCoord) {
+void HUD::enableBuff(GLint h_vertPos, GLint h_aTexCoord) {
   GLSL::enableVertexAttribArray(h_vertPos); //position
   glBindBuffer(GL_ARRAY_BUFFER, posBufObjHUD);
   glVertexAttribPointer(h_vertPos, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
-  GLSL::enableVertexAttribArray(h_hudColor);
-  glBindBuffer(GL_ARRAY_BUFFER, colorBufObjHUD);
-  glVertexAttribPointer(h_hudColor, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
   glBindTexture(GL_TEXTURE_2D, HUD_ID);
   GLSL::enableVertexAttribArray(h_aTexCoord);
@@ -104,9 +99,8 @@ void HUD::enableBuff(GLint h_vertPos, GLint h_hudColor, GLint h_aTexCoord) {
 
 }
 
-void HUD::disableBuff(GLint h_vertPos, GLint h_hudColor, GLint h_aTexCoord) {
+void HUD::disableBuff(GLint h_vertPos, GLint h_aTexCoord) {
   GLSL::disableVertexAttribArray(h_vertPos);
-  GLSL::disableVertexAttribArray(h_hudColor);
   GLSL::disableVertexAttribArray(h_aTexCoord);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);

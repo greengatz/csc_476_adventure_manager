@@ -18,7 +18,6 @@ uniform int terrainToggle;
 varying vec3 color; // passed from the vertex shader
 varying vec4 pos;
 varying vec3 normal;
-varying vec3 hudCol;
 
 void main()
 {
@@ -48,7 +47,6 @@ void main()
 	}
 	else
 	{
-		//gl_FragColor = vec4(hudCol.r, hudCol.g, hudCol.b, 1);
 		vec4 texColor1 = texture2D(uTexUnit, vTexCoord);
 		gl_FragColor = texColor1 * 2.0 * vec4(color.r, color.g, color.b, 1.0);
 	}
