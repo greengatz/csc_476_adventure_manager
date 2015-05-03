@@ -88,6 +88,9 @@ void HUD::drawHud(GLint h_ModelMatrix, GLint h_vertPos, int width, int height, G
 }
 
 void HUD::enableBuff(GLint h_vertPos, GLint h_aTexCoord) {
+	glEnable(GL_TEXTURE_2D);
+    glActiveTexture(GL_TEXTURE0);
+
   GLSL::enableVertexAttribArray(h_vertPos); //position
   glBindBuffer(GL_ARRAY_BUFFER, posBufObjHUD);
   glVertexAttribPointer(h_vertPos, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
@@ -105,4 +108,5 @@ void HUD::disableBuff(GLint h_vertPos, GLint h_aTexCoord) {
   GLSL::disableVertexAttribArray(h_aTexCoord);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+  glDisable(GL_TEXTURE_2D);
 }
