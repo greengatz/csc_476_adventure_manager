@@ -5,7 +5,6 @@
 #include <stdlib.h>
 #include <string>
 #include <iostream>
-#include "text2D.hpp"
 #include "GLSL.h"
 #include "Camera.h"
 #include "glm/glm.hpp"
