@@ -23,6 +23,7 @@ void main()
 	vec4 norm = (uViewMatrix * uModelMatrix) * vec4(vertNor, 0.0);
 	normal = norm.xyz;
 	pos = uViewMatrix * uModelMatrix * vertPos;
+   gl_Position = uProjMatrix * uViewMatrix * uModelMatrix * vertPos;
 	if(flag == 1)
 	{
 		gl_Position = uModelMatrix * vertPos;
@@ -30,12 +31,11 @@ void main()
 	}
 	else
 	{
-		gl_Position = uProjMatrix * uViewMatrix * uModelMatrix * vertPos;
+		//gl_Position = uProjMatrix * uViewMatrix * uModelMatrix * vertPos;
 	}
 
 	if (terrainToggle == 1)
 	{
 		vTexCoord = aTexCoord;
 	}
-	//color = vec3(0.5, 0.5, 0.5);
 }
