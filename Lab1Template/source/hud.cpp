@@ -13,7 +13,7 @@ HUD::HUD(Manager *newMan)
 
 void HUD::initHUD(TextureLoader *texLoader)
 {
-	texLoader->LoadTexture((char *)"assets/tavern/crateTex.bmp", HUD_ID);
+	texLoader->LoadTexture((char *)"assets/hud.bmp", HUD_ID);
 
 	// GLfloat vert[] = {
 	// 	0.0f, 0.0f, 1.0f,
@@ -26,8 +26,8 @@ void HUD::initHUD(TextureLoader *texLoader)
 
 	GLfloat vert[] = {
 		0, 0, 1.0f,
-		0, 50.0f, 1.0f,
-		1024.0f, 50.0f, 1.0f,
+		0, 64.0f, 1.0f,
+		1024.0f, 64.0f, 1.0f,
 		1024.0f, 0, 1.0f
 	};
 
@@ -47,14 +47,14 @@ void HUD::initHUD(TextureLoader *texLoader)
 	glBindBuffer(GL_ARRAY_BUFFER, colorBufObjHUD);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(colr), colr, GL_STATIC_DRAW);
 
-
-	  static GLfloat GrndTex[] = {
-      0, 0, // back
-      0, 1,
-      1, 1,
-      1, 0 };
+	static GLfloat GrndTex[] = {
+      0, 1, // back
+      0, 0,
+      1, 0,
+      1, 1 };
 
     unsigned short idx[] = {0, 1, 2, 0, 2, 3};
+
 
     g_GiboLen = 6;
     glGenBuffers(1, &GrndTexBuffObj);
