@@ -9,6 +9,7 @@ HUD::HUD(Manager *newMan)
 	colorBufObjHUD = 0;
 	GrndTexBuffObj = 0;
 	GIndxBuffObj = 0;
+	on = true;
 }
 
 void HUD::initHUD(TextureLoader *texLoader)
