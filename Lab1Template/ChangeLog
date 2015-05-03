@@ -3,3 +3,5 @@ In file dependencies/glad/include/glad/glad.h:
 
 If having problems with libGL.so:
 	ln -s /usr/lib/x86_64-linux-gnu/mesa/libGL.so /usr/lib/x86_64-linux-gnu/libGL.so
+
+Please add to this if you find more errors....
