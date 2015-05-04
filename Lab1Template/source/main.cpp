@@ -30,6 +30,8 @@
 #include "Materials.h"
 #include "FrustumCull.h"
 #include <string>
+#include "splineTest.cpp"
+#include "TerrainEvent.h"
 //#include "text2D.hpp"
 // #include "SoundPlayer.h"
 
@@ -119,11 +121,13 @@ GLuint NumBufObj, NumIndBufObj, NumTexBufObj;
 //Rendering Helper
 RenderingHelper ModelTrans;
 Tavern tavern;
+TerrainEvent terrEv;
 Manager manager("The Dude");
 TavernTerrain tavTerr;
 Materials matSetter;
 FrustumCull fCuller;
 HUD hud(&manager);
+double dtDraw;
 // SoundPlayer audio;
 
 /**
@@ -449,7 +453,7 @@ void drawGL()
 		matSetter.setMaterial(4);
 		ModelTrans.popMatrix();
 		matSetter.setMaterial(3);
-		tavern.drawTavern(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord);
+		tavern.drawTavern(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord, dtDraw);
 		glUniform1i(terrainToggleID, 0);
 	}
 
@@ -459,6 +463,7 @@ void drawGL()
 	{
 		glUniform1i(h_flag, 1);
 		hud.drawHud(h_ModelMatrix, h_vertPos, g_width, g_height, h_aTexCoord);
+		glUniform1i(h_flag, 0);
 	}
 
 	//**************Draw HUD FINISH********************
@@ -681,6 +686,9 @@ void checkCollisions(){
 
 int main(int argc, char **argv)
 {
+    // please don't remove this, using it to demo splines
+    // splineTest(); 
+
 	// Initialise GLFW
     if( !glfwInit() )
     {
@@ -726,16 +734,18 @@ int main(int argc, char **argv)
 	installShaders("lab7_vert.glsl", "lab7_frag.glsl");
 	fCuller.init();
 	tavern.init(&matSetter, &fCuller);
+	terrEv.init(&matSetter, &fCuller);
 	std::string str = "assets/bunny.obj";
 	// initShape(&str[0u]); //initShape(argv[0]);
   	initModels();
   	tavern.loadTavernMeshes(&texLoader);
   	hud.initHUD(&texLoader);
   	//initText2D( "Holstein.DDS" );
+  	dtDraw = 0;
    do{
    	timeNew = glfwGetTime();
 	
-		double dtDraw = timeNew - timeOldDraw;
+		dtDraw = timeNew - timeOldDraw;
 		t += h;
 		// Update every 60Hz
 		if(dtDraw >= (1.0 / 60.0) ) {
