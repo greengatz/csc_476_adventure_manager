@@ -1,5 +1,6 @@
-#ifndef TERRAINEVENT_H
-#define TERRAINEVENT_H
+#pragma once
+#ifndef _TERRAINEVENT_H_
+#define _TERRAINEVENT_H_
 
 #include "GLSL.h"
 //#include "bounding.h"
@@ -29,12 +30,12 @@ class TerrainEvent
 		TerrainEvent();
 		void init(Materials *newMatSetter, FrustumCull *newCuller);
 		void loadTavernMeshes(TextureLoader* texLoader);
+		void addAmbush(vec3 loc, mat4 rot);
 		void drawTerrainEvents(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor, GLint h_aTexCoord);
 
 	private:
 		Materials *matSetter;
 		FrustumCull *fCuller;
-		void loadBufferData(TextureLoader* texLoader);
 		void addEventMesh(const string filename, bool noNorms);
 		void addEventItem(int index, glm::vec3 scale, glm::vec3 trans, glm::mat4 rot);
 		void addEventCharacter(int index, glm::vec3 scale, glm::vec3 trans, glm::mat4 rot);

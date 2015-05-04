@@ -1,57 +1,18 @@
 #include "TerrainEvent.h"
+#include <time.h>
 
-#define CUBE 0
-#define DOOR 1
-#define BOOKSHELF 2
-#define STOOL 3
-#define CHAIR 4
-#define RECT_TABLE 5
-#define CIR_TABLE 6
-#define MUG 7
-#define BOTTLE 8
-#define TORCH 9
-#define BARREL 10
-#define STICK 11
-#define POLE 12
-#define FIREPLACE 13
-#define TABLEWARE 14
-#define TURKEY 15
-#define LANDLORD 16
-#define LUMBERJACK 17
-#define SAMURAI 18 // being given a box for an arm right now
-#define ROCK 19
-#define CRATE 20
-#define BALUSTRADE 21
-#define ROOF 22
-#define PLANK 23
+#define KNIGHT 0
+#define KNIGHT2 1
+#define WEREWOLF 2
+#define WARRIOR 3
 
-#define NUMFILES 24
+#define NUMFILES 4
 
-const string terrEvFiles[] = {"assets/tavern/cube.obj",
-                       	      "assets/tavern/door.obj",
-                              "assets/tavern/bookshelf.obj",
-                              "assets/tavern/stool.obj",
-                              "assets/tavern/chair.obj",
-                              "assets/tavern/table.obj",
-                              "assets/tavern/diningtable.obj",
-                       	      "assets/tavern/mug.obj",
-                       	      "assets/tavern/bottle.obj",
-                       	      "assets/tavern/torch.obj",
-                              "assets/tavern/barrel.obj",   ///this is the barrel
-                              "assets/tavern/stick.obj",
-                              "assets/tavern/pole.obj",
-                              "assets/tavern/fireplace.obj",
-                              "assets/tavern/tableware.obj",
-                              "assets/tavern/turkey.obj",
-                      	      "assets/tavern/landlord.obj",
-                   		      "assets/tavern/lumberjack.obj",
-               			      "assets/tavern/samurai.obj",
-               			      "assets/tavern/rock.obj",
-               			      "assets/tavern/box.obj",
-               			      "assets/tavern/balustrade.obj", //currently a cube until can find a good balustrade.obj
-               			      "assets/tavern/roof.obj",
-               			      "assets/tavern/plank.obj"
-               			};
+const string terrEvFiles[] = {"assets/events/knight",
+							  "assets/events/knight2",
+							  "assets/events/werewolf",
+							  "assets/events/warrior"
+							 };
 
 // int TAV_CRATE_ID = 5000;
 // int TAV_LANDLORD_ID = 5500;
@@ -67,18 +28,18 @@ const string terrEvFiles[] = {"assets/tavern/cube.obj",
 // int TAV_ROCK_ID = 6500;
 // int TAV_DIRT_ID = 6600;
 
-Obj3dContainer containers[std::extent<decltype(tavObjFiles)>::value];
+// Obj3dContainer containers[std::extent<decltype(terrEvFiles)>::value];
 
-//between [1, limit]
-int getRandInt(int limit)
-{
-	return rand() % limit + 1;
-}
-//between [1, limit]
-float getRandFloat(float limit)
-{
-	return static_cast <float> (rand()) / static_cast <float> (RAND_MAX / limit);
-}
+// //between [1, limit]
+// int getRandInt(int limit)
+// {
+// 	return rand() % limit + 1;
+// }
+// //between [1, limit]
+// float getRandFloat(float limit)
+// {
+// 	return static_cast <float> (rand()) / static_cast <float> (RAND_MAX / limit);
+// }
 
 TerrainEvent::TerrainEvent()
 {
@@ -91,7 +52,7 @@ void TerrainEvent::init(Materials *newMatSetter, FrustumCull *newCuller)
 	fCuller = newCuller;
 }
 
-void TerrainEvent::addTavernMesh(const string filename, bool noNorms)
+void TerrainEvent::addEventMesh(const string filename, bool noNorms)
 {
 	Obj3dContainer temp;
 	temp.loadIntoTinyOBJ(filename);
@@ -100,7 +61,7 @@ void TerrainEvent::addTavernMesh(const string filename, bool noNorms)
 }
 
 //index is the index of buffer info in tavernMeshes
-void TerrainEvent::addTavernItem(int index, glm::vec3 scale, glm::vec3 trans, glm::mat4 rot)
+void TerrainEvent::addEventItem(int index, glm::vec3 scale, glm::vec3 trans, glm::mat4 rot)
 {
 	Obj3d temp(&(meshes[index]), scale, trans, rot);
 	eventItems.push_back(temp);
@@ -120,14 +81,14 @@ void TerrainEvent::addEventCharacter(int index, glm::vec3 scale, glm::vec3 trans
 	// tavernCharacters.push_back(*(new Mercenary(bodyParts)));
 }
 
-void TerrainEvent::loadBufferData(TextureLoader* texLoader)
+void TerrainEvent::loadTavernMeshes(TextureLoader* texLoader)
 {
+	srand(time(NULL));
+	float ang;
+	glm::mat4 rot;
+
 	for (int iter = 0; iter < NUMFILES; iter++) {
-		// printf("iter is %d\n", iter);
-		if (iter == BARREL)
-			addTavernMesh(tavObjFiles[iter], true);
-		else
-			addTavernMesh(tavObjFiles[iter], false);
+		addEventMesh(terrEvFiles[iter], false);
 	}
 
 	//load textures
@@ -143,16 +104,12 @@ void TerrainEvent::loadBufferData(TextureLoader* texLoader)
 	// texLoader->LoadTexture((char *)"assets/tavern/torchTex.bmp", TAV_TORCH_ID);
 	// texLoader->LoadTexture((char *)"assets/tavern/plankTex.bmp", TAV_PLANK_ID);
 	// texLoader->LoadTexture((char *)"assets/tavern/rockTex.bmp", TAV_ROCK_ID);
-	// texLoader->LoadTexture((char *)"assets/tavern/dirtTex.bmp", TAV_DIRT_ID);
+	// texLoader->LoadTexture((char *)"assets/tavern/dirtTex.bmp", TAV_DIRT_ID);	
 }
 
-void TerrainEvent::loadTavernMeshes(TextureLoader* texLoader)
+void TerrainEvent::addAmbush(vec3 loc, mat4 rot)
 {
-	srand(time(NULL));
-	float ang;
-	glm::mat4 rot;
 
-	loadBufferData(texLoader);	
 }
 
 void TerrainEvent::enableBuff(GLint h_vertPos, GLint h_vertNor, GLuint posBuf, GLuint norBuf, GLuint indBuf) {
@@ -195,37 +152,37 @@ void TerrainEvent::enableTextureBuffer(GLint h_aTexCoord, GLuint texBuf, int id)
 
 void TerrainEvent::drawTerrainEvents(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor, GLint h_aTexCoord)
 {
-	for (int iter = 0; iter < tavernItems.size(); iter++) {
+	for (int iter = 0; iter < eventItems.size(); iter++) {
 		//set a material
-		if (tavernItems[iter].materialNdx != -1) {
-			(*matSetter).setMaterial(tavernItems[iter].materialNdx);
+		if (eventItems[iter].materialNdx != -1) {
+			(*matSetter).setMaterial(eventItems[iter].materialNdx);
 			// printf("object %d update material to %d\n", iter, tavernItems[iter].materialNdx);
 		}
 		else {
 			(*matSetter).setMaterial(9);
 			// printf("material is now 9");
 		}
-		enableBuff(h_vertPos, h_vertNor, (*tavernItems[iter].cont).posBuf, (*tavernItems[iter].cont).norBuf, (*tavernItems[iter].cont).indBuf);
-		if (tavernItems[iter].hasTexture) {
-			enableTextureBuffer(h_aTexCoord, tavernItems[iter].texBuf, tavernItems[iter].textureNdx);
+		enableBuff(h_vertPos, h_vertNor, (*eventItems[iter].cont).posBuf, (*eventItems[iter].cont).norBuf, (*eventItems[iter].cont).indBuf);
+		if (eventItems[iter].hasTexture) {
+			enableTextureBuffer(h_aTexCoord, eventItems[iter].texBuf, eventItems[iter].textureNdx);
 		}
 		//decide whether to cull
-		if ((*fCuller).checkCull(tavernItems[iter])) {
-			tavernItems[iter].draw(h_ModelMatrix);
+		if ((*fCuller).checkCull(eventItems[iter])) {
+			eventItems[iter].draw(h_ModelMatrix);
 		}
 		disableBuff(h_vertPos, h_vertNor, h_aTexCoord);
 	}
 	
-	for (int iter = 0; iter < tavernCharacters.size(); iter++) {
-        for(int meshIter = 0; meshIter < tavernCharacters[iter].meshes.size(); meshIter++) {
-        	if ((*fCuller).checkCull(tavernCharacters[iter].meshes[meshIter])) {
-			    enableBuff(h_vertPos, h_vertNor, (*tavernCharacters[iter].meshes[meshIter].cont).posBuf, (*tavernCharacters[iter].meshes[meshIter].cont).norBuf, (*tavernCharacters[iter].meshes[meshIter].cont).indBuf);
-			    if (tavernCharacters[iter].meshes[meshIter].hasTexture) {
-			    	enableTextureBuffer(h_aTexCoord, tavernCharacters[iter].meshes[meshIter].texBuf, tavernCharacters[iter].meshes[meshIter].textureNdx);
-			    }
-			    tavernCharacters[iter].draw(h_ModelMatrix, meshIter);
-			    disableBuff(h_vertPos, h_vertNor, h_aTexCoord);
-			}
-        }
-	}
+	// for (int iter = 0; iter < tavernCharacters.size(); iter++) {
+ //        for(int meshIter = 0; meshIter < tavernCharacters[iter].meshes.size(); meshIter++) {
+ //        	if ((*fCuller).checkCull(tavernCharacters[iter].meshes[meshIter])) {
+	// 		    enableBuff(h_vertPos, h_vertNor, (*tavernCharacters[iter].meshes[meshIter].cont).posBuf, (*tavernCharacters[iter].meshes[meshIter].cont).norBuf, (*tavernCharacters[iter].meshes[meshIter].cont).indBuf);
+	// 		    if (tavernCharacters[iter].meshes[meshIter].hasTexture) {
+	// 		    	enableTextureBuffer(h_aTexCoord, tavernCharacters[iter].meshes[meshIter].texBuf, tavernCharacters[iter].meshes[meshIter].textureNdx);
+	// 		    }
+	// 		    tavernCharacters[iter].draw(h_ModelMatrix, meshIter);
+	// 		    disableBuff(h_vertPos, h_vertNor, h_aTexCoord);
+	// 		}
+ //        }
+	// }
 }

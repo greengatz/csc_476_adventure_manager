@@ -31,6 +31,7 @@
 #include "FrustumCull.h"
 #include <string>
 #include "splineTest.cpp"
+#include "TerrainEvent.h"
 //#include "text2D.hpp"
 // #include "SoundPlayer.h"
 
@@ -120,6 +121,7 @@ GLuint NumBufObj, NumIndBufObj, NumTexBufObj;
 //Rendering Helper
 RenderingHelper ModelTrans;
 Tavern tavern;
+TerrainEvent terrEv;
 Manager manager("The Dude");
 TavernTerrain tavTerr;
 Materials matSetter;
@@ -732,6 +734,7 @@ int main(int argc, char **argv)
 	installShaders("lab7_vert.glsl", "lab7_frag.glsl");
 	fCuller.init();
 	tavern.init(&matSetter, &fCuller);
+	terrEv.init(&matSetter, &fCuller);
 	std::string str = "assets/bunny.obj";
 	// initShape(&str[0u]); //initShape(argv[0]);
   	initModels();
