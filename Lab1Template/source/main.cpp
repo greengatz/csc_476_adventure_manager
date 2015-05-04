@@ -124,6 +124,7 @@ TavernTerrain tavTerr;
 Materials matSetter;
 FrustumCull fCuller;
 HUD hud(&manager);
+double dtDraw;
 // SoundPlayer audio;
 
 /**
@@ -449,7 +450,7 @@ void drawGL()
 		matSetter.setMaterial(4);
 		ModelTrans.popMatrix();
 		matSetter.setMaterial(3);
-		tavern.drawTavern(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord);
+		tavern.drawTavern(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord, dtDraw);
 		glUniform1i(terrainToggleID, 0);
 	}
 
@@ -733,10 +734,11 @@ int main(int argc, char **argv)
   	tavern.loadTavernMeshes(&texLoader);
   	hud.initHUD(&texLoader);
   	//initText2D( "Holstein.DDS" );
+  	dtDraw = 0;
    do{
    	timeNew = glfwGetTime();
 	
-		double dtDraw = timeNew - timeOldDraw;
+		dtDraw = timeNew - timeOldDraw;
 		t += h;
 		// Update every 60Hz
 		if(dtDraw >= (1.0 / 60.0) ) {

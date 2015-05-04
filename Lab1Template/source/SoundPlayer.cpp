@@ -69,5 +69,4 @@ void SoundPlayer::pause()
 {
 	pauseSound = !pauseSound;
 	FMOD_Channel_SetPaused(channel, pauseSound);
-	// FSOUND_SetPaused(handle, pauseSound);
 }
