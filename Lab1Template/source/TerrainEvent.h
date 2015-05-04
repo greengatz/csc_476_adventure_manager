@@ -31,6 +31,10 @@ class TerrainEvent
 		void init(Materials *newMatSetter, FrustumCull *newCuller);
 		void loadTavernMeshes(TextureLoader* texLoader);
 		void addAmbush(vec3 loc, mat4 rot);
+		void addMerchantStand(vec3 loc, mat4 rot);
+		void addRandomDuder(vec3 loc, mat4 rot);
+		void startCity(vec3 loc);
+        void endCity(vec3 loc);
 		void drawTerrainEvents(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor, GLint h_aTexCoord);
 
 	private:
@@ -42,6 +46,8 @@ class TerrainEvent
 		void enableTextureBuffer(GLint h_aTexCoord, GLuint texBuf,int id);
 		void enableBuff(GLint h_vertPos, GLint h_vertNor, GLuint posBuf, GLuint norBuf, GLuint indBuf);
 		void disableBuff(GLint h_vertPos, GLint h_vertNor, GLint h_aTexCoord);
-};
+		int getRandInt(int limit);
+		float getRandFloat(float limit);
 
+};
 #endif

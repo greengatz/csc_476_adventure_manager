@@ -1,18 +1,30 @@
 #include "TerrainEvent.h"
 #include <time.h>
 
-#define KNIGHT 0
-#define KNIGHT2 1
-#define WEREWOLF 2
+#define WEREWOLF 0
+#define KNIGHT 1
+#define KNIGHT2 2
 #define WARRIOR 3
+#define CART 4
+#define HORSE 5
 
-#define NUMFILES 4
+#define NUM_TERR_EV_FILES 0
 
-const string terrEvFiles[] = {"assets/events/knight",
-							  "assets/events/knight2",
-							  "assets/events/werewolf",
-							  "assets/events/warrior"
+const string terrEvFiles[] = {"assets/events/werewolf.obj",
+							  "assets/events/knight.obj",
+							  "assets/events/knight2.obj",
+							  "assets/events/warrior.obj",
+							  "assets/events/cart.obj",
+							  "assets/events/horse.obj"
 							 };
+
+const vec3 objScales[] = {vec3(1.0, 1.0, 1.0),
+		                  vec3(1.0, 1.0, 1.0),
+		                  vec3(1.0, 1.0, 1.0),
+		                  vec3(1.0, 1.0, 1.0),
+		                  vec3(1.0, 1.0, 1.0),
+		                  vec3(1.0, 1.0, 1.0),
+						};
 
 // int TAV_CRATE_ID = 5000;
 // int TAV_LANDLORD_ID = 5500;
@@ -30,16 +42,16 @@ const string terrEvFiles[] = {"assets/events/knight",
 
 // Obj3dContainer containers[std::extent<decltype(terrEvFiles)>::value];
 
-// //between [1, limit]
-// int getRandInt(int limit)
-// {
-// 	return rand() % limit + 1;
-// }
-// //between [1, limit]
-// float getRandFloat(float limit)
-// {
-// 	return static_cast <float> (rand()) / static_cast <float> (RAND_MAX / limit);
-// }
+//between [1, limit]
+int TerrainEvent::getRandInt(int limit)
+{
+	return rand() % limit + 1;
+}
+//between [0, limit]
+float TerrainEvent::getRandFloat(float limit)
+{
+	return static_cast <float> (rand()) / static_cast <float> (RAND_MAX / limit);
+}
 
 TerrainEvent::TerrainEvent()
 {
@@ -87,7 +99,7 @@ void TerrainEvent::loadTavernMeshes(TextureLoader* texLoader)
 	float ang;
 	glm::mat4 rot;
 
-	for (int iter = 0; iter < NUMFILES; iter++) {
+	for (int iter = 0; iter < NUM_TERR_EV_FILES; iter++) {
 		addEventMesh(terrEvFiles[iter], false);
 	}
 
@@ -109,7 +121,52 @@ void TerrainEvent::loadTavernMeshes(TextureLoader* texLoader)
 
 void TerrainEvent::addAmbush(vec3 loc, mat4 rot)
 {
+	int locations[] = {0,  0,
+	                   1,  1,
+	                   1, -1,
+	                  -1,  1,
+	                  -1, -1};
 
+	int partySize = getRandInt(3) + 2;
+	
+	for (int iter = 0; iter < partySize; iter++) {
+		int num = getRandInt(4) - 1;
+		int xLoc = getRandFloat(1.0);
+		int zLoc = getRandFloat(1.0);
+		vec3 trans = vec3(loc.x + xLoc * locations[iter * 2], loc.y, loc.z + zLoc * locations[iter * 2 + 1]);
+		addEventItem(num, vec3(1.0, 1.0, 1.0), trans, rot);
+	}
+}
+
+void TerrainEvent::addMerchantStand(vec3 loc, mat4 rot)
+{
+	addEventItem(CART, vec3(1.0, 1.0, 1.0), loc, rot);
+	addEventItem(HORSE, vec3(1.0, 1.0, 1.0), vec3(loc.x + 1.0, loc.y, loc.z), rot);
+	//addEventItem(MERCHANT, vec3(1.0, 1.0, 1.0), loc, rot);
+	int numBodyGuard = getRandInt(2) + 1;
+	for (int iter = 0; iter < numBodyGuard; iter++) {
+		// int num = getRandInt(4) - 1;
+		// int xLoc = getRandFloat(1.0);
+		// int zLoc = getRandFloat(1.0);
+		// vec3 trans = vec3(loc.x + xLoc * locations[iter * 2], loc.y, loc.z + zLoc * locations[iter * 2 + 1]);
+		// addEventItem(num, vec3(1.0, 1.0, 1.0), trans, rot);
+	}
+}
+
+void TerrainEvent::addRandomDuder(vec3 loc, mat4 rot) 
+{
+	int randDude = getRandInt(3) + 1;
+	addEventItem(randDude, vec3(1.0, 1.0, 1.0), loc, rot);
+}
+
+void TerrainEvent::startCity(vec3 loc)
+{
+
+}
+
+void TerrainEvent::endCity(vec3 loc)
+{
+	
 }
 
 void TerrainEvent::enableBuff(GLint h_vertPos, GLint h_vertNor, GLuint posBuf, GLuint norBuf, GLuint indBuf) {
