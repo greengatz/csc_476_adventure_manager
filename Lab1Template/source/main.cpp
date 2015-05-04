@@ -30,6 +30,7 @@
 #include "Materials.h"
 #include "FrustumCull.h"
 #include <string>
+#include "splineTest.cpp"
 //#include "text2D.hpp"
 // #include "SoundPlayer.h"
 
@@ -682,6 +683,9 @@ void checkCollisions(){
 
 int main(int argc, char **argv)
 {
+    // please don't remove this, using it to demo splines
+    // splineTest(); 
+
 	// Initialise GLFW
     if( !glfwInit() )
     {

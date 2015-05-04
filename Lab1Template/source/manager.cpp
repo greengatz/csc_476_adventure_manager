@@ -8,7 +8,7 @@ Manager::Manager(string newName)
 	food = 0;
 	beer = 0;
 
-	reportStats();
+//	reportStats();
 }
 
 void Manager::reportStats()
