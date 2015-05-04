@@ -22,7 +22,7 @@ set(HEADERS
    Materials.h
    FrustumCull.h
    hud.h
-   
+   splineCurve.h
 )
 
 # List all .c / .cpp files here
@@ -49,4 +49,5 @@ set(SOURCES
    Materials.cpp
    FrustumCull.cpp
    hud.cpp
+   splineCurve.cpp
 )
