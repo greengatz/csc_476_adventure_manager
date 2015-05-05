@@ -19,6 +19,16 @@ float Spline::SplineSegment::getY(float x)
     return sum;
 }
 
+void Spline::SplineSegment::printSegment()
+{
+    cout << startX << " <= x >= " << endX << "   y = ";
+    cout << coefficients[0] << " + ";
+    cout << coefficients[1] << "x + ";
+    cout << coefficients[2] << "x^2 + ";
+    cout << coefficients[3] << "x^3";
+    cout << "\n";
+}
+
 Spline::Spline(vector<glm::vec2> points, float initSlope, float finalSlope)
 {
     // currently magic
@@ -26,7 +36,7 @@ Spline::Spline(vector<glm::vec2> points, float initSlope, float finalSlope)
     int b = 1;
     int c = 2;
     int d = 3;
-    int dimensions = (points.size() - 1 ) * 4;
+    int dimensions = (points.size() - 1) * 4;
     int row = 0;
     int i;
     // determine column with row and segment
@@ -86,8 +96,8 @@ Spline::Spline(vector<glm::vec2> points, float initSlope, float finalSlope)
 
     // final slope
     m(row, b + (i - 1) * 4) = 1;
-    m(row, c + (i - 1) * 4) = points[i].x;
-    m(row, d + (i - 1) * 4) = 2 * pow(points[i].x, 2);
+    m(row, c + (i - 1) * 4) = 2 * points[i].x;
+    m(row, d + (i - 1) * 4) = 3 * pow(points[i].x, 2);
     y(row) = finalSlope;
 
     coefficients = VectorXd(dimensions);
@@ -131,4 +141,13 @@ float Spline::getY(float x)
 
     //cout << "requested value was outside domain of spline\n";
     return -1000000; // bad value to ensure error is not overlooked
+}
+
+void Spline::printSpline()
+{
+    cout << "This spline has " << pieces.size() << " pieces\n";
+    for(int i = 0; i < pieces.size(); i++) {
+        cout << "segment[" << i << "]: ";
+        pieces[i].printSegment();
+    }
 }
