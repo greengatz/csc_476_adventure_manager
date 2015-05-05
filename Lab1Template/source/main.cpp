@@ -442,6 +442,18 @@ void drawGL()
 
 	//========================= END OUTSIDE SCENE =======================
 
+	if (!camera.isTavernView() || camera.isFreeRoam())
+	{
+		glUniform1i(terrainToggleID, 1);
+		glUniform1i(h_uTexUnit, 0);
+		ModelTrans.loadIdentity();
+		ModelTrans.pushMatrix();
+		ModelTrans.popMatrix();
+		terrEv.drawTerrainEvents(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord);
+		glUniform1i(terrainToggleID, 0);
+	}
+
+
 	if (camera.isTavernView() || camera.isFreeRoam())
 	{
 		//Draw TAVERN
@@ -739,6 +751,12 @@ int main(int argc, char **argv)
 	// initShape(&str[0u]); //initShape(argv[0]);
   	initModels();
   	tavern.loadTavernMeshes(&texLoader);
+
+  	//currently being worked on... sorta works
+  	// terrEv.loadTerrEvMeshes(&texLoader);
+  	// vec3 loc = terrain.getStartPosition();
+  	// terrEv.addMerchantStand(vec3(loc.x - 99, loc.y, loc.z), glm::mat4(1.0f));
+
   	hud.initHUD(&texLoader);
   	//initText2D( "Holstein.DDS" );
   	dtDraw = 0;

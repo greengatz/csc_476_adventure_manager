@@ -29,7 +29,7 @@ class TerrainEvent
 		vector<Mercenary> eventCharacters;
 		TerrainEvent();
 		void init(Materials *newMatSetter, FrustumCull *newCuller);
-		void loadTavernMeshes(TextureLoader* texLoader);
+		void loadTerrEvMeshes(TextureLoader* texLoader);
 		void addAmbush(vec3 loc, mat4 rot);
 		void addMerchantStand(vec3 loc, mat4 rot);
 		void addRandomDuder(vec3 loc, mat4 rot);
