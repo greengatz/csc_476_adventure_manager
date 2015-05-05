@@ -3,7 +3,7 @@
 #define _SOUNDPLAYER_H_
 
 #include <stdio.h>
-#include "inc/fmod.h"
+#include <fmod.h>
 // #include "fmod.h"
 
 #define TAV_MUSIC 0

@@ -7,6 +7,15 @@ set(DEP_DIR "${PROJECT_SOURCE_DIR}/dependencies")
 # Source / header files
 include("sources.txt")
 
+#fmod
+set(FMOD_DIR "${DEP_DIR}/fmod_api")
+list(APPEND INCLUDES
+   ${FMOD_DIR}/api/inc
+)
+list(APPEND LIBS
+   ${FMOD_DIR}/api/lib/libfmodex64-4.44.52.so
+)
+
 # GLFW
 set(GLFW_DIR "${DEP_DIR}/glfw")
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "Build the GLFW example programs")

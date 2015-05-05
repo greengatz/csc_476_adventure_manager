@@ -24,6 +24,7 @@ set(HEADERS
    hud.h
    splineCurve.h
    TerrainEvent.h
+   SoundPlayer.h
 )
 
 # List all .c / .cpp files here
@@ -52,4 +53,5 @@ set(SOURCES
    hud.cpp
    splineCurve.cpp
    TerrainEvent.cpp
+   SoundPlayer.cpp
 )
