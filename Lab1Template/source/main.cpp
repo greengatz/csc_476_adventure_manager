@@ -33,7 +33,7 @@
 #include "splineTest.cpp"
 #include "TerrainEvent.h"
 //#include "text2D.hpp"
-// #include "SoundPlayer.h"
+#include "SoundPlayer.h"
 
 using namespace std;
 using namespace glm;
@@ -128,7 +128,7 @@ Materials matSetter;
 FrustumCull fCuller;
 HUD hud(&manager);
 double dtDraw;
-// SoundPlayer audio;
+SoundPlayer audio;
 
 /**
  * Helper function to send materials to the shader - create below.
@@ -667,8 +667,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	}
 	if (key == GLFW_KEY_J && action == GLFW_PRESS)
 	{
-		// audio.loadFile(TAV_MUSIC);
-		// audio.play();
+		audio.loadFile(TAV_MUSIC);
+		audio.play();
 	}
 	//Toggle hud
 	if (key == GLFW_KEY_G && action == GLFW_PRESS)
