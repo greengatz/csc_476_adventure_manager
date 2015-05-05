@@ -31,8 +31,9 @@
 #include "FrustumCull.h"
 #include <string>
 #include "splineTest.cpp"
+#include "TerrainEvent.h"
 //#include "text2D.hpp"
-// #include "SoundPlayer.h"
+#include "SoundPlayer.h"
 
 using namespace std;
 using namespace glm;
@@ -120,12 +121,14 @@ GLuint NumBufObj, NumIndBufObj, NumTexBufObj;
 //Rendering Helper
 RenderingHelper ModelTrans;
 Tavern tavern;
+TerrainEvent terrEv;
 Manager manager("The Dude");
 TavernTerrain tavTerr;
 Materials matSetter;
 FrustumCull fCuller;
 HUD hud(&manager);
-// SoundPlayer audio;
+double dtDraw;
+SoundPlayer audio;
 
 /**
  * Helper function to send materials to the shader - create below.
@@ -439,6 +442,18 @@ void drawGL()
 
 	//========================= END OUTSIDE SCENE =======================
 
+	if (!camera.isTavernView() || camera.isFreeRoam())
+	{
+		glUniform1i(terrainToggleID, 1);
+		glUniform1i(h_uTexUnit, 0);
+		ModelTrans.loadIdentity();
+		ModelTrans.pushMatrix();
+		ModelTrans.popMatrix();
+		terrEv.drawTerrainEvents(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord);
+		glUniform1i(terrainToggleID, 0);
+	}
+
+
 	if (camera.isTavernView() || camera.isFreeRoam())
 	{
 		//Draw TAVERN
@@ -450,7 +465,7 @@ void drawGL()
 		matSetter.setMaterial(4);
 		ModelTrans.popMatrix();
 		matSetter.setMaterial(3);
-		tavern.drawTavern(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord);
+		tavern.drawTavern(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord, dtDraw);
 		glUniform1i(terrainToggleID, 0);
 	}
 
@@ -652,8 +667,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	}
 	if (key == GLFW_KEY_J && action == GLFW_PRESS)
 	{
-		// audio.loadFile(TAV_MUSIC);
-		// audio.play();
+		audio.loadFile(TAV_MUSIC);
+		audio.play();
 	}
 	//Toggle hud
 	if (key == GLFW_KEY_G && action == GLFW_PRESS)
@@ -731,16 +746,24 @@ int main(int argc, char **argv)
 	installShaders("lab7_vert.glsl", "lab7_frag.glsl");
 	fCuller.init();
 	tavern.init(&matSetter, &fCuller);
+	terrEv.init(&matSetter, &fCuller);
 	std::string str = "assets/bunny.obj";
 	// initShape(&str[0u]); //initShape(argv[0]);
   	initModels();
   	tavern.loadTavernMeshes(&texLoader);
+
+  	//currently being worked on... sorta works
+  	// terrEv.loadTerrEvMeshes(&texLoader);
+  	// vec3 loc = terrain.getStartPosition();
+  	// terrEv.addMerchantStand(vec3(loc.x - 99, loc.y, loc.z), glm::mat4(1.0f));
+
   	hud.initHUD(&texLoader);
   	//initText2D( "Holstein.DDS" );
+  	dtDraw = 0;
    do{
    	timeNew = glfwGetTime();
 	
-		double dtDraw = timeNew - timeOldDraw;
+		dtDraw = timeNew - timeOldDraw;
 		t += h;
 		// Update every 60Hz
 		if(dtDraw >= (1.0 / 60.0) ) {

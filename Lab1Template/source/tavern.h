@@ -36,14 +36,17 @@ class Tavern
 		void loadTavernMeshes(TextureLoader* texLoader);
 		void showMercsForSale();
         //void buyMercenary(int mercenaryID, Manager* purchaser);
-		void drawTavern(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor, GLint h_aTexCoord);
+		void drawTavern(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor, GLint h_aTexCoord, double ltime);
 
 	private:
+		float curTime;
 		Materials *matSetter;
 		FrustumCull *fCuller;
 		vec3 doorLoc;
 		vec3 beerLoc;
 		vec3 foodLoc;
+		float getRandFloat(float limit);
+		int getRandInt(int limit);
 		void loadBufferData(TextureLoader* texLoader);
 		void createTable1(glm::vec3 initLoc, float ang);
 		void createPillar(glm::vec3 initLoc);
@@ -54,7 +57,7 @@ class Tavern
 		void enableTextureBuffer(GLint h_aTexCoord, GLuint texBuf,int id);
 		void enableBuff(GLint h_vertPos, GLint h_vertNor, GLuint posBuf, GLuint norBuf, GLuint indBuf);
 		void disableBuff(GLint h_vertPos, GLint h_vertNor, GLint h_aTexCoord);
-		
+		void applyTurkeySpin(double ltime);
 };
 
 #endif

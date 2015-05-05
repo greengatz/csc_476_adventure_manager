@@ -23,6 +23,7 @@ set(HEADERS
    FrustumCull.h
    hud.h
    splineCurve.h
+   TerrainEvent.h
 )
 
 # List all .c / .cpp files here
@@ -50,4 +51,5 @@ set(SOURCES
    FrustumCull.cpp
    hud.cpp
    splineCurve.cpp
+   TerrainEvent.cpp
 )

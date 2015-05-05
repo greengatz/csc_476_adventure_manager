@@ -78,5 +78,17 @@ void Materials::setMaterial(int i)
 			glUniform3f(*h_ks, 0.01, 0.01, 0.01);
 			glUniform1f(*h_s, 0.00001);
 			break;
+		case 10: //dark brown
+			glUniform3f(*h_ka, 0.185, 0.1, 0.045);
+			glUniform3f(*h_kd, 0.392, 0.2549, 0.0902);
+			glUniform3f(*h_ks, 0.076, 0.051, 0.051);
+			glUniform1f(*h_s, 0.01);
+			break;
+		case 11: //very dark brown
+			glUniform3f(*h_ka, 0.185, 0.1, 0.045);
+			glUniform3f(*h_kd, 0.2, 0.098, 0.0);
+			glUniform3f(*h_ks, 0.076, 0.051, 0.051);
+			glUniform1f(*h_s, 0.01);
+			break;
 	}
 }
