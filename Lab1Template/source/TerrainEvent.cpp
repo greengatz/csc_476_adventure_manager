@@ -1,18 +1,46 @@
 #include "TerrainEvent.h"
 #include <time.h>
 
-#define KNIGHT 0
-#define KNIGHT2 1
-#define WEREWOLF 2
+#define SAMURAI 0
+#define SPEARMAN 1
+#define KNIGHT2 2
 #define WARRIOR 3
+#define STALL 4
+#define ROOF 5
 
-#define NUMFILES 4
+#define NUM_TERR_EV_FILES 6
 
-const string terrEvFiles[] = {"assets/events/knight",
-							  "assets/events/knight2",
-							  "assets/events/werewolf",
-							  "assets/events/warrior"
+const string terrEvFiles[] = {"assets/events/samurai.obj",
+							  "assets/events/spearman.obj",
+							  "assets/events/knight2.obj",
+							  "assets/events/warrior.obj",
+							  "assets/events/stall.obj",
+							  "assets/events/box.obj"
 							 };
+
+const vec3 objScales[] = {vec3(0.09, 0.09, 0.09),
+		                  vec3(0.125, 0.125, 0.125),
+		                  vec3(1.0, 1.0, 1.0),
+		                  vec3(1.0, 1.0, 1.0),
+		                  vec3(0.39, 0.45, 0.39),
+		                  vec3(0.415, 0.04, 0.305),
+						};
+
+const float objYTrans[] = {0.085,
+                           0.085,
+                           1.0,
+                           1.0,
+                           0.22,
+                           0.40};
+
+//characters rotate to face left of trail assuming right behind wagon
+const mat4 objRotates[] = {glm::rotate(mat4(1.0f), (const float)180, glm::vec3(0, 1.0f, 0)),
+						   glm::rotate(mat4(1.0f), (const float)180, glm::vec3(0, 1.0f, 0)),
+						   mat4(1.0f),
+						   mat4(1.0f),
+						   glm::rotate(mat4(1.0f), (const float)180, glm::vec3(0, 1.0f, 0)),
+						   glm::rotate(mat4(1.0f), (const float)180, glm::vec3(0, 1.0f, 0)), //faces toward the end city
+						};
 
 // int TAV_CRATE_ID = 5000;
 // int TAV_LANDLORD_ID = 5500;
@@ -30,16 +58,17 @@ const string terrEvFiles[] = {"assets/events/knight",
 
 // Obj3dContainer containers[std::extent<decltype(terrEvFiles)>::value];
 
-// //between [1, limit]
-// int getRandInt(int limit)
-// {
-// 	return rand() % limit + 1;
-// }
-// //between [1, limit]
-// float getRandFloat(float limit)
-// {
-// 	return static_cast <float> (rand()) / static_cast <float> (RAND_MAX / limit);
-// }
+//between [1, limit]
+int TerrainEvent::getRandInt(int limit)
+{
+	return rand() % limit + 1;
+}
+//between [0, limit]
+float TerrainEvent::getRandFloat(float limit)
+{
+	// return static_cast <float> (rand()) / static_cast <float> (RAND_MAX / limit);/
+	return static_cast <float> (rand()) / static_cast <float> (RAND_MAX) * limit * 2 - limit;//* spawnRad * 2 - spawnRad
+}
 
 TerrainEvent::TerrainEvent()
 {
@@ -81,14 +110,17 @@ void TerrainEvent::addEventCharacter(int index, glm::vec3 scale, glm::vec3 trans
 	// tavernCharacters.push_back(*(new Mercenary(bodyParts)));
 }
 
-void TerrainEvent::loadTavernMeshes(TextureLoader* texLoader)
+void TerrainEvent::loadTerrEvMeshes(TextureLoader* texLoader)
 {
 	srand(time(NULL));
 	float ang;
 	glm::mat4 rot;
 
-	for (int iter = 0; iter < NUMFILES; iter++) {
-		addEventMesh(terrEvFiles[iter], false);
+	for (int iter = 0; iter < NUM_TERR_EV_FILES; iter++) {
+		if (iter == SPEARMAN)
+			addEventMesh(terrEvFiles[iter], true);
+		else
+			addEventMesh(terrEvFiles[iter], false);
 	}
 
 	//load textures
@@ -109,7 +141,59 @@ void TerrainEvent::loadTavernMeshes(TextureLoader* texLoader)
 
 void TerrainEvent::addAmbush(vec3 loc, mat4 rot)
 {
+	float ambushLoc[] = {0,  0,
+	                     0.09,  0.12,
+	                     0.11, -0.16,
+	                    -0.15,  0.05,
+	                    -0.09, -0.17};
 
+	int partySize = getRandInt(3) + 2;  //between 3 - 5 attackers
+	for (int iter = 0; iter < partySize; iter++) {
+		int num = getRandInt(2) - 1;
+		vec3 trans = vec3(loc.x + ambushLoc[iter * 2], objYTrans[num], loc.z + ambushLoc[iter * 2 + 1]);
+		mat4 newRot = rot * objRotates[num];
+		addEventItem(num, objScales[num], trans, newRot);
+	}
+}
+
+void TerrainEvent::addMerchantStand(vec3 loc, mat4 rot)
+{
+	mat4 newRot = rot * objRotates[STALL];
+	addEventItem(STALL, objScales[STALL], vec3(loc.x, objYTrans[STALL], loc.z), newRot);
+	newRot = rot * objRotates[ROOF];
+	addEventItem(ROOF, objScales[ROOF], vec3(loc.x, objYTrans[ROOF], loc.z), newRot);
+	//addEventItem(MERCHANT, vec3(1.0, 1.0, 1.0), loc, rot);
+
+	float merchantLoc[] = {-0.19, -0.3,
+                           0.35, -0.41,
+                           0.54, -0.3};
+
+	int numBodyGuard = getRandInt(3) + 1; //between 1 - 3 bodyguards
+	for (int iter = 0; iter < numBodyGuard; iter++) {
+		int num = getRandInt(2) - 1;
+		vec3 trans = vec3(loc.x + merchantLoc[iter * 2], objYTrans[num], loc.z + merchantLoc[iter * 2 + 1]);
+		mat4 newRot = rot * objRotates[num];
+		addEventItem(num, objScales[num], trans, newRot);
+	}
+}
+
+void TerrainEvent::addRandomDuder(vec3 loc, mat4 rot) 
+{
+	int randDude = getRandInt(2) - 1;
+	vec3 trans = vec3(loc.x, objYTrans[randDude], loc.z);
+	mat4 newRot = rot * objRotates[randDude];
+	addEventItem(randDude, objScales[randDude], trans, newRot);
+	addEventItem(randDude, vec3(1.0, 1.0, 1.0), loc, rot);
+}
+
+void TerrainEvent::startCity(vec3 loc)
+{
+
+}
+
+void TerrainEvent::endCity(vec3 loc)
+{
+	
 }
 
 void TerrainEvent::enableBuff(GLint h_vertPos, GLint h_vertNor, GLuint posBuf, GLuint norBuf, GLuint indBuf) {
@@ -167,9 +251,9 @@ void TerrainEvent::drawTerrainEvents(GLint h_ModelMatrix, GLint h_vertPos, GLint
 			enableTextureBuffer(h_aTexCoord, eventItems[iter].texBuf, eventItems[iter].textureNdx);
 		}
 		//decide whether to cull
-		if ((*fCuller).checkCull(eventItems[iter])) {
+		// if ((*fCuller).checkCull(eventItems[iter])) {
 			eventItems[iter].draw(h_ModelMatrix);
-		}
+		// }
 		disableBuff(h_vertPos, h_vertNor, h_aTexCoord);
 	}
 	

@@ -173,7 +173,7 @@ void Terrain::createTrail(){
     int changeInPath = (rand() % (maxShift - minShift)) + minShift;
     // printf("Trail Map @ startingSpot %d{\n", startingSpot);
     for (indexZ = 0; indexZ < MAP_Z; indexZ++){
-        // printf("New ChangeInPath %d |", changeInPath);
+        printf("Going Right: %d, New ChangeInPath %d |", shiftTog, changeInPath);
         // changeInPath = (indexZ % 2 == 1) ? ((rand() % 3) - 1) + startingSpot : startingSpot;
         // printf("Shift %d |", changeInPath);
         for (indexX = 0; indexX < MAP_X; indexX++)
@@ -230,14 +230,21 @@ void Terrain::createTrail(){
         }
         
 
+        
+
+
         if(changeInPath == 0){
             // srand(time(NULL));
-            if (shiftTog)
-              criticalPoints.push_back(glm::vec3(indexZ + 1.0, 0.0, -lastSpot - 1.0));
-            else
-              criticalPoints.push_back(glm::vec3(indexZ + 1.0, 0.0, -lastSpot));
-
+            
             changeInPath = (rand() % (maxShift - minShift)) + minShift;
+            if (shiftTog){
+              criticalPoints.push_back(glm::vec3(indexZ, 0.0, -lastSpot - 1.0));
+              criticalPoints.push_back(glm::vec3(indexZ + 1.0, 0.0, -lastSpot - 1.0));
+            }else{
+              criticalPoints.push_back(glm::vec3(indexZ, 0.0, -lastSpot));
+              criticalPoints.push_back(glm::vec3(indexZ + 1.0, 0.0, -lastSpot));   
+            }
+
             if(lastSpot > MAP_X - 5){
                 shiftTog = false;
             }else if(lastSpot < 5){
@@ -246,6 +253,11 @@ void Terrain::createTrail(){
                 shiftTog = !shiftTog;
             }
         }else if(changeInPath == 1){
+            // if (shiftTog)
+            //   criticalPoints.push_back(glm::vec3(indexZ, 0.0, -lastSpot - 1.0));
+            // else
+            //   criticalPoints.push_back(glm::vec3(indexZ, 0.0, -lastSpot));
+
             changeInPath--;
         }else{
             changeInPath--;
@@ -254,6 +266,14 @@ void Terrain::createTrail(){
             else
             lastSpot--;
         }
+
+
+        if(changeInPath > 1 && lastSpot > MAP_X - (bound / 2) && shiftTog){
+            changeInPath = 1;
+        }else if(changeInPath > 1 && lastSpot < bound / 2 && !shiftTog){
+            changeInPath = 1;
+        } 
+
         printf("\n");
         // startingSpot = changeInPath;
         //Relative to the world
@@ -263,6 +283,8 @@ void Terrain::createTrail(){
       criticalPoints.push_back(glm::vec3((float)((MAP_X+1.0) * MAP_SCALE), 0.0, -lastSpot - 1.0));
     else
       criticalPoints.push_back(glm::vec3((float)((MAP_X+1.0) * MAP_SCALE), 0.0, -lastSpot));
+
+    createEvents();
 }
 
 void Terrain::init(TextureLoader* texLoader)
@@ -271,7 +293,6 @@ void Terrain::init(TextureLoader* texLoader)
 	x.y = 0.0f;
 	x.z = 0.0f;
 	scale = 5.0f;
-    createEvents();
     createTrail();
 	GLfloat terrain_buffer[(MAP_Z - 1) * (MAP_X - 1) * 12];
   	GLfloat terrain_norm[(MAP_Z - 1) * (MAP_X - 1) * 12];

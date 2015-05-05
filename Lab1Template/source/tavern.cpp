@@ -87,12 +87,12 @@ void Tavern::init(Materials *newMatSetter, FrustumCull *newCuller)
 }
 
 //between [1, limit]
-int getRandInt(int limit)
+int Tavern::getRandInt(int limit)
 {
 	return rand() % limit + 1;
 }
-//between [1, limit]
-float getRandFloat(float limit)
+//between [0, limit]
+float Tavern::getRandFloat(float limit)
 {
 	return static_cast <float> (rand()) / static_cast <float> (RAND_MAX / limit);
 }

@@ -45,6 +45,8 @@ class Tavern
 		vec3 doorLoc;
 		vec3 beerLoc;
 		vec3 foodLoc;
+		float getRandFloat(float limit);
+		int getRandInt(int limit);
 		void loadBufferData(TextureLoader* texLoader);
 		void createTable1(glm::vec3 initLoc, float ang);
 		void createPillar(glm::vec3 initLoc);
