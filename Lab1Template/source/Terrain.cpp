@@ -75,8 +75,6 @@ void Terrain::printCriticalPoints()
 glm::vec3 Terrain::nextCriticalPoint(glm::vec3 aPos)
 {
    nextCPoint++;
-   //glm::vec3 nextCriticPoint = criticalPoints.front();
-   //criticalPoints.erase(criticalPoints.begin());
    return criticalPoints[nextCPoint - 1];
 }
 

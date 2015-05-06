@@ -107,6 +107,7 @@ void Camera::updateStrafe(glm::vec3 dStrafe)
 	}
 	else
 	{
+		//Only sums up the x and z, not y.
 		theStrafe.x += dStrafe.x * 0.1;
 		theStrafe.z += dStrafe.z * 0.1;
 	}
@@ -121,6 +122,7 @@ void Camera::updateZoom(glm::vec3 dZoom)
 	}
 	else
 	{
+		//Only sums up the x and z, not y.
 		theZoom.x += dZoom.x * 0.1;
 		theZoom.z += dZoom.z * 0.1;
 	}
