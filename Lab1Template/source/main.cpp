@@ -228,7 +228,6 @@ void initShape(char * filename)
 /**
  * Generalized approach to intialization.
  */
-
 void spinOffNewShape(char * filename, float x, float z){
 	Shape temp;
 	temp.load(filename);

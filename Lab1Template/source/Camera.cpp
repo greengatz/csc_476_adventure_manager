@@ -35,7 +35,7 @@ Camera::Camera() :
 	theStrafe(25.0f, 1.0f, 0.0f),
 	theZoom(0.0f, 1.0f, -25.0f),
 	freeRoam(false),
-	wagonZoom(0.0f),
+	wagonZoom(1.0f),
 	tavernView(true)
 
 {
@@ -132,7 +132,15 @@ void Camera::updateZoom(glm::vec3 dZoom)
 
 void Camera::updateWagonZoom(double yoffset)
 {
-	printf("yoffest: %lf\n", yoffset);
+	// printf("yoffest: %lf\n", yoffset);
+	if (yoffset > 0 && wagonZoom > 1.0)
+	{
+		wagonZoom += -yoffset * 0.1;
+	}
+	else if (yoffset < 0 && wagonZoom < 5.0)
+	{
+		wagonZoom += -yoffset * 0.1;
+	}
 }
 
 void Camera::mouseMoved(int x, int y)
@@ -178,9 +186,9 @@ void Camera::update(double xpos, double ypos, glm::vec3 wagonPos)
     		verticalAngle = -(10.0 * (3.14f)/180.0);
 
  		//TODO: add scroll for the radius
-  		theWagonEye.x = 2.0 * cos(verticalAngle) * sin(horizontalAngle);
-  		theWagonEye.y = 2.0 * sin(verticalAngle) * sin(verticalAngle);
-  		theWagonEye.z = 2.0 * cos(horizontalAngle);
+  		theWagonEye.x = wagonZoom * cos(verticalAngle) * sin(horizontalAngle);
+  		theWagonEye.y = wagonZoom * sin(verticalAngle) * sin(verticalAngle);
+  		theWagonEye.z = wagonZoom * cos(horizontalAngle);
   		theWagonEye += wagonPos;
    }
 }
