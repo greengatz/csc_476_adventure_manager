@@ -46,7 +46,9 @@ Spline::Spline(vector<glm::vec2> points, float initSlope, float finalSlope)
     // determine column with row and segment
     
     MatrixXd m(dimensions, dimensions);
+    m.fill(0);
     VectorXd y(dimensions);
+    y.fill(0);
     //VectorXd coefficients(dimensions);
     
     // slope at 0

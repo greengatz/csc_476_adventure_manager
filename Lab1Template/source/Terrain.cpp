@@ -74,11 +74,10 @@ void Terrain::printCriticalPoints()
 
 glm::vec3 Terrain::nextCriticalPoint(glm::vec3 aPos)
 {
-   static int nextRet = 1;
-   nextRet++;
+   nextCPoint++;
    //glm::vec3 nextCriticPoint = criticalPoints.front();
    //criticalPoints.erase(criticalPoints.begin());
-   return criticalPoints[nextRet - 1];
+   return criticalPoints[nextCPoint - 1];
 }
 
 bool Terrain::atEnd(glm::vec3 aPos)
@@ -175,7 +174,9 @@ void Terrain::createTrail(){
     int changeInPath = (rand() % (maxShift - minShift)) + minShift;
     vector<glm::vec2> splineSeed;
     int direction = 1;
+    nextCPoint = 1;
 
+    splineSeed.clear();
     // determine our critical points to make the spline
     splineSeed.push_back(glm::vec2(0, 25)); // add first point to spline
     cout << MAP_Z << "\n";
@@ -230,10 +231,10 @@ void Terrain::createTrail(){
     }
     
     splineSeed.push_back(glm::vec2(50, splineSeed[splineSeed.size() - 1].y)); // add last point to spline
-    path = Spline(splineSeed, 0, 0);
+    path = new Spline(splineSeed, 0, 0);
 
     for(int i = 0; i < 50; i++) { // reverse these
-        criticalPoints.push_back(glm::vec3(path.getY(i), 0, -i));
+        criticalPoints.push_back(glm::vec3(path->getY(i), 0, -i));
     }
 
     // using the spline, draw generate a path
@@ -249,7 +250,7 @@ void Terrain::createTrail(){
         // changeInPath = (indexZ % 2 == 1) ? ((rand() % 3) - 1) + startingSpot : startingSpot;
         // printf("Shift %d |", changeInPath);
         for (indexX = 0; indexX < MAP_X; indexX++) {
-            if(abs(indexZ - path.getY(indexX)) < 1) {
+            if(abs(indexZ - path->getY(indexX)) < 1) {
                 trailMap[indexX][indexZ]=TRAIL;
                 trailMap[indexX + 1][indexZ]=TRAIL;
                 trailMap[indexX][indexZ + 1]=TRAIL;
@@ -369,7 +370,8 @@ void Terrain::createTrail(){
       criticalPoints.push_back(glm::vec3((float)((MAP_X+1.0) * MAP_SCALE), 0.0, -lastSpot - 1.0));
     else
       criticalPoints.push_back(glm::vec3((float)((MAP_X+1.0) * MAP_SCALE), 0.0, -lastSpot));
-
+    
+    path->printSpline();
     createEvents();
 }
 
@@ -579,7 +581,7 @@ void Terrain::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord)
    glDisable(GL_TEXTURE_2D);
 }
 
-Spline Terrain::getSpline()
+Spline* Terrain::getSpline()
 {
     return path;
 }
