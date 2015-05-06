@@ -12,11 +12,6 @@
 
 using namespace std;
 
-//Global variables for now ......
-//Camera
-// horizontal angle : toward -Z
-
-
 Camera::Camera() :
 	aspect(1.0f),
 	fovy(45.0f),
@@ -167,6 +162,7 @@ void Camera::update(double xpos, double ypos, glm::vec3 wagonPos)
 
   	if (tavernView || freeRoam)
   	{
+  		//Check vertical angle bounds for camera
   		if (verticalAngle > (80.0 * (3.14f)/180.0))
     		verticalAngle = (80.0 * (3.14f)/180.0);
   		else if (verticalAngle < -(80.0 * (3.14f)/180.0))
@@ -179,12 +175,13 @@ void Camera::update(double xpos, double ypos, glm::vec3 wagonPos)
    }
    else
    {
+   	//Check vertical angle bounds of camera
    	if (verticalAngle > (55.0 * (3.14f)/180.0))
     		verticalAngle = (55.0 * (3.14f)/180.0);
   		else if (verticalAngle < -(10.0 * (3.14f)/180.0))
     		verticalAngle = -(10.0 * (3.14f)/180.0);
 
- 		//TODO: add scroll for the radius
+    	//Update look at point for the wagon eye
   		theWagonEye.x = wagonZoom * cos(verticalAngle) * sin(horizontalAngle);
   		theWagonEye.y = wagonZoom * sin(verticalAngle) * sin(verticalAngle);
   		theWagonEye.z = wagonZoom * cos(horizontalAngle);
