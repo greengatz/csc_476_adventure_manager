@@ -12,7 +12,6 @@
 #include "Camera.h"
 #include "Shape.h"
 #include "Terrain.h"
-#include "Wall.h"
 #include "hud.h"
 #include "MatrixStack.h"
 #include "tiny_obj_loader.h"
@@ -58,8 +57,6 @@ int points = 0;
 Terrain terrain;
 //Plane toggle for coloring
 GLint terrainToggleID;
-
-Wall wall;
 
 Wagon wagon;
 
@@ -244,9 +241,6 @@ void initModels()
 	//Initialize Terrain object
 	terrain.init(&texLoader);
 	tavTerr.init(&texLoader);
-
-	//Initalize Wall
-	wall.init(&texLoader);
 
 	//Initalize Wagon
 	wagon.init(&texLoader, &terrain);
@@ -529,6 +523,14 @@ void checkUserInput()
 
 }
 
+void mouseScrollCB(GLFWwindow* window, double xoffset, double yoffset)
+{
+	if (!camera.isTavernView())
+	{
+		camera.updateWagonZoom(yoffset);
+	}
+}
+
 /**
  * Use this for debugging purposes for right now.
  */
@@ -698,6 +700,7 @@ int main(int argc, char **argv)
     glfwMakeContextCurrent(window);
     glfwSetWindowSizeCallback(window, window_size_callback);
     glfwSetKeyCallback(window, key_callback);
+    glfwSetScrollCallback(window, mouseScrollCB);
 
     // Initialize glad
    if (!gladLoadGL()) {

@@ -40,6 +40,7 @@ public:
 	glm::vec3 getPosition();
 	void updateStrafe(glm::vec3 dStrafe);
 	void updateZoom(glm::vec3 dZoom);
+	void updateWagonZoom(double yoffset);
 	void toggleFreeRoam();
 	void setTavernView();
 	void setTrailView();
@@ -75,10 +76,12 @@ private:
 	glm::vec2 mousePrev;
 	glm::vec2 rotations;
 	glm::vec3 position;
+	float wagonZoom;
 
 	//Brandon stuff
 	glm::vec3 lookAtPoint;
 	glm::vec3 theEye;
+	glm::vec3 theWagonEye;
 	glm::vec3 theStrafe;
 	glm::vec3 theZoom;
 };
