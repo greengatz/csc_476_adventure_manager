@@ -70,3 +70,23 @@ void Manager::buyMercenary(int mercenaryID, Tavern* tav)
 
 	reportStats();
 }
+
+int Manager::getGold()
+{
+	return gold;
+}
+
+int Manager::getFood()
+{
+	return food;
+}
+
+int Manager::getBeer()
+{
+	return beer;
+}
+
+int Manager::getMercs()
+{
+	return mercs.size();
+}

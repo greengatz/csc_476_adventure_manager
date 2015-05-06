@@ -32,7 +32,7 @@
 #include <string>
 #include "splineTest.cpp"
 #include "TerrainEvent.h"
-//#include "text2D.hpp"
+#include "text2D.hpp"
 #include "SoundPlayer.h"
 
 using namespace std;
@@ -476,6 +476,19 @@ void drawGL()
 		glUniform1i(h_flag, 1);
 		hud.drawHud(h_ModelMatrix, h_vertPos, g_width, g_height, h_aTexCoord);
 		glUniform1i(h_flag, 0);
+
+		char info[64];
+		sprintf(info,"x %d", manager.getGold());
+		printText2D(info, 50, 566, 18);
+
+		sprintf(info,"x %d", manager.getFood());
+		printText2D(info, 220, 566, 18);
+
+		sprintf(info,"x %d", manager.getBeer());
+		printText2D(info, 430, 566, 18);
+
+		sprintf(info,"x %d", manager.getBeer());
+		printText2D(info, 620, 566, 18);
 	}
 
 	//**************Draw HUD FINISH********************
@@ -758,7 +771,7 @@ int main(int argc, char **argv)
   	// terrEv.addMerchantStand(vec3(loc.x - 99, loc.y, loc.z), glm::mat4(1.0f));
 
   	hud.initHUD(&texLoader);
-  	//initText2D( "Holstein.DDS" );
+  	initText2D( "Holstein.DDS" );
   	dtDraw = 0;
    do{
    	timeNew = glfwGetTime();
