@@ -77,7 +77,7 @@ void Wagon::updateWagon(float globalTime)
     }
     position += direction * deltaTime * velocity;
     position.y = 0.05;
-    position.x = terrain->getSpline().getY(-position.z);
+    position.x = terrain->getSpline()->getY(-position.z);
     startTime += deltaTime;
   }
 }

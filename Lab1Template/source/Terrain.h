@@ -27,7 +27,7 @@ public:
 	glm::vec3 nextCriticalPoint(glm::vec3 aPos);
 	void printCriticalPoints();
 	void checkEvents(glm::vec3 aPos);
-    Spline getSpline();
+    Spline* getSpline();
 
 private:
 
@@ -47,7 +47,8 @@ private:
 	glm::vec3 beginPosition;
 	std::vector<glm::vec3> criticalPoints;
 	int oldTextureID;
-    Spline path;
+    int nextCPoint = 1;
+    Spline* path;
 
 };
 

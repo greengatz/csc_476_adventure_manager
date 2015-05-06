@@ -12,7 +12,6 @@
 #include "Camera.h"
 #include "Shape.h"
 #include "Terrain.h"
-#include "Wall.h"
 #include "hud.h"
 #include "MatrixStack.h"
 #include "tiny_obj_loader.h"
@@ -58,8 +57,6 @@ int points = 0;
 Terrain terrain;
 //Plane toggle for coloring
 GLint terrainToggleID;
-
-Wall wall;
 
 Wagon wagon;
 
@@ -231,7 +228,6 @@ void initShape(char * filename)
 /**
  * Generalized approach to intialization.
  */
-
 void spinOffNewShape(char * filename, float x, float z){
 	Shape temp;
 	temp.load(filename);
@@ -244,9 +240,6 @@ void initModels()
 	//Initialize Terrain object
 	terrain.init(&texLoader);
 	tavTerr.init(&texLoader);
-
-	//Initalize Wall
-	wall.init(&texLoader);
 
 	//Initalize Wagon
 	wagon.init(&texLoader, &terrain);
@@ -347,47 +340,8 @@ bool installShaders(const string &vShaderName, const string &fShaderName)
 	return true;
 }
 
-//This will be in wall class eventually....
-void drawWalls()
-{
-	ModelTrans.pushMatrix();
-		ModelTrans.translate(glm::vec3(3.0, 0.0, 0.0));
-		glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(ModelTrans.modelViewMatrix));
-		wall.draw(h_vertPos, h_vertNor, h_aTexCoord);
-		for (int i = 0; i < 7; i++)
-		{
-			ModelTrans.translate(glm::vec3(5.7, 0.0, 0.0));
-			glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(ModelTrans.modelViewMatrix));
-			wall.draw(h_vertPos, h_vertNor, h_aTexCoord);
-		}
-		ModelTrans.translate(glm::vec3(3.3, 0.0, 0.0));
-		glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(ModelTrans.modelViewMatrix));
-		wall.draw(h_vertPos, h_vertNor, h_aTexCoord);
-		for (int j = 0; j < 3; j++)
-		{
-			ModelTrans.translate(glm::vec3(2.8, 0.0, 0.0));
-			ModelTrans.pushMatrix();
-				ModelTrans.rotate(90.0, glm::vec3(0, 1, 0));
-				ModelTrans.translate(vec3(-3.0, 0.0, 0.0));
-				for (int i = 0; i < 8; i++)
-				{
-					ModelTrans.translate(glm::vec3(5.7, 0.0, 0.0));
-					glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(ModelTrans.modelViewMatrix));
-					wall.draw(h_vertPos, h_vertNor, h_aTexCoord);
-				}
-				ModelTrans.translate(glm::vec3(3.3, 0.0, 0.0));
-				glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(ModelTrans.modelViewMatrix));
-				wall.draw(h_vertPos, h_vertNor, h_aTexCoord);
-		}
-					ModelTrans.popMatrix();
-				ModelTrans.popMatrix();
-			ModelTrans.popMatrix();
-	ModelTrans.popMatrix();
-}
-
 void drawGL()
 {
-
 	// Clear buffers
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -433,7 +387,6 @@ void drawGL()
 			//ModelTrans.popMatrix();
 			ModelTrans.pushMatrix();
 				terrain.draw(h_vertPos, h_vertNor, h_aTexCoord);
-				drawWalls();
 				wagon.draw(h_vertPos, h_vertNor, h_aTexCoord, h_ModelMatrix, &ModelTrans);
 			ModelTrans.popMatrix();
 		ModelTrans.popMatrix();
@@ -567,6 +520,14 @@ void checkUserInput()
       camera.updateZoom(-view);
    }
 
+}
+
+void mouseScrollCB(GLFWwindow* window, double xoffset, double yoffset)
+{
+	if (!camera.isTavernView())
+	{
+		camera.updateWagonZoom(yoffset);
+	}
 }
 
 /**
@@ -738,6 +699,7 @@ int main(int argc, char **argv)
     glfwMakeContextCurrent(window);
     glfwSetWindowSizeCallback(window, window_size_callback);
     glfwSetKeyCallback(window, key_callback);
+    glfwSetScrollCallback(window, mouseScrollCB);
 
     // Initialize glad
    if (!gladLoadGL()) {

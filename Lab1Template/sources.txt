@@ -10,7 +10,6 @@ set(HEADERS
    Shape.h
    Terrain.h
    TextureLoader.h
-   Wall.h
    tavern.h
    obj3d.h
    obj3dcontainer.h
@@ -42,7 +41,6 @@ set(SOURCES
    Shape.cpp
    Terrain.cpp
    TextureLoader.cpp
-   Wall.cpp
    tavern.cpp
    obj3d.cpp
    obj3dcontainer.cpp
