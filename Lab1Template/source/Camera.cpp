@@ -132,7 +132,6 @@ void Camera::updateZoom(glm::vec3 dZoom)
 
 void Camera::updateWagonZoom(double yoffset)
 {
-	// printf("yoffest: %lf\n", yoffset);
 	if (yoffset > 0 && wagonZoom > 1.0)
 	{
 		wagonZoom += -yoffset * 0.1;
