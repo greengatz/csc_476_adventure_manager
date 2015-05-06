@@ -487,7 +487,7 @@ void drawGL()
 		sprintf(info,"x %d", manager.getBeer());
 		printText2D(info, 430, 566, 18);
 
-		sprintf(info,"x %d", manager.getBeer());
+		sprintf(info,"x %d", manager.getMercs());
 		printText2D(info, 620, 566, 18);
 	}
 
