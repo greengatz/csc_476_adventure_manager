@@ -29,6 +29,10 @@ void Spline::SplineSegment::printSegment()
     cout << "\n";
 }
 
+Spline::Spline()
+{
+}
+
 Spline::Spline(vector<glm::vec2> points, float initSlope, float finalSlope)
 {
     // currently magic
@@ -38,7 +42,7 @@ Spline::Spline(vector<glm::vec2> points, float initSlope, float finalSlope)
     int d = 3;
     int dimensions = (points.size() - 1) * 4;
     int row = 0;
-    int i;
+    int i, j;
     // determine column with row and segment
     
     MatrixXd m(dimensions, dimensions);
@@ -100,6 +104,18 @@ Spline::Spline(vector<glm::vec2> points, float initSlope, float finalSlope)
     m(row, d + (i - 1) * 4) = 3 * pow(points[i].x, 2);
     y(row) = finalSlope;
 
+    for(i = 0; i < dimensions; i++)
+    {
+        for(j = 0; j < dimensions; j++)
+        {
+            // set nans to 0 as well as excessive precision
+            if(m(i, j) != m(i, j) || abs(m(i, j)) < 1e-5)
+            {
+                m(i, j) = 0;
+            }
+        }
+    }
+
     coefficients = VectorXd(dimensions);
     coefficients = m.colPivHouseholderQr().solve(y);
 
@@ -117,26 +133,12 @@ Spline::Spline(vector<glm::vec2> points, float initSlope, float finalSlope)
 
 float Spline::getY(float x)
 {    
-    bool found = false;
-    float fromRange, strength;
-    float sum = 0;
-    float count = 0;
-
     for(int i = 0; i < pieces.size(); i++)
     {
         if(x >= pieces[i].startX && x <= pieces[i].endX)
         {
-            fromRange = pieces[i].getY(x);
-            strength = abs(((pieces[i].startX + pieces[i].endX) / 2.0f) - x);
-
-            sum += fromRange * strength;
-            count += strength;
-            found = true;
+            return pieces[i].getY(x);
         }
-    }
-
-    if(found) {
-        return sum / count;
     }
 
     //cout << "requested value was outside domain of spline\n";
