@@ -12,6 +12,7 @@ Obj3d::Obj3d(Obj3dContainer *newCont, vec3 newScale, vec3 initPos, mat4 newRot)
   hasTexture = false;
   materialNdx = -1;
   preTrans = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
+  moveRot = glm::mat4(1.0f);
 }
 
 /* helper function to make sure your matrix handle is correct */
@@ -23,7 +24,7 @@ inline void safe_glUniformMatrix4fv(const GLint handle, const GLfloat data[]) {
 void Obj3d::draw(GLint h_uModelMatrix)
 {
   glm::mat4 trans = glm::translate(mat4(1.0f), pos);
-  mat4 result = trans * rot * preTrans * glm::scale(mat4(1.0f), scale);
+  mat4 result = moveRot * trans * rot * preTrans * glm::scale(mat4(1.0f), scale);
   safe_glUniformMatrix4fv(h_uModelMatrix, glm::value_ptr(result));
   int nIndices = (int)((*cont).shape[0].mesh.indices.size());
   glDrawElements(GL_TRIANGLES, nIndices, GL_UNSIGNED_INT, 0);

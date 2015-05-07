@@ -422,7 +422,7 @@ void drawGL()
 		matSetter.setMaterial(4);
 		ModelTrans.popMatrix();
 		matSetter.setMaterial(3);
-		tavern.drawTavern(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord, dtDraw);
+		// tavern.drawTavern(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord, dtDraw);
 		glUniform1i(terrainToggleID, 0);
 	}
 
@@ -734,13 +734,14 @@ int main(int argc, char **argv)
 	std::string str = "assets/bunny.obj";
 	// initShape(&str[0u]); //initShape(argv[0]);
   	initModels();
-  	tavern.loadTavernMeshes(&texLoader);
+  	// tavern.loadTavernMeshes(&texLoader);
 
   	//currently being worked on... sorta works
-  	// terrEv.loadTerrEvMeshes(&texLoader);
-  	// vec3 loc = terrain.getStartPosition();
+  	terrEv.loadTerrEvMeshes(&texLoader);
+  	vec3 loc = terrain.getStartPosition();
   	// printf("staring location was %f %f %f\n", loc.x - 99, loc.y, loc.z);
   	// terrEv.addMerchantStand(vec3(loc.x - 95.5, loc.y, loc.z), glm::mat4(1.0f));
+  	terrEv.addEndCity(vec3(loc.x - 95.5, loc.y, loc.z));
 
   	hud.initHUD(&texLoader);
   	initText2D( "Holstein.DDS" );
