@@ -52,16 +52,6 @@ const mat4 objRotates[] = {glm::rotate(mat4(1.0f), (const float)180, glm::vec3(0
 						};
 
 // int TAV_CRATE_ID = 5000;
-// int TAV_LANDLORD_ID = 5500;
-// int TAV_LOG_ID = 5600;
-// int TAV_LUMBERJACK_ID = 5700;
-// int TAV_SAMURAI_ID = 5800;
-// int TAV_SHELF_ID = 5900;
-// int TAV_MARBLE_ID = 6000;
-// int TAV_BRANCHES_ID = 6100;
-// int TAV_ROOF_ID = 6200;
-// int TAV_TORCH_ID = 6300;
-// int TAV_PLANK_ID = 6400;
 // int TAV_ROCK_ID = 6500;
 int TERR_EV_STONE_ID = 7000;
 int TERR_EV_START_CITY_ID = 7200;
@@ -174,6 +164,8 @@ void TerrainEvent::addAmbush(vec3 loc, mat4 rot)
 
 void TerrainEvent::addMerchantStand(vec3 loc, mat4 rot)
 {
+	//trans to final pos * rot corresponding to rot variable * trans to certain dist out * rot to face right dir * scale
+
 	mat4 newRot = rot * objRotates[STALL];
 	addEventItem(STALL, objScales[STALL], vec3(loc.x, objYTrans[STALL], loc.z), newRot);
 	newRot = rot * objRotates[BOX];
@@ -269,6 +261,10 @@ void TerrainEvent::setBridge(double ltime)
 	// float ang = 90;
 	//rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 1.0f, 0));
 	// mat4 constRot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 1.0f, 0));
+
+	//
+	//trans to final pos in world * moving angle * trans up a bit * rot to face right dir * scale
+
 	bridgeAng += (float)ltime * 10;
 	mat4 newRot = glm::rotate(glm::mat4(1.0f), bridgeAng, glm::vec3(0, 0, 1.0f));
 	eventItems[BRIDGE_NUM].rot = newRot;
