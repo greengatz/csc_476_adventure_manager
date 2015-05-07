@@ -9,6 +9,7 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "Wagon.h"
 #include "GLSL.h"
+#include "splineCurve.h"
 #include <math.h>
 
 using namespace std;
@@ -42,14 +43,14 @@ Wagon::~Wagon()
 void Wagon::resetWagon()
 {
     neg = 1.0;
-   wagonStart = false;
-   orientation = glm::vec3(1.0f, 0.0f, 0.0f);
-   position = terrain->getStartPosition() + glm::vec3(0.6, 0.05, -0.5);
-   nextPoint = terrain->nextCriticalPoint(position);
-   direction = glm::normalize(nextPoint - position);
-   terrain->printCriticalPoints();
+    wagonStart = false;
+    orientation = glm::vec3(1.0f, 0.0f, 0.0f);
+    position = terrain->getStartPosition() + glm::vec3(0.6, 0.05, -0.5);
+    nextPoint = terrain->nextCriticalPoint(position);
+    direction = glm::normalize(nextPoint - position);
+    terrain->printCriticalPoints();
 
-   rotate = acos((glm::dot(direction, orientation)/(glm::length(orientation) * glm::length(direction)))) * (180.0/3.14);
+    rotate = acos((glm::dot(direction, orientation)/(glm::length(orientation) * glm::length(direction)))) * (180.0/3.14);
 }
 
 void Wagon::startWagon()
@@ -67,7 +68,7 @@ void Wagon::updateWagon(float globalTime)
   {
     terrain->checkEvents(position);
     deltaTime = glfwGetTime() - startTime;
-    if (position.x >= nextPoint.x)
+    if (position.z <= nextPoint.z)
     {
       nextPoint = terrain->nextCriticalPoint(position);
       direction = glm::normalize(nextPoint - position);
@@ -76,6 +77,7 @@ void Wagon::updateWagon(float globalTime)
     }
     position += direction * deltaTime * velocity;
     position.y = 0.05;
+    position.x = terrain->getSpline()->getY(-position.z);
     startTime += deltaTime;
   }
 }

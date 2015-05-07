@@ -12,11 +12,6 @@
 
 using namespace std;
 
-//Global variables for now ......
-//Camera
-// horizontal angle : toward -Z
-
-
 Camera::Camera() :
 	aspect(1.0f),
 	fovy(45.0f),
@@ -31,9 +26,11 @@ Camera::Camera() :
 	//Brandon Stuff
 	lookAtPoint(0.0f, 0.0f, 0.0f),
 	theEye(0.0f, 0.0f, 0.0f),
+	theWagonEye(0.0f, 0.0f, 0.0f),
 	theStrafe(25.0f, 1.0f, 0.0f),
 	theZoom(0.0f, 1.0f, -25.0f),
 	freeRoam(false),
+	wagonZoom(1.0f),
 	tavernView(true)
 
 {
@@ -107,6 +104,7 @@ void Camera::updateStrafe(glm::vec3 dStrafe)
 	}
 	else
 	{
+		//Only sums up the x and z, not y.
 		theStrafe.x += dStrafe.x * 0.1;
 		theStrafe.z += dStrafe.z * 0.1;
 	}
@@ -121,8 +119,21 @@ void Camera::updateZoom(glm::vec3 dZoom)
 	}
 	else
 	{
+		//Only sums up the x and z, not y.
 		theZoom.x += dZoom.x * 0.1;
 		theZoom.z += dZoom.z * 0.1;
+	}
+}
+
+void Camera::updateWagonZoom(double yoffset)
+{
+	if (yoffset > 0 && wagonZoom > 1.0)
+	{
+		wagonZoom += -yoffset * 0.1;
+	}
+	else if (yoffset < 0 && wagonZoom < 5.0)
+	{
+		wagonZoom += -yoffset * 0.1;
 	}
 }
 
@@ -149,8 +160,9 @@ void Camera::update(double xpos, double ypos, glm::vec3 wagonPos)
   	xOld = xpos;
   	yOld = ypos;
 
-  	if (tavernView)
+  	if (tavernView || freeRoam)
   	{
+  		//Check vertical angle bounds for camera
   		if (verticalAngle > (80.0 * (3.14f)/180.0))
     		verticalAngle = (80.0 * (3.14f)/180.0);
   		else if (verticalAngle < -(80.0 * (3.14f)/180.0))
@@ -163,19 +175,17 @@ void Camera::update(double xpos, double ypos, glm::vec3 wagonPos)
    }
    else
    {
-   	if (verticalAngle > -(5.0 * (3.14f)/180.0))
-    		verticalAngle = -(5.0 * (3.14f)/180.0);
-  		else if (verticalAngle < -(20.0 * (3.14f)/180.0))
-    		verticalAngle = -(20.0 * (3.14f)/180.0);
-  		/*if (horizontalAngle > (45 * (3.14f)/180.0))
-    		horizontalAngle = (45 * (3.14f)/180.0);
- 		else if (horizontalAngle < -(45 * (3.14f/180.0)))
-    		horizontalAngle = -(45 * (3.14f/180.0));*/
+   	//Check vertical angle bounds of camera
+   	if (verticalAngle > (55.0 * (3.14f)/180.0))
+    		verticalAngle = (55.0 * (3.14f)/180.0);
+  		else if (verticalAngle < -(10.0 * (3.14f)/180.0))
+    		verticalAngle = -(10.0 * (3.14f)/180.0);
 
-  		lookAtPoint.x = 2.0 * -sinf(horizontalAngle) + cosf(verticalAngle);
-  		lookAtPoint.y = 2.0 * -sinf(verticalAngle);
-  		lookAtPoint.z = 2.0 * cosf(horizontalAngle) + cosf(90.0 - horizontalAngle);
-  		lookAtPoint += wagonPos;
+    	//Update look at point for the wagon eye
+  		theWagonEye.x = wagonZoom * cos(verticalAngle) * sin(horizontalAngle);
+  		theWagonEye.y = wagonZoom * sin(verticalAngle) * sin(verticalAngle);
+  		theWagonEye.z = wagonZoom * cos(horizontalAngle);
+  		theWagonEye += wagonPos;
    }
 }
 
@@ -186,7 +196,7 @@ void Camera::applyProjectionMatrix(MatrixStack *P) const
 
 void Camera::applyViewMatrix(MatrixStack *MV, glm::vec3 wagonPos) const
 {
-	if (tavernView)
+	if (tavernView || freeRoam)
 	{
 		glm::mat4 View = glm::lookAt((theEye + theStrafe + theZoom), 
 			(lookAtPoint + theStrafe + theZoom), glm::vec3(0, 1, 0));
@@ -194,7 +204,8 @@ void Camera::applyViewMatrix(MatrixStack *MV, glm::vec3 wagonPos) const
 	}
 	else
 	{
-		glm::mat4 View = glm::lookAt(lookAtPoint, wagonPos, glm::vec3(0, 1, 0));
+		//theEye looking at the wagon
+		glm::mat4 View = glm::lookAt(theWagonEye, wagonPos, glm::vec3(0, 1, 0));
 		MV->multMatrix(View);
 	}
   	

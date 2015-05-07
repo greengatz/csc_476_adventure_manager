@@ -11,6 +11,7 @@
 #include "glm/glm.hpp"
 #include "Terrain.h"
 #include "GLSL.h"
+#include "splineCurve.h"
 #define MERCHANT 1
 #define WANDERER 2
 #define AMBUSH 3
@@ -47,7 +48,7 @@ Terrain::Terrain() :
 	posBufID(0),
 	norBufID(0),
 	texBufID(0),
-  oldTextureID(0),
+    oldTextureID(0),
     beginPosition(0.0f, 0.0f, 0.0f),
     criticalPoints(std::vector<glm::vec3>())
 {
@@ -59,7 +60,7 @@ Terrain::~Terrain()
 
 glm::vec3 Terrain::getStartPosition()
 {
-   return beginPosition;
+   return criticalPoints[0];
 }
 
 void Terrain::printCriticalPoints()
@@ -73,9 +74,8 @@ void Terrain::printCriticalPoints()
 
 glm::vec3 Terrain::nextCriticalPoint(glm::vec3 aPos)
 {
-   glm::vec3 nextCriticPoint = criticalPoints.front();
-   criticalPoints.erase(criticalPoints.begin());
-   return nextCriticPoint;
+   nextCPoint++;
+   return criticalPoints[nextCPoint - 1];
 }
 
 bool Terrain::atEnd(glm::vec3 aPos)
@@ -163,24 +163,100 @@ void Terrain::createTrail(){
     criticalPoints.clear();
 
     srand(time(NULL));
-    int minShift = 2, maxShift = 10;
+    int minShift = 6, maxShift = 12;
     //left for false, right for true.
     bool shiftTog = (rand() % 2) == 0 ? false : true; 
     int indexX, indexZ, bound = 20;
     int startingSpot = ((rand() % (MAP_X - bound)) + (bound / 2));
     int lastSpot = startingSpot;
-    // srand(time(NULL));
     int changeInPath = (rand() % (maxShift - minShift)) + minShift;
-    // printf("Trail Map @ startingSpot %d{\n", startingSpot);
+    vector<glm::vec2> splineSeed;
+    int direction = 1;
+    nextCPoint = 1;
+
+    splineSeed.clear();
+    // determine our critical points to make the spline
+    splineSeed.push_back(glm::vec2(0, 25)); // add first point to spline
+    cout << MAP_Z << "\n";
+    // x is our depth through the trail
+    // x = 50 is end
+    for (indexZ = 0; indexZ < MAP_Z; indexZ++) {
+        // this ticks down till we find a change in our path
+        if(changeInPath == 0) {
+            // srand(time(NULL));
+            
+            changeInPath = (rand() % (maxShift - minShift)) + minShift;
+            //if (shiftTog){
+                //criticalPoints.push_back(glm::vec3(indexZ, 0.0, -lastSpot - 1.0));
+                //criticalPoints.push_back(glm::vec3(indexZ + 1.0, 0.0, -lastSpot - 1.0));
+            int newZ = (rand() % (maxShift - minShift)) * direction + splineSeed[splineSeed.size() - 1].y;
+            splineSeed.push_back(glm::vec2(indexZ, newZ));
+            //}else{
+                //criticalPoints.push_back(glm::vec3(indexZ, 0.0, -lastSpot));
+                //criticalPoints.push_back(glm::vec3(indexZ + 1.0, 0.0, -lastSpot));   
+            //}
+            cout << splineSeed[splineSeed.size() - 1].x << ", " << splineSeed[splineSeed.size() - 1].y << "\n";
+
+            /*if(lastSpot > MAP_X - 5){
+                shiftTog = false;
+            }else if(lastSpot < 5){
+                shiftTog = true;
+            }else{
+                shiftTog = !shiftTog;
+            }*/
+        }
+        else {//if(changeInPath == 1){
+            changeInPath--;
+            direction = -direction;
+        }
+        /*}else{
+            changeInPath--;
+            if(shiftTog)
+            lastSpot++;
+            else
+            lastSpot--;
+        }*/
+
+        /*if(changeInPath > 1 && lastSpot > MAP_X - (bound / 2) && shiftTog){
+            changeInPath = 1;
+        }else if(changeInPath > 1 && lastSpot < bound / 2 && !shiftTog){
+            changeInPath = 1;
+        } */
+
+        // startingSpot = changeInPath;
+        //Relative to the world
+   //     beginPosition = glm::vec3(0.0, 0.0, -startingSpot);
+    }
+    
+    splineSeed.push_back(glm::vec2(50, splineSeed[splineSeed.size() - 1].y)); // add last point to spline
+    path = new Spline(splineSeed, 0, 0);
+
+    for(int i = 0; i < 50; i++) { // reverse these
+        criticalPoints.push_back(glm::vec3(path->getY(i), 0, -i));
+    }
+
+    // using the spline, draw generate a path
+    // everything is grass to start
+    for (indexZ = 0; indexZ < MAP_Z; indexZ++){
+        for (indexX = 0; indexX < MAP_X; indexX++) {
+            trailMap[indexX][indexZ] = GRASS;
+        }
+    }
+
     for (indexZ = 0; indexZ < MAP_Z; indexZ++){
         printf("Going Right: %d, New ChangeInPath %d |", shiftTog, changeInPath);
         // changeInPath = (indexZ % 2 == 1) ? ((rand() % 3) - 1) + startingSpot : startingSpot;
         // printf("Shift %d |", changeInPath);
-        for (indexX = 0; indexX < MAP_X; indexX++)
-        {
-            trailMap[indexX][indexZ] = GRASS;
-
-            if(indexZ == 0 && indexX == startingSpot){
+        for (indexX = 0; indexX < MAP_X; indexX++) {
+            if(abs(indexZ - path->getY(indexX)) < 1) {
+                trailMap[indexX][indexZ]=TRAIL;
+                trailMap[indexX + 1][indexZ]=TRAIL;
+                trailMap[indexX][indexZ + 1]=TRAIL;
+                trailMap[indexX - 1][indexZ]=TRAIL;
+                trailMap[indexX][indexZ - 1]=TRAIL;
+            }
+        }
+            /*if(indexZ == 0 && indexX == startingSpot){
                 //Starting spot
                 trailMap[indexX][indexZ]=RED;
             }
@@ -228,21 +304,26 @@ void Terrain::createTrail(){
 
 
         }
+        printf("\n");
+        beginPosition = glm::vec3(0.0, 0.0, -startingSpot);*/
+    }
         
 
         
-
-
+/*
+        // this ticks down till we find a change in our path
         if(changeInPath == 0){
             // srand(time(NULL));
             
             changeInPath = (rand() % (maxShift - minShift)) + minShift;
             if (shiftTog){
-              criticalPoints.push_back(glm::vec3(indexZ, 0.0, -lastSpot - 1.0));
-              criticalPoints.push_back(glm::vec3(indexZ + 1.0, 0.0, -lastSpot - 1.0));
+                criticalPoints.push_back(glm::vec3(indexZ, 0.0, -lastSpot - 1.0));
+                criticalPoints.push_back(glm::vec3(indexZ + 1.0, 0.0, -lastSpot - 1.0));
+                splineSeed.push_back(glm::vec2(indexZ, -lastSpot - 1.0));
             }else{
-              criticalPoints.push_back(glm::vec3(indexZ, 0.0, -lastSpot));
-              criticalPoints.push_back(glm::vec3(indexZ + 1.0, 0.0, -lastSpot));   
+                criticalPoints.push_back(glm::vec3(indexZ, 0.0, -lastSpot));
+                criticalPoints.push_back(glm::vec3(indexZ + 1.0, 0.0, -lastSpot));   
+                splineSeed.push_back(glm::vec2(indexZ + 1.0));
             }
 
             if(lastSpot > MAP_X - 5){
@@ -279,11 +360,16 @@ void Terrain::createTrail(){
         //Relative to the world
         beginPosition = glm::vec3(0.0, 0.0, -startingSpot);
     }
+*/
+
+    beginPosition = criticalPoints[0];
+
     if (shiftTog)
       criticalPoints.push_back(glm::vec3((float)((MAP_X+1.0) * MAP_SCALE), 0.0, -lastSpot - 1.0));
     else
       criticalPoints.push_back(glm::vec3((float)((MAP_X+1.0) * MAP_SCALE), 0.0, -lastSpot));
-
+    
+    path->printSpline();
     createEvents();
 }
 
@@ -491,4 +577,9 @@ void Terrain::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord)
    GLSL::disableVertexAttribArray(h_aTexCoord);
    glBindBuffer(GL_ARRAY_BUFFER, 0);
    glDisable(GL_TEXTURE_2D);
+}
+
+Spline* Terrain::getSpline()
+{
+    return path;
 }
