@@ -1,3 +1,7 @@
+#ifdef _MSC_VER
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+
 /**
  * Mercenary Manager
  * @author Brandon Clark
@@ -402,7 +406,7 @@ void drawGL()
 		ModelTrans.loadIdentity();
 		ModelTrans.pushMatrix();
 		ModelTrans.popMatrix();
-		terrEv.drawTerrainEvents(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord);
+		terrEv.drawTerrainEvents(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord, dtDraw);
 		glUniform1i(terrainToggleID, 0);
 	}
 
@@ -649,6 +653,11 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	{
 		hud.on = !hud.on;
 	}
+	//lower drawbridge
+	if (key == GLFW_KEY_N && action == GLFW_PRESS)
+	{
+		terrEv.lowerBridge();
+	}
 }
 
 void window_size_callback(GLFWwindow* window, int w, int h){
@@ -731,7 +740,7 @@ int main(int argc, char **argv)
   	// terrEv.loadTerrEvMeshes(&texLoader);
   	// vec3 loc = terrain.getStartPosition();
   	// printf("staring location was %f %f %f\n", loc.x - 99, loc.y, loc.z);
-  	// terrEv.addEndCity(vec3(loc.x - 95.5, loc.y, loc.z));
+  	// terrEv.addMerchantStand(vec3(loc.x - 95.5, loc.y, loc.z), glm::mat4(1.0f));
 
   	hud.initHUD(&texLoader);
   	initText2D( "Holstein.DDS" );

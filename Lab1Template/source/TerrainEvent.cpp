@@ -6,10 +6,10 @@
 #define KNIGHT2 2
 #define WARRIOR 3
 #define STALL 4
-#define BOX 5
-#define START_CITY 6
-#define END_CITY 7
-#define BRIDGE 8
+#define MERCHANT 5
+#define BOX 6
+#define START_CITY 7
+#define END_CITY 8
 
 #define NUM_TERR_EV_FILES 9
 
@@ -18,10 +18,10 @@ const string terrEvFiles[] = {"assets/events/samurai.obj",
 							  "assets/events/knight2 split.obj",
 							  "assets/events/warrior split.obj",
 							  "assets/events/stall.obj",
+							  "assets/events/merchant.obj",
 							  "assets/events/box.obj",
 							  "assets/events/startCity.obj",
 							  "assets/events/endCity.obj",
-							  "assets/events/bridge.obj"
 							 };
 
 const vec3 objScales[] = {vec3(0.09, 0.09, 0.09),
@@ -29,6 +29,7 @@ const vec3 objScales[] = {vec3(0.09, 0.09, 0.09),
 		                  vec3(1.0, 1.0, 1.0),
 		                  vec3(1.0, 1.0, 1.0),
 		                  vec3(0.39, 0.45, 0.39),
+		                  vec3(0.09, 0.09, 0.09),
 		                  vec3(0.415, 0.04, 0.305),
 						};
 
@@ -37,6 +38,7 @@ const float objYTrans[] = {0.085,
                            1.0,
                            1.0,
                            0.22,
+                           0.09,
                            0.40};
 
 //characters rotate to face left of trail assuming right behind wagon
@@ -45,6 +47,7 @@ const mat4 objRotates[] = {glm::rotate(mat4(1.0f), (const float)180, glm::vec3(0
 						   mat4(1.0f),
 						   mat4(1.0f),
 						   glm::rotate(mat4(1.0f), (const float)180, glm::vec3(0, 1.0f, 0)),
+						   glm::rotate(mat4(1.0f), (const float)90, glm::vec3(1.0f, 0, 0)) * glm::rotate(mat4(1.0f), (const float)180, glm::vec3(0, 0, 1.0f)),
 						   glm::rotate(mat4(1.0f), (const float)180, glm::vec3(0, 1.0f, 0)), //faces toward the end city
 						};
 
@@ -62,8 +65,11 @@ const mat4 objRotates[] = {glm::rotate(mat4(1.0f), (const float)180, glm::vec3(0
 // int TAV_ROCK_ID = 6500;
 int TERR_EV_STONE_ID = 7000;
 int TERR_EV_START_CITY_ID = 7200;
+int TERR_EV_MERCHANT = 7300;
 
 // Obj3dContainer containers[std::extent<decltype(terrEvFiles)>::value];
+
+int BRIDGE_NUM;
 
 //between [1, limit]
 int TerrainEvent::getRandInt(int limit)
@@ -86,6 +92,8 @@ void TerrainEvent::init(Materials *newMatSetter, FrustumCull *newCuller)
 {
 	matSetter = newMatSetter;
 	fCuller = newCuller;
+	bridgeAng = 90;
+	moveBridge = false;
 }
 
 void TerrainEvent::addEventMesh(const string filename, bool noNorms)
@@ -133,6 +141,7 @@ void TerrainEvent::loadTerrEvMeshes(TextureLoader* texLoader)
 	//load textures
 	texLoader->LoadTexture((char *)"assets/events/stone.bmp", TERR_EV_STONE_ID);
 	texLoader->LoadTexture((char *)"assets/events/startCity.bmp", TERR_EV_START_CITY_ID);
+	texLoader->LoadTexture((char *)"assets/events/merchant.bmp", TERR_EV_MERCHANT);
 	// texLoader->LoadTexture((char *)"assets/tavern/logTex.bmp", TAV_LOG_ID);
 	// texLoader->LoadTexture((char *)"assets/tavern/lumberjackTex.bmp", TAV_LUMBERJACK_ID);
 	// texLoader->LoadTexture((char *)"assets/tavern/samuraiTex.bmp", TAV_SAMURAI_ID);
@@ -169,7 +178,9 @@ void TerrainEvent::addMerchantStand(vec3 loc, mat4 rot)
 	addEventItem(STALL, objScales[STALL], vec3(loc.x, objYTrans[STALL], loc.z), newRot);
 	newRot = rot * objRotates[BOX];
 	addEventItem(BOX, objScales[BOX], vec3(loc.x, objYTrans[BOX], loc.z), newRot);
-	//addEventItem(MERCHANT, vec3(1.0, 1.0, 1.0), loc, rot);
+	newRot = rot * objRotates[MERCHANT];
+	addEventItem(MERCHANT, objScales[MERCHANT], vec3(loc.x, objYTrans[MERCHANT], loc.z - 0.23), newRot);
+	eventItems[eventItems.size() - 1].loadTextureCoor(TERR_EV_MERCHANT);
 
 	float merchantLoc[] = {-0.19, -0.3,
                            0.35, -0.41,
@@ -203,7 +214,16 @@ void TerrainEvent::addEndCity(vec3 loc)
 {
 	addEventItem(END_CITY, vec3(4.05, 4.05, 4.05), vec3(loc.x, 0.45, loc.z - 0.2), glm::rotate(mat4(1.0f), (const float)-90, vec3(0, 1.0f, 0)));
 	eventItems[eventItems.size() - 1].loadTextureCoor(TERR_EV_STONE_ID);
-	addEventItem(BOX, vec3(0.7, 0.05, 0.34), vec3(loc.x - 2.5, 0.0, loc.z - 1.065), glm::mat4(1.0f));//glm::rotate(mat4(1.0f), (const float)-90, vec3(0, 1.0f, 0)));
+	// addEventItem(BOX, vec3(0.7, 0.05, 0.34), vec3(loc.x - 2.5, 0.0, loc.z - 1.065), glm::rotate(mat4(1.0f), (const float)90, vec3(0, 0, 1.0f)));//glm::mat4(1.0f));
+	addEventItem(BOX, vec3(0.7, 0.05, 0.34), vec3(loc.x - 2.5, 0.0, loc.z - 1.065), glm::rotate(mat4(1.0f), (const float)90, vec3(0, 0, 1.0f)));//glm::mat4(1.0f));
+	BRIDGE_NUM = eventItems.size() - 1;
+}
+
+void TerrainEvent::lowerBridge()
+{
+	if (bridgeAng == 90) {
+		moveBridge = true;
+	}
 }
 
 void TerrainEvent::enableBuff(GLint h_vertPos, GLint h_vertNor, GLuint posBuf, GLuint norBuf, GLuint indBuf) {
@@ -244,8 +264,24 @@ void TerrainEvent::enableTextureBuffer(GLint h_aTexCoord, GLuint texBuf, int id)
   glVertexAttribPointer(h_aTexCoord, 2, GL_FLOAT, GL_FALSE, 0, 0);
 }
 
-void TerrainEvent::drawTerrainEvents(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor, GLint h_aTexCoord)
+void TerrainEvent::setBridge(double ltime)
 {
+	// float ang = 90;
+	//rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 1.0f, 0));
+	// mat4 constRot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 1.0f, 0));
+	bridgeAng += (float)ltime * 10;
+	mat4 newRot = glm::rotate(glm::mat4(1.0f), bridgeAng, glm::vec3(0, 0, 1.0f));
+	eventItems[BRIDGE_NUM].rot = newRot;
+	if (bridgeAng > 180) {
+		moveBridge = false;
+	}
+}
+
+void TerrainEvent::drawTerrainEvents(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor, GLint h_aTexCoord, double ltime)
+{
+	if (moveBridge) {
+		setBridge(ltime);
+	}
 	for (int iter = 0; iter < eventItems.size(); iter++) {
 		//set a material
 		if (eventItems[iter].materialNdx != -1) {
