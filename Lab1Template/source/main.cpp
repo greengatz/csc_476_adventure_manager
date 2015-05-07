@@ -755,7 +755,8 @@ int main(int argc, char **argv)
   	//currently being worked on... sorta works
   	// terrEv.loadTerrEvMeshes(&texLoader);
   	// vec3 loc = terrain.getStartPosition();
-  	// terrEv.addMerchantStand(vec3(loc.x - 99, loc.y, loc.z), glm::mat4(1.0f));
+  	// printf("staring location was %f %f %f\n", loc.x - 99, loc.y, loc.z);
+  	// terrEv.addEndCity(vec3(loc.x - 95.5, loc.y, loc.z));
 
   	hud.initHUD(&texLoader);
   	//initText2D( "Holstein.DDS" );

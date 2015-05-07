@@ -33,8 +33,8 @@ class TerrainEvent
 		void addAmbush(vec3 loc, mat4 rot);
 		void addMerchantStand(vec3 loc, mat4 rot);
 		void addRandomDuder(vec3 loc, mat4 rot);
-		void startCity(vec3 loc);
-        void endCity(vec3 loc);
+		void addStartCity(vec3 loc);
+        void addEndCity(vec3 loc);
 		void drawTerrainEvents(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor, GLint h_aTexCoord);
 
 	private:
