@@ -33,13 +33,16 @@ class TerrainEvent
 		void addAmbush(vec3 loc, mat4 rot);
 		void addMerchantStand(vec3 loc, mat4 rot);
 		void addRandomDuder(vec3 loc, mat4 rot);
-		void startCity(vec3 loc);
-        void endCity(vec3 loc);
-		void drawTerrainEvents(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor, GLint h_aTexCoord);
+		void addStartCity(vec3 loc);
+        void addEndCity(vec3 loc);
+		void drawTerrainEvents(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor, GLint h_aTexCoord, double ltime);
+		void lowerBridge();
 
 	private:
 		Materials *matSetter;
 		FrustumCull *fCuller;
+		float bridgeAng;
+		bool moveBridge;
 		void addEventMesh(const string filename, bool noNorms);
 		void addEventItem(int index, glm::vec3 scale, glm::vec3 trans, glm::mat4 rot);
 		void addEventCharacter(int index, glm::vec3 scale, glm::vec3 trans, glm::mat4 rot);
@@ -48,6 +51,7 @@ class TerrainEvent
 		void disableBuff(GLint h_vertPos, GLint h_vertNor, GLint h_aTexCoord);
 		int getRandInt(int limit);
 		float getRandFloat(float limit);
+		void setBridge(double ltime);
 
 };
 #endif
