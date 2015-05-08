@@ -736,7 +736,7 @@ int main(int argc, char **argv)
   	initModels();
   	tavern.loadTavernMeshes(&texLoader);
 
-  	//currently being worked on... sorta works
+ 	//used only for testing purposes
   	// terrEv.loadTerrEvMeshes(&texLoader);
   	// vec3 loc = terrain.getStartPosition();
   	// terrEv.addMerchantStand(vec3(loc.x - 95.5, loc.y, loc.z), glm::mat4(1.0f));

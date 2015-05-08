@@ -11,8 +11,10 @@
 #define START_CITY 7
 #define END_CITY 8
 #define ROPE 9
+#define BARREL 10
+#define BOTTLE 11
 
-#define NUM_TERR_EV_FILES 10
+#define NUM_TERR_EV_FILES 12
 
 const string terrEvFiles[] = {"assets/events/samurai.obj",
 							  "assets/events/spearman.obj",
@@ -23,7 +25,9 @@ const string terrEvFiles[] = {"assets/events/samurai.obj",
 							  "assets/events/box.obj",
 							  "assets/events/startCity.obj",
 							  "assets/events/endCity.obj",
-							  "assets/events/rope.obj"
+							  "assets/events/rope.obj",
+							  "assets/events/barrel.obj",
+							  "assets/events/bottle.obj"
 							 };
 
 const vec3 objScales[] = {vec3(0.09, 0.09, 0.09),
@@ -60,7 +64,8 @@ int TERR_EV_START_CITY_ID = 7200;
 int TERR_EV_MERCHANT_ID = 7300;
 int TERR_EV_SPEARMAN_ID = 7400;
 int TERR_EV_SAMURAI_ID = 7500;
-int TERR_EV_BRIDGE_ID = 7700;
+int TERR_EV_CRATE_ID = 7700;
+int TERR_EV_ROOF_ID = 7800;
 
 // Obj3dContainer containers[std::extent<decltype(terrEvFiles)>::value];
 
@@ -130,7 +135,7 @@ void TerrainEvent::loadTerrEvMeshes(TextureLoader* texLoader)
 	glm::mat4 rot;
 
 	for (int iter = 0; iter < NUM_TERR_EV_FILES; iter++) {
-		if (iter == SPEARMAN)
+		if (iter == SPEARMAN || iter == BARREL)
 			addEventMesh(terrEvFiles[iter], true);
 		else
 			addEventMesh(terrEvFiles[iter], false);
@@ -142,7 +147,8 @@ void TerrainEvent::loadTerrEvMeshes(TextureLoader* texLoader)
 	texLoader->LoadTexture((char *)"assets/events/merchant.bmp", TERR_EV_MERCHANT_ID);
 	texLoader->LoadTexture((char *)"assets/events/spearman.bmp", TERR_EV_SPEARMAN_ID);
 	texLoader->LoadTexture((char *)"assets/events/samuraiTex.bmp", TERR_EV_SAMURAI_ID); //yeah i know... its bad
-	texLoader->LoadTexture((char *)"assets/events/bridge.bmp", TERR_EV_BRIDGE_ID);
+	texLoader->LoadTexture((char *)"assets/events/crateTex.bmp", TERR_EV_CRATE_ID);
+	texLoader->LoadTexture((char *)"assets/events/roof.bmp", TERR_EV_ROOF_ID);
 	// texLoader->LoadTexture((char *)"assets/tavern/logTex.bmp", TAV_LOG_ID);
 	// texLoader->LoadTexture((char *)"assets/tavern/lumberjackTex.bmp", TAV_LUMBERJACK_ID);
 	// texLoader->LoadTexture((char *)"assets/tavern/samuraiTex.bmp", TAV_SAMURAI_ID);
@@ -180,12 +186,42 @@ void TerrainEvent::addMerchantStand(vec3 loc, mat4 rot)
 
 	mat4 newRot = rot * objRotates[STALL];
 	addEventItem(STALL, objScales[STALL], vec3(loc.x, objYTrans[STALL], loc.z), newRot);
+	eventItems[eventItems.size() - 1].materialNdx = 7;
 	newRot = rot * objRotates[BOX];
 	addEventItem(BOX, objScales[BOX], vec3(loc.x, objYTrans[BOX], loc.z), newRot);
+	eventItems[eventItems.size() - 1].loadTextureCoor(TERR_EV_ROOF_ID);
 	newRot = rot * objRotates[MERCHANT];
-	addEventItem(MERCHANT, objScales[MERCHANT], vec3(0, 0.23, 0), glm::mat4(1.0f));
+	addEventItem(MERCHANT, objScales[MERCHANT], vec3(0, 0.23, 0), mat4(1.0f));
 	eventItems[eventItems.size() - 1].loadTextureCoor(TERR_EV_MERCHANT_ID);
 	eventItems[eventItems.size() - 1].moveRot = glm::translate(mat4(1.0f), vec3(loc.x, objYTrans[MERCHANT], loc.z)) * newRot;
+
+	addEventItem(BOX, vec3(0.05, 0.05, 0.05), vec3(0.295, 0, .09), mat4(1.0f));
+	eventItems[eventItems.size() - 1].moveRot = glm::translate(mat4(1.0f), vec3(loc.x, 0.05, loc.z)) * rot;
+	eventItems[eventItems.size() - 1].loadTextureCoor(TERR_EV_CRATE_ID);
+	addEventItem(BOX, vec3(0.05, 0.05, 0.05), vec3(0.165, 0, .1), mat4(1.0f));
+	eventItems[eventItems.size() - 1].moveRot = glm::translate(mat4(1.0f), vec3(loc.x, 0.05, loc.z)) * rot;
+	eventItems[eventItems.size() - 1].loadTextureCoor(TERR_EV_CRATE_ID);
+	addEventItem(BOX, vec3(0.05, 0.05, 0.05), vec3(0.225, 0, .098), mat4(1.0f));
+	eventItems[eventItems.size() - 1].moveRot = glm::translate(mat4(1.0f), vec3(loc.x, 0.15, loc.z)) * rot;
+	eventItems[eventItems.size() - 1].loadTextureCoor(TERR_EV_CRATE_ID);
+
+	addEventItem(BOX, vec3(0.05, 0.05, 0.05), vec3(0.26, 0, -.32), mat4(1.0f));
+	eventItems[eventItems.size() - 1].moveRot = glm::translate(mat4(1.0f), vec3(loc.x, 0.05, loc.z)) * rot;
+	eventItems[eventItems.size() - 1].loadTextureCoor(TERR_EV_CRATE_ID);
+	addEventItem(BARREL, vec3(0.055, 0.055, 0.055), vec3(0.09, 0, -.17), mat4(1.0f));
+	eventItems[eventItems.size() - 1].moveRot = glm::translate(mat4(1.0f), vec3(loc.x, 0.065, loc.z)) * rot;
+	eventItems[eventItems.size() - 1].materialNdx = 11;
+	addEventItem(BOTTLE, vec3(0.015, 0.015, 0.015), vec3(0.09, 0, -.17), mat4(1.0f));
+	eventItems[eventItems.size() - 1].moveRot = glm::translate(mat4(1.0f), vec3(loc.x, 0.1, loc.z)) * rot;
+	eventItems[eventItems.size() - 1].materialNdx = 8;
+
+	addEventItem(BARREL, vec3(0.055, 0.055, 0.055), vec3(-0.09, 0, .065), mat4(1.0f));
+	eventItems[eventItems.size() - 1].moveRot = glm::translate(mat4(1.0f), vec3(loc.x, 0.065, loc.z)) * rot;
+	eventItems[eventItems.size() - 1].materialNdx = 11;
+	addEventItem(BARREL, vec3(0.055, 0.055, 0.055), vec3(-0.2, 0, .08), mat4(1.0f));
+	eventItems[eventItems.size() - 1].moveRot = glm::translate(mat4(1.0f), vec3(loc.x, 0.065, loc.z)) * rot;
+	eventItems[eventItems.size() - 1].materialNdx = 11;
+
 
 	float merchantLoc[] = {0.19, 0.3,
                            -0.35, 0.41,
@@ -222,7 +258,7 @@ void TerrainEvent::addEndCity(vec3 loc)
 	eventItems[eventItems.size() - 1].loadTextureCoor(TERR_EV_STONE_ID);
 	
 	addEventItem(BOX, vec3(0.52, 0.05, 0.34), vec3(0.45, 0, 0), mat4(1.0f));
-	eventItems[eventItems.size() - 1].loadTextureCoor(TERR_EV_BRIDGE_ID);
+	eventItems[eventItems.size() - 1].loadTextureCoor(TERR_EV_ROOF_ID);
 	BRIDGE_NUM = eventItems.size() - 1;
 	mat4 bridgeRot = glm::rotate(mat4(1.0f), bridgeAng, vec3(0, 0, 1.0f));
 	bridgeLoc = vec3(loc.x - 1.9, 0, loc.z - 1.065);
