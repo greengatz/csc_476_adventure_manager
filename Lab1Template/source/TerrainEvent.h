@@ -42,7 +42,9 @@ class TerrainEvent
 		Materials *matSetter;
 		FrustumCull *fCuller;
 		float bridgeAng;
+		float ropeScale;
 		bool moveBridge;
+		vec3 bridgeLoc, ropeLoc;
 		void addEventMesh(const string filename, bool noNorms);
 		void addEventItem(int index, glm::vec3 scale, glm::vec3 trans, glm::mat4 rot);
 		void addEventCharacter(int index, glm::vec3 scale, glm::vec3 trans, glm::mat4 rot);
@@ -52,6 +54,7 @@ class TerrainEvent
 		int getRandInt(int limit);
 		float getRandFloat(float limit);
 		void setBridge(double ltime);
+		int findTex(int num);
 
 };
 #endif
