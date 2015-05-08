@@ -80,6 +80,8 @@ void Wagon::updateWagon(float globalTime)
     position += direction * deltaTime * velocity;
     position.y = 0.05;
     position.z = terrain->getSpline()->getY(position.x);
+    rotate = 90.0f + -1.0 * atan(terrain->getSpline()->getDY(position.x)) * (180.0 / 3.14);
+
     startTime += deltaTime;
   }
 }
