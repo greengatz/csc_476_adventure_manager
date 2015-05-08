@@ -46,6 +46,7 @@ void Wagon::resetWagon()
     wagonStart = false;
     orientation = glm::vec3(1.0f, 0.0f, 0.0f);
     position = terrain->getStartPosition() + glm::vec3(0.6, 0.05, -0.5);
+    cout << "wagon is starting at " << position.x << ", " << position.z << "\n";
     nextPoint = terrain->nextCriticalPoint(position);
     direction = glm::normalize(nextPoint - position);
     terrain->printCriticalPoints();
@@ -68,8 +69,9 @@ void Wagon::updateWagon(float globalTime)
   {
     terrain->checkEvents(position);
     deltaTime = glfwGetTime() - startTime;
-    if (position.z <= nextPoint.z)
+    if (position.x >= nextPoint.x)
     {
+        cout << "wagon is at " << position.x << ", " << position.z << "\n";
       nextPoint = terrain->nextCriticalPoint(position);
       direction = glm::normalize(nextPoint - position);
       neg = -neg;
@@ -77,7 +79,9 @@ void Wagon::updateWagon(float globalTime)
     }
     position += direction * deltaTime * velocity;
     position.y = 0.05;
-    position.x = terrain->getSpline()->getY(-position.z);
+    position.z = terrain->getSpline()->getY(position.x);
+    rotate = 90.0f + -1.0 * atan(terrain->getSpline()->getDY(position.x)) * (180.0 / 3.14);
+
     startTime += deltaTime;
   }
 }

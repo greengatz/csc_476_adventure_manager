@@ -27,6 +27,7 @@ class Obj3d
 		vec3 scale;
 		mat4 rot;
         mat4 preTrans;
+        mat4 moveRot;
 		GLuint texBuf;
 		//texture and material data
 		bool hasTexture;

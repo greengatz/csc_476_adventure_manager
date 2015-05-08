@@ -19,6 +19,18 @@ float Spline::SplineSegment::getY(float x)
     return sum;
 }
 
+// plug x into the derivative of this segment
+float Spline::SplineSegment::getDY(float x)
+{
+    float sum = 0;
+    sum += coefficients[1];
+    sum += coefficients[2] * 2 * x;
+    sum += coefficients[3] * 3 * pow(x, 2);
+
+    return sum;
+}
+
+
 void Spline::SplineSegment::printSegment()
 {
     cout << startX << " <= x >= " << endX << "   y = ";
@@ -140,6 +152,20 @@ float Spline::getY(float x)
         if(x >= pieces[i].startX && x <= pieces[i].endX)
         {
             return pieces[i].getY(x);
+        }
+    }
+
+    //cout << "requested value was outside domain of spline\n";
+    return -1000000; // bad value to ensure error is not overlooked
+}
+
+float Spline::getDY(float x)
+{    
+    for(int i = 0; i < pieces.size(); i++)
+    {
+        if(x >= pieces[i].startX && x <= pieces[i].endX)
+        {
+            return pieces[i].getDY(x);
         }
     }
 

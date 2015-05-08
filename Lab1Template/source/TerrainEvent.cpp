@@ -10,8 +10,9 @@
 #define BOX 6
 #define START_CITY 7
 #define END_CITY 8
+#define ROPE 9
 
-#define NUM_TERR_EV_FILES 9
+#define NUM_TERR_EV_FILES 10
 
 const string terrEvFiles[] = {"assets/events/samurai.obj",
 							  "assets/events/spearman.obj",
@@ -22,6 +23,7 @@ const string terrEvFiles[] = {"assets/events/samurai.obj",
 							  "assets/events/box.obj",
 							  "assets/events/startCity.obj",
 							  "assets/events/endCity.obj",
+							  "assets/events/rope.obj"
 							 };
 
 const vec3 objScales[] = {vec3(0.09, 0.09, 0.09),
@@ -52,24 +54,17 @@ const mat4 objRotates[] = {glm::rotate(mat4(1.0f), (const float)180, glm::vec3(0
 						};
 
 // int TAV_CRATE_ID = 5000;
-// int TAV_LANDLORD_ID = 5500;
-// int TAV_LOG_ID = 5600;
-// int TAV_LUMBERJACK_ID = 5700;
-// int TAV_SAMURAI_ID = 5800;
-// int TAV_SHELF_ID = 5900;
-// int TAV_MARBLE_ID = 6000;
-// int TAV_BRANCHES_ID = 6100;
-// int TAV_ROOF_ID = 6200;
-// int TAV_TORCH_ID = 6300;
-// int TAV_PLANK_ID = 6400;
 // int TAV_ROCK_ID = 6500;
 int TERR_EV_STONE_ID = 7000;
 int TERR_EV_START_CITY_ID = 7200;
-int TERR_EV_MERCHANT = 7300;
+int TERR_EV_MERCHANT_ID = 7300;
+int TERR_EV_SPEARMAN_ID = 7400;
+int TERR_EV_SAMURAI_ID = 7500;
+int TERR_EV_BRIDGE_ID = 7700;
 
 // Obj3dContainer containers[std::extent<decltype(terrEvFiles)>::value];
 
-int BRIDGE_NUM;
+int BRIDGE_NUM, ROPE_NUM;
 
 //between [1, limit]
 int TerrainEvent::getRandInt(int limit)
@@ -92,8 +87,11 @@ void TerrainEvent::init(Materials *newMatSetter, FrustumCull *newCuller)
 {
 	matSetter = newMatSetter;
 	fCuller = newCuller;
-	bridgeAng = 90;
 	moveBridge = false;
+	bridgeLoc = vec3(0, 0, 0);
+	ropeLoc = vec3(0, 0, 0);
+	bridgeAng = 110;
+	ropeScale = 0;
 }
 
 void TerrainEvent::addEventMesh(const string filename, bool noNorms)
@@ -141,7 +139,10 @@ void TerrainEvent::loadTerrEvMeshes(TextureLoader* texLoader)
 	//load textures
 	texLoader->LoadTexture((char *)"assets/events/stone.bmp", TERR_EV_STONE_ID);
 	texLoader->LoadTexture((char *)"assets/events/startCity.bmp", TERR_EV_START_CITY_ID);
-	texLoader->LoadTexture((char *)"assets/events/merchant.bmp", TERR_EV_MERCHANT);
+	texLoader->LoadTexture((char *)"assets/events/merchant.bmp", TERR_EV_MERCHANT_ID);
+	texLoader->LoadTexture((char *)"assets/events/spearman.bmp", TERR_EV_SPEARMAN_ID);
+	texLoader->LoadTexture((char *)"assets/events/samuraiTex.bmp", TERR_EV_SAMURAI_ID); //yeah i know... its bad
+	texLoader->LoadTexture((char *)"assets/events/bridge.bmp", TERR_EV_BRIDGE_ID);
 	// texLoader->LoadTexture((char *)"assets/tavern/logTex.bmp", TAV_LOG_ID);
 	// texLoader->LoadTexture((char *)"assets/tavern/lumberjackTex.bmp", TAV_LUMBERJACK_ID);
 	// texLoader->LoadTexture((char *)"assets/tavern/samuraiTex.bmp", TAV_SAMURAI_ID);
@@ -169,29 +170,35 @@ void TerrainEvent::addAmbush(vec3 loc, mat4 rot)
 		vec3 trans = vec3(loc.x + ambushLoc[iter * 2], objYTrans[num], loc.z + ambushLoc[iter * 2 + 1]);
 		mat4 newRot = rot * objRotates[num];
 		addEventItem(num, objScales[num], trans, newRot);
+		eventItems[eventItems.size() - 1].loadTextureCoor(findTex(num));
 	}
 }
 
 void TerrainEvent::addMerchantStand(vec3 loc, mat4 rot)
 {
+	//trans to final pos * rot corresponding to rot variable * trans to certain dist out * scale
+
 	mat4 newRot = rot * objRotates[STALL];
 	addEventItem(STALL, objScales[STALL], vec3(loc.x, objYTrans[STALL], loc.z), newRot);
 	newRot = rot * objRotates[BOX];
 	addEventItem(BOX, objScales[BOX], vec3(loc.x, objYTrans[BOX], loc.z), newRot);
 	newRot = rot * objRotates[MERCHANT];
-	addEventItem(MERCHANT, objScales[MERCHANT], vec3(loc.x, objYTrans[MERCHANT], loc.z - 0.23), newRot);
-	eventItems[eventItems.size() - 1].loadTextureCoor(TERR_EV_MERCHANT);
+	addEventItem(MERCHANT, objScales[MERCHANT], vec3(0, 0.23, 0), glm::mat4(1.0f));
+	eventItems[eventItems.size() - 1].loadTextureCoor(TERR_EV_MERCHANT_ID);
+	eventItems[eventItems.size() - 1].moveRot = glm::translate(mat4(1.0f), vec3(loc.x, objYTrans[MERCHANT], loc.z)) * newRot;
 
-	float merchantLoc[] = {-0.19, -0.3,
-                           0.35, -0.41,
-                           0.54, -0.3};
+	float merchantLoc[] = {0.19, 0.3,
+                           -0.35, 0.41,
+                           -0.54, 0.3};
 
 	int numBodyGuard = getRandInt(3) + 1; //between 1 - 3 bodyguards
 	for (int iter = 0; iter < numBodyGuard; iter++) {
 		int num = getRandInt(2) - 1;
-		vec3 trans = vec3(loc.x + merchantLoc[iter * 2], objYTrans[num], loc.z + merchantLoc[iter * 2 + 1]);
+		vec3 trans = vec3(merchantLoc[iter * 2], 0, merchantLoc[iter * 2 + 1]);
 		mat4 newRot = rot * objRotates[num];
-		addEventItem(num, objScales[num], trans, newRot);
+		addEventItem(num, objScales[num], trans, glm::mat4(1.0f));
+		eventItems[eventItems.size() - 1].moveRot = glm::translate(mat4(1.0f), vec3(loc.x, objYTrans[num], loc.z)) * newRot;
+		eventItems[eventItems.size() - 1].loadTextureCoor(findTex(num));
 	}
 }
 
@@ -201,7 +208,6 @@ void TerrainEvent::addRandomDuder(vec3 loc, mat4 rot)
 	vec3 trans = vec3(loc.x, objYTrans[randDude], loc.z);
 	mat4 newRot = rot * objRotates[randDude];
 	addEventItem(randDude, objScales[randDude], trans, newRot);
-	addEventItem(randDude, vec3(1.0, 1.0, 1.0), loc, rot);
 }
 
 void TerrainEvent::addStartCity(vec3 loc)
@@ -214,14 +220,43 @@ void TerrainEvent::addEndCity(vec3 loc)
 {
 	addEventItem(END_CITY, vec3(4.05, 4.05, 4.05), vec3(loc.x, 0.45, loc.z - 0.2), glm::rotate(mat4(1.0f), (const float)-90, vec3(0, 1.0f, 0)));
 	eventItems[eventItems.size() - 1].loadTextureCoor(TERR_EV_STONE_ID);
-	// addEventItem(BOX, vec3(0.7, 0.05, 0.34), vec3(loc.x - 2.5, 0.0, loc.z - 1.065), glm::rotate(mat4(1.0f), (const float)90, vec3(0, 0, 1.0f)));//glm::mat4(1.0f));
-	addEventItem(BOX, vec3(0.7, 0.05, 0.34), vec3(loc.x - 2.5, 0.0, loc.z - 1.065), glm::rotate(mat4(1.0f), (const float)90, vec3(0, 0, 1.0f)));//glm::mat4(1.0f));
+	
+	addEventItem(BOX, vec3(0.52, 0.05, 0.34), vec3(0.45, 0, 0), mat4(1.0f));
+	eventItems[eventItems.size() - 1].loadTextureCoor(TERR_EV_BRIDGE_ID);
 	BRIDGE_NUM = eventItems.size() - 1;
+	mat4 bridgeRot = glm::rotate(mat4(1.0f), bridgeAng, vec3(0, 0, 1.0f));
+	bridgeLoc = vec3(loc.x - 1.9, 0, loc.z - 1.065);
+	eventItems[BRIDGE_NUM].moveRot = glm::translate(mat4(1.0f), bridgeLoc) * bridgeRot;
+	
+	ropeScale = 0.1;
+	mat4 ropeRot = glm::rotate(mat4(1.0f), (const float)-90, vec3(0, 1.0f, 0)) * glm::rotate(mat4(1.0f), (const float)45, vec3(1.0f, 0, 0));
+	ropeLoc = vec3(loc.x - 1.92, 0.9, loc.z - 1.32);
+	addEventItem(ROPE, vec3(0.15, 0.15, ropeScale), ropeLoc, ropeRot);
+	ROPE_NUM = eventItems.size() - 1;
+
+	addEventItem(ROPE, vec3(0.15, 0.15, ropeScale), vec3(ropeLoc.x, ropeLoc.y, ropeLoc.z + 0.5), ropeRot);
+
+	addEventItem(BOX, vec3(0.15, 0.15, 0.42), vec3(loc.x - 1.9, 0.84, loc.z - 1.065), mat4(1.0f));
+	eventItems[eventItems.size() - 1].loadTextureCoor(TERR_EV_STONE_ID);
+}
+
+int TerrainEvent::findTex(int num) 
+{
+	int found = -1;
+	switch (num) {
+		case 0:
+			found = TERR_EV_SAMURAI_ID;
+			break;
+		case 1:
+			found = TERR_EV_SPEARMAN_ID;
+			break;
+	}
+	return found;
 }
 
 void TerrainEvent::lowerBridge()
 {
-	if (bridgeAng == 90) {
+	if (bridgeAng < 180) {
 		moveBridge = true;
 	}
 }
@@ -266,12 +301,25 @@ void TerrainEvent::enableTextureBuffer(GLint h_aTexCoord, GLuint texBuf, int id)
 
 void TerrainEvent::setBridge(double ltime)
 {
-	// float ang = 90;
-	//rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 1.0f, 0));
-	// mat4 constRot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 1.0f, 0));
-	bridgeAng += (float)ltime * 10;
-	mat4 newRot = glm::rotate(glm::mat4(1.0f), bridgeAng, glm::vec3(0, 0, 1.0f));
-	eventItems[BRIDGE_NUM].rot = newRot;
+	//trans to final pos in world * moving angle * trans up a bit * rot to face right dir * scale
+	// printf("ltime is %f and bridge ang is %f\n", ltime, bridgeAng);
+
+	// float timeInc = (float)ltime * 10;	//for those random times my computer speeds up -_-
+	// bridgeAng += (timeInc > 0.25) ? 0.25 : timeInc;
+	bridgeAng += 0.25;
+	mat4 bridgeRot = glm::rotate(mat4(1.0f), bridgeAng, vec3(0, 0, 1.0f));
+	eventItems[BRIDGE_NUM].moveRot = glm::translate(mat4(1.0f), bridgeLoc) * bridgeRot;
+
+	// ropeScale += ltime / 12.0;
+	// timeInc = ltime / 12.0;	//for those random times my computer speeds up -_-
+	// ropeScale += (timeInc > 0.00165) ? 0.00165 : timeInc;
+	ropeScale += 0.00165;
+	eventItems[ROPE_NUM].scale = vec3(0.15, 0.15, ropeScale);
+	eventItems[ROPE_NUM + 1].scale = vec3(0.15, 0.15, ropeScale);
+	// ropeLoc = vec3(ropeLoc.x - .001, ropeLoc.y -.001, ropeLoc.z);
+	ropeLoc = vec3(ropeLoc.x - .00175, ropeLoc.y -.00175, ropeLoc.z);
+	eventItems[ROPE_NUM].pos = ropeLoc;
+	eventItems[ROPE_NUM + 1].pos = vec3(ropeLoc.x, ropeLoc.y, ropeLoc.z + 0.5);
 	if (bridgeAng > 180) {
 		moveBridge = false;
 	}
