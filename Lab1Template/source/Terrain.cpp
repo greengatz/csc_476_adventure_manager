@@ -159,6 +159,7 @@ void Terrain::createEvents(){
     }
 }
 
+// i fixed one of 3 problem spots
 void Terrain::createTrail(){
     criticalPoints.clear();
 
@@ -174,65 +175,31 @@ void Terrain::createTrail(){
     int direction = 1;
     nextCPoint = 1;
 
+
     splineSeed.clear();
     // determine our critical points to make the spline
-    splineSeed.push_back(glm::vec2(0, 25)); // add first point to spline
-    cout << MAP_Z << "\n";
+    splineSeed.push_back(glm::vec2(0, -25)); // add first point to spline
     // x is our depth through the trail
     // x = 50 is end
     for (indexZ = 0; indexZ < MAP_Z; indexZ++) {
-        // this ticks down till we find a change in our path
         if(changeInPath == 0) {
-            // srand(time(NULL));
-            
             changeInPath = (rand() % (maxShift - minShift)) + minShift;
-            //if (shiftTog){
-                //criticalPoints.push_back(glm::vec3(indexZ, 0.0, -lastSpot - 1.0));
-                //criticalPoints.push_back(glm::vec3(indexZ + 1.0, 0.0, -lastSpot - 1.0));
             int newZ = (rand() % (maxShift - minShift)) * direction + splineSeed[splineSeed.size() - 1].y;
             splineSeed.push_back(glm::vec2(indexZ, newZ));
-            //}else{
-                //criticalPoints.push_back(glm::vec3(indexZ, 0.0, -lastSpot));
-                //criticalPoints.push_back(glm::vec3(indexZ + 1.0, 0.0, -lastSpot));   
-            //}
             cout << splineSeed[splineSeed.size() - 1].x << ", " << splineSeed[splineSeed.size() - 1].y << "\n";
-
-            /*if(lastSpot > MAP_X - 5){
-                shiftTog = false;
-            }else if(lastSpot < 5){
-                shiftTog = true;
-            }else{
-                shiftTog = !shiftTog;
-            }*/
         }
         else {//if(changeInPath == 1){
             changeInPath--;
             direction = -direction;
         }
-        /*}else{
-            changeInPath--;
-            if(shiftTog)
-            lastSpot++;
-            else
-            lastSpot--;
-        }*/
-
-        /*if(changeInPath > 1 && lastSpot > MAP_X - (bound / 2) && shiftTog){
-            changeInPath = 1;
-        }else if(changeInPath > 1 && lastSpot < bound / 2 && !shiftTog){
-            changeInPath = 1;
-        } */
-
-        // startingSpot = changeInPath;
-        //Relative to the world
-   //     beginPosition = glm::vec3(0.0, 0.0, -startingSpot);
     }
     
     splineSeed.push_back(glm::vec2(50, splineSeed[splineSeed.size() - 1].y)); // add last point to spline
     path = new Spline(splineSeed, 0, 0);
 
     for(int i = 0; i < 50; i++) { // reverse these
-        criticalPoints.push_back(glm::vec3(path->getY(i), 0, -i));
+        cout << "cp: " << i << ", " << path->getY(i) << "\n";
+        criticalPoints.push_back(glm::vec3(i, 0, path->getY(i)));
     }
 
     // using the spline, draw generate a path
@@ -243,125 +210,82 @@ void Terrain::createTrail(){
         }
     }
 
+    // draw the main trail
     for (indexZ = 0; indexZ < MAP_Z; indexZ++){
-        printf("Going Right: %d, New ChangeInPath %d |", shiftTog, changeInPath);
-        // changeInPath = (indexZ % 2 == 1) ? ((rand() % 3) - 1) + startingSpot : startingSpot;
-        // printf("Shift %d |", changeInPath);
         for (indexX = 0; indexX < MAP_X; indexX++) {
-            if(abs(indexZ - path->getY(indexX)) < 1) {
-                trailMap[indexX][indexZ]=TRAIL;
-                trailMap[indexX + 1][indexZ]=TRAIL;
-                trailMap[indexX][indexZ + 1]=TRAIL;
-                trailMap[indexX - 1][indexZ]=TRAIL;
-                trailMap[indexX][indexZ - 1]=TRAIL;
+            if(abs(indexZ + path->getY(indexX) + 0.5) < 1) {
+                trailMap[indexZ][indexX]=TRAIL;
             }
         }
-            /*if(indexZ == 0 && indexX == startingSpot){
-                //Starting spot
-                trailMap[indexX][indexZ]=RED;
-            }
-            else if(indexX == lastSpot - 1)
-            {
-                if(changeInPath == 0){
-                    if(!shiftTog){
-                        trailMap[indexX][indexZ]=LNEARTRAIL;
-                    }else{
-                        trailMap[indexX][indexZ]=LFARTRAIL;
-                    }
-                }else{
-                    //Left Tile
-                    if(!shiftTog){
-                        trailMap[indexX][indexZ]=LBTRAIL;
-                    }else{
-                        trailMap[indexX][indexZ]=RBTRAIL;
-                    }
-                }
-            }
-            else if(indexX == lastSpot + 1)
-            {
-                if(changeInPath == 0){
-                    if(!shiftTog){
-                        trailMap[indexX][indexZ]=RNEARTRAIL;
-                    }else{
-                        trailMap[indexX][indexZ]=RFARTRAIL;
-                    }
-                }else{
-                    //Right Tile
-                    if(!shiftTog){
-                        trailMap[indexX][indexZ]=LTTRAIL;
-                    }else{
-                        trailMap[indexX][indexZ]=RTTRAIL;
-                    }
-                }
-            }
-            else if(indexX == lastSpot)
-            {
-                //Center Tile
-                trailMap[indexX][indexZ]=TRAIL;
-                //criticalPoints.push_back(glm::vec3(indexX, 0.0, indexZ));
-            }
-            printf("[%i]",trailMap[indexX][indexZ]);
+    }
 
+    // draw the sides of the trail
 
+    // 4 diagonal trail sides
+    for(indexZ = 0; indexZ < MAP_Z - 1; indexZ++) {
+        for(indexX = 0; indexX < MAP_X; indexX++) {
+            if(trailMap[indexX][indexZ] == TRAIL
+                && trailMap[indexX - 1][indexZ + 1] == TRAIL
+                && trailMap[indexX - 1][indexZ] == GRASS) {
+                trailMap[indexX - 1][indexZ] = LBTRAIL;
+            }
         }
-        printf("\n");
-        beginPosition = glm::vec3(0.0, 0.0, -startingSpot);*/
+    }
+    
+    for(indexZ = 0; indexZ < MAP_Z - 1; indexZ++) {
+        for(indexX = 0; indexX < MAP_X; indexX++) {
+            if(trailMap[indexX][indexZ] == TRAIL
+                && trailMap[indexX + 1][indexZ + 1] == TRAIL
+                && trailMap[indexX + 1][indexZ] == GRASS) {
+                trailMap[indexX + 1][indexZ] = RTTRAIL;
+            }
+        }
+    }
+    
+    for(indexZ = 0; indexZ < MAP_Z; indexZ++) {
+        for(indexX = 0; indexX < MAP_X - 1; indexX++) {
+            if(trailMap[indexX][indexZ] == TRAIL
+                && trailMap[indexX - 1][indexZ - 1] == TRAIL
+                && trailMap[indexX - 1][indexZ] == GRASS) {
+                trailMap[indexX - 1][indexZ] = RBTRAIL;
+            }
+        }
+    }
+    
+    for(indexZ = 0; indexZ < MAP_Z; indexZ++) {
+        for(indexX = 1; indexX < MAP_X - 1; indexX++) {
+            if(trailMap[indexX][indexZ] == TRAIL
+                && trailMap[indexX + 1][indexZ - 1] == TRAIL
+                && trailMap[indexX + 1][indexZ] == GRASS) {
+                trailMap[indexX + 1][indexZ ] = LTTRAIL;
+            }
+        }
+    }
+
+/*#define LNEARTRAIL 7
+#define RNEARTRAIL 8
+#define LFARTRAIL 9
+#define RFARTRAIL 10*/
+    // flat trail sides
+    for(indexZ = 0; indexZ < MAP_Z; indexZ++) {
+        for(indexX = 0; indexX < MAP_X; indexX++) {
+            if(trailMap[indexX][indexZ] == TRAIL
+                && trailMap[indexX + 1][indexZ] == GRASS) {
+                trailMap[indexX][indexZ] = RFARTRAIL;
+            }
+        }
+    }
+    
+    for(indexZ = 0; indexZ < MAP_Z; indexZ++) {
+        for(indexX = 0; indexX < MAP_X; indexX++) {
+            if(trailMap[indexX][indexZ] == TRAIL
+                && trailMap[indexX - 1][indexZ] == GRASS) {
+                trailMap[indexX][indexZ] = LNEARTRAIL;
+            }
+        }
     }
         
-
         
-/*
-        // this ticks down till we find a change in our path
-        if(changeInPath == 0){
-            // srand(time(NULL));
-            
-            changeInPath = (rand() % (maxShift - minShift)) + minShift;
-            if (shiftTog){
-                criticalPoints.push_back(glm::vec3(indexZ, 0.0, -lastSpot - 1.0));
-                criticalPoints.push_back(glm::vec3(indexZ + 1.0, 0.0, -lastSpot - 1.0));
-                splineSeed.push_back(glm::vec2(indexZ, -lastSpot - 1.0));
-            }else{
-                criticalPoints.push_back(glm::vec3(indexZ, 0.0, -lastSpot));
-                criticalPoints.push_back(glm::vec3(indexZ + 1.0, 0.0, -lastSpot));   
-                splineSeed.push_back(glm::vec2(indexZ + 1.0));
-            }
-
-            if(lastSpot > MAP_X - 5){
-                shiftTog = false;
-            }else if(lastSpot < 5){
-                shiftTog = true;
-            }else{
-                shiftTog = !shiftTog;
-            }
-        }else if(changeInPath == 1){
-            // if (shiftTog)
-            //   criticalPoints.push_back(glm::vec3(indexZ, 0.0, -lastSpot - 1.0));
-            // else
-            //   criticalPoints.push_back(glm::vec3(indexZ, 0.0, -lastSpot));
-
-            changeInPath--;
-        }else{
-            changeInPath--;
-            if(shiftTog)
-            lastSpot++;
-            else
-            lastSpot--;
-        }
-
-
-        if(changeInPath > 1 && lastSpot > MAP_X - (bound / 2) && shiftTog){
-            changeInPath = 1;
-        }else if(changeInPath > 1 && lastSpot < bound / 2 && !shiftTog){
-            changeInPath = 1;
-        } 
-
-        printf("\n");
-        // startingSpot = changeInPath;
-        //Relative to the world
-        beginPosition = glm::vec3(0.0, 0.0, -startingSpot);
-    }
-*/
-
     beginPosition = criticalPoints[0];
 
     if (shiftTog)
