@@ -17,6 +17,7 @@
 #include "Shape.h"
 #include "Terrain.h"
 #include "hud.h"
+#include "menu.h"
 #include "MatrixStack.h"
 #include "tiny_obj_loader.h"
 #include "glm/glm.hpp"
@@ -128,6 +129,7 @@ TavernTerrain tavTerr;
 Materials matSetter;
 FrustumCull fCuller;
 HUD hud(&manager);
+Menu menu;
 double dtDraw;
 SoundPlayer audio;
 
@@ -347,7 +349,10 @@ void drawGL()
 	{
 		glUniform1i(h_flag, 1);
 		hud.drawHud(h_ModelMatrix, h_vertPos, g_width, g_height, h_aTexCoord);
+		menu.drawMenu(3, "Test", "About Test Blah Blah Blah", "Option 1", "Option 2",
+			"Press g to close this");
 		glUniform1i(h_flag, 0);
+		
 
 		char info[64];
 		sprintf(info,"x %d", manager.getGold());
@@ -660,6 +665,7 @@ int main(int argc, char **argv)
   	// terrEv.addEndCity(vec3(loc.x - 82.5, loc.y, loc.z));
 
   	hud.initHUD(&texLoader);
+  	menu.initMenu(&texLoader, h_ModelMatrix, h_vertPos, g_width, g_height, h_aTexCoord);
   	initText2D( "Holstein.DDS" );
   	dtDraw = 0;
    do{
