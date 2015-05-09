@@ -63,7 +63,7 @@ void Materials::setMaterial(int i)
 		case 7: //grey
 			glUniform3f(*h_ka, 0.1, 0.1, 0.1);
 			glUniform3f(*h_kd, 0.4, 0.4, 0.04);
-			glUniform3f(*h_ks, 0.05, 0.05, 0.05);
+			glUniform3f(*h_ks, 0.015, 0.015, 0.015);
 			glUniform1f(*h_s, 0.01);
 			break;
 		case 8: //white
@@ -90,5 +90,10 @@ void Materials::setMaterial(int i)
 			glUniform3f(*h_ks, 0.076, 0.051, 0.051);
 			glUniform1f(*h_s, 0.01);
 			break;
+		case 12: //rope
+			glUniform3f(*h_ka, 0.185, 0.1, 0.045);
+			glUniform3f(*h_kd, 0.55294, 0.31765, 0.094118);
+			glUniform3f(*h_ks, 0.55294, 0.31765, 0.094118);
+			glUniform1f(*h_s, 0.01);
 	}
 }
