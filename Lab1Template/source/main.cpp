@@ -349,7 +349,8 @@ void drawGL()
 	{
 		glUniform1i(h_flag, 1);
 		hud.drawHud(h_ModelMatrix, h_vertPos, g_width, g_height, h_aTexCoord);
-		menu.drawMenu(2, "Test", "About Test Blah Blah Blah", "Option 1", "Option 2");
+		menu.drawMenu(3, "Test", "About Test Blah Blah Blah", "Option 1", "Option 2",
+			"Press g to close this");
 		glUniform1i(h_flag, 0);
 		
 
