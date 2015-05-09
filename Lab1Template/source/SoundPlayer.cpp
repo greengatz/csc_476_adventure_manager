@@ -50,7 +50,7 @@ SoundPlayer::~SoundPlayer()
 void SoundPlayer::playBackgroundMusic(bool tav)
 {
 	//gets a 0 or 1 if trail, 2 or 3 if tavern
-	curBkgSong = (tav) ? getRandInt(2) * 2 - 1 : getRandInt(2) - 1;
+	curBkgSong = (tav) ? getRandInt(2) + 1 : getRandInt(2) - 1;
 	play(&music, curBkgSong);
 	startTime = time(0);
 	pausedTime = 0;
