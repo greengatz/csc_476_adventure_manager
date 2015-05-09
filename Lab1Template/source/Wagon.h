@@ -28,6 +28,7 @@ public:
 	void startWagon();
 	void updateWagon(float globalTime);
 	bool hasStarted();
+	void setTimeStamp(float newTime);
 	
 private:
 	std::vector<tinyobj::shape_t> shapes;

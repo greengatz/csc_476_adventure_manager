@@ -49,7 +49,8 @@ Terrain::Terrain() :
 	texBufID(0),
   oldTextureID(0),
     beginPosition(0.0f, 0.0f, 0.0f),
-    criticalPoints(std::vector<glm::vec3>())
+    criticalPoints(std::vector<glm::vec3>()),
+  terrainEvents()
 {
 }
 
@@ -106,6 +107,22 @@ void Terrain::checkEvents(glm::vec3 aPos){
     eventsMap[spot] = 0;
 }
 
+void Terrain::placeEvents(){
+  for(int i = 0; i < MAP_Z; i++){
+    if(eventsMap[i] == AMBUSH){
+      // printf("Placing Ambush\n");
+      //z = i
+      //x = find(0)
+      for(int j = 0; j < MAP_X; j++){
+        if(trailMap[j][i] == 0){
+            printf("Placing ambush at %f, %f\n", (float)j, (float)i);
+            terrainEvents.addAmbush(glm::vec3((float)i - 105, 0, 0 - (float)j), glm::mat4(1.0f));
+        }
+      }
+    }
+  }
+}
+
 void Terrain::createEvents(){
     int minMerch = 1, maxMerch = 2,      //Min max chance of Merchant event
         minWand = 1, maxWand = 2,        //Min max chance of Random Wanderer event
@@ -142,8 +159,10 @@ void Terrain::createEvents(){
     int ambushCount = (rand() % (maxAmbush - minAmbush + 1)) + minAmbush;
     for(int i = 0; i <= ambushCount; i++){
         int random = ((rand() % (MAP_X - startingOffset)) +  startingOffset);
-        if(eventsMap[random] == 0 && eventsMap[random + 1] == 0 && eventsMap[random - 1] == 0)
+        if(eventsMap[random] == 0 && eventsMap[random + 1] == 0 && eventsMap[random - 1] == 0){
             eventsMap[random] = AMBUSH; 
+            // printf("Ambush on trail at : %f", (float)random); 
+        }
         else
             i--;
     }
@@ -157,6 +176,7 @@ void Terrain::createEvents(){
         else
             i--;
     }
+    placeEvents();
 }
 
 void Terrain::createTrail(){
@@ -166,7 +186,7 @@ void Terrain::createTrail(){
     int minShift = 2, maxShift = 10;
     //left for false, right for true.
     bool shiftTog = (rand() % 2) == 0 ? false : true; 
-    int indexX, indexZ, bound = 20;
+    int indexX, indexZ, bound = 10;
     int startingSpot = ((rand() % (MAP_X - bound)) + (bound / 2));
     int lastSpot = startingSpot;
     // srand(time(NULL));
@@ -287,8 +307,10 @@ void Terrain::createTrail(){
     createEvents();
 }
 
-void Terrain::init(TextureLoader* texLoader)
+void Terrain::init(TextureLoader* texLoader, Materials *matSetter, FrustumCull *fCuller)
 {
+  terrainEvents.init(matSetter, fCuller);
+  terrainEvents.loadTerrEvMeshes(texLoader);
 	x.x = 0.0f;
 	x.y = 0.0f;
 	x.z = 0.0f;
@@ -415,12 +437,11 @@ void Terrain::init(TextureLoader* texLoader)
 	assert(glGetError() == GL_NO_ERROR);
 }
 
-void Terrain::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord)
+void Terrain::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMatrix)
 {
   //set up the texture unit
     glEnable(GL_TEXTURE_2D);
     glActiveTexture(GL_TEXTURE0);
-
     // //glUniform1i(h_uTexUnit, 0);
     // for (int n = 0; n < MAP_Z; n++)
     // {
@@ -491,4 +512,7 @@ void Terrain::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord)
    GLSL::disableVertexAttribArray(h_aTexCoord);
    glBindBuffer(GL_ARRAY_BUFFER, 0);
    glDisable(GL_TEXTURE_2D);
+
+   terrainEvents.drawTerrainEvents(h_ModelMatrix, h_pos, h_nor, h_aTexCoord);
+
 }

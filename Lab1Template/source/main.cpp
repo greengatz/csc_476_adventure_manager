@@ -65,6 +65,7 @@ Wagon wagon;
 
 int NUMOBJ = 5;
 Camera camera;
+bool gamePaused = false;
 bool cull = false;
 glm::vec2 mouse;
 int shapeCount = 1;
@@ -121,7 +122,7 @@ GLuint NumBufObj, NumIndBufObj, NumTexBufObj;
 //Rendering Helper
 RenderingHelper ModelTrans;
 Tavern tavern;
-TerrainEvent terrEv;
+// TerrainEvent terrEv;
 Manager manager("The Dude");
 TavernTerrain tavTerr;
 Materials matSetter;
@@ -242,7 +243,7 @@ void spinOffNewShape(char * filename, float x, float z){
 void initModels()
 {
 	//Initialize Terrain object
-	terrain.init(&texLoader);
+	terrain.init(&texLoader, &matSetter, &fCuller);
 	tavTerr.init(&texLoader);
 
 	//Initalize Wall
@@ -432,7 +433,7 @@ void drawGL()
 			glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(ModelTrans.modelViewMatrix));
 			//ModelTrans.popMatrix();
 			ModelTrans.pushMatrix();
-				terrain.draw(h_vertPos, h_vertNor, h_aTexCoord);
+				terrain.draw(h_vertPos, h_vertNor, h_aTexCoord, h_ModelMatrix);
 				drawWalls();
 				wagon.draw(h_vertPos, h_vertNor, h_aTexCoord, h_ModelMatrix, &ModelTrans);
 			ModelTrans.popMatrix();
@@ -449,7 +450,7 @@ void drawGL()
 		ModelTrans.loadIdentity();
 		ModelTrans.pushMatrix();
 		ModelTrans.popMatrix();
-		terrEv.drawTerrainEvents(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord);
+		// terrEv.drawTerrainEvents(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord);
 		glUniform1i(terrainToggleID, 0);
 	}
 
@@ -675,6 +676,15 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	{
 		hud.on = !hud.on;
 	}
+
+	if (key == GLFW_KEY_5 && action == GLFW_PRESS)
+    {
+        gamePaused = !gamePaused;
+        if(!gamePaused){
+        	printf("%s\n", "reseting start time");
+        	wagon.setTimeStamp(glfwGetTime());
+        }
+    }
 }
 
 void window_size_callback(GLFWwindow* window, int w, int h){
@@ -689,7 +699,7 @@ void window_size_callback(GLFWwindow* window, int w, int h){
  **/
 void updateModels()
 {
-	wagon.updateWagon(t);
+	wagon.updateWagon(dtDraw);
 }
 
 void checkCollisions(){
@@ -746,7 +756,7 @@ int main(int argc, char **argv)
 	installShaders("lab7_vert.glsl", "lab7_frag.glsl");
 	fCuller.init();
 	tavern.init(&matSetter, &fCuller);
-	terrEv.init(&matSetter, &fCuller);
+	// terrEv.init(&matSetter, &fCuller);
 	std::string str = "assets/bunny.obj";
 	// initShape(&str[0u]); //initShape(argv[0]);
   	initModels();
@@ -762,9 +772,14 @@ int main(int argc, char **argv)
   	dtDraw = 0;
    do{
    	timeNew = glfwGetTime();
-	
+
 		dtDraw = timeNew - timeOldDraw;
+		if(gamePaused){
+			dtDraw = 0;
+		}
 		t += h;
+	
+
 		// Update every 60Hz
 		if(dtDraw >= (1.0 / 60.0) ) {
 			checkUserInput();

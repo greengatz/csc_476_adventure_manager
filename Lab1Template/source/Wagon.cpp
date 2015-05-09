@@ -25,13 +25,13 @@ Wagon::Wagon() :
 	norBufID(0),
   indBufID(0),
 	texBufID(0),
-   startTime(0.0f),
-   wagonStart(false),
-   terrain(0),
-   deltaTime(0.0f),
-   velocity(0.5f),
-   nextPoint(0.0f, 0.0f, 0.0f),
-   orientation(1.0f, 0.0f, 0.0f)
+  startTime(0.0f),
+  wagonStart(false),
+  terrain(0),
+  deltaTime(0.0f),
+  velocity(3.0f),
+  nextPoint(0.0f, 0.0f, 0.0f),
+  orientation(1.0f, 0.0f, 0.0f)
 {
 }
 
@@ -41,7 +41,7 @@ Wagon::~Wagon()
 
 void Wagon::resetWagon()
 {
-    neg = 1.0;
+   neg = 1.0;
    wagonStart = false;
    orientation = glm::vec3(1.0f, 0.0f, 0.0f);
    position = terrain->getStartPosition() + glm::vec3(0.6, 0.05, -0.5);
@@ -74,6 +74,7 @@ void Wagon::updateWagon(float globalTime)
       neg = -neg;
       rotate = neg * cos((glm::dot(direction, orientation)/(glm::length(orientation) * glm::length(direction)))) * (180.0/3.14);
     }
+    printf("DeltaTime: %f\n", deltaTime);
     position += direction * deltaTime * velocity;
     position.y = 0.05;
     startTime += deltaTime;
@@ -100,6 +101,11 @@ glm::vec3 Wagon::getPosition()
 void Wagon::setScale(glm::vec3 aScale)
 {
    scale = aScale;
+}
+
+void Wagon::setTimeStamp(float newTime)
+{
+  startTime = newTime;
 }
 
 void Wagon::setRotation(float aRotation)

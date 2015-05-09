@@ -238,6 +238,7 @@ void TerrainEvent::drawTerrainEvents(GLint h_ModelMatrix, GLint h_vertPos, GLint
 {
 	for (int iter = 0; iter < eventItems.size(); iter++) {
 		//set a material
+
 		if (eventItems[iter].materialNdx != -1) {
 			(*matSetter).setMaterial(eventItems[iter].materialNdx);
 			// printf("object %d update material to %d\n", iter, tavernItems[iter].materialNdx);
