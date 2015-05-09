@@ -268,6 +268,11 @@ bool installShaders(const string &vShaderName, const string &fShaderName)
 	return true;
 }
 
+void test()
+{
+	cout << "test funct pointer" << endl;
+}
+
 void drawGL()
 {
 	// Clear buffers
@@ -359,8 +364,7 @@ void drawGL()
 		glUseProgram(pid);
 		glUniform1i(h_flag, 1);
 		hud.drawHud(h_ModelMatrix, h_vertPos, g_width, g_height, h_aTexCoord);
-		menu.drawMenu(3, "Test", "About Test Blah Blah Blah", "Option 1", "Option 2",
-			"Press g to close this");
+		menu.drawMenu();
 		glUniform1i(h_flag, 0);
 
 		char info[64];
@@ -508,7 +512,14 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	if (key >= GLFW_KEY_1 && key <= GLFW_KEY_5 && action == GLFW_PRESS)
 	{
 		// tavern.buyMercenary(key - GLFW_KEY_1, &manager);
-		manager.buyMercenary(key - GLFW_KEY_1, &tavern);
+		if(menu.inMenu)
+		{
+			menu.selectOption(key);
+		}
+		else
+		{
+			manager.buyMercenary(key - GLFW_KEY_1, &tavern);
+		}
 	}
 	
     if (key == GLFW_KEY_H && action == GLFW_PRESS)
@@ -677,6 +688,12 @@ int main(int argc, char **argv)
   	menu.initMenu(&texLoader, h_ModelMatrix, h_vertPos, g_width, g_height, h_aTexCoord);
   	initText2D( "Holstein.DDS" );
   	dtDraw = 0;
+  	vector<string> about;
+	about.push_back("about test");
+	option testOpt = {"test option", test};
+	vector<option> options;
+	options.push_back(testOpt);
+	menu.setData("Title", about, options);
    do{
    	timeNew = glfwGetTime();
 	
