@@ -28,6 +28,7 @@
 #define LFARTRAIL 9
 #define RFARTRAIL 10
 
+//This probably isnt a good idea....
 using namespace std;
 
 int TERRAIN_TEX_ID = 100;
