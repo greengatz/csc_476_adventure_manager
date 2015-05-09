@@ -333,7 +333,7 @@ void drawGL()
 		terrEv.drawTerrainEvents(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord, dtDraw);
 		glUniform1i(terrainToggleID, 0);
       //Draw the skybox
-      skybox.draw(&camera, wagon.getPosition());
+      	skybox.draw(&camera, wagon.getPosition());
 	}
 
 
@@ -356,12 +356,12 @@ void drawGL()
 
 	if(hud.on)
 	{
+		glUseProgram(pid);
 		glUniform1i(h_flag, 1);
 		hud.drawHud(h_ModelMatrix, h_vertPos, g_width, g_height, h_aTexCoord);
 		menu.drawMenu(3, "Test", "About Test Blah Blah Blah", "Option 1", "Option 2",
 			"Press g to close this");
 		glUniform1i(h_flag, 0);
-		
 
 		char info[64];
 		sprintf(info,"x %d", manager.getGold());
