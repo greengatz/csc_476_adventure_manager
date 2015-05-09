@@ -332,6 +332,8 @@ void drawGL()
 		ModelTrans.popMatrix();
 		terrEv.drawTerrainEvents(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord, dtDraw);
 		glUniform1i(terrainToggleID, 0);
+      //Draw the skybox
+      skybox.draw(&camera, wagon.getPosition());
 	}
 
 
@@ -381,9 +383,6 @@ void drawGL()
 	glUseProgram(0);
 	// Pop stacks
 	proj.popMatrix();
-
-	//Now Draw Skybox
-	skybox.draw(&camera, wagon.getPosition());
 }
 
 bool hasCollided(glm::vec3 incr)
