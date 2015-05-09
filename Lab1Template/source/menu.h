@@ -1,10 +1,11 @@
-#ifndef HUD_H
-#define HUD_H
+#ifndef MENU_H
+#define MENU_H
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
 #include <iostream>
+#include <cstdarg>
 #include "GLSL.h"
 #include "Camera.h"
 #include "glm/glm.hpp"
@@ -13,28 +14,31 @@
 #include "tavern.h"
 #include "manager.h"
 #include "TextureLoader.h"
+#include "text2D.hpp"
 
 using namespace std;
 using namespace glm;
 
-class HUD
+class Menu
 {
 	public:
-		
-		HUD(Manager *newMan);
-		void drawHud(GLint h_ModelMatrix, GLint h_vertPos, int width, int height, GLint h_aTexCoord);
-		void initHUD(TextureLoader *texLoader);
+		void drawMenu(int args, char* title, char* about, ...);
+		void initMenu(TextureLoader *texLoader, GLint h_ModelMatrix, GLint h_vertPos, int width, int height, GLint h_aTexCoord);
 		void enableBuff(GLint h_vertPos, GLint h_aTexCoord);
 		void disableBuff(GLint h_vertPos, GLint h_aTexCoord);
 		GLuint posBufObjHUD;
-		GLuint colorBufObjHUD;
 		GLuint GrndTexBuffObj;
 		GLuint GIndxBuffObj;
-		bool on;
+		int on;
 
 	private:
-		Manager *man;
 		int g_GiboLen;
+		GLint h_ModelMatrix;
+		GLint h_vertPos;
+		int width;
+		int height;
+		GLint h_aTexCoord;
+		int offset = -40;
 };
 
 #endif

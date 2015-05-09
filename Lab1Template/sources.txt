@@ -27,6 +27,7 @@ set(HEADERS
    text2D.hpp
    texture.hpp
    shader.hpp
+   menu.h
 )
 
 # List all .c / .cpp files here
@@ -58,4 +59,5 @@ set(SOURCES
    text2D.cpp
    texture.cpp
    shader.cpp
+   menu.cpp
 )
