@@ -268,6 +268,11 @@ bool installShaders(const string &vShaderName, const string &fShaderName)
 	return true;
 }
 
+void test()
+{
+	cout << "test funct pointer" << endl;
+}
+
 void drawGL()
 {
 	// Clear buffers
@@ -332,6 +337,8 @@ void drawGL()
 		ModelTrans.popMatrix();
 		terrEv.drawTerrainEvents(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord, dtDraw);
 		glUniform1i(terrainToggleID, 0);
+      //Draw the skybox
+      	skybox.draw(&camera, wagon.getPosition());
 	}
 
 
@@ -346,7 +353,7 @@ void drawGL()
 		matSetter.setMaterial(4);
 		ModelTrans.popMatrix();
 		matSetter.setMaterial(3);
-		// tavern.drawTavern(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord, dtDraw);
+		tavern.drawTavern(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord, dtDraw);
 		glUniform1i(terrainToggleID, 0);
 	}
 
@@ -354,12 +361,11 @@ void drawGL()
 
 	if(hud.on)
 	{
+		glUseProgram(pid);
 		glUniform1i(h_flag, 1);
 		hud.drawHud(h_ModelMatrix, h_vertPos, g_width, g_height, h_aTexCoord);
-		menu.drawMenu(3, "Test", "About Test Blah Blah Blah", "Option 1", "Option 2",
-			"Press g to close this");
+		menu.drawMenu();
 		glUniform1i(h_flag, 0);
-		
 
 		char info[64];
 		sprintf(info,"x %d", manager.getGold());
@@ -381,9 +387,6 @@ void drawGL()
 	glUseProgram(0);
 	// Pop stacks
 	proj.popMatrix();
-
-	//Now Draw Skybox
-	skybox.draw(&camera, wagon.getPosition());
 }
 
 bool hasCollided(glm::vec3 incr)
@@ -509,7 +512,14 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	if (key >= GLFW_KEY_1 && key <= GLFW_KEY_5 && action == GLFW_PRESS)
 	{
 		// tavern.buyMercenary(key - GLFW_KEY_1, &manager);
-		manager.buyMercenary(key - GLFW_KEY_1, &tavern);
+		if(menu.inMenu)
+		{
+			menu.selectOption(key);
+		}
+		else
+		{
+			manager.buyMercenary(key - GLFW_KEY_1, &tavern);
+		}
 	}
 	
     if (key == GLFW_KEY_H && action == GLFW_PRESS)
@@ -673,7 +683,7 @@ int main(int argc, char **argv)
 	std::string str = "assets/bunny.obj";
 	// initShape(&str[0u]); //initShape(argv[0]);
   	initModels();
-  	// tavern.loadTavernMeshes(&texLoader);
+  	tavern.loadTavernMeshes(&texLoader);
 
  	//used only for testing purposes
   	// terrEv.loadTerrEvMeshes(&texLoader);
@@ -688,6 +698,13 @@ int main(int argc, char **argv)
   	initText2D( "Holstein.DDS" );
   	dtDraw = 0;
   	audio.playBackgroundMusic(true);
+
+  	vector<string> about;
+	about.push_back("about test");
+	option testOpt = {"test option", test};
+	vector<option> options;
+	options.push_back(testOpt);
+	menu.setData("Title", about, options);
    do{
    	timeNew = glfwGetTime();
 		audio.checkTime();
