@@ -12,6 +12,8 @@
 #include "TextureLoader.h"
 #include <vector>
 #include "splineCurve.h"
+#include "Tree.h"
+#include "Camera.h"
 
 class Terrain
 {
@@ -19,7 +21,7 @@ public:
 	Terrain();
 	virtual ~Terrain();
 	void init(TextureLoader* texLoader);
-	void draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord);
+	void draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, Camera* camera, glm::vec3 wagonPos);
 	void createTrail();
 	void createEvents();
 	glm::vec3 getStartPosition();
@@ -49,6 +51,7 @@ private:
 	int oldTextureID;
     int nextCPoint = 1;
     Spline* path;
+    Tree tree;
 
 };
 

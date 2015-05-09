@@ -314,7 +314,8 @@ void drawGL()
 			glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(ModelTrans.modelViewMatrix));
 			//ModelTrans.popMatrix();
 			ModelTrans.pushMatrix();
-				terrain.draw(h_vertPos, h_vertNor, h_aTexCoord);
+				terrain.draw(h_vertPos, h_vertNor, h_aTexCoord, &camera, wagon.getPosition());
+            glUseProgram(pid);
 				wagon.draw(h_vertPos, h_vertNor, h_aTexCoord, h_ModelMatrix, &ModelTrans);
 			ModelTrans.popMatrix();
 		ModelTrans.popMatrix();

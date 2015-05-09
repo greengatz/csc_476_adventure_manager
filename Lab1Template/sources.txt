@@ -29,6 +29,7 @@ set(HEADERS
    shader.hpp
    menu.h
    Skybox.h
+   Tree.h
 )
 
 # List all .c / .cpp files here
@@ -62,4 +63,5 @@ set(SOURCES
    shader.cpp
    menu.cpp
    Skybox.cpp
+   Tree.cpp
 )
