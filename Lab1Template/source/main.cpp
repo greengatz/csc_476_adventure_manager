@@ -346,7 +346,7 @@ void drawGL()
 		matSetter.setMaterial(4);
 		ModelTrans.popMatrix();
 		matSetter.setMaterial(3);
-		tavern.drawTavern(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord, dtDraw);
+		// tavern.drawTavern(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord, dtDraw);
 		glUniform1i(terrainToggleID, 0);
 	}
 
@@ -528,6 +528,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	{
         manager.inTavern = manager.inTavern ? false : true;
 		camera.toggleGameViews();
+		audio.playBackgroundMusic(manager.inTavern);
 	}
 
    	//Toggle between lines and filled polygons
@@ -573,11 +574,6 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	{
 		fCuller.holdView();
 	}
-	if (key == GLFW_KEY_J && action == GLFW_PRESS)
-	{
-		audio.loadFile(TAV_MUSIC);
-		audio.play();
-	}
 	//Toggle hud
 	if (key == GLFW_KEY_G && action == GLFW_PRESS)
 	{
@@ -588,6 +584,19 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	{
 		terrEv.lowerBridge();
 	}
+	if (key == GLFW_KEY_Y && action == GLFW_PRESS)
+	{
+		audio.pause();
+	}
+	if (key == GLFW_KEY_U && action == GLFW_PRESS)
+	{
+		audio.playSoundEffect(EXPLOSION_SOUND);
+	}
+	if (key == GLFW_KEY_I && action == GLFW_PRESS)
+	{
+		audio.playVoice(MAGMISS_VOICE);
+	}
+
 }
 
 void window_size_callback(GLFWwindow* window, int w, int h){
@@ -664,7 +673,7 @@ int main(int argc, char **argv)
 	std::string str = "assets/bunny.obj";
 	// initShape(&str[0u]); //initShape(argv[0]);
   	initModels();
-  	tavern.loadTavernMeshes(&texLoader);
+  	// tavern.loadTavernMeshes(&texLoader);
 
  	//used only for testing purposes
   	// terrEv.loadTerrEvMeshes(&texLoader);
@@ -678,9 +687,10 @@ int main(int argc, char **argv)
   	menu.initMenu(&texLoader, h_ModelMatrix, h_vertPos, g_width, g_height, h_aTexCoord);
   	initText2D( "Holstein.DDS" );
   	dtDraw = 0;
+  	audio.playBackgroundMusic(true);
    do{
    	timeNew = glfwGetTime();
-	
+		audio.checkTime();
 		dtDraw = timeNew - timeOldDraw;
 		t += h;
 		// Update every 60Hz
