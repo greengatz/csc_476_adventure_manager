@@ -268,6 +268,11 @@ bool installShaders(const string &vShaderName, const string &fShaderName)
 	return true;
 }
 
+void test()
+{
+	cout << "test funct pointer" << endl;
+}
+
 void drawGL()
 {
 	// Clear buffers
@@ -360,8 +365,7 @@ void drawGL()
 		glUseProgram(pid);
 		glUniform1i(h_flag, 1);
 		hud.drawHud(h_ModelMatrix, h_vertPos, g_width, g_height, h_aTexCoord);
-		menu.drawMenu(3, "Test", "About Test Blah Blah Blah", "Option 1", "Option 2",
-			"Press g to close this");
+		menu.drawMenu();
 		glUniform1i(h_flag, 0);
 
 		char info[64];
@@ -509,7 +513,14 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	if (key >= GLFW_KEY_1 && key <= GLFW_KEY_5 && action == GLFW_PRESS)
 	{
 		// tavern.buyMercenary(key - GLFW_KEY_1, &manager);
-		manager.buyMercenary(key - GLFW_KEY_1, &tavern);
+		if(menu.inMenu)
+		{
+			menu.selectOption(key);
+		}
+		else
+		{
+			manager.buyMercenary(key - GLFW_KEY_1, &tavern);
+		}
 	}
 	
     if (key == GLFW_KEY_H && action == GLFW_PRESS)
@@ -528,6 +539,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	{
         manager.inTavern = manager.inTavern ? false : true;
 		camera.toggleGameViews();
+		audio.playBackgroundMusic(manager.inTavern);
 	}
 
    	//Toggle between lines and filled polygons
@@ -573,11 +585,6 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	{
 		fCuller.holdView();
 	}
-	if (key == GLFW_KEY_J && action == GLFW_PRESS)
-	{
-		audio.loadFile(TAV_MUSIC);
-		audio.play();
-	}
 	//Toggle hud
 	if (key == GLFW_KEY_G && action == GLFW_PRESS)
 	{
@@ -588,6 +595,19 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	{
 		terrEv.lowerBridge();
 	}
+	if (key == GLFW_KEY_Y && action == GLFW_PRESS)
+	{
+		audio.pause();
+	}
+	if (key == GLFW_KEY_U && action == GLFW_PRESS)
+	{
+		audio.playSoundEffect(EXPLOSION_SOUND);
+	}
+	if (key == GLFW_KEY_I && action == GLFW_PRESS)
+	{
+		audio.playVoice(MAGMISS_VOICE);
+	}
+
 }
 
 void window_size_callback(GLFWwindow* window, int w, int h){
@@ -678,9 +698,17 @@ int main(int argc, char **argv)
   	menu.initMenu(&texLoader, h_ModelMatrix, h_vertPos, g_width, g_height, h_aTexCoord);
   	initText2D( "Holstein.DDS" );
   	dtDraw = 0;
+  	audio.playBackgroundMusic(true);
+
+  	vector<string> about;
+	about.push_back("about test");
+	option testOpt = {"test option", test};
+	vector<option> options;
+	options.push_back(testOpt);
+	menu.setData("Title", about, options);
    do{
    	timeNew = glfwGetTime();
-	
+		audio.checkTime();
 		dtDraw = timeNew - timeOldDraw;
 		t += h;
 		// Update every 60Hz
