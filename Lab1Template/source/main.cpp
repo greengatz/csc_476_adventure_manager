@@ -38,6 +38,7 @@
 #include "TerrainEvent.h"
 #include "text2D.hpp"
 #include "SoundPlayer.h"
+#include "Skybox.h"
 
 using namespace std;
 using namespace glm;
@@ -133,6 +134,9 @@ Menu menu;
 double dtDraw;
 SoundPlayer audio;
 
+//The skybox
+Skybox skybox;
+
 /**
  * For now, this just initializes the Shape object.
  * Later, we'll updated to initialize all objects moving.
@@ -164,6 +168,9 @@ void initModels()
 
 	//Initalize Wagon
 	wagon.init(&texLoader, &terrain);
+
+	//Initialize skybox
+	skybox.init(&texLoader);
 
 	//initialize the modeltrans matrix stack
    ModelTrans.useModelViewMatrix();
@@ -374,6 +381,9 @@ void drawGL()
 	glUseProgram(0);
 	// Pop stacks
 	proj.popMatrix();
+
+	//Now Draw Skybox
+	skybox.draw(&camera, wagon.getPosition());
 }
 
 bool hasCollided(glm::vec3 incr)

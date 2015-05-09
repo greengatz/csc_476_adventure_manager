@@ -11,6 +11,8 @@
 #include "tiny_obj_loader.h"
 #include "TextureLoader.h"
 #include <vector>
+#include "Camera.h"
+#include "RenderingHelper.h"
 
 class Skybox
 {
@@ -18,11 +20,11 @@ public:
 	Skybox();
 	virtual ~Skybox();
 	void init(TextureLoader* texLoader);
-	void draw(Camera *camera, glm::vec3 wagonPos);
+	void draw(Camera* camera, glm::vec3 wagonPos);
 	//GLint h_pos, GLint h_nor, GLint h_aTexCoord
 
 private:
-	static const int PLANE_SCALE = 100;
+	static const int PLANE_SCALE = 35;
 	GLuint pid;
 	GLint h_vertPos;
 	GLint h_vertNor;
@@ -40,6 +42,8 @@ private:
 
 	glm::vec3 position;
 	void drawPlane();
+	//Rendering Helper
+	RenderingHelper ModelTrans;
 };
 
 #endif

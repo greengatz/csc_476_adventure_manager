@@ -28,6 +28,7 @@ set(HEADERS
    texture.hpp
    shader.hpp
    menu.h
+   Skybox.h
 )
 
 # List all .c / .cpp files here
@@ -60,4 +61,5 @@ set(SOURCES
    texture.cpp
    shader.cpp
    menu.cpp
+   Skybox.cpp
 )
