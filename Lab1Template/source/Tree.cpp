@@ -138,6 +138,8 @@ void Tree::draw(Camera *camera, glm::vec3 wagonPos)
    //Using another shader program
    glUseProgram(pid);
 
+   glUniform1i(leafToggleID, 0);
+
    //Set projection matrix
    MatrixStack proj, view;
    proj.pushMatrix();
@@ -219,6 +221,8 @@ void Tree::draw(Camera *camera, glm::vec3 wagonPos)
    GLSL::disableVertexAttribArray(h_aTexCoord);
    glBindBuffer(GL_ARRAY_BUFFER, 0);
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+   glUniform1i(leafToggleID, 0);
 
    // Unbind the program
    glUseProgram(0);

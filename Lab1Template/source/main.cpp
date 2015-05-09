@@ -324,24 +324,19 @@ void drawGL()
 				wagon.draw(h_vertPos, h_vertNor, h_aTexCoord, h_ModelMatrix, &ModelTrans);
 			ModelTrans.popMatrix();
 		ModelTrans.popMatrix();
-		glUniform1i(terrainToggleID, 0);
-	}
-
-	//========================= END OUTSIDE SCENE =======================
-
-	if (!camera.isTavernView() || camera.isFreeRoam())
-	{
-		glUniform1i(terrainToggleID, 1);
-		glUniform1i(h_uTexUnit, 0);
+		
 		ModelTrans.loadIdentity();
 		ModelTrans.pushMatrix();
 		ModelTrans.popMatrix();
 		terrEv.drawTerrainEvents(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord, dtDraw);
 		glUniform1i(terrainToggleID, 0);
       //Draw the skybox
-      	skybox.draw(&camera, wagon.getPosition());
+      skybox.draw(&camera, wagon.getPosition());
+
+      glUniform1i(terrainToggleID, 0);
 	}
 
+	//========================= END OUTSIDE SCENE =======================
 
 	if (camera.isTavernView() || camera.isFreeRoam())
 	{
