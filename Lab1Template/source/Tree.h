@@ -51,6 +51,7 @@ private:
    //Rendering Helper
    RenderingHelper ModelTrans;
    std::vector<tinyobj::shape_t> shapes;
+   float scale;
 };
 
 #endif

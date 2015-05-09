@@ -28,7 +28,9 @@ Tree::Tree() :
    leafTexBuffObj(0),
    indBufObjLeaf(0),
 
-   leafToggleID(0)
+   leafToggleID(0),
+
+   scale(0.05f)
 {
 }
 
@@ -43,8 +45,7 @@ void Tree::init(TextureLoader* texLoader)
    ModelTrans.loadIdentity();
 
   // Initialize Shader
-  pid = LoadShaders( "Shaders/tree_vert.glsl", 
-      "Shaders/tree_frag.glsl");
+  pid = LoadShaders( "Shaders/tree_vert.glsl", "Shaders/tree_frag.glsl");
 
   h_vertPos = GLSL::getAttribLocation(pid, "vertPos");
   h_vertNor = GLSL::getAttribLocation(pid, "vertNor");
@@ -97,7 +98,7 @@ void Tree::init(TextureLoader* texLoader)
    //===========================TREE LEAFS INIT======================================================
 
    // Send the position array to the GPU
-   /*const vector<float> &posBufLeaf = shapes[1].mesh.positions;
+   const vector<float> &posBufLeaf = shapes[1].mesh.positions;
    glGenBuffers(1, &posBufObjLeaf);
    glBindBuffer(GL_ARRAY_BUFFER, posBufObjLeaf);
    glBufferData(GL_ARRAY_BUFFER, posBufLeaf.size()*sizeof(float), &posBufLeaf[0], GL_STATIC_DRAW);
@@ -118,7 +119,7 @@ void Tree::init(TextureLoader* texLoader)
    const vector<unsigned int> &indBufLeaf = shapes[1].mesh.indices;
    glGenBuffers(1, &indBufObjLeaf);
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indBufObjLeaf);
-   glBufferData(GL_ELEMENT_ARRAY_BUFFER, indBufLeaf.size()*sizeof(unsigned int), &indBufLeaf[0], GL_STATIC_DRAW);*/
+   glBufferData(GL_ELEMENT_ARRAY_BUFFER, indBufLeaf.size()*sizeof(unsigned int), &indBufLeaf[0], GL_STATIC_DRAW);
 
    //Load Texture
    texLoader->LoadTexture((char *)"assets/trees/tree1/bark1.bmp", TREE_BARK_TEX);
@@ -129,7 +130,7 @@ void Tree::init(TextureLoader* texLoader)
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
    
    GLSL::checkVersion();
-   printf("GL ERROR: %d\n", glGetError());
+   //printf("GL ERROR: %d\n", glGetError());
    assert(glGetError() == GL_NO_ERROR);
 }
 
@@ -152,6 +153,7 @@ void Tree::draw(Camera *camera, glm::vec3 wagonPos)
    //Position Wagon along the trail
    ModelTrans.pushMatrix();
       ModelTrans.translate(position);
+      ModelTrans.scale(scale, scale, scale);
       glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(ModelTrans.modelViewMatrix));
    ModelTrans.popMatrix();
 
@@ -192,7 +194,7 @@ void Tree::draw(Camera *camera, glm::vec3 wagonPos)
    //======================== Draw Leaves of the tree ==========================
    glUniform1i(leafToggleID, 1);
 
-   //TODO: Set material
+   //TODO: Set material when we go back to lighting methods. 
 
    //set up the texture unit for bark
    glBindTexture(GL_TEXTURE_2D, TREE_LEAFS_TEX);

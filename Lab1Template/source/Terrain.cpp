@@ -506,7 +506,7 @@ void Terrain::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, Camera* camera, 
    glBindBuffer(GL_ARRAY_BUFFER, 0);
    glDisable(GL_TEXTURE_2D);
 
-   //tree.draw(camera, wagonPos);
+   tree.draw(camera, wagonPos);
 }
 
 Spline* Terrain::getSpline()

@@ -8,7 +8,7 @@ uniform mat4 uViewMatrix;
 uniform mat4 uModelMatrix;
 
 //Toggle for shading the leafs
-uniform int leafToggle
+uniform int leafToggle;
 
 varying vec4 pos;
 varying vec3 normal; 
