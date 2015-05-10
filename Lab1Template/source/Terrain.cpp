@@ -492,26 +492,8 @@ void Terrain::init(TextureLoader* texLoader, Materials *matSetter, FrustumCull *
 void Terrain::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMatrix, Camera* camera, glm::vec3 wagonPos, GLuint* pid)
 {
   //set up the texture unit
-    // glEnable(GL_TEXTURE_2D);
-    // glActiveTexture(GL_TEXTURE0);
-
-
-
-
-    // //glUniform1i(h_uTexUnit, 0);
-    // for (int n = 0; n < MAP_Z; n++)
-    // {
-    //     for (int m = 0; m < MAP_Z; m++)
-    //     {
-    //         if(trailMap[n][z] == GRASS){
-    //             glBindTexture(GL_TEXTURE_2D, TERRAIN_TEX_ID);
-
-
-    //         }
-    //     }
-    // }
-    // glBindTexture(GL_TEXTURE_2D, TERRAIN_TEX_ID);
-
+   glEnable(GL_TEXTURE_2D);
+   glActiveTexture(GL_TEXTURE0);
 
 	// Enable and bind normal array for drawing
    GLSL::enableVertexAttribArray(h_nor);
