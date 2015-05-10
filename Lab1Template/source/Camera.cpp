@@ -54,7 +54,14 @@ glm::vec3 Camera::getTheEye()
 
 glm::vec3 Camera::getPosition()
 {
-	return theStrafe + theZoom;
+	if (tavernView || freeRoam)
+	{
+		return theStrafe + theZoom;
+	}
+	else
+	{
+		return glm::vec3(theWagonEye.x, theWagonEye.y, theWagonEye.z);
+	}
 }
 
 void Camera::setPosition(glm::vec3 aPos)

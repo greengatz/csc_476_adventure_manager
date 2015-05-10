@@ -22,6 +22,7 @@ public:
    virtual ~Tree();
    void init(TextureLoader* texLoader);
    void draw(glm::vec3 treePosition, Camera* camera, glm::vec3 wagonPos);
+   void drawBillboard(glm::vec3 treePosition, Camera *camera, glm::vec3 wagonPos);
 
 private:
    GLuint pid;
@@ -52,6 +53,11 @@ private:
    GLuint norBufObjLeaf;
    GLuint leafTexBuffObj;
    GLuint indBufObjLeaf;
+
+   //Board
+   GLuint posBufObjBoard;
+   GLuint norBufObjBoard;
+   GLuint boardTexBuffObj;
 
    GLuint leafToggleID;
 
