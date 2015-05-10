@@ -20,7 +20,7 @@ string Last[] = {"Bobby", "Andrzejewski", "Zdrojewski", "Copperhordes", "Hugehai
 int lastCount = 9;
 
 string Title[] = {"Driver", "Bear-Hugger", "God", "Lord-Commander", "Pestilent", 
-		"Determined", "Steadfast", "Untrustworthy", "Too-Friendly"};
+		"Determined", "Steadfast", "Untrustworthy", "Teletubby"};
 int titleCount = 9;
 
 

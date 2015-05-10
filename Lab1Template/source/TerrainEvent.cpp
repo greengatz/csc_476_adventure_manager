@@ -248,6 +248,7 @@ void TerrainEvent::addRandomDuder(vec3 loc, mat4 rot)
 
 void TerrainEvent::addStartCity(vec3 loc)
 {
+	printf("Position : %f,%f,%f\n ",loc.x,loc.y,loc.z);
 	addEventItem(START_CITY, vec3(1.65, 1.65, 1.65), vec3(loc.x, 0.685, loc.z), glm::rotate(mat4(1.0f), (const float)90, vec3(0, 1.0f, 0)));
 	eventItems[eventItems.size() - 1].loadTextureCoor(TERR_EV_START_CITY_ID);
 }
@@ -368,6 +369,7 @@ void TerrainEvent::drawTerrainEvents(GLint h_ModelMatrix, GLint h_vertPos, GLint
 	}
 	for (int iter = 0; iter < eventItems.size(); iter++) {
 		//set a material
+
 		if (eventItems[iter].materialNdx != -1) {
 			(*matSetter).setMaterial(eventItems[iter].materialNdx);
 			// printf("object %d update material to %d\n", iter, tavernItems[iter].materialNdx);
