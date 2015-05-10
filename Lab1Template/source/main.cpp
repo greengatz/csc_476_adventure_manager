@@ -362,6 +362,12 @@ void drawGL()
 	{
 		glUseProgram(pid);
 		glUniform1i(h_flag, 1);
+		if(menu.inMenu)
+		{
+			glUseProgram(pid);
+			menu.drawMenu();
+			glUseProgram(pid);
+		}
 		hud.drawHud(h_ModelMatrix, h_vertPos, g_width, g_height, h_aTexCoord);
 		glUniform1i(h_flag, 0);
 
@@ -385,6 +391,7 @@ void drawGL()
 			printText2D("Press Enter to Continue", 75, 75, 24);
 		}
 	}
+
 
 	//**************Draw HUD FINISH********************
 	
@@ -519,7 +526,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		// tavern.buyMercenary(key - GLFW_KEY_1, &manager);
 		if(menu.inMenu)
 		{
-			menu.selectOption(key);
+			menu.selectOption(key - GLFW_KEY_1);
 		}
 		else
 		{
@@ -714,12 +721,28 @@ int main(int argc, char **argv)
   	// terrEv.addMerchantStand(vec3(loc.x - 89.5, loc.y, loc.z), glm::rotate(glm::mat4(1.0f), (const float)180, glm::vec3(0, 1.0f, 0)));
   	// terrEv.addEndCity(vec3(loc.x - 82.5, loc.y, loc.z));
 
+  	//Create about vector and add an element
+
+
   	hud.initHUD(&texLoader);
   	hud.initHomeScreen(&texLoader);
   	menu.initMenu(&texLoader, h_ModelMatrix, h_vertPos, g_width, g_height, h_aTexCoord);
   	initText2D( "Holstein.DDS" );
   	dtDraw = 0;
   	audio.playBackgroundMusic(true);
+
+
+
+ //  	vector<string> about;
+	// about.push_back("about test");
+
+	// //Create an option and add it to a vector
+	// option testOpt = {"test option", test};
+	// vector<option> options;
+	// options.push_back(testOpt);
+
+	// //Set the data
+	// menu.setData("Title", about, options);
 
 
    do{
