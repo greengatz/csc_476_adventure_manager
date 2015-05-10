@@ -320,8 +320,7 @@ void drawGL()
 			glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(ModelTrans.modelViewMatrix));
 			//ModelTrans.popMatrix();
 			ModelTrans.pushMatrix();
-
-				terrain.draw(h_vertPos, h_vertNor, h_aTexCoord, h_ModelMatrix, &camera, wagon.getPosition());
+				terrain.draw(h_vertPos, h_vertNor, h_aTexCoord, h_ModelMatrix, &camera, wagon.getPosition(), &pid);
             glUseProgram(pid);
 				wagon.draw(h_vertPos, h_vertNor, h_aTexCoord, h_ModelMatrix, &ModelTrans);
 			ModelTrans.popMatrix();
@@ -338,6 +337,7 @@ void drawGL()
 
       glUniform1i(terrainToggleID, 0);
 	}
+	glUseProgram(pid);
 
 	//========================= END OUTSIDE SCENE =======================
 

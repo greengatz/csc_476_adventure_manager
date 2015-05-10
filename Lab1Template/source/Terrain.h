@@ -23,7 +23,7 @@ public:
 	Terrain();
 	virtual ~Terrain();
 	void init(TextureLoader* texLoader, Materials *matSetter, FrustumCull *fCuller);
-	void draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMatrix, Camera* camera, glm::vec3 wagonPos);
+	void draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMatrix, Camera* camera, glm::vec3 wagonPos, GLuint* pid);
 	void createTrail();
 	void createEvents();
 	glm::vec3 getStartPosition();
@@ -56,6 +56,7 @@ private:
     int nextCPoint = 1;
     Spline* path;
     Tree tree;
+   int startingSpot;
 
 };
 

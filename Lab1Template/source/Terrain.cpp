@@ -206,8 +206,8 @@ void Terrain::createTrail(){
     int minShift = 6, maxShift = 12;
     //left for false, right for true.
     bool shiftTog = (rand() % 2) == 0 ? false : true; 
-    int indexX, indexZ, bound = 10;
-    int startingSpot = ((rand() % (MAP_X - bound)) + (bound / 2));
+    int indexX, indexZ, bound = 20;
+    startingSpot = ((rand() % (MAP_X - bound)) + (bound / 2));
     int lastSpot = startingSpot;
     int changeInPath = (rand() % (maxShift - minShift)) + minShift;
     vector<glm::vec2> splineSeed;
@@ -325,11 +325,11 @@ void Terrain::createTrail(){
             }
         }
     }
+
     
     vec3 temp = criticalPoints[0];
     temp.x -= 101;
     temp.y += 0.1;
-    printf("Critical Point [0] : %f,%f,%f\n", temp.x, temp.y, temp.z);
     terrainEvents.addStartCity(temp);
 
     vec3 temp2 = criticalPoints[MAP_X - 1];
@@ -338,9 +338,9 @@ void Terrain::createTrail(){
     temp2.y -= 0.1;
     temp2.z += 1;
     // temp2.z = temp.z * -1.0;
-    printf("Critical Point [50] : %f,%f,%f\n", temp2.x, temp2.y, temp2.z);
     terrainEvents.addEndCity(temp2);
- 
+        
+    startingSpot = criticalPoints[0].z;
     beginPosition = criticalPoints[0];
 
     if (shiftTog)
@@ -486,12 +486,15 @@ void Terrain::init(TextureLoader* texLoader, Materials *matSetter, FrustumCull *
 }
 
 
-void Terrain::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMatrix, Camera* camera, glm::vec3 wagonPos)
-
+void Terrain::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMatrix, Camera* camera, glm::vec3 wagonPos, GLuint* pid)
 {
   //set up the texture unit
-    glEnable(GL_TEXTURE_2D);
-    glActiveTexture(GL_TEXTURE0);
+    // glEnable(GL_TEXTURE_2D);
+    // glActiveTexture(GL_TEXTURE0);
+
+
+
+
     // //glUniform1i(h_uTexUnit, 0);
     // for (int n = 0; n < MAP_Z; n++)
     // {
@@ -505,6 +508,7 @@ void Terrain::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMat
     //     }
     // }
     // glBindTexture(GL_TEXTURE_2D, TERRAIN_TEX_ID);
+
 
 	// Enable and bind normal array for drawing
    GLSL::enableVertexAttribArray(h_nor);
@@ -564,7 +568,22 @@ void Terrain::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMat
    glDisable(GL_TEXTURE_2D);
 
    terrainEvents.drawTerrainEvents(h_ModelMatrix, h_pos, h_nor, h_aTexCoord, 0.0);
-   tree.draw(camera, wagonPos);
+   for (int index = 0; index < MAP_X - 1; index++)
+   {
+      for(int index2 = 0; index2 < MAP_Z - 1; index2++)
+      {
+         if(trailMap[index][index2] == LBTRAIL || trailMap[index][index2] == RBTRAIL
+            || trailMap[index][index2] == LFARTRAIL || trailMap[index][index2] == LNEARTRAIL)
+         {
+            tree.draw(glm::vec3(index2, 0.0, -index + startingSpot + 2), camera, wagonPos);
+         }
+         else if (trailMap[index][index2] == LTTRAIL || trailMap[index][index2] == RTTRAIL
+            || trailMap[index][index2] == RFARTRAIL || trailMap[index][index2] == RNEARTRAIL)
+         {
+            tree.draw(glm::vec3(index2, 0.0, -index + startingSpot - 2), camera, wagonPos);
+         }
+      }
+   }
 }
 
 Spline* Terrain::getSpline()
