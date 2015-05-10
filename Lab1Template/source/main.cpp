@@ -709,12 +709,7 @@ int main(int argc, char **argv)
   	dtDraw = 0;
   	audio.playBackgroundMusic(true);
 
- //  	vector<string> about;
-	// about.push_back("about test");
-	// option testOpt = {"test option", test};
-	// vector<option> options;
-	// options.push_back(testOpt);
-	// menu.setData("Title", about, options);
+
    do{
    	timeNew = glfwGetTime();
 		audio.checkTime();
