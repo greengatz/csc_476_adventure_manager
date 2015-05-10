@@ -181,7 +181,7 @@ void Tree::draw(Camera *camera, glm::vec3 wagonPos)
    //=============== BARK of TREE ===================/
 
    //Set the material for the tree bark.
-   matSetter.setMaterial(1);
+   matSetter.setMaterial(4);
 
    glBindTexture(GL_TEXTURE_2D, TREE_BARK_TEX);
    GLSL::enableVertexAttribArray(h_aTexCoord);
