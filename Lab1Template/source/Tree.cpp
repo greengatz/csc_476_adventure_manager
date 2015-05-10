@@ -17,6 +17,7 @@ int TREE_LEAFS_TEX = 81;
 
 Tree::Tree() :
    position(-75.0f, 0.0f, -25.0f),
+   lightPosID(0),
    //Skybox Buffer
    posBufObjTree(0),
    norBufObjTree(0),
@@ -27,6 +28,12 @@ Tree::Tree() :
    norBufObjLeaf(0),
    leafTexBuffObj(0),
    indBufObjLeaf(0),
+
+   //Initialize the material.
+   h_ka(0),
+   h_kd(0),
+   h_ks(0),
+   h_s(0),
 
    leafToggleID(0),
 
@@ -44,6 +51,8 @@ void Tree::init(TextureLoader* texLoader)
    ModelTrans.useModelViewMatrix();
    ModelTrans.loadIdentity();
 
+   matSetter.init(&pid, &h_ka, &h_kd, &h_ks, &h_s);
+
   // Initialize Shader
   pid = LoadShaders( "Shaders/tree_vert.glsl", "Shaders/tree_frag.glsl");
 
@@ -55,6 +64,11 @@ void Tree::init(TextureLoader* texLoader)
   h_ModelMatrix = GLSL::getUniformLocation(pid, "uModelMatrix");
   h_uTexUnit = GLSL::getUniformLocation(pid, "uTexUnit");
   leafToggleID = GLSL::getUniformLocation(pid, "leafToggle");
+  lightPosID = GLSL::getUniformLocation(pid, "lightPos");
+  h_ka = GLSL::getUniformLocation(pid, "ka");
+  h_kd = GLSL::getUniformLocation(pid, "kd");
+  h_ks = GLSL::getUniformLocation(pid, "ks");
+  h_s = GLSL::getUniformLocation(pid, "s");
 
   // Load geometry
   // Some obj files contain material information.
@@ -150,6 +164,8 @@ void Tree::draw(Camera *camera, glm::vec3 wagonPos)
    camera->applyViewMatrix(&view, wagonPos);
    glUniformMatrix4fv(h_ViewMatrix, 1, GL_FALSE, glm::value_ptr(view.topMatrix()));
 
+   glUniform3fv(lightPosID, 1, glm::value_ptr(glm::vec3(-75.0f, 0.0f, -25.0f)));
+
    //Position Wagon along the trail
    ModelTrans.pushMatrix();
       ModelTrans.translate(position);
@@ -163,6 +179,9 @@ void Tree::draw(Camera *camera, glm::vec3 wagonPos)
    glUniform1i(h_uTexUnit, 0);
 
    //=============== BARK of TREE ===================/
+
+   //Set the material for the tree bark.
+   matSetter.setMaterial(4);
 
    glBindTexture(GL_TEXTURE_2D, TREE_BARK_TEX);
    GLSL::enableVertexAttribArray(h_aTexCoord);
@@ -192,6 +211,10 @@ void Tree::draw(Camera *camera, glm::vec3 wagonPos)
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
    //======================== Draw Leaves of the tree ==========================
+
+   //Set the material for the tree leaves.
+   matSetter.setMaterial(1);
+
    glUniform1i(leafToggleID, 1);
 
    //TODO: Set material when we go back to lighting methods. 

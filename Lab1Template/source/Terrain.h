@@ -14,6 +14,7 @@
 #include "splineCurve.h"
 #include "Tree.h"
 #include "Camera.h"
+#include "Materials.h"
 
 class Terrain
 {
