@@ -573,7 +573,7 @@ void Terrain::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMat
    terrainEvents.drawTerrainEvents(h_ModelMatrix, h_pos, h_nor, h_aTexCoord, 0.0);
    for (int index = 0; index < MAP_X - 1; index++)
    {
-      for(int index2 = 0; index2 < MAP_Z - 1; index2++)
+      for(int index2 = 0; index2 < MAP_Z - 3; index2++)
       {
          if(trailMap[index][index2] == LBTRAIL || trailMap[index][index2] == RBTRAIL
             || trailMap[index][index2] == LFARTRAIL || trailMap[index][index2] == LNEARTRAIL)
