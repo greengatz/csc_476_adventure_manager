@@ -169,7 +169,7 @@ void Terrain::createTrail(){
     //left for false, right for true.
     bool shiftTog = (rand() % 2) == 0 ? false : true; 
     int indexX, indexZ, bound = 20;
-    int startingSpot = ((rand() % (MAP_X - bound)) + (bound / 2));
+    startingSpot = ((rand() % (MAP_X - bound)) + (bound / 2));
     int lastSpot = startingSpot;
     int changeInPath = (rand() % (maxShift - minShift)) + minShift;
     vector<glm::vec2> splineSeed;
@@ -286,7 +286,7 @@ void Terrain::createTrail(){
         }
     }
         
-        
+    startingSpot = criticalPoints[0].z;
     beginPosition = criticalPoints[0];
 
     if (shiftTog)
@@ -429,25 +429,12 @@ void Terrain::init(TextureLoader* texLoader)
 	assert(glGetError() == GL_NO_ERROR);
 }
 
-void Terrain::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, Camera* camera, glm::vec3 wagonPos)
+void Terrain::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, 
+    Camera* camera, glm::vec3 wagonPos, GLuint* pid)
 {
   //set up the texture unit
     glEnable(GL_TEXTURE_2D);
     glActiveTexture(GL_TEXTURE0);
-
-    // //glUniform1i(h_uTexUnit, 0);
-    // for (int n = 0; n < MAP_Z; n++)
-    // {
-    //     for (int m = 0; m < MAP_Z; m++)
-    //     {
-    //         if(trailMap[n][z] == GRASS){
-    //             glBindTexture(GL_TEXTURE_2D, TERRAIN_TEX_ID);
-
-
-    //         }
-    //     }
-    // }
-    // glBindTexture(GL_TEXTURE_2D, TERRAIN_TEX_ID);
 
 	// Enable and bind normal array for drawing
    GLSL::enableVertexAttribArray(h_nor);
@@ -506,7 +493,22 @@ void Terrain::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, Camera* camera, 
    glBindBuffer(GL_ARRAY_BUFFER, 0);
    glDisable(GL_TEXTURE_2D);
 
-   tree.draw(camera, wagonPos);
+   for (int index = 0; index < MAP_X - 1; index++)
+   {
+      for(int index2 = 0; index2 < MAP_Z - 1; index2++)
+      {
+         if(trailMap[index][index2] == LBTRAIL || trailMap[index][index2] == RBTRAIL
+            || trailMap[index][index2] == LFARTRAIL || trailMap[index][index2] == LNEARTRAIL)
+         {
+            tree.draw(glm::vec3(index2, 0.0, -index + startingSpot + 2), camera, wagonPos);
+         }
+         else if (trailMap[index][index2] == LTTRAIL || trailMap[index][index2] == RTTRAIL
+            || trailMap[index][index2] == RFARTRAIL || trailMap[index][index2] == RNEARTRAIL)
+         {
+            tree.draw(glm::vec3(index2, 0.0, -index + startingSpot - 2), camera, wagonPos);
+         }
+      }
+   }
 }
 
 Spline* Terrain::getSpline()

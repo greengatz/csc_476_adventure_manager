@@ -16,7 +16,7 @@ int TREE_BARK_TEX = 80;
 int TREE_LEAFS_TEX = 81;
 
 Tree::Tree() :
-   position(-75.0f, 0.0f, -25.0f),
+   position(-100.0f, 0.0f, 25.0f),
    lightPosID(0),
    //Skybox Buffer
    posBufObjTree(0),
@@ -148,7 +148,7 @@ void Tree::init(TextureLoader* texLoader)
    assert(glGetError() == GL_NO_ERROR);
 }
 
-void Tree::draw(Camera *camera, glm::vec3 wagonPos)
+void Tree::draw(glm::vec3 treePosition, Camera *camera, glm::vec3 wagonPos)
 {
    //Using another shader program
    glUseProgram(pid);
@@ -168,7 +168,7 @@ void Tree::draw(Camera *camera, glm::vec3 wagonPos)
 
    //Position Wagon along the trail
    ModelTrans.pushMatrix();
-      ModelTrans.translate(position);
+      ModelTrans.translate(treePosition + position); //this was just "position". Can get rid of this after.
       ModelTrans.scale(scale, scale, scale);
       glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(ModelTrans.modelViewMatrix));
    ModelTrans.popMatrix();
@@ -216,8 +216,6 @@ void Tree::draw(Camera *camera, glm::vec3 wagonPos)
    matSetter.setMaterial(1);
 
    glUniform1i(leafToggleID, 1);
-
-   //TODO: Set material when we go back to lighting methods. 
 
    //set up the texture unit for bark
    glBindTexture(GL_TEXTURE_2D, TREE_LEAFS_TEX);

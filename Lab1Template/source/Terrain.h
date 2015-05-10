@@ -22,7 +22,7 @@ public:
 	Terrain();
 	virtual ~Terrain();
 	void init(TextureLoader* texLoader);
-	void draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, Camera* camera, glm::vec3 wagonPos);
+	void draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, Camera* camera, glm::vec3 wagonPos, GLuint* pid);
 	void createTrail();
 	void createEvents();
 	glm::vec3 getStartPosition();
@@ -50,9 +50,10 @@ private:
 	glm::vec3 beginPosition;
 	std::vector<glm::vec3> criticalPoints;
 	int oldTextureID;
-    int nextCPoint = 1;
-    Spline* path;
-    Tree tree;
+   int nextCPoint = 1;
+   Spline* path;
+   Tree tree;
+   int startingSpot;
 
 };
 

@@ -21,7 +21,7 @@ public:
    Tree();
    virtual ~Tree();
    void init(TextureLoader* texLoader);
-   void draw(Camera* camera, glm::vec3 wagonPos);
+   void draw(glm::vec3 treePosition, Camera* camera, glm::vec3 wagonPos);
 
 private:
    GLuint pid;
