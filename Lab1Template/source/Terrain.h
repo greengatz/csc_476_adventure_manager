@@ -38,6 +38,7 @@ private:
 	static const int MAP_Z = 50;
 	static const int MAP_SCALE = 1;
 	float terrain[MAP_X][MAP_Z][3]; // Terrain data
+	float randomTree[MAP_X][MAP_Z]; // random tree
 	GLuint posBufID;
 	GLuint norBufID;
 	GLuint texBufID;

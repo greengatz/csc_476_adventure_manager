@@ -283,6 +283,9 @@ void Terrain::createTrail(){
                 && trailMap[indexX - 1][indexZ] == GRASS) {
                 trailMap[indexX][indexZ] = LNEARTRAIL;
             }
+
+            //Stuffed in here to avoid writing another for loop
+            randomTree[indexX][indexZ] = 1.0 + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/(3.0-1.0)));
         }
     }
         
@@ -500,12 +503,12 @@ void Terrain::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord,
          if(trailMap[index][index2] == LBTRAIL || trailMap[index][index2] == RBTRAIL
             || trailMap[index][index2] == LFARTRAIL || trailMap[index][index2] == LNEARTRAIL)
          {
-            tree.draw(glm::vec3(index2, 0.0, -index + startingSpot + 2), camera, wagonPos);
+            tree.draw(glm::vec3(index2, 0.0, -index + startingSpot + randomTree[index][index2]), camera, wagonPos);
          }
          else if (trailMap[index][index2] == LTTRAIL || trailMap[index][index2] == RTTRAIL
             || trailMap[index][index2] == RFARTRAIL || trailMap[index][index2] == RNEARTRAIL)
          {
-            tree.draw(glm::vec3(index2, 0.0, -index + startingSpot - 2), camera, wagonPos);
+            tree.draw(glm::vec3(index2, 0.0, -index + startingSpot - randomTree[index][index2]), camera, wagonPos);
          }
       }
    }
