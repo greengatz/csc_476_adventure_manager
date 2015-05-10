@@ -11,6 +11,7 @@
 #include "glm/glm.hpp"
 #include "Terrain.h"
 #include "GLSL.h"
+#include "splineCurve.h"
 #define MERCHANT 1
 #define WANDERER 2
 #define AMBUSH 3
@@ -27,6 +28,7 @@
 #define LFARTRAIL 9
 #define RFARTRAIL 10
 
+//This probably isnt a good idea....
 using namespace std;
 
 int TERRAIN_TEX_ID = 100;
@@ -48,8 +50,8 @@ Terrain::Terrain() :
 	norBufID(0),
 	texBufID(0),
   oldTextureID(0),
-    beginPosition(0.0f, 0.0f, 0.0f),
-    criticalPoints(std::vector<glm::vec3>()),
+  beginPosition(0.0f, 0.0f, 0.0f),
+  criticalPoints(std::vector<glm::vec3>()),
   terrainEvents()
 {
 }
@@ -60,7 +62,7 @@ Terrain::~Terrain()
 
 glm::vec3 Terrain::getStartPosition()
 {
-   return beginPosition;
+   return criticalPoints[0];
 }
 
 void Terrain::printCriticalPoints()
@@ -74,9 +76,8 @@ void Terrain::printCriticalPoints()
 
 glm::vec3 Terrain::nextCriticalPoint(glm::vec3 aPos)
 {
-   glm::vec3 nextCriticPoint = criticalPoints.front();
-   criticalPoints.erase(criticalPoints.begin());
-   return nextCriticPoint;
+   nextCPoint++;
+   return criticalPoints[nextCPoint - 1];
 }
 
 bool Terrain::atEnd(glm::vec3 aPos)
@@ -91,8 +92,12 @@ bool Terrain::atEnd(glm::vec3 aPos)
 void Terrain::checkEvents(glm::vec3 aPos){
 
     int spot = floor(aPos.x);
+    if(spot > MAP_Z - 10){
+      terrainEvents.lowerBridge();
+    }
     if(eventsMap[spot] == MERCHANT){
         printf("%s\n", "You stumbled upon a merchant.");
+        
     }
     if(eventsMap[spot] == AMBUSH){
         printf("%s\n", "Bandits are ambushing your party!");
@@ -103,22 +108,30 @@ void Terrain::checkEvents(glm::vec3 aPos){
     if(eventsMap[spot] == SICKNESS){
         printf("%s\n", "One of you troops just caught the plague!");
     }
-
     eventsMap[spot] = 0;
 }
 
 void Terrain::placeEvents(){
   for(int i = 0; i < MAP_Z; i++){
+    glm::vec3 temp = criticalPoints[i];
     if(eventsMap[i] == AMBUSH){
-      // printf("Placing Ambush\n");
-      //z = i
-      //x = find(0)
-      for(int j = 0; j < MAP_X; j++){
-        if(trailMap[j][i] == 0){
-            printf("Placing ambush at %f, %f\n", (float)j, (float)i);
-            terrainEvents.addAmbush(glm::vec3((float)i - 105, 0, 0 - (float)j), glm::mat4(1.0f));
-        }
-      }
+      temp.x -= 101;
+      temp.z -= 1;
+      terrainEvents.addAmbush(temp, glm::mat4(1.0f));
+      printf("Placing ambush at %f, %f\n", temp.x, temp.z);
+
+    }
+    if(eventsMap[i] == MERCHANT){
+      temp.x -= 101;
+      temp.z += 1.5;
+      terrainEvents.addMerchantStand(temp, glm::mat4(1.0f));
+      printf("Placing merchant at %f, %f\n", temp.x, temp.z);
+    }
+    if(eventsMap[i] == WANDERER){
+      temp.x -= 101;
+      // temp.z += 0.5;
+      terrainEvents.addRandomDuder(temp, glm::mat4(1.0f));
+      printf("Placing merchant at %f, %f\n", temp.x, temp.z);
     }
   }
 }
@@ -128,7 +141,8 @@ void Terrain::createEvents(){
         minWand = 1, maxWand = 2,        //Min max chance of Random Wanderer event
         minAmbush = 1, maxAmbush = 3,    //Min max chance of Ambush event
         minSick = 2, maxSick = 5;        //Min max chance of Sickness event 
-    int startingOffset = 3;
+    int startingOffset = 3;      //No events from starting 3 spaces
+    int endingOffset = 5;      //No events from ending 5 spaces
 
     for(int i = 0; i < MAP_X; i++){
         eventsMap[i] = 0;
@@ -136,174 +150,205 @@ void Terrain::createEvents(){
     srand(time(NULL));
 
     //Place Merchant
-    int merchCount = (rand() % (maxMerch - minMerch + 1)) + minMerch;
+    int merchCount = (rand() % (maxMerch - minMerch)) + minMerch;
     for(int i = 0; i <= merchCount; i++){
-        int random = ((rand() % (MAP_X - startingOffset)) +  startingOffset);
+        int random = ((rand() % (MAP_X - startingOffset - endingOffset)) +  startingOffset);
         if(eventsMap[random] == 0 && eventsMap[random + 1] == 0 && eventsMap[random - 1] == 0)
             eventsMap[random] = MERCHANT; 
         else
-            i--;
+            merchCount++;
     }
 
     //Place Wanderer
-    int wandCount = (rand() % (maxWand - minWand + 1)) + minWand;
+    int wandCount = (rand() % (maxWand - minWand)) + minWand;
     for(int i = 0; i <= wandCount; i++){
-        int random = ((rand() % (MAP_X - startingOffset)) +  startingOffset);
+        int random = ((rand() % (MAP_X - startingOffset - endingOffset)) +  startingOffset);
         if(eventsMap[random] == 0 && eventsMap[random + 1] == 0 && eventsMap[random - 1] == 0)
             eventsMap[random] = WANDERER; 
         else
-            i--;
+            wandCount++;
     }
 
     //Place Ambush
-    int ambushCount = (rand() % (maxAmbush - minAmbush + 1)) + minAmbush;
+    int ambushCount = (rand() % (maxAmbush - minAmbush)) + minAmbush;
     for(int i = 0; i <= ambushCount; i++){
-        int random = ((rand() % (MAP_X - startingOffset)) +  startingOffset);
+        int random = ((rand() % (MAP_X - startingOffset - endingOffset)) +  startingOffset);
         if(eventsMap[random] == 0 && eventsMap[random + 1] == 0 && eventsMap[random - 1] == 0){
             eventsMap[random] = AMBUSH; 
             // printf("Ambush on trail at : %f", (float)random); 
         }
         else
-            i--;
+            ambushCount++;
     }
 
     //Place Sickness
-    int sickCount = (rand() % (maxSick - minSick + 1)) + minSick;
+    int sickCount = (rand() % (maxSick - minSick)) + minSick;
     for(int i = 0; i <= sickCount ; i++){
         int random = ((rand() % (MAP_X - startingOffset)) +  startingOffset);
         if(eventsMap[random] == 0 && eventsMap[random + 1] == 0 && eventsMap[random - 1] == 0)
             eventsMap[random] = SICKNESS; 
         else
-            i--;
+            sickCount++;
     }
+    printf("MerchCount:%d, Wanderer:%d, Ambush:%d, Sickness:%d\n", merchCount, wandCount, ambushCount, sickCount);
+    for(int i = 0; i <= MAP_Z ; i++){
+        printf("[%d]", eventsMap[i]);
+    }
+
     placeEvents();
 }
 
+// i fixed one of 3 problem spots
 void Terrain::createTrail(){
     criticalPoints.clear();
 
     srand(time(NULL));
-    int minShift = 2, maxShift = 10;
+    int minShift = 6, maxShift = 12;
     //left for false, right for true.
     bool shiftTog = (rand() % 2) == 0 ? false : true; 
     int indexX, indexZ, bound = 10;
     int startingSpot = ((rand() % (MAP_X - bound)) + (bound / 2));
     int lastSpot = startingSpot;
-    // srand(time(NULL));
     int changeInPath = (rand() % (maxShift - minShift)) + minShift;
-    // printf("Trail Map @ startingSpot %d{\n", startingSpot);
-    for (indexZ = 0; indexZ < MAP_Z; indexZ++){
-        printf("Going Right: %d, New ChangeInPath %d |", shiftTog, changeInPath);
-        // changeInPath = (indexZ % 2 == 1) ? ((rand() % 3) - 1) + startingSpot : startingSpot;
-        // printf("Shift %d |", changeInPath);
-        for (indexX = 0; indexX < MAP_X; indexX++)
-        {
-            trailMap[indexX][indexZ] = GRASS;
-
-            if(indexZ == 0 && indexX == startingSpot){
-                //Starting spot
-                trailMap[indexX][indexZ]=RED;
-            }
-            else if(indexX == lastSpot - 1)
-            {
-                if(changeInPath == 0){
-                    if(!shiftTog){
-                        trailMap[indexX][indexZ]=LNEARTRAIL;
-                    }else{
-                        trailMap[indexX][indexZ]=LFARTRAIL;
-                    }
-                }else{
-                    //Left Tile
-                    if(!shiftTog){
-                        trailMap[indexX][indexZ]=LBTRAIL;
-                    }else{
-                        trailMap[indexX][indexZ]=RBTRAIL;
-                    }
-                }
-            }
-            else if(indexX == lastSpot + 1)
-            {
-                if(changeInPath == 0){
-                    if(!shiftTog){
-                        trailMap[indexX][indexZ]=RNEARTRAIL;
-                    }else{
-                        trailMap[indexX][indexZ]=RFARTRAIL;
-                    }
-                }else{
-                    //Right Tile
-                    if(!shiftTog){
-                        trailMap[indexX][indexZ]=LTTRAIL;
-                    }else{
-                        trailMap[indexX][indexZ]=RTTRAIL;
-                    }
-                }
-            }
-            else if(indexX == lastSpot)
-            {
-                //Center Tile
-                trailMap[indexX][indexZ]=TRAIL;
-                //criticalPoints.push_back(glm::vec3(indexX, 0.0, indexZ));
-            }
-            printf("[%i]",trailMap[indexX][indexZ]);
+    vector<glm::vec2> splineSeed;
+    int direction = 1;
+    nextCPoint = 1;
 
 
-        }
-        
-
-        
-
-
-        if(changeInPath == 0){
-            // srand(time(NULL));
-            
+    splineSeed.clear();
+    // determine our critical points to make the spline
+    splineSeed.push_back(glm::vec2(0, -25)); // add first point to spline
+    // x is our depth through the trail
+    // x = 50 is end
+    for (indexZ = 0; indexZ < MAP_Z; indexZ++) {
+        if(changeInPath == 0) {
             changeInPath = (rand() % (maxShift - minShift)) + minShift;
-            if (shiftTog){
-              criticalPoints.push_back(glm::vec3(indexZ, 0.0, -lastSpot - 1.0));
-              criticalPoints.push_back(glm::vec3(indexZ + 1.0, 0.0, -lastSpot - 1.0));
-            }else{
-              criticalPoints.push_back(glm::vec3(indexZ, 0.0, -lastSpot));
-              criticalPoints.push_back(glm::vec3(indexZ + 1.0, 0.0, -lastSpot));   
-            }
-
-            if(lastSpot > MAP_X - 5){
-                shiftTog = false;
-            }else if(lastSpot < 5){
-                shiftTog = true;
-            }else{
-                shiftTog = !shiftTog;
-            }
-        }else if(changeInPath == 1){
-            // if (shiftTog)
-            //   criticalPoints.push_back(glm::vec3(indexZ, 0.0, -lastSpot - 1.0));
-            // else
-            //   criticalPoints.push_back(glm::vec3(indexZ, 0.0, -lastSpot));
-
-            changeInPath--;
-        }else{
-            changeInPath--;
-            if(shiftTog)
-            lastSpot++;
-            else
-            lastSpot--;
+            int newZ = (rand() % (maxShift - minShift)) * direction + splineSeed[splineSeed.size() - 1].y;
+            splineSeed.push_back(glm::vec2(indexZ, newZ));
+            cout << splineSeed[splineSeed.size() - 1].x << ", " << splineSeed[splineSeed.size() - 1].y << "\n";
         }
-
-
-        if(changeInPath > 1 && lastSpot > MAP_X - (bound / 2) && shiftTog){
-            changeInPath = 1;
-        }else if(changeInPath > 1 && lastSpot < bound / 2 && !shiftTog){
-            changeInPath = 1;
-        } 
-
-        printf("\n");
-        // startingSpot = changeInPath;
-        //Relative to the world
-        beginPosition = glm::vec3(0.0, 0.0, -startingSpot);
+        else {//if(changeInPath == 1){
+            changeInPath--;
+            direction = -direction;
+        }
     }
+    
+    splineSeed.push_back(glm::vec2(50, splineSeed[splineSeed.size() - 1].y)); // add last point to spline
+    path = new Spline(splineSeed, 0, 0);
+
+    for(int i = 0; i < 50; i++) { // reverse these
+        cout << "cp: " << i << ", " << path->getY(i) << "\n";
+        criticalPoints.push_back(glm::vec3(i, 0, path->getY(i)));
+        printf("criticalPoints[%d]:%f,%f,%f \n", i, criticalPoints[i].x,criticalPoints[i].y,criticalPoints[i].z);
+    }
+
+    // using the spline, draw generate a path
+    // everything is grass to start
+    for (indexZ = 0; indexZ < MAP_Z; indexZ++){
+        for (indexX = 0; indexX < MAP_X; indexX++) {
+            trailMap[indexX][indexZ] = GRASS;
+        }
+    }
+
+    // draw the main trail
+    for (indexZ = 0; indexZ < MAP_Z; indexZ++){
+        for (indexX = 0; indexX < MAP_X; indexX++) {
+            if(abs(indexZ + path->getY(indexX) + 0.5) < 1) {
+                trailMap[indexZ][indexX]=TRAIL;
+              
+            }
+        }
+    }
+
+    // draw the sides of the trail
+
+    // 4 diagonal trail sides
+    for(indexZ = 0; indexZ < MAP_Z - 1; indexZ++) {
+        for(indexX = 0; indexX < MAP_X; indexX++) {
+            if(trailMap[indexX][indexZ] == TRAIL
+                && trailMap[indexX - 1][indexZ + 1] == TRAIL
+                && trailMap[indexX - 1][indexZ] == GRASS) {
+                trailMap[indexX - 1][indexZ] = LBTRAIL;
+            }
+        }
+    }
+    
+    for(indexZ = 0; indexZ < MAP_Z - 1; indexZ++) {
+        for(indexX = 0; indexX < MAP_X; indexX++) {
+            if(trailMap[indexX][indexZ] == TRAIL
+                && trailMap[indexX + 1][indexZ + 1] == TRAIL
+                && trailMap[indexX + 1][indexZ] == GRASS) {
+                trailMap[indexX + 1][indexZ] = RTTRAIL;
+            }
+        }
+    }
+    
+    for(indexZ = 0; indexZ < MAP_Z; indexZ++) {
+        for(indexX = 0; indexX < MAP_X - 1; indexX++) {
+            if(trailMap[indexX][indexZ] == TRAIL
+                && trailMap[indexX - 1][indexZ - 1] == TRAIL
+                && trailMap[indexX - 1][indexZ] == GRASS) {
+                trailMap[indexX - 1][indexZ] = RBTRAIL;
+            }
+        }
+    }
+    
+    for(indexZ = 0; indexZ < MAP_Z; indexZ++) {
+        for(indexX = 1; indexX < MAP_X - 1; indexX++) {
+            if(trailMap[indexX][indexZ] == TRAIL
+                && trailMap[indexX + 1][indexZ - 1] == TRAIL
+                && trailMap[indexX + 1][indexZ] == GRASS) {
+                trailMap[indexX + 1][indexZ ] = LTTRAIL;
+            }
+        }
+    }
+
+/*#define LNEARTRAIL 7
+#define RNEARTRAIL 8
+#define LFARTRAIL 9
+#define RFARTRAIL 10*/
+    // flat trail sides
+    for(indexZ = 0; indexZ < MAP_Z; indexZ++) {
+        for(indexX = 0; indexX < MAP_X; indexX++) {
+            if(trailMap[indexX][indexZ] == TRAIL
+                && trailMap[indexX + 1][indexZ] == GRASS) {
+                trailMap[indexX][indexZ] = RFARTRAIL;
+            }
+        }
+    }
+    
+    for(indexZ = 0; indexZ < MAP_Z; indexZ++) {
+        for(indexX = 0; indexX < MAP_X; indexX++) {
+            if(trailMap[indexX][indexZ] == TRAIL
+                && trailMap[indexX - 1][indexZ] == GRASS) {
+                trailMap[indexX][indexZ] = LNEARTRAIL;
+            }
+        }
+    }
+    
+    vec3 temp = criticalPoints[0];
+    temp.x -= 101;
+    temp.y += 0.1;
+    printf("Critical Point [0] : %f,%f,%f\n", temp.x, temp.y, temp.z);
+    terrainEvents.addStartCity(temp);
+
+    vec3 temp2 = criticalPoints[MAP_X - 1];
+
+    temp2.x -= 100;
+    temp2.y -= 0.1;
+    temp2.z += 1;
+    // temp2.z = temp.z * -1.0;
+    printf("Critical Point [50] : %f,%f,%f\n", temp2.x, temp2.y, temp2.z);
+    terrainEvents.addEndCity(temp2);
+ 
+    beginPosition = criticalPoints[0];
+
     if (shiftTog)
       criticalPoints.push_back(glm::vec3((float)((MAP_X+1.0) * MAP_SCALE), 0.0, -lastSpot - 1.0));
     else
       criticalPoints.push_back(glm::vec3((float)((MAP_X+1.0) * MAP_SCALE), 0.0, -lastSpot));
-
+    
+    path->printSpline();
     createEvents();
 }
 
@@ -315,10 +360,10 @@ void Terrain::init(TextureLoader* texLoader, Materials *matSetter, FrustumCull *
 	x.y = 0.0f;
 	x.z = 0.0f;
 	scale = 5.0f;
-    createTrail();
+  createTrail();
 	GLfloat terrain_buffer[(MAP_Z - 1) * (MAP_X - 1) * 12];
-  	GLfloat terrain_norm[(MAP_Z - 1) * (MAP_X - 1) * 12];
-  	GLfloat terrain_tex[(MAP_Z - 1) * (MAP_X - 1) * 8];
+  GLfloat terrain_norm[(MAP_Z - 1) * (MAP_X - 1) * 12];
+  GLfloat terrain_tex[(MAP_Z - 1) * (MAP_X - 1) * 8];
 
   	int index = 0;
   	// loop through all of the heightfield points, calculating
@@ -510,9 +555,14 @@ void Terrain::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMat
    GLSL::disableVertexAttribArray(h_pos);
    GLSL::disableVertexAttribArray(h_nor);
    GLSL::disableVertexAttribArray(h_aTexCoord);
-   glBindBuffer(GL_ARRAY_BUFFER, 0);
+   glBindBuffer(GL_ARRAY_BUFFER, 0); 
    glDisable(GL_TEXTURE_2D);
 
-   terrainEvents.drawTerrainEvents(h_ModelMatrix, h_pos, h_nor, h_aTexCoord);
+   terrainEvents.drawTerrainEvents(h_ModelMatrix, h_pos, h_nor, h_aTexCoord, 0.0);
 
+}
+
+Spline* Terrain::getSpline()
+{
+    return path;
 }

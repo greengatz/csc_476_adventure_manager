@@ -7,6 +7,25 @@ set(DEP_DIR "${PROJECT_SOURCE_DIR}/dependencies")
 # Source / header files
 include("sources.txt")
 
+#fmod
+set(FMOD_DIR "${DEP_DIR}/fmod_api")
+set(FMOD_DIR_MAC "${DEP_DIR}/fmod_mac")
+if(APPLE)
+    #include apple fmod library
+    list(APPEND INCLUDES
+      ${FMOD_DIR_MAC}/api/inc
+   )
+   list(APPEND LIBS
+      ${FMOD_DIR_MAC}/api/lib/libfmodex.dylib)
+elseif(UNIX)
+    list(APPEND INCLUDES
+        ${FMOD_DIR}/api/inc
+    )
+    list(APPEND LIBS
+        ${FMOD_DIR}/api/lib/libfmodex64-4.44.52.so
+    )
+endif(APPLE)
+
 # GLFW
 set(GLFW_DIR "${DEP_DIR}/glfw")
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "Build the GLFW example programs")

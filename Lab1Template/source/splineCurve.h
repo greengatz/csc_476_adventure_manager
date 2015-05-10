@@ -27,7 +27,10 @@ class Spline
 {
 	public:
 		Spline(vector<glm::vec2> points, float initSlope, float endSlope);
+		Spline(); // don't use this ever
 		float getY(float x);
+		float getDY(float x);
+        void printSpline();
 
 	private:
         class SplineSegment
@@ -37,6 +40,8 @@ class Spline
                 float endX;
                 SplineSegment(VectorXd coeff, float start, float end);
                 float getY(float x);
+                float getDY(float x);
+                void printSegment();
 
             private:
                 VectorXd coefficients;

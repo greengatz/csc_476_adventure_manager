@@ -53,7 +53,7 @@ void SoundPlayer::play()
 {
 	if (success) {
 		result = FMOD_System_PlaySound(sys, FMOD_CHANNEL_FREE, audioStream, false, &channel);
-		printf("Did not play sound because %d\n", result);
+		// printf("Did not play sound because %d\n", result);
 		FMOD_Channel_SetMode(channel, FMOD_LOOP_NORMAL);
 	}
 }

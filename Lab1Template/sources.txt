@@ -10,7 +10,6 @@ set(HEADERS
    Shape.h
    Terrain.h
    TextureLoader.h
-   Wall.h
    tavern.h
    obj3d.h
    obj3dcontainer.h
@@ -24,6 +23,12 @@ set(HEADERS
    hud.h
    splineCurve.h
    TerrainEvent.h
+   SoundPlayer.h
+   text2D.hpp
+   texture.hpp
+   shader.hpp
+   menu.h
+   Skybox.h
 )
 
 # List all .c / .cpp files here
@@ -38,7 +43,6 @@ set(SOURCES
    Shape.cpp
    Terrain.cpp
    TextureLoader.cpp
-   Wall.cpp
    tavern.cpp
    obj3d.cpp
    obj3dcontainer.cpp
@@ -52,4 +56,10 @@ set(SOURCES
    hud.cpp
    splineCurve.cpp
    TerrainEvent.cpp
+   SoundPlayer.cpp
+   text2D.cpp
+   texture.cpp
+   shader.cpp
+   menu.cpp
+   Skybox.cpp
 )

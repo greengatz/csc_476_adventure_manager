@@ -1,6 +1,6 @@
 #include "hud.h"
 int HUD_ID = 4000;
-int g_GiboLen;
+
 
 HUD::HUD(Manager *newMan)
 {

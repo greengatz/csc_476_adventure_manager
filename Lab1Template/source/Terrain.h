@@ -12,7 +12,7 @@
 #include "TextureLoader.h"
 #include "TerrainEvent.h"
 #include <vector>
-
+#include "splineCurve.h"
 
 class Terrain
 {
@@ -29,6 +29,7 @@ public:
 	void printCriticalPoints();
 	void checkEvents(glm::vec3 aPos);
 	void placeEvents();
+    Spline* getSpline();
 
 private:
 
@@ -49,6 +50,9 @@ private:
 	std::vector<glm::vec3> criticalPoints;
 	int oldTextureID;
 	TerrainEvent terrainEvents;
+    int nextCPoint = 1;
+    Spline* path;
+
 };
 
 #endif

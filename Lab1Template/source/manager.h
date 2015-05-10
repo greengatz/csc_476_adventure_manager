@@ -29,11 +29,16 @@ class Manager
 		void reportStats();
 		void buyFood();
 		void buyBeer();
+		int getGold();
+		int getFood();
+		int getBeer();
+		int getMercs();
+
 
 	private:
 		vec3 position;
 		string name;
-		double gold;
+		int gold;
 		int food;
 		int beer;
 		vector<Mercenary> mercs;

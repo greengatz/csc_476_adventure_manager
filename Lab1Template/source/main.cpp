@@ -1,3 +1,7 @@
+#ifdef _MSC_VER
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+
 /**
  * Mercenary Manager
  * @author Brandon Clark
@@ -12,8 +16,8 @@
 #include "Camera.h"
 #include "Shape.h"
 #include "Terrain.h"
-#include "Wall.h"
 #include "hud.h"
+#include "menu.h"
 #include "MatrixStack.h"
 #include "tiny_obj_loader.h"
 #include "glm/glm.hpp"
@@ -32,8 +36,9 @@
 #include <string>
 #include "splineTest.cpp"
 #include "TerrainEvent.h"
-//#include "text2D.hpp"
-// #include "SoundPlayer.h"
+#include "text2D.hpp"
+#include "SoundPlayer.h"
+#include "Skybox.h"
 
 using namespace std;
 using namespace glm;
@@ -58,8 +63,6 @@ int points = 0;
 Terrain terrain;
 //Plane toggle for coloring
 GLint terrainToggleID;
-
-Wall wall;
 
 Wagon wagon;
 
@@ -122,99 +125,18 @@ GLuint NumBufObj, NumIndBufObj, NumTexBufObj;
 //Rendering Helper
 RenderingHelper ModelTrans;
 Tavern tavern;
-// TerrainEvent terrEv;
+TerrainEvent terrEv;
 Manager manager("The Dude");
 TavernTerrain tavTerr;
 Materials matSetter;
 FrustumCull fCuller;
 HUD hud(&manager);
+Menu menu;
 double dtDraw;
-// SoundPlayer audio;
+SoundPlayer audio;
 
-/**
- * Helper function to send materials to the shader - create below.
- */
-// void SetMaterial(int i)
-// {
-// 	glUseProgram(pid);
-// 	switch(i) {
-// 		case 0: //Red Default
-// 			glUniform3f(h_ka, 0.15, 0.15, 0.15);
-// 			glUniform3f(h_kd, 0.8, 0.2, 0.2);
-// 			glUniform3f(h_ks, 0.2, 0.2, 0.2);
-// 			glUniform1f(h_s, 50.0);
-// 			break;
-// 		case 1: //Green
-// 			glUniform3f(h_ka, 0.15, 0.15, 0.15);
-// 			glUniform3f(h_kd, 0.2, 0.8, 0.2);
-// 			glUniform3f(h_ks, 0.2, 0.2, 0.2);
-// 			glUniform1f(h_s, 50.0);
-// 			break;
-// 		case 2: //Default light
-// 			glUniform3f(h_ka, 0.15, 0.15, 0.15);
-// 			glUniform3f(h_kd, 0.3, 0.3, 0.3);
-// 			glUniform3f(h_ks, 0.2, 0.2, 0.2);
-// 			glUniform1f(h_s, 50.0);
-// 			break;
-// 		case 3: //Wood
-// 			glUniform3f(h_ka, 0.35, 0.35, 0.35);
-// 			glUniform3f(h_kd, 0.804, 0.666, 0.49);
-// 			glUniform3f(h_ks, 0.1, 0.1, 0.1);
-// 			glUniform1f(h_s, 0.01);
-// 			break;
-// 		case 4: //not specular Wood
-// 			glUniform3f(h_ka, 0.1, 0.1, 0.1);
-// 			glUniform3f(h_kd, 0.404, 0.366, 0.29);
-// 			glUniform3f(h_ks, 0.051, 0.051, 0.051);
-// 			glUniform1f(h_s, 0.01);
-// 			break;
-// 	}
-// }
-
-// static void initNumPlane() {
-
-//    float g_groundSize = 1;
-
-//   // A x-z plane at y = g_groundY of dimension [-g_groundSize, g_groundSize]^2
-//     float GrndPos[] = {
-//     -g_groundSize, -g_groundSize, 0.0,
-//     -g_groundSize, g_groundSize, 0.0,
-//      g_groundSize, g_groundSize, 0.0, 
-//      g_groundSize, -g_groundSize, 0.0
-//     };
-
-//     float GrndNorm[] = {
-//      0, 0, 1,
-//      0, 0, 1,
-//      0, 0, 1,
-//      0, 0, 1,
-//      0, 0, 1,
-//      0, 0, 1
-//     };
-
-
-//   static GLfloat GrndTex[] = {
-//       0, 0, // back
-//       0, 1,
-//       1, 1,
-//       1, 0 };
-
-//     unsigned short idx[] = {0, 1, 2, 0, 2, 3};
-
-//     g_GiboLen = 6;
-//     glGenBuffers(1, &NumBufObj);
-//     glBindBuffer(GL_ARRAY_BUFFER, NumBufObj);
-//     glBufferData(GL_ARRAY_BUFFER, sizeof(GrndPos), GrndPos, GL_STATIC_DRAW);
-
-//     glGenBuffers(1, &NumTexBufObj);
-//     glBindBuffer(GL_ARRAY_BUFFER, NumTexBufObj);
-//     glBufferData(GL_ARRAY_BUFFER, sizeof(GrndTex), GrndTex, GL_STATIC_DRAW);
-
-//     glGenBuffers(1, &NumIndBufObj);
-//     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, NumIndBufObj);
-//     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(idx), idx, GL_STATIC_DRAW);
-
-// }
+//The skybox
+Skybox skybox;
 
 /**
  * For now, this just initializes the Shape object.
@@ -232,7 +154,6 @@ void initShape(char * filename)
 /**
  * Generalized approach to intialization.
  */
-
 void spinOffNewShape(char * filename, float x, float z){
 	Shape temp;
 	temp.load(filename);
@@ -246,11 +167,11 @@ void initModels()
 	terrain.init(&texLoader, &matSetter, &fCuller);
 	tavTerr.init(&texLoader);
 
-	//Initalize Wall
-	wall.init(&texLoader);
-
 	//Initalize Wagon
 	wagon.init(&texLoader, &terrain);
+
+	//Initialize skybox
+	skybox.init(&texLoader);
 
 	//initialize the modeltrans matrix stack
    ModelTrans.useModelViewMatrix();
@@ -348,47 +269,8 @@ bool installShaders(const string &vShaderName, const string &fShaderName)
 	return true;
 }
 
-//This will be in wall class eventually....
-void drawWalls()
-{
-	ModelTrans.pushMatrix();
-		ModelTrans.translate(glm::vec3(3.0, 0.0, 0.0));
-		glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(ModelTrans.modelViewMatrix));
-		wall.draw(h_vertPos, h_vertNor, h_aTexCoord);
-		for (int i = 0; i < 7; i++)
-		{
-			ModelTrans.translate(glm::vec3(5.7, 0.0, 0.0));
-			glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(ModelTrans.modelViewMatrix));
-			wall.draw(h_vertPos, h_vertNor, h_aTexCoord);
-		}
-		ModelTrans.translate(glm::vec3(3.3, 0.0, 0.0));
-		glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(ModelTrans.modelViewMatrix));
-		wall.draw(h_vertPos, h_vertNor, h_aTexCoord);
-		for (int j = 0; j < 3; j++)
-		{
-			ModelTrans.translate(glm::vec3(2.8, 0.0, 0.0));
-			ModelTrans.pushMatrix();
-				ModelTrans.rotate(90.0, glm::vec3(0, 1, 0));
-				ModelTrans.translate(vec3(-3.0, 0.0, 0.0));
-				for (int i = 0; i < 8; i++)
-				{
-					ModelTrans.translate(glm::vec3(5.7, 0.0, 0.0));
-					glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(ModelTrans.modelViewMatrix));
-					wall.draw(h_vertPos, h_vertNor, h_aTexCoord);
-				}
-				ModelTrans.translate(glm::vec3(3.3, 0.0, 0.0));
-				glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(ModelTrans.modelViewMatrix));
-				wall.draw(h_vertPos, h_vertNor, h_aTexCoord);
-		}
-					ModelTrans.popMatrix();
-				ModelTrans.popMatrix();
-			ModelTrans.popMatrix();
-	ModelTrans.popMatrix();
-}
-
 void drawGL()
 {
-
 	// Clear buffers
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -434,7 +316,8 @@ void drawGL()
 			//ModelTrans.popMatrix();
 			ModelTrans.pushMatrix();
 				terrain.draw(h_vertPos, h_vertNor, h_aTexCoord, h_ModelMatrix);
-				drawWalls();
+				// drawWalls();
+				// terrain.draw(h_vertPos, h_vertNor, h_aTexCoord);
 				wagon.draw(h_vertPos, h_vertNor, h_aTexCoord, h_ModelMatrix, &ModelTrans);
 			ModelTrans.popMatrix();
 		ModelTrans.popMatrix();
@@ -451,7 +334,10 @@ void drawGL()
 		ModelTrans.pushMatrix();
 		ModelTrans.popMatrix();
 		// terrEv.drawTerrainEvents(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord);
+		// terrEv.drawTerrainEvents(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord, dtDraw);
 		glUniform1i(terrainToggleID, 0);
+      //Draw the skybox
+      skybox.draw(&camera, wagon.getPosition());
 	}
 
 
@@ -476,7 +362,23 @@ void drawGL()
 	{
 		glUniform1i(h_flag, 1);
 		hud.drawHud(h_ModelMatrix, h_vertPos, g_width, g_height, h_aTexCoord);
+		menu.drawMenu(3, "Test", "About Test Blah Blah Blah", "Option 1", "Option 2",
+			"Press g to close this");
 		glUniform1i(h_flag, 0);
+		
+
+		char info[64];
+		sprintf(info,"x %d", manager.getGold());
+		printText2D(info, 50, 566, 18);
+
+		sprintf(info,"x %d", manager.getFood());
+		printText2D(info, 220, 566, 18);
+
+		sprintf(info,"x %d", manager.getBeer());
+		printText2D(info, 430, 566, 18);
+
+		sprintf(info,"x %d", manager.getMercs());
+		printText2D(info, 620, 566, 18);
 	}
 
 	//**************Draw HUD FINISH********************
@@ -555,6 +457,14 @@ void checkUserInput()
       camera.updateZoom(-view);
    }
 
+}
+
+void mouseScrollCB(GLFWwindow* window, double xoffset, double yoffset)
+{
+	if (!camera.isTavernView())
+	{
+		camera.updateWagonZoom(yoffset);
+	}
 }
 
 /**
@@ -668,8 +578,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	}
 	if (key == GLFW_KEY_J && action == GLFW_PRESS)
 	{
-		// audio.loadFile(TAV_MUSIC);
-		// audio.play();
+		audio.loadFile(TAV_MUSIC);
+		audio.play();
 	}
 	//Toggle hud
 	if (key == GLFW_KEY_G && action == GLFW_PRESS)
@@ -685,6 +595,11 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         	wagon.setTimeStamp(glfwGetTime());
         }
     }
+	//lower drawbridge
+	if (key == GLFW_KEY_N && action == GLFW_PRESS)
+	{
+		terrEv.lowerBridge();
+	}
 }
 
 void window_size_callback(GLFWwindow* window, int w, int h){
@@ -735,6 +650,7 @@ int main(int argc, char **argv)
     glfwMakeContextCurrent(window);
     glfwSetWindowSizeCallback(window, window_size_callback);
     glfwSetKeyCallback(window, key_callback);
+    glfwSetScrollCallback(window, mouseScrollCB);
 
     // Initialize glad
    if (!gladLoadGL()) {
@@ -762,13 +678,17 @@ int main(int argc, char **argv)
   	initModels();
   	tavern.loadTavernMeshes(&texLoader);
 
-  	//currently being worked on... sorta works
+ 	//used only for testing purposes
   	// terrEv.loadTerrEvMeshes(&texLoader);
   	// vec3 loc = terrain.getStartPosition();
-  	// terrEv.addMerchantStand(vec3(loc.x - 99, loc.y, loc.z), glm::mat4(1.0f));
+  	// terrEv.addMerchantStand(vec3(loc.x - 95.5, loc.y, loc.z), glm::mat4(1.0f));
+  	// terrEv.addMerchantStand(vec3(loc.x - 92.5, loc.y, loc.z), glm::rotate(glm::mat4(1.0f), (const float)90, glm::vec3(0, 1.0f, 0)));
+  	// terrEv.addMerchantStand(vec3(loc.x - 89.5, loc.y, loc.z), glm::rotate(glm::mat4(1.0f), (const float)180, glm::vec3(0, 1.0f, 0)));
+  	// terrEv.addEndCity(vec3(loc.x - 82.5, loc.y, loc.z));
 
   	hud.initHUD(&texLoader);
-  	//initText2D( "Holstein.DDS" );
+  	menu.initMenu(&texLoader, h_ModelMatrix, h_vertPos, g_width, g_height, h_aTexCoord);
+  	initText2D( "Holstein.DDS" );
   	dtDraw = 0;
    do{
    	timeNew = glfwGetTime();

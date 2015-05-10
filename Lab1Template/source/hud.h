@@ -34,6 +34,7 @@ class HUD
 
 	private:
 		Manager *man;
+		int g_GiboLen;
 };
 
 #endif

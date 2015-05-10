@@ -9,6 +9,7 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "Wagon.h"
 #include "GLSL.h"
+#include "splineCurve.h"
 #include <math.h>
 
 using namespace std;
@@ -29,7 +30,7 @@ Wagon::Wagon() :
   wagonStart(false),
   terrain(0),
   deltaTime(0.0f),
-  velocity(3.0f),
+  velocity(0.75f),
   nextPoint(0.0f, 0.0f, 0.0f),
   orientation(1.0f, 0.0f, 0.0f)
 {
@@ -41,15 +42,17 @@ Wagon::~Wagon()
 
 void Wagon::resetWagon()
 {
-   neg = 1.0;
-   wagonStart = false;
-   orientation = glm::vec3(1.0f, 0.0f, 0.0f);
-   position = terrain->getStartPosition() + glm::vec3(0.6, 0.05, -0.5);
-   nextPoint = terrain->nextCriticalPoint(position);
-   direction = glm::normalize(nextPoint - position);
-   terrain->printCriticalPoints();
 
-   rotate = acos((glm::dot(direction, orientation)/(glm::length(orientation) * glm::length(direction)))) * (180.0/3.14);
+    neg = 1.0;
+    wagonStart = false;
+    orientation = glm::vec3(1.0f, 0.0f, 0.0f);
+    position = terrain->getStartPosition() + glm::vec3(0.6, 0.05, -0.5);
+    // cout << "wagon is starting at " << position.x << ", " << position.z << "\n";
+    nextPoint = terrain->nextCriticalPoint(position);
+    direction = glm::normalize(nextPoint - position);
+    terrain->printCriticalPoints();
+
+    rotate = acos((glm::dot(direction, orientation)/(glm::length(orientation) * glm::length(direction)))) * (180.0/3.14);
 }
 
 void Wagon::startWagon()
@@ -67,8 +70,10 @@ void Wagon::updateWagon(float globalTime)
   {
     terrain->checkEvents(position);
     deltaTime = glfwGetTime() - startTime;
+
     if (position.x >= nextPoint.x)
     {
+      cout << "wagon is at " << position.x << ", " << position.z << "\n";
       nextPoint = terrain->nextCriticalPoint(position);
       direction = glm::normalize(nextPoint - position);
       neg = -neg;
@@ -77,6 +82,9 @@ void Wagon::updateWagon(float globalTime)
     printf("DeltaTime: %f\n", deltaTime);
     position += direction * deltaTime * velocity;
     position.y = 0.05;
+    position.z = terrain->getSpline()->getY(position.x);
+    rotate = 90.0f + -1.0 * atan(terrain->getSpline()->getDY(position.x)) * (180.0 / 3.14);
+
     startTime += deltaTime;
   }
 }
