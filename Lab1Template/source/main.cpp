@@ -360,21 +360,27 @@ void drawGL()
 		glUseProgram(pid);
 		glUniform1i(h_flag, 1);
 		hud.drawHud(h_ModelMatrix, h_vertPos, g_width, g_height, h_aTexCoord);
-		menu.drawMenu();
 		glUniform1i(h_flag, 0);
 
-		char info[64];
-		sprintf(info,"x %d", manager.getGold());
-		printText2D(info, 50, 566, 18);
+		if(!hud.homeScreenOn)
+		{
+			char info[64];
+			sprintf(info,"x %d", manager.getGold());
+			printText2D(info, 50, 566, 18);
 
-		sprintf(info,"x %d", manager.getFood());
-		printText2D(info, 220, 566, 18);
+			sprintf(info,"x %d", manager.getFood());
+			printText2D(info, 220, 566, 18);
 
-		sprintf(info,"x %d", manager.getBeer());
-		printText2D(info, 430, 566, 18);
+			sprintf(info,"x %d", manager.getBeer());
+			printText2D(info, 430, 566, 18);
 
-		sprintf(info,"x %d", manager.getMercs());
-		printText2D(info, 620, 566, 18);
+			sprintf(info,"x %d", manager.getMercs());
+			printText2D(info, 620, 566, 18);
+		}
+		else
+		{
+			printText2D("Press Enter to Continue", 75, 75, 24);
+		}
 	}
 
 	//**************Draw HUD FINISH********************
@@ -474,8 +480,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	//This time step is causing issues for key inputs right now.
 	// Update every 60Hz
 	//if(dtKey >= (1.0 / 60.0) ) {
-		//Free roam camera
-		if (key == GLFW_KEY_0 && action == GLFW_PRESS)
+	//Free roam camera
+	if (key == GLFW_KEY_0 && action == GLFW_PRESS)
    	{
    		camera.toggleFreeRoam();
    	}
@@ -523,6 +529,13 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		//manager.buyMercenary(key - GLFW_KEY_1, &tavern);
         tavern.tavernCharacters[0].wave();
 	}
+
+	if (key == GLFW_KEY_ENTER && action == GLFW_PRESS)
+	{
+		//manager.buyMercenary(key - GLFW_KEY_1, &tavern);
+        hud.homeScreenOn = false;
+	}
+
 
 	if (key == GLFW_KEY_T && action == GLFW_PRESS)
     {
@@ -690,6 +703,7 @@ int main(int argc, char **argv)
   	// terrEv.addEndCity(vec3(loc.x - 82.5, loc.y, loc.z));
 
   	hud.initHUD(&texLoader);
+  	hud.initHomeScreen(&texLoader);
   	menu.initMenu(&texLoader, h_ModelMatrix, h_vertPos, g_width, g_height, h_aTexCoord);
   	initText2D( "Holstein.DDS" );
   	dtDraw = 0;
