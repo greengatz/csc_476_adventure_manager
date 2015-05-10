@@ -13,6 +13,9 @@
 #include "TerrainEvent.h"
 #include <vector>
 #include "splineCurve.h"
+#include "Tree.h"
+#include "Camera.h"
+#include "Materials.h"
 
 class Terrain
 {
@@ -20,7 +23,7 @@ public:
 	Terrain();
 	virtual ~Terrain();
 	void init(TextureLoader* texLoader, Materials *matSetter, FrustumCull *fCuller);
-	void draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMatrix);
+	void draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMatrix, Camera* camera, glm::vec3 wagonPos);
 	void createTrail();
 	void createEvents();
 	glm::vec3 getStartPosition();
@@ -52,6 +55,7 @@ private:
 	TerrainEvent terrainEvents;
     int nextCPoint = 1;
     Spline* path;
+    Tree tree;
 
 };
 

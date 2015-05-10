@@ -269,6 +269,11 @@ bool installShaders(const string &vShaderName, const string &fShaderName)
 	return true;
 }
 
+// void test()
+// {
+// 	cout << "test funct pointer" << endl;
+// }
+
 void drawGL()
 {
 	// Clear buffers
@@ -315,21 +320,13 @@ void drawGL()
 			glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(ModelTrans.modelViewMatrix));
 			//ModelTrans.popMatrix();
 			ModelTrans.pushMatrix();
-				terrain.draw(h_vertPos, h_vertNor, h_aTexCoord, h_ModelMatrix);
-				// drawWalls();
-				// terrain.draw(h_vertPos, h_vertNor, h_aTexCoord);
+
+				terrain.draw(h_vertPos, h_vertNor, h_aTexCoord, h_ModelMatrix, &camera, wagon.getPosition());
+            glUseProgram(pid);
 				wagon.draw(h_vertPos, h_vertNor, h_aTexCoord, h_ModelMatrix, &ModelTrans);
 			ModelTrans.popMatrix();
 		ModelTrans.popMatrix();
-		glUniform1i(terrainToggleID, 0);
-	}
-
-	//========================= END OUTSIDE SCENE =======================
-
-	if (!camera.isTavernView() || camera.isFreeRoam())
-	{
-		glUniform1i(terrainToggleID, 1);
-		glUniform1i(h_uTexUnit, 0);
+		
 		ModelTrans.loadIdentity();
 		ModelTrans.pushMatrix();
 		ModelTrans.popMatrix();
@@ -338,8 +335,11 @@ void drawGL()
 		glUniform1i(terrainToggleID, 0);
       //Draw the skybox
       skybox.draw(&camera, wagon.getPosition());
+
+      glUniform1i(terrainToggleID, 0);
 	}
 
+	//========================= END OUTSIDE SCENE =======================
 
 	if (camera.isTavernView() || camera.isFreeRoam())
 	{
@@ -360,25 +360,30 @@ void drawGL()
 
 	if(hud.on)
 	{
+		glUseProgram(pid);
 		glUniform1i(h_flag, 1);
 		hud.drawHud(h_ModelMatrix, h_vertPos, g_width, g_height, h_aTexCoord);
-		menu.drawMenu(3, "Test", "About Test Blah Blah Blah", "Option 1", "Option 2",
-			"Press g to close this");
 		glUniform1i(h_flag, 0);
-		
 
-		char info[64];
-		sprintf(info,"x %d", manager.getGold());
-		printText2D(info, 50, 566, 18);
+		if(!hud.homeScreenOn)
+		{
+			char info[64];
+			sprintf(info,"x %d", manager.getGold());
+			printText2D(info, 50, 566, 18);
 
-		sprintf(info,"x %d", manager.getFood());
-		printText2D(info, 220, 566, 18);
+			sprintf(info,"x %d", manager.getFood());
+			printText2D(info, 220, 566, 18);
 
-		sprintf(info,"x %d", manager.getBeer());
-		printText2D(info, 430, 566, 18);
+			sprintf(info,"x %d", manager.getBeer());
+			printText2D(info, 430, 566, 18);
 
-		sprintf(info,"x %d", manager.getMercs());
-		printText2D(info, 620, 566, 18);
+			sprintf(info,"x %d", manager.getMercs());
+			printText2D(info, 620, 566, 18);
+		}
+		else
+		{
+			printText2D("Press Enter to Continue", 75, 75, 24);
+		}
 	}
 
 	//**************Draw HUD FINISH********************
@@ -478,8 +483,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	//This time step is causing issues for key inputs right now.
 	// Update every 60Hz
 	//if(dtKey >= (1.0 / 60.0) ) {
-		//Free roam camera
-		if (key == GLFW_KEY_0 && action == GLFW_PRESS)
+	//Free roam camera
+	if (key == GLFW_KEY_0 && action == GLFW_PRESS)
    	{
    		camera.toggleFreeRoam();
    	}
@@ -512,7 +517,14 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	if (key >= GLFW_KEY_1 && key <= GLFW_KEY_5 && action == GLFW_PRESS)
 	{
 		// tavern.buyMercenary(key - GLFW_KEY_1, &manager);
-		manager.buyMercenary(key - GLFW_KEY_1, &tavern);
+		if(menu.inMenu)
+		{
+			menu.selectOption(key);
+		}
+		else
+		{
+			manager.buyMercenary(key - GLFW_KEY_1, &tavern);
+		}
 	}
 	
     if (key == GLFW_KEY_H && action == GLFW_PRESS)
@@ -520,6 +532,13 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		//manager.buyMercenary(key - GLFW_KEY_1, &tavern);
         tavern.tavernCharacters[0].wave();
 	}
+
+	if (key == GLFW_KEY_ENTER && action == GLFW_PRESS)
+	{
+		//manager.buyMercenary(key - GLFW_KEY_1, &tavern);
+        hud.homeScreenOn = false;
+	}
+
 
 	if (key == GLFW_KEY_T && action == GLFW_PRESS)
     {
@@ -531,6 +550,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	{
         manager.inTavern = manager.inTavern ? false : true;
 		camera.toggleGameViews();
+		audio.playBackgroundMusic(manager.inTavern);
 	}
 
    	//Toggle between lines and filled polygons
@@ -576,11 +596,6 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	{
 		fCuller.holdView();
 	}
-	if (key == GLFW_KEY_J && action == GLFW_PRESS)
-	{
-		audio.loadFile(TAV_MUSIC);
-		audio.play();
-	}
 	//Toggle hud
 	if (key == GLFW_KEY_G && action == GLFW_PRESS)
 	{
@@ -600,6 +615,19 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	{
 		terrEv.lowerBridge();
 	}
+	if (key == GLFW_KEY_Y && action == GLFW_PRESS)
+	{
+		audio.pause();
+	}
+	if (key == GLFW_KEY_U && action == GLFW_PRESS)
+	{
+		audio.playSoundEffect(EXPLOSION_SOUND);
+	}
+	if (key == GLFW_KEY_I && action == GLFW_PRESS)
+	{
+		audio.playVoice(MAGMISS_VOICE);
+	}
+
 }
 
 void window_size_callback(GLFWwindow* window, int w, int h){
@@ -687,12 +715,16 @@ int main(int argc, char **argv)
   	// terrEv.addEndCity(vec3(loc.x - 82.5, loc.y, loc.z));
 
   	hud.initHUD(&texLoader);
+  	hud.initHomeScreen(&texLoader);
   	menu.initMenu(&texLoader, h_ModelMatrix, h_vertPos, g_width, g_height, h_aTexCoord);
   	initText2D( "Holstein.DDS" );
   	dtDraw = 0;
-   do{
-   	timeNew = glfwGetTime();
+  	audio.playBackgroundMusic(true);
 
+
+   do{
+   		timeNew = glfwGetTime();
+		audio.checkTime();
 		dtDraw = timeNew - timeOldDraw;
 		if(gamePaused){
 			dtDraw = 0;

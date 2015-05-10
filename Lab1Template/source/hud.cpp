@@ -1,5 +1,6 @@
 #include "hud.h"
 int HUD_ID = 4000;
+int HOME_ID = 4001;
 
 
 HUD::HUD(Manager *newMan)
@@ -9,7 +10,11 @@ HUD::HUD(Manager *newMan)
 	colorBufObjHUD = 0;
 	GrndTexBuffObj = 0;
 	GIndxBuffObj = 0;
+	posBufObjMenu = 0;
+	indxBuffObjMenu = 0;
+	textBuffMenu = 0;
 	on = true;
+	homeScreenOn = true;
 }
 
 void HUD::initHUD(TextureLoader *texLoader)
@@ -21,6 +26,13 @@ void HUD::initHUD(TextureLoader *texLoader)
 		0, 64.0f, 1.0f,
 		1024.0f, 64.0f, 1.0f,
 		1024.0f, 0, 1.0f
+	};
+
+	GLfloat homeVerts[] = {
+		0, 0, 1.0f,
+		0, 768.0f, 1.0f,
+		1024.0f, 768.0f, 1.0f,
+		1024.0f, 0, 1.0f 
 	};
 
     glGenBuffers(1, &posBufObjHUD);
@@ -57,6 +69,40 @@ void HUD::initHUD(TextureLoader *texLoader)
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(idx), idx, GL_STATIC_DRAW);
 }
 
+void HUD::initHomeScreen(TextureLoader *texLoader)
+{
+	texLoader->LoadTexture((char *)"assets/homeScreen.bmp", HOME_ID);
+
+
+	GLfloat homeVerts[] = {
+		0, 0, 1.0f,
+		0, 768.0f, 1.0f,
+		1024.0f, 768.0f, 1.0f,
+		1024.0f, 0, 1.0f 
+	};
+
+    glGenBuffers(1, &posBufObjMenu);
+    glBindBuffer(GL_ARRAY_BUFFER, posBufObjMenu);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(homeVerts), homeVerts, GL_STATIC_DRAW);
+
+	static GLfloat GrndTex[] = {
+      0, 1, // back
+      0, 0,
+      1, 0,
+      1, 1 };
+
+    unsigned short idx[] = {0, 1, 2, 0, 2, 3};
+
+    g_GiboLen = 6;
+    glGenBuffers(1, &textBuffMenu);
+    glBindBuffer(GL_ARRAY_BUFFER, textBuffMenu);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GrndTex), GrndTex, GL_STATIC_DRAW);
+
+    glGenBuffers(1, &indxBuffObjMenu);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indxBuffObjMenu);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(idx), idx, GL_STATIC_DRAW);
+}
+
 void HUD::drawHud(GLint h_ModelMatrix, GLint h_vertPos, int width, int height, GLint h_aTexCoord)
 {
 	enableBuff(h_vertPos, h_aTexCoord);
@@ -81,16 +127,45 @@ void HUD::enableBuff(GLint h_vertPos, GLint h_aTexCoord) {
     glActiveTexture(GL_TEXTURE0);
 
   GLSL::enableVertexAttribArray(h_vertPos); //position
-  glBindBuffer(GL_ARRAY_BUFFER, posBufObjHUD);
+  if(homeScreenOn)
+  {
+  	glBindBuffer(GL_ARRAY_BUFFER, posBufObjMenu);
+  }
+  else
+  {
+  	glBindBuffer(GL_ARRAY_BUFFER, posBufObjHUD);
+  }
   glVertexAttribPointer(h_vertPos, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
-  glBindTexture(GL_TEXTURE_2D, HUD_ID);
+  if(homeScreenOn)
+  {
+  	glBindTexture(GL_TEXTURE_2D, HOME_ID);
+  }
+  else
+  {
+  	glBindTexture(GL_TEXTURE_2D, HUD_ID);
+  }
 
   GLSL::enableVertexAttribArray(h_aTexCoord);
-  glBindBuffer(GL_ARRAY_BUFFER, GrndTexBuffObj);
+
+  if(homeScreenOn)
+  {
+  	glBindBuffer(GL_ARRAY_BUFFER, textBuffMenu);
+  }
+  else
+  {
+  	glBindBuffer(GL_ARRAY_BUFFER, GrndTexBuffObj);
+  }
   glVertexAttribPointer(h_aTexCoord, 2, GL_FLOAT ,GL_FALSE, 0, 0);
 
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, GIndxBuffObj);
+  if(homeScreenOn)
+  {
+  	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indxBuffObjMenu);
+  }
+  else
+  {
+  	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, GIndxBuffObj);
+  }
 }
 
 void HUD::disableBuff(GLint h_vertPos, GLint h_aTexCoord) {

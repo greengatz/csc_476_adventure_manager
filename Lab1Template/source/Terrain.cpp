@@ -479,10 +479,15 @@ void Terrain::init(TextureLoader* texLoader, Materials *matSetter, FrustumCull *
 
   	//unbind the arrays
   	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+   tree.init(texLoader);
+   
 	assert(glGetError() == GL_NO_ERROR);
 }
 
-void Terrain::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMatrix)
+
+void Terrain::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMatrix, Camera* camera, glm::vec3 wagonPos)
+
 {
   //set up the texture unit
     glEnable(GL_TEXTURE_2D);
@@ -559,7 +564,7 @@ void Terrain::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMat
    glDisable(GL_TEXTURE_2D);
 
    terrainEvents.drawTerrainEvents(h_ModelMatrix, h_pos, h_nor, h_aTexCoord, 0.0);
-
+   tree.draw(camera, wagonPos);
 }
 
 Spline* Terrain::getSpline()
