@@ -767,9 +767,7 @@ int main(int argc, char **argv)
    		timeNew = glfwGetTime();
 		audio.checkTime();
 		dtDraw = timeNew - timeOldDraw;
-		if(gamePaused){
-			dtDraw = 0;
-		}
+		
 		t += h;
 	
 

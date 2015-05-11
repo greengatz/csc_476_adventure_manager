@@ -221,25 +221,27 @@ void Wagon::updateWagon(float globalTime)
       //Set the data
       menu->setData("Ambush", about, options);
     }
-    if(*gamePaused == true){
-      startTime = glfwGetTime();
-    }
+    
     deltaTime = glfwGetTime() - startTime;
 
     if (position.x >= nextPoint.x)
     {
-      cout << "wagon is at " << position.x << ", " << position.z << "\n";
       nextPoint = terrain->nextCriticalPoint(position);
       direction = glm::normalize(nextPoint - position);
       neg = -neg;
       rotate = neg * cos((glm::dot(direction, orientation)/(glm::length(orientation) * glm::length(direction)))) * (180.0/3.14);
     }
-    position += direction * deltaTime * velocity;
+    if(*gamePaused == true){
+      startTime = glfwGetTime() - deltaTime ;
+    }else{
+      position += direction * deltaTime * velocity;
+    }
     position.y = 0.05;
     position.z = terrain->getSpline()->getY(position.x);
     rotate = 90.0f + -1.0 * atan(terrain->getSpline()->getDY(position.x)) * (180.0 / 3.14);
 
     startTime += deltaTime;
+
   }
 }
 

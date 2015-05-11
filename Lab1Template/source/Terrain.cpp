@@ -116,20 +116,20 @@ void Terrain::placeEvents(){
   for(int i = 0; i < MAP_Z; i++){
     glm::vec3 temp = criticalPoints[i];
     if(eventsMap[i] == AMBUSH){
-      temp.x -= 100.25;
+      temp.x -= 100;
       temp.z -= 1;
       terrainEvents.addAmbush(temp, glm::mat4(1.0f));
       printf("Placing ambush at %f, %f\n", temp.x, temp.z);
 
     }
     if(eventsMap[i] == MERCHANT){
-      temp.x -= 100.25;
+      temp.x -= 100;
       temp.z += 1.5;
       terrainEvents.addMerchantStand(temp, glm::mat4(1.0f));
       printf("Placing merchant at %f, %f\n", temp.x, temp.z);
     }
     if(eventsMap[i] == WANDERER){
-      temp.x -= 100.25;
+      temp.x -= 100;
       // temp.z += 0.5;
       terrainEvents.addRandomDuder(temp, glm::mat4(1.0f));
       printf("Placing merchant at %f, %f\n", temp.x, temp.z);
