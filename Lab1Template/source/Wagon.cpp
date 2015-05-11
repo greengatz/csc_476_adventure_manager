@@ -221,7 +221,9 @@ void Wagon::updateWagon(float globalTime)
       //Set the data
       menu->setData("Ambush", about, options);
     }
-
+    if(*gamePaused == true){
+      startTime = glfwGetTime();
+    }
     deltaTime = glfwGetTime() - startTime;
 
     if (position.x >= nextPoint.x)
