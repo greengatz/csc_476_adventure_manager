@@ -161,9 +161,9 @@ void Wagon::updateWagon(float globalTime)
       fpFood = buyFood;
       fpBeer = buyBeer;
       fpResume = resumeGame;
-      option foodOpt = {"Buy Meat", fpFood};
-      option beerOpt = {"Buy Beer", fpBeer};
-      option resumeOpt = {"Continue On", fpResume};
+      option foodOpt = {"Buy Meat", fpFood, false};
+      option beerOpt = {"Buy Beer", fpBeer, false};
+      option resumeOpt = {"Continue On", fpResume, true};
       vector<option> options;
       options.push_back(foodOpt);
       options.push_back(beerOpt);
@@ -181,7 +181,7 @@ void Wagon::updateWagon(float globalTime)
       about.push_back("has come down with smallpox!");
       //Create an option and add it to a vector
       fpResume = resumeGame;
-      option resumeOpt = {"Continue On", fpResume};
+      option resumeOpt = {"Continue On", fpResume, true};
       vector<option> options;
       options.push_back(resumeOpt);
 
@@ -195,9 +195,9 @@ void Wagon::updateWagon(float globalTime)
       about.push_back("Buy this mercenary for 25 gold?");
       //Create an option and add it to a vector
       fpMercenary = buyMercenary;
-      option mercOpt = {"Buy mercenary", fpMercenary};
+      option mercOpt = {"Buy mercenary", fpMercenary, false};
       fpResume = resumeGame;
-      option resumeOpt = {"Continue On", fpResume};
+      option resumeOpt = {"Continue On", fpResume, true};
       vector<option> options;
       options.push_back(mercOpt);
       options.push_back(resumeOpt);
@@ -212,8 +212,8 @@ void Wagon::updateWagon(float globalTime)
       about.push_back("Bandits are ambushing your party");
       //Create an option and add it to a vector
       fpResume = resumeGame;
-      option fightOpt = {"Fight", fpResume};
-      option fleeOpt = {"Flee", fpResume};
+      option fightOpt = {"Fight", fpResume, true};
+      option fleeOpt = {"Flee", fpResume, true};
       vector<option> options;
       options.push_back(fightOpt);
       options.push_back(fleeOpt);

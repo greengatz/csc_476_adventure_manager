@@ -23,6 +23,7 @@ struct option
 {
 	string str;
 	void (* funct)(void *, bool *);
+	bool close;
 };
 
 class Menu
