@@ -31,7 +31,7 @@ public:
 	void updateWagon(float globalTime);
 	bool hasStarted();
 	void setTimeStamp(float newTime);
-	
+
 private:
 	std::vector<tinyobj::shape_t> shapes;
 	GLuint posBufID;
@@ -43,8 +43,8 @@ private:
 	float rotate;
 	float startTime;
 	Terrain* terrain;
-	Manager* manager;
 	Menu* menu;
+	Manager* manager;
 	bool* gamePaused;
 	float deltaTime;
 	bool wagonStart;

@@ -22,14 +22,14 @@ using namespace glm;
 struct option
 {
 	string str;
-	void (*funct)();
+	void (* funct)(void *, bool *);
 };
 
 class Menu
 {
 	public:
 		void drawMenu();
-		void initMenu(TextureLoader *texLoader, GLint h_ModelMatrix, GLint h_vertPos, int width, int height, GLint h_aTexCoord);
+		void initMenu(TextureLoader *texLoader, GLint h_ModelMatrix, GLint h_vertPos, int width, int height, GLint h_aTexCoord, Manager *mgr, bool* gameP);
 		void enableBuff(GLint h_vertPos, GLint h_aTexCoord);
 		void disableBuff(GLint h_vertPos, GLint h_aTexCoord);
 		void setData(char* title, vector<string> about, vector<option> options);
@@ -52,6 +52,8 @@ class Menu
 		GLint h_aTexCoord;
 		int offset = -40;
 		int aboutOffset = -20;
+		Manager *manager;
+		bool* gamePaused;
 };
 
 #endif

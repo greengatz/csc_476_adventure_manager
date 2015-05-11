@@ -151,6 +151,8 @@ void initShape(char * filename)
 	//Initialize shapes here
 }
 
+
+
 /**
  * Generalized approach to intialization.
  */
@@ -614,21 +616,21 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	if (key == GLFW_KEY_5 && action == GLFW_PRESS)
     {
     	//Create about vector and add an element
-	  	vector<string> about;
-		about.push_back("about test");
+	 //  	vector<string> about;
+		// about.push_back("about test");
 
-		//Create an option and add it to a vector
-		option testOpt = {"test option", test};
-		vector<option> options;
-		options.push_back(testOpt);
+		// //Create an option and add it to a vector
+		// option testOpt = {"test option", test};
+		// vector<option> options;
+		// options.push_back(testOpt);
 
-		//Set the data
-		menu.setData("Title", about, options);
-        gamePaused = !gamePaused;
-        if(!gamePaused){
-        	printf("%s\n", "reseting start time");
-        	wagon.setTimeStamp(glfwGetTime());
-        }
+		// //Set the data
+		// menu.setData("Title", about, options);
+  //       gamePaused = !gamePaused;
+  //       if(!gamePaused){
+  //       	printf("%s\n", "reseting start time");
+  //       	wagon.setTimeStamp(glfwGetTime());
+  //       }
         
     }
 	//lower drawbridge
@@ -725,7 +727,7 @@ int main(int argc, char **argv)
 	std::string str = "assets/bunny.obj";
 	// initShape(&str[0u]); //initShape(argv[0]);
 
-	menu.initMenu(&texLoader, h_ModelMatrix, h_vertPos, g_width, g_height, h_aTexCoord);
+	menu.initMenu(&texLoader, h_ModelMatrix, h_vertPos, g_width, g_height, h_aTexCoord, &manager, &gamePaused);
   	
   	initModels();
   	tavern.loadTavernMeshes(&texLoader);

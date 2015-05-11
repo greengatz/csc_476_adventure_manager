@@ -16,7 +16,10 @@ using namespace std;
 
 int WAGON_TEX_ID = 111;
 float neg = 1.0;
-void (Wagon::*fp)()const = NULL;
+void (*fpFood)(void *, bool *) = NULL;
+void (*fpBeer)(void *, bool *) = NULL;
+void (*fpResume)(void *, bool *) = NULL;
+void (*fpMercenary)(void *, bool *) = NULL;
 
 Wagon::Wagon() :
 	position(0.6f, 0.05f, -0.5f),
@@ -30,7 +33,6 @@ Wagon::Wagon() :
   startTime(0.0f),
   wagonStart(false),
   terrain(0),
-  
   deltaTime(0.0f),
   velocity(0.75f),
   nextPoint(0.0f, 0.0f, 0.0f),
@@ -122,10 +124,27 @@ void Wagon::startWagon()
   }
 }
 
-void buyFood(){
+void buyFood(void* mgr, bool* gamePaused){
   // *gamePaused = false;
-  printf("I just got clicked\n");
-  // manager->buyFood
+  Manager* manager = (Manager*)mgr;
+  manager->buyFood();
+}
+
+void buyBeer(void* mgr, bool* gamePaused){
+  // *gamePaused = false;
+  Manager* manager = (Manager*)mgr;
+  manager->buyBeer();
+}
+
+void buyMercenary(void* mgr, bool* gamePaused){
+  // *gamePaused = false;
+  Manager* manager = (Manager*)mgr;
+  // manager->buyMercenary();
+}
+
+void resumeGame(void* mgr, bool* gamePaused){
+  // *gamePaused = false;
+  *gamePaused = false;
 }
 
 void Wagon::updateWagon(float globalTime)
@@ -135,27 +154,72 @@ void Wagon::updateWagon(float globalTime)
     int event = terrain->checkEvents(position);
     if(event == MERCHANT){
       *gamePaused = true;
-      // // fp = &Wagon::test;
-      // //Create about vector and add an element
-      // vector<string> about;
-      // about.push_back("Meat is 3 gold and Beer is 2 gold!");
-      // //Create an option and add it to a vector
-      // option testOpt = {"Buy Meat", buyFood};
-      // vector<option> options;
-      // options.push_back(testOpt);
+      //Create about vector and add an element
+      vector<string> about;
+      about.push_back("Meat is 5 gold and Beer is 2 gold!");
+      //Create an option and add it to a vector
+      fpFood = buyFood;
+      fpBeer = buyBeer;
+      fpResume = resumeGame;
+      option foodOpt = {"Buy Meat", fpFood};
+      option beerOpt = {"Buy Beer", fpBeer};
+      option resumeOpt = {"Continue On", fpResume};
+      vector<option> options;
+      options.push_back(foodOpt);
+      options.push_back(beerOpt);
+      options.push_back(resumeOpt);
 
-      // //Set the data
-      // menu->setData("You have come accross a merchant", about, options);
+      //Set the data
+      menu->setData("Merchant", about, options);
 
     }
     if(event == SICKNESS){
-      *gamePaused = true;
+       *gamePaused = true;
+      //Create about vector and add an element
+      vector<string> about;
+      about.push_back("It appears that on of your mercenaries");
+      about.push_back("has come down with smallpox!");
+      //Create an option and add it to a vector
+      fpResume = resumeGame;
+      option resumeOpt = {"Continue On", fpResume};
+      vector<option> options;
+      options.push_back(resumeOpt);
+
+      //Set the data
+      menu->setData("Sickness", about, options);
     }
     if(event == WANDERER){
       *gamePaused = true;
+      //Create about vector and add an element
+      vector<string> about;
+      about.push_back("Buy this mercenary for 25 gold?");
+      //Create an option and add it to a vector
+      fpMercenary = buyMercenary;
+      option mercOpt = {"Buy mercenary", fpMercenary};
+      fpResume = resumeGame;
+      option resumeOpt = {"Continue On", fpResume};
+      vector<option> options;
+      options.push_back(mercOpt);
+      options.push_back(resumeOpt);
+
+      //Set the data
+      menu->setData("Wanderer", about, options);
     }
     if(event == AMBUSH){
       *gamePaused = true;
+      //Create about vector and add an element
+      vector<string> about;
+      about.push_back("Bandits are ambushing your party");
+      //Create an option and add it to a vector
+      fpResume = resumeGame;
+      option fightOpt = {"Fight", fpResume};
+      option fleeOpt = {"Flee", fpResume};
+      vector<option> options;
+      options.push_back(fightOpt);
+      options.push_back(fleeOpt);
+
+      //Set the data
+      menu->setData("Ambush", about, options);
     }
 
     deltaTime = glfwGetTime() - startTime;

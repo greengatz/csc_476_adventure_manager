@@ -2,8 +2,10 @@
 
 int MENU_ID = 4004;
 
-void Menu::initMenu(TextureLoader *texLoader, GLint h_ModelMatrixA, GLint h_vertPosA, int widthA, int heightA, GLint h_aTexCoordA)
+void Menu::initMenu(TextureLoader *texLoader, GLint h_ModelMatrixA, GLint h_vertPosA, int widthA, int heightA, GLint h_aTexCoordA, Manager *mgr, bool* gameP)
 {
+	gamePaused = gameP;
+	manager = mgr;
 	inMenu = false;
 	h_ModelMatrix = h_ModelMatrixA;
 	h_vertPos = h_vertPosA;
@@ -61,8 +63,7 @@ void Menu::selectOption(int num)
 	cout << num << endl;
 	if(num < options.size())
 	{
-
-		options[num].funct();
+		options[num].funct(manager, gamePaused);
 		inMenu = false;
 
 	}

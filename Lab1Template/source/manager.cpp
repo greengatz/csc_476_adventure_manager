@@ -78,7 +78,7 @@ int Manager::getGold()
 
 int Manager::getFood()
 {
-	return food;
+	return food; 
 }
 
 int Manager::getBeer()
