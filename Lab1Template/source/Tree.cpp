@@ -14,6 +14,7 @@
 
 int TREE_BARK_TEX = 80;
 int TREE_LEAFS_TEX = 81;
+int TREE1_BOARD_TEX = 82;
 
 Tree::Tree() :
    position(-100.0f, 0.0f, 25.0f),
@@ -28,6 +29,10 @@ Tree::Tree() :
    norBufObjLeaf(0),
    leafTexBuffObj(0),
    indBufObjLeaf(0),
+
+   posBufObjBoard(0),
+   norBufObjBoard(0),
+   boardTexBuffObj(0),
 
    //Initialize the material.
    h_ka(0),
@@ -142,10 +147,127 @@ void Tree::init(TextureLoader* texLoader)
    //unbind the arrays
    glBindBuffer(GL_ARRAY_BUFFER, 0);
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+   //=================================Initialize Billboards=========================
+
+   float PlanePos[] = {
+    -1.0, -1.0, 0.0,
+    -1.0,  1.0, 0.0,
+     1.0, -1.0, 0.0,
+     1.0,  1.0, 0.0
+  };
+
+  float normal_data[] = {
+    0.0, 0.0, 1.0,
+    0.0, 0.0, 1.0,
+    0.0, 0.0, 1.0,
+    0.0, 0.0, 1.0
+  };
+
+   static GLfloat PlaneTex[] = {      
+      1.00, 0.00,
+      1.00, 1.00,
+      0.00, 0.00,
+      0.00, 1.00
+    }; 
+
+    glGenBuffers(1, &posBufObjBoard);
+    glBindBuffer(GL_ARRAY_BUFFER, posBufObjBoard);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(PlanePos), PlanePos, GL_STATIC_DRAW);
+
+    glGenBuffers(1, &norBufObjBoard);
+    glBindBuffer(GL_ARRAY_BUFFER, norBufObjBoard);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(normal_data), normal_data, GL_STATIC_DRAW);
+
+    glGenBuffers(1, &boardTexBuffObj);
+    glBindBuffer(GL_ARRAY_BUFFER, boardTexBuffObj);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(PlaneTex), PlaneTex, GL_STATIC_DRAW);
+
+     texLoader->LoadTexture(
+      (char *)"assets/trees/billboard/tree1.bmp",
+      TREE1_BOARD_TEX);
+
+   //unbind the arrays
+   glBindBuffer(GL_ARRAY_BUFFER, 0);
    
    GLSL::checkVersion();
    //printf("GL ERROR: %d\n", glGetError());
    assert(glGetError() == GL_NO_ERROR);
+}
+
+void Tree::drawBillboard(glm::vec3 treePosition, Camera *camera, glm::vec3 wagonPos)
+{
+   //Using another shader program
+   glUseProgram(pid);
+
+   glUniform1i(leafToggleID, 1);
+
+   //Set projection matrix
+   MatrixStack proj, view;
+   proj.pushMatrix();
+   camera->applyProjectionMatrix(&proj);
+   glUniformMatrix4fv( h_ProjMatrix, 1, GL_FALSE, glm::value_ptr( proj.topMatrix()));
+   proj.pushMatrix();
+   camera->applyViewMatrix(&view, wagonPos);
+   glUniformMatrix4fv(h_ViewMatrix, 1, GL_FALSE, glm::value_ptr(view.topMatrix()));
+
+   glUniform3fv(lightPosID, 1, glm::value_ptr(glm::vec3(-75.0f, 0.0f, -25.0f)));
+
+   glm::vec3 camPos = camera->getPosition();
+
+   glm::vec3 up = glm::vec3(0.0, 1.0, 0.0);
+   glm::vec3 look = camPos - 
+      (treePosition + position + glm::vec3(0.0, 0.88, 0.0));
+   look.y = 0.0;
+   look = normalize(look);
+   glm::vec3 lookAt = glm::vec3(0.0, 0.0, -1.0);
+
+   float angle = glm::dot(lookAt, look);
+   glm::vec3 upAux = glm::cross(lookAt, look);
+   float rot = acos(angle)*180/3.14;
+
+   //Position Wagon along the trail
+   ModelTrans.pushMatrix();
+      ModelTrans.translate(treePosition + position + glm::vec3(0.0, 0.8, 0.0));
+      ModelTrans.rotate(rot, upAux);
+      ModelTrans.scale(0.9, 0.9, 0.9);
+      glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(ModelTrans.modelViewMatrix));
+   ModelTrans.popMatrix();
+
+   //set up the texture unit
+   glEnable(GL_TEXTURE_2D);
+   glActiveTexture(GL_TEXTURE0);
+   glUniform1i(h_uTexUnit, 0);
+
+   // Enable and bind normal array for drawing
+   GLSL::enableVertexAttribArray(h_vertNor);
+   glBindBuffer(GL_ARRAY_BUFFER, norBufObjBoard);
+   glVertexAttribPointer(h_vertNor, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+   GLSL::enableVertexAttribArray(h_vertPos);
+   glBindBuffer(GL_ARRAY_BUFFER, posBufObjBoard);
+   glVertexAttribPointer(h_vertPos, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+   GLSL::enableVertexAttribArray(h_aTexCoord);
+   glBindBuffer(GL_ARRAY_BUFFER, boardTexBuffObj);
+   glVertexAttribPointer(h_aTexCoord, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
+   //Draw Back plane
+   glBindTexture(GL_TEXTURE_2D, TREE1_BOARD_TEX);
+   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+   GLSL::disableVertexAttribArray(h_vertPos);
+   GLSL::disableVertexAttribArray(h_vertNor);
+   GLSL::disableVertexAttribArray(h_aTexCoord);
+   glBindBuffer(GL_ARRAY_BUFFER, 0);
+   glDisable(GL_TEXTURE_2D);
+
+   glUniform1i(leafToggleID, 0);
+
+   // Unbind the program
+   glUseProgram(0);
+   // Pop stacks
+   proj.popMatrix();
 }
 
 void Tree::draw(glm::vec3 treePosition, Camera *camera, glm::vec3 wagonPos)

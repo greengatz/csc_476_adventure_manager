@@ -563,12 +563,16 @@ void Terrain::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMat
          {
             tree.draw(glm::vec3(index2, 0.0, -index + startingSpot + randomTree[index][index2]), camera, wagonPos);
             tree.draw(glm::vec3(index2 + 0.5, 0.0, -index + startingSpot + randomTree[index][index2] + 2.0), camera, wagonPos);
+            tree.drawBillboard(glm::vec3(index2, 0.0, -index + startingSpot + randomTree[index][index2] + 4.0), camera, wagonPos);
+            tree.drawBillboard(glm::vec3(index2 + 0.5, 0.0, -index + startingSpot + randomTree[index][index2] + 6.0), camera, wagonPos);
          }
          else if (trailMap[index][index2] == LTTRAIL || trailMap[index][index2] == RTTRAIL
             || trailMap[index][index2] == RFARTRAIL || trailMap[index][index2] == RNEARTRAIL)
          {
             tree.draw(glm::vec3(index2, 0.0, -index + startingSpot - randomTree[index][index2]), camera, wagonPos);
             tree.draw(glm::vec3(index2 + 0.5, 0.0, -index + startingSpot - randomTree[index][index2] - 2.0), camera, wagonPos);
+            tree.drawBillboard(glm::vec3(index2, 0.0, -index + startingSpot - randomTree[index][index2] - 4.0), camera, wagonPos);
+            tree.drawBillboard(glm::vec3(index2 + 0.5, 0.0, -index + startingSpot - randomTree[index][index2] - 6.0), camera, wagonPos);
          }
       }
    }

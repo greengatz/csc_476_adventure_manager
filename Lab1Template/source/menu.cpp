@@ -58,9 +58,11 @@ void Menu::setData(char* titleA, vector<string> aboutA, vector<option> optionsA)
 
 void Menu::selectOption(int num)
 {
-	if(num <= options.size())
+	cout << num << endl;
+	if(num < options.size())
 	{
-		options[num-1].funct();
+
+		options[num].funct();
 		inMenu = false;
 
 	}
