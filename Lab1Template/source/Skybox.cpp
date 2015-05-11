@@ -19,7 +19,7 @@ int SKYBOX_RIGHT = 78;
 int SKYBOX_TOP = 79;
 
 Skybox::Skybox() :
-	position(-75.0f, 0.0f, -25.0f), // TODO: Update this soon
+	position(-75.0f, 0.0f, -25.0f),
    //Skybox Buffer
    posBufObjSkybox(0),
    norBufObjSkybox(0),
@@ -166,6 +166,9 @@ void Skybox::init(TextureLoader* texLoader)
      texLoader->LoadTexture(
       (char *)"assets/skyboxes/powderpeak/powderpeak_top.bmp", 
       SKYBOX_TOP);
+
+   //unbind the arrays
+   glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void Skybox::draw(Camera *camera, glm::vec3 wagonPos)

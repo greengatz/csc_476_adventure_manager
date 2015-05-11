@@ -12,13 +12,15 @@
 #include "TextureLoader.h"
 #include "RenderingHelper.h"
 #include "Terrain.h"
+#include "manager.h"
+#include "menu.h"
 
 class Wagon
 {
 public:
 	Wagon();
 	virtual ~Wagon();
-	void init(TextureLoader* texLoader, Terrain* aTerrain);
+	void init(TextureLoader* texLoader, Terrain* aTerrain, Menu* aMenu, bool* gP, Manager* mgr);
 	void draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMatrix, RenderingHelper* modelTrans);
 	void setPosition(float x, float y, float z);
 	glm::vec3 getPosition();
@@ -28,7 +30,8 @@ public:
 	void startWagon();
 	void updateWagon(float globalTime);
 	bool hasStarted();
-	
+	void setTimeStamp(float newTime);
+
 private:
 	std::vector<tinyobj::shape_t> shapes;
 	GLuint posBufID;
@@ -40,6 +43,9 @@ private:
 	float rotate;
 	float startTime;
 	Terrain* terrain;
+	Menu* menu;
+	Manager* manager;
+	bool* gamePaused;
 	float deltaTime;
 	bool wagonStart;
 	float velocity;

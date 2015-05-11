@@ -10,23 +10,33 @@
 #include "GLSL.h"
 #include "tiny_obj_loader.h"
 #include "TextureLoader.h"
+#include "TerrainEvent.h"
 #include <vector>
 #include "splineCurve.h"
+#include "Tree.h"
+#include "Camera.h"
+#include "Materials.h"
+
+#define MERCHANT 1
+#define WANDERER 2
+#define AMBUSH 3
+#define SICKNESS 4
 
 class Terrain
 {
 public:
 	Terrain();
 	virtual ~Terrain();
-	void init(TextureLoader* texLoader);
-	void draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord);
+	void init(TextureLoader* texLoader, Materials *matSetter, FrustumCull *fCuller);
+	void draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMatrix, Camera* camera, glm::vec3 wagonPos, GLuint* pid);
 	void createTrail();
 	void createEvents();
 	glm::vec3 getStartPosition();
 	bool atEnd(glm::vec3 aPos);
 	glm::vec3 nextCriticalPoint(glm::vec3 aPos);
 	void printCriticalPoints();
-	void checkEvents(glm::vec3 aPos);
+	int checkEvents(glm::vec3 aPos);
+	void placeEvents();
     Spline* getSpline();
 
 private:
@@ -35,6 +45,7 @@ private:
 	static const int MAP_Z = 50;
 	static const int MAP_SCALE = 1;
 	float terrain[MAP_X][MAP_Z][3]; // Terrain data
+	float randomTree[MAP_X][MAP_Z]; // random tree
 	GLuint posBufID;
 	GLuint norBufID;
 	GLuint texBufID;
@@ -47,8 +58,12 @@ private:
 	glm::vec3 beginPosition;
 	std::vector<glm::vec3> criticalPoints;
 	int oldTextureID;
+	TerrainEvent terrainEvents;
     int nextCPoint = 1;
     Spline* path;
+    Tree tree;
+    int startingSpot;
+
 
 };
 

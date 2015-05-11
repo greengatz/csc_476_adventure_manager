@@ -21,7 +21,6 @@ public:
 	virtual ~Skybox();
 	void init(TextureLoader* texLoader);
 	void draw(Camera* camera, glm::vec3 wagonPos);
-	//GLint h_pos, GLint h_nor, GLint h_aTexCoord
 
 private:
 	static const int PLANE_SCALE = 35;
@@ -41,7 +40,6 @@ private:
 	GLuint skyTexBuffObj;
 
 	glm::vec3 position;
-	void drawPlane();
 	//Rendering Helper
 	RenderingHelper ModelTrans;
 };

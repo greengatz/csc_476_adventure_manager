@@ -2,8 +2,11 @@
 
 int MENU_ID = 4004;
 
-void Menu::initMenu(TextureLoader *texLoader, GLint h_ModelMatrixA, GLint h_vertPosA, int widthA, int heightA, GLint h_aTexCoordA)
+void Menu::initMenu(TextureLoader *texLoader, GLint h_ModelMatrixA, GLint h_vertPosA, int widthA, int heightA, GLint h_aTexCoordA, Manager *mgr, bool* gameP)
 {
+	gamePaused = gameP;
+	manager = mgr;
+	inMenu = false;
 	h_ModelMatrix = h_ModelMatrixA;
 	h_vertPos = h_vertPosA;
 	width = widthA;
@@ -12,7 +15,6 @@ void Menu::initMenu(TextureLoader *texLoader, GLint h_ModelMatrixA, GLint h_vert
 	posBufObjHUD = 0;
 	GrndTexBuffObj = 0;
 	GIndxBuffObj = 0;
-	on = true;
 	initText2D( "Holstein.DDS" );
 	texLoader->LoadTexture((char *)"assets/menuBack.bmp", MENU_ID);
 
@@ -23,19 +25,6 @@ void Menu::initMenu(TextureLoader *texLoader, GLint h_ModelMatrixA, GLint h_vert
 		896.0f, 640.0f, 1.0f,
 		896.0f, 128.0f, 1.0f
 	};
-
-	// GLfloat vert[] = {
-	// 	128.0f, 0.0f, 1.0f,
-	// 	128.0f, 512.0f, 1.0f,
-	// 	640.0f, 512.0f, 1.0f,
-	// 	640.0f, 0.0f, 1.0f
-	// };
-	// GLfloat vert[] = {
-	// 	0, 0, 1.0f,
-	// 	0, 64.0f, 1.0f,
-	// 	1024.0f, 64.0f, 1.0f,
-	// 	1024.0f, 0, 1.0f
-	// };
 
     glGenBuffers(1, &posBufObjHUD);
     glBindBuffer(GL_ARRAY_BUFFER, posBufObjHUD);
@@ -60,24 +49,28 @@ void Menu::initMenu(TextureLoader *texLoader, GLint h_ModelMatrixA, GLint h_vert
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(idx), idx, GL_STATIC_DRAW);
 }
 
-// void print() {
-//     cout << endl;
-// }
 
-// template <typename T> void print(const T& t) {
-//     cout << t;
-// }
-
-// template <typename First, typename... Rest> void print(const First& first, const Rest&... rest) {
-//     print(first);
-//     print(rest...); // recursive call using pack expansion syntax
-// }
-
-void Menu::drawMenu(int args, char* title, char* about, ...)
+void Menu::setData(char* titleA, vector<string> aboutA, vector<option> optionsA)
 {
-	va_list ap;
-	va_start(ap, args);
-	//va_end(ap);
+	inMenu = true;
+	title = titleA;
+	about = aboutA;
+	options = optionsA;
+}
+
+void Menu::selectOption(int num)
+{
+	cout << num << endl;
+	if(num < options.size())
+	{
+		options[num].funct(manager, gamePaused);
+		inMenu = false;
+
+	}
+}
+
+void Menu::drawMenu()
+{
 	//Enable Buffers
 	enableBuff(h_vertPos, h_aTexCoord);
 
@@ -100,15 +93,19 @@ void Menu::drawMenu(int args, char* title, char* about, ...)
 
 	//sprintf(info,"x %d", manager.getMercs());
 	printText2D(title, 350, 470, 28);
-	printText2D(about, 160, 440, 14);
-
-	for(int i = 0; i < args; i++)
+	// printText2D(about, 160, 440, 14);
+	for(int i = 0; i < about.size(); i++)
 	{
-		char* sentence = va_arg(ap, char*);
-		printText2D(sentence, 350, 400 + offset, 18);
+		printText2D(about[i].c_str(), 160, 440 + aboutOffset, 14);
+		aboutOffset -= 20;
+	}
+	aboutOffset = -20;
+
+	for(int i = 0; i < options.size(); i++)
+	{
+		printText2D(options[i].str.c_str(), 160, 400 + offset, 18);
 		offset-=40;
 	}
-	va_end(ap);
 
 	offset = -40;
 }
