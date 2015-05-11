@@ -7,10 +7,12 @@ set(DEP_DIR "${PROJECT_SOURCE_DIR}/dependencies")
 # Source / header files
 include("sources.txt")
 
-#fmod
+# fmod
+message("-- Including fmod...")
 set(FMOD_DIR "${DEP_DIR}/fmod_api")
 set(FMOD_DIR_MAC "${DEP_DIR}/fmod_mac")
 if(APPLE)
+    message("--   Mac version of fmod")
     #include apple fmod library
     list(APPEND INCLUDES
       ${FMOD_DIR_MAC}/api/inc
@@ -18,6 +20,7 @@ if(APPLE)
    list(APPEND LIBS
       ${FMOD_DIR_MAC}/api/lib/libfmodex.dylib)
 elseif(UNIX)
+    message("--   Unix version of fmod")
     list(APPEND INCLUDES
         ${FMOD_DIR}/api/inc
     )
@@ -25,6 +28,16 @@ elseif(UNIX)
         ${FMOD_DIR}/api/lib/libfmodex64-4.44.52.so
     )
 endif(APPLE)
+
+# assimp
+message("-- Including assimp...")
+set (ASSIMP_DIR "${DEP_DIR}/assimp-3.1.1")
+list(APPEND INCLUDES
+    ${ASSIMP_DIR}/include/assimp
+)
+list(APPEND LIBS
+    ${ASSIMP_DIR}/lib/libassimp.so
+)
 
 # GLFW
 set(GLFW_DIR "${DEP_DIR}/glfw")

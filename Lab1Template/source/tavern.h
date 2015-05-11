@@ -6,6 +6,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
+#include <Importer.hpp>
+#include <scene.h>
+#include <postprocess.h>
 #include "tiny_obj_loader.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp" //perspective, trans etc
@@ -16,6 +19,7 @@
 #include "TextureLoader.h"
 #include "Materials.h"
 #include "FrustumCull.h"
+#include "charDae.h"
 
 using namespace std;
 using namespace glm;
@@ -58,6 +62,8 @@ class Tavern
 		void enableBuff(GLint h_vertPos, GLint h_vertNor, GLuint posBuf, GLuint norBuf, GLuint indBuf);
 		void disableBuff(GLint h_vertPos, GLint h_vertNor, GLint h_aTexCoord);
 		void applyTurkeySpin(double ltime);
+
+        CharDae sam;
 };
 
 #endif

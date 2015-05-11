@@ -72,7 +72,8 @@ Obj3dContainer containers[std::extent<decltype(tavObjFiles)>::value];
 
 int TURKEY_NUM;
 
-Tavern::Tavern()
+Tavern::Tavern() :
+    sam(CharDae("a"))
 {
 	doorLoc = vec3(7.5, 1.35, -23);
 	beerLoc = vec3(35.0, 1.0, -35.0);
@@ -472,6 +473,10 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 	addTavernCharacter(SAMURAI, glm::vec3(1, 1, 1), glm::vec3(21.05, 1.3, -22.5), glm::mat4(1.0f));
 	tavernCharacters[tavernCharacters.size() - 1].meshes[0].loadTextureCoor(TAV_SAMURAI_ID);
 	createFirePlace(glm::vec3(23.05, 1.5, -23.5));
+
+    // try some assimp stuff
+    // TODO
+    sam = CharDae("assets/characters/samurai.dae");
 }
 
 void Tavern::enableBuff(GLint h_vertPos, GLint h_vertNor, GLuint posBuf, GLuint norBuf, GLuint indBuf) {
@@ -539,15 +544,23 @@ void Tavern::drawTavern(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor, G
 	for (int iter = 0; iter < tavernCharacters.size(); iter++) {
         for(int meshIter = 0; meshIter < tavernCharacters[iter].meshes.size(); meshIter++) {
         	if ((*fCuller).checkCull(tavernCharacters[iter].meshes[meshIter])) {
-			    enableBuff(h_vertPos, h_vertNor, (*tavernCharacters[iter].meshes[meshIter].cont).posBuf, (*tavernCharacters[iter].meshes[meshIter].cont).norBuf, (*tavernCharacters[iter].meshes[meshIter].cont).indBuf);
+			    enableBuff(h_vertPos, h_vertNor, 
+                    (*tavernCharacters[iter].meshes[meshIter].cont).posBuf, 
+                    (*tavernCharacters[iter].meshes[meshIter].cont).norBuf, 
+                    (*tavernCharacters[iter].meshes[meshIter].cont).indBuf);
 			    if (tavernCharacters[iter].meshes[meshIter].hasTexture) {
-			    	enableTextureBuffer(h_aTexCoord, tavernCharacters[iter].meshes[meshIter].texBuf, tavernCharacters[iter].meshes[meshIter].textureNdx);
+			    	enableTextureBuffer(h_aTexCoord, 
+                        tavernCharacters[iter].meshes[meshIter].texBuf, 
+                        tavernCharacters[iter].meshes[meshIter].textureNdx);
 			    }
 			    tavernCharacters[iter].draw(h_ModelMatrix, meshIter);
 			    disableBuff(h_vertPos, h_vertNor, h_aTexCoord);
 			}
         }
 	}
+
+    // TODO remove this
+    sam.drawChar();
 }
 
 void Tavern::applyTurkeySpin(double ltime)

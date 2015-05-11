@@ -130,6 +130,8 @@ Spline::Spline(vector<glm::vec2> points, float initSlope, float finalSlope)
         }
     }
 
+    cout << m << "\n\n";
+
     coefficients = VectorXd(dimensions);
     coefficients = m.colPivHouseholderQr().solve(y);
 
