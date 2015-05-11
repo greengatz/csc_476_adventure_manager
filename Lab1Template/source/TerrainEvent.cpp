@@ -244,6 +244,7 @@ void TerrainEvent::addRandomDuder(vec3 loc, mat4 rot)
 	vec3 trans = vec3(loc.x, objYTrans[randDude], loc.z);
 	mat4 newRot = rot * objRotates[randDude];
 	addEventItem(randDude, objScales[randDude], trans, newRot);
+	eventItems[eventItems.size() - 1].loadTextureCoor(findTex(num));
 }
 
 void TerrainEvent::addStartCity(vec3 loc)
