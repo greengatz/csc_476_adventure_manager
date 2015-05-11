@@ -168,7 +168,7 @@ void initModels()
 	tavTerr.init(&texLoader);
 
 	//Initalize Wagon
-	wagon.init(&texLoader, &terrain);
+	wagon.init(&texLoader, &terrain, &menu, &gamePaused, &manager);
 
 	//Initialize skybox
 	skybox.init(&texLoader);
@@ -269,10 +269,10 @@ bool installShaders(const string &vShaderName, const string &fShaderName)
 	return true;
 }
 
-// void test()
-// {
-// 	cout << "test funct pointer" << endl;
-// }
+void test()
+{
+	cout << "test funct pointer" << endl;
+}
 
 void drawGL()
 {
@@ -475,6 +475,8 @@ void mouseScrollCB(GLFWwindow* window, double xoffset, double yoffset)
 /**
  * Use this for debugging purposes for right now.
  */
+
+ 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	timeNew = glfwGetTime();
@@ -604,11 +606,23 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 	if (key == GLFW_KEY_5 && action == GLFW_PRESS)
     {
+    	//Create about vector and add an element
+	  	vector<string> about;
+		about.push_back("about test");
+
+		//Create an option and add it to a vector
+		option testOpt = {"test option", test};
+		vector<option> options;
+		options.push_back(testOpt);
+
+		//Set the data
+		menu.setData("Title", about, options);
         gamePaused = !gamePaused;
         if(!gamePaused){
         	printf("%s\n", "reseting start time");
         	wagon.setTimeStamp(glfwGetTime());
         }
+        
     }
 	//lower drawbridge
 	if (key == GLFW_KEY_N && action == GLFW_PRESS)
@@ -703,6 +717,9 @@ int main(int argc, char **argv)
 	// terrEv.init(&matSetter, &fCuller);
 	std::string str = "assets/bunny.obj";
 	// initShape(&str[0u]); //initShape(argv[0]);
+
+	menu.initMenu(&texLoader, h_ModelMatrix, h_vertPos, g_width, g_height, h_aTexCoord);
+  	
   	initModels();
   	tavern.loadTavernMeshes(&texLoader);
 
@@ -716,7 +733,6 @@ int main(int argc, char **argv)
 
   	hud.initHUD(&texLoader);
   	hud.initHomeScreen(&texLoader);
-  	menu.initMenu(&texLoader, h_ModelMatrix, h_vertPos, g_width, g_height, h_aTexCoord);
   	initText2D( "Holstein.DDS" );
   	dtDraw = 0;
   	audio.playBackgroundMusic(true);

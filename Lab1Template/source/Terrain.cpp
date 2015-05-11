@@ -12,10 +12,7 @@
 #include "Terrain.h"
 #include "GLSL.h"
 #include "splineCurve.h"
-#define MERCHANT 1
-#define WANDERER 2
-#define AMBUSH 3
-#define SICKNESS 4
+
 #define GRASS 3
 #define TRAIL 0
 #define RED 1
@@ -89,46 +86,50 @@ bool Terrain::atEnd(glm::vec3 aPos)
    return false;
 }
 
-void Terrain::checkEvents(glm::vec3 aPos){
-
+int Terrain::checkEvents(glm::vec3 aPos){
+    int event = 0;
     int spot = floor(aPos.x);
     if(spot > MAP_Z - 10){
       terrainEvents.lowerBridge();
     }
     if(eventsMap[spot] == MERCHANT){
         printf("%s\n", "You stumbled upon a merchant.");
-        
+        event = MERCHANT;
     }
     if(eventsMap[spot] == AMBUSH){
         printf("%s\n", "Bandits are ambushing your party!");
+        event = AMBUSH;
     }
     if(eventsMap[spot] == WANDERER){
         printf("%s\n", "A lone wanderer joins your party.");
+        event = WANDERER;
     }
     if(eventsMap[spot] == SICKNESS){
         printf("%s\n", "One of you troops just caught the plague!");
+        event = SICKNESS;
     }
     eventsMap[spot] = 0;
+    return event;
 }
 
 void Terrain::placeEvents(){
   for(int i = 0; i < MAP_Z; i++){
     glm::vec3 temp = criticalPoints[i];
     if(eventsMap[i] == AMBUSH){
-      temp.x -= 101;
+      temp.x -= 100.25;
       temp.z -= 1;
       terrainEvents.addAmbush(temp, glm::mat4(1.0f));
       printf("Placing ambush at %f, %f\n", temp.x, temp.z);
 
     }
     if(eventsMap[i] == MERCHANT){
-      temp.x -= 101;
+      temp.x -= 100.25;
       temp.z += 1.5;
       terrainEvents.addMerchantStand(temp, glm::mat4(1.0f));
       printf("Placing merchant at %f, %f\n", temp.x, temp.z);
     }
     if(eventsMap[i] == WANDERER){
-      temp.x -= 101;
+      temp.x -= 100.25;
       // temp.z += 0.5;
       terrainEvents.addRandomDuder(temp, glm::mat4(1.0f));
       printf("Placing merchant at %f, %f\n", temp.x, temp.z);

@@ -17,6 +17,11 @@
 #include "Camera.h"
 #include "Materials.h"
 
+#define MERCHANT 1
+#define WANDERER 2
+#define AMBUSH 3
+#define SICKNESS 4
+
 class Terrain
 {
 public:
@@ -30,7 +35,7 @@ public:
 	bool atEnd(glm::vec3 aPos);
 	glm::vec3 nextCriticalPoint(glm::vec3 aPos);
 	void printCriticalPoints();
-	void checkEvents(glm::vec3 aPos);
+	int checkEvents(glm::vec3 aPos);
 	void placeEvents();
     Spline* getSpline();
 
@@ -57,7 +62,8 @@ private:
     int nextCPoint = 1;
     Spline* path;
     Tree tree;
-   int startingSpot;
+    int startingSpot;
+
 
 };
 
