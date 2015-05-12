@@ -99,6 +99,18 @@ void TerrainEvent::init(Materials *newMatSetter, FrustumCull *newCuller)
 	ropeScale = 0;
 }
 
+void TerrainEvent::reset()
+{
+	moveBridge = false;
+	bridgeLoc = vec3(0, 0, 0);
+	ropeLoc = vec3(0, 0, 0);
+	bridgeAng = 110;
+	ropeScale = 0;
+
+	eventItems.clear();
+	eventCharacters.clear();
+}
+
 void TerrainEvent::addEventMesh(const string filename, bool noNorms)
 {
 	Obj3dContainer temp;
