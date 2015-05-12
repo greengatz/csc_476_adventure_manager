@@ -145,6 +145,8 @@ void Terrain::createEvents(){
     int startingOffset = 3;      //No events from starting 3 spaces
     int endingOffset = 5;      //No events from ending 5 spaces
 
+    terrainEvents.reset();
+
     for(int i = 0; i < MAP_X; i++){
         eventsMap[i] = 0;
     }
