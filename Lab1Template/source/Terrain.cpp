@@ -145,8 +145,6 @@ void Terrain::createEvents(){
     int startingOffset = 3;      //No events from starting 3 spaces
     int endingOffset = 5;      //No events from ending 5 spaces
 
-    terrainEvents.reset();
-
     for(int i = 0; i < MAP_X; i++){
         eventsMap[i] = 0;
     }
@@ -331,7 +329,8 @@ void Terrain::createTrail(){
             randomTree[indexX][indexZ] = 1.0 + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/(3.0-1.0)));
         }
     }
-
+    
+    terrainEvents.reset();
     
     vec3 temp = criticalPoints[0];
     temp.x -= 101;
