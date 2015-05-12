@@ -39,6 +39,7 @@
 #include "text2D.hpp"
 #include "SoundPlayer.h"
 #include "Skybox.h"
+#include "FadeSystem.h"
 
 using namespace std;
 using namespace glm;
@@ -138,6 +139,9 @@ SoundPlayer audio;
 //The skybox
 Skybox skybox;
 
+//Fading in and out
+FadeSystem fadeSystem;
+
 /**
  * For now, this just initializes the Shape object.
  * Later, we'll updated to initialize all objects moving.
@@ -150,8 +154,6 @@ void initShape(char * filename)
 
 	//Initialize shapes here
 }
-
-
 
 /**
  * Generalized approach to intialization.
@@ -174,6 +176,9 @@ void initModels()
 
 	//Initialize skybox
 	skybox.init(&texLoader);
+
+	//Initialize the fade in/out system
+	fadeSystem.init();
 
 	//initialize the modeltrans matrix stack
    ModelTrans.useModelViewMatrix();
@@ -271,11 +276,6 @@ bool installShaders(const string &vShaderName, const string &fShaderName)
 	return true;
 }
 
-void test()
-{
-	cout << "test funct pointer" << endl;
-}
-
 void drawGL()
 {
 	// Clear buffers
@@ -358,6 +358,35 @@ void drawGL()
 		glUniform1i(terrainToggleID, 0);
 	}
 
+	//****************The fade system******************
+	//NOTE: Keep fade system above HUD so we still show hud when fading.
+
+	if (wagon.getPosition().x > -54.0 && !fadeSystem.isFading())
+	{
+		manager.inTavern = manager.inTavern ? false : true;
+		audio.playBackgroundMusic(manager.inTavern);
+		fadeSystem.startFade(g_width, g_height);
+	}
+
+	if (fadeSystem.isFading())
+	{
+		fadeSystem.updateFade();
+		if (fadeSystem.readyToChangeScene())
+		{
+			camera.toggleGameViews();
+			if (!camera.isTavernView())
+			{
+				wagon.startWagon();
+			}
+			else
+			{
+				terrain.createTrail();
+   			wagon.resetWagon();
+			}
+		}
+	}
+	
+
 	//**************Draw HUD START*********************
 
 	if(hud.on)
@@ -393,7 +422,6 @@ void drawGL()
 			printText2D("Press Enter to Continue", 75, 75, 24);
 		}
 	}
-
 
 	//**************Draw HUD FINISH********************
 	
@@ -470,7 +498,6 @@ void checkUserInput()
    {
       camera.updateZoom(-view);
    }
-
 }
 
 void mouseScrollCB(GLFWwindow* window, double xoffset, double yoffset)
@@ -484,8 +511,6 @@ void mouseScrollCB(GLFWwindow* window, double xoffset, double yoffset)
 /**
  * Use this for debugging purposes for right now.
  */
-
- 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	timeNew = glfwGetTime();
@@ -514,13 +539,13 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	}
 	
 	//Buy food
-	if (key == GLFW_KEY_F && action == GLFW_PRESS)
+	if (key == GLFW_KEY_F && action == GLFW_PRESS && camera.isTavernView())
 	{
 		manager.buyFood();
 	}
 
 	//Buy beer
-	if (key == GLFW_KEY_B && action == GLFW_PRESS)
+	if (key == GLFW_KEY_B && action == GLFW_PRESS && camera.isTavernView())
 	{
 		manager.buyBeer();
 	}
@@ -550,6 +575,12 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         hud.homeScreenOn = false;
 	}
 
+	if (key == GLFW_KEY_EQUAL && action == GLFW_PRESS)
+	{
+		//manager.buyMercenary(key - GLFW_KEY_1, &tavern);
+        hud.deadScreenOn = !hud.deadScreenOn;
+	}
+
 
 	if (key == GLFW_KEY_T && action == GLFW_PRESS)
     {
@@ -559,9 +590,11 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	//Leave Tavern
 	if (key == GLFW_KEY_X && action == GLFW_PRESS)
 	{
-        manager.inTavern = manager.inTavern ? false : true;
-		camera.toggleGameViews();
+      manager.inTavern = manager.inTavern ? false : true;
+		//camera.toggleGameViews();
 		audio.playBackgroundMusic(manager.inTavern);
+
+		fadeSystem.startFade(g_width, g_height);
 	}
 
    	//Toggle between lines and filled polygons
@@ -650,7 +683,6 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	{
 		audio.playVoice(MAGMISS_VOICE);
 	}
-
 }
 
 void window_size_callback(GLFWwindow* window, int w, int h){
@@ -742,14 +774,11 @@ int main(int argc, char **argv)
 
   	//Create about vector and add an element
 
-
   	hud.initHUD(&texLoader);
   	hud.initHomeScreen(&texLoader);
   	initText2D( "Holstein.DDS" );
   	dtDraw = 0;
   	audio.playBackgroundMusic(true);
-
-
 
  //  	vector<string> about;
 	// about.push_back("about test");
@@ -762,17 +791,13 @@ int main(int argc, char **argv)
 	// //Set the data
 	// menu.setData("Title", about, options);
 
-
    do{
    		timeNew = glfwGetTime();
 		audio.checkTime();
 		dtDraw = timeNew - timeOldDraw;
-		if(gamePaused){
-			dtDraw = 0;
-		}
+		
 		t += h;
 	
-
 		// Update every 60Hz
 		if(dtDraw >= (1.0 / 60.0) ) {
 			checkUserInput();

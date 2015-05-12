@@ -1,6 +1,7 @@
 #include "hud.h"
 int HUD_ID = 4000;
 int HOME_ID = 4001;
+int DEAD_ID = 4002;
 
 
 HUD::HUD(Manager *newMan)
@@ -15,24 +16,19 @@ HUD::HUD(Manager *newMan)
 	textBuffMenu = 0;
 	on = true;
 	homeScreenOn = true;
+  deadScreenOn = false;
 }
 
 void HUD::initHUD(TextureLoader *texLoader)
 {
 	texLoader->LoadTexture((char *)"assets/hud.bmp", HUD_ID);
+  texLoader->LoadTexture((char *)"assets/deadScreen.bmp", DEAD_ID);
 
 	GLfloat vert[] = {
 		0, 0, 1.0f,
 		0, 64.0f, 1.0f,
 		1024.0f, 64.0f, 1.0f,
 		1024.0f, 0, 1.0f
-	};
-
-	GLfloat homeVerts[] = {
-		0, 0, 1.0f,
-		0, 768.0f, 1.0f,
-		1024.0f, 768.0f, 1.0f,
-		1024.0f, 0, 1.0f 
 	};
 
     glGenBuffers(1, &posBufObjHUD);
@@ -127,7 +123,7 @@ void HUD::enableBuff(GLint h_vertPos, GLint h_aTexCoord) {
     glActiveTexture(GL_TEXTURE0);
 
   GLSL::enableVertexAttribArray(h_vertPos); //position
-  if(homeScreenOn)
+  if(homeScreenOn || deadScreenOn)
   {
   	glBindBuffer(GL_ARRAY_BUFFER, posBufObjMenu);
   }
@@ -141,6 +137,10 @@ void HUD::enableBuff(GLint h_vertPos, GLint h_aTexCoord) {
   {
   	glBindTexture(GL_TEXTURE_2D, HOME_ID);
   }
+  else if(deadScreenOn)
+  {
+    glBindTexture(GL_TEXTURE_2D, DEAD_ID);
+  }
   else
   {
   	glBindTexture(GL_TEXTURE_2D, HUD_ID);
@@ -148,7 +148,7 @@ void HUD::enableBuff(GLint h_vertPos, GLint h_aTexCoord) {
 
   GLSL::enableVertexAttribArray(h_aTexCoord);
 
-  if(homeScreenOn)
+  if(homeScreenOn || deadScreenOn)
   {
   	glBindBuffer(GL_ARRAY_BUFFER, textBuffMenu);
   }
@@ -158,7 +158,7 @@ void HUD::enableBuff(GLint h_vertPos, GLint h_aTexCoord) {
   }
   glVertexAttribPointer(h_aTexCoord, 2, GL_FLOAT ,GL_FALSE, 0, 0);
 
-  if(homeScreenOn)
+  if(homeScreenOn || deadScreenOn)
   {
   	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indxBuffObjMenu);
   }

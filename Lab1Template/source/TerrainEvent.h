@@ -37,6 +37,7 @@ class TerrainEvent
         void addEndCity(vec3 loc);
 		void drawTerrainEvents(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor, GLint h_aTexCoord, double ltime);
 		void lowerBridge();
+		void reset(); //resets the class erasing all events
 
 	private:
 		Materials *matSetter;

@@ -31,6 +31,7 @@ set(HEADERS
    Skybox.h
    charDae.h
    Tree.h
+   FadeSystem.h
 )
 
 # List all .c / .cpp files here
@@ -66,4 +67,5 @@ set(SOURCES
    Skybox.cpp
    charDae.cpp
    Tree.cpp
+   FadeSystem.cpp
 )

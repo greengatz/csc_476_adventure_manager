@@ -60,12 +60,12 @@ void Menu::setData(char* titleA, vector<string> aboutA, vector<option> optionsA)
 
 void Menu::selectOption(int num)
 {
-	cout << num << endl;
 	if(num < options.size())
 	{
 		options[num].funct(manager, gamePaused);
-		inMenu = false;
-
+		if(options[num].close == true){
+			inMenu = false;
+		}
 	}
 }
 
