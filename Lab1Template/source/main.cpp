@@ -151,8 +151,6 @@ void initShape(char * filename)
 	//Initialize shapes here
 }
 
-
-
 /**
  * Generalized approach to intialization.
  */
@@ -269,11 +267,6 @@ bool installShaders(const string &vShaderName, const string &fShaderName)
 	GLSL::checkVersion();
 	assert(glGetError() == GL_NO_ERROR);
 	return true;
-}
-
-void test()
-{
-	cout << "test funct pointer" << endl;
 }
 
 void drawGL()
@@ -394,7 +387,6 @@ void drawGL()
 		}
 	}
 
-
 	//**************Draw HUD FINISH********************
 	
 	// Unbind the program
@@ -484,8 +476,6 @@ void mouseScrollCB(GLFWwindow* window, double xoffset, double yoffset)
 /**
  * Use this for debugging purposes for right now.
  */
-
- 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	timeNew = glfwGetTime();
@@ -650,7 +640,6 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	{
 		audio.playVoice(MAGMISS_VOICE);
 	}
-
 }
 
 void window_size_callback(GLFWwindow* window, int w, int h){
@@ -742,14 +731,11 @@ int main(int argc, char **argv)
 
   	//Create about vector and add an element
 
-
   	hud.initHUD(&texLoader);
   	hud.initHomeScreen(&texLoader);
   	initText2D( "Holstein.DDS" );
   	dtDraw = 0;
   	audio.playBackgroundMusic(true);
-
-
 
  //  	vector<string> about;
 	// about.push_back("about test");
@@ -762,7 +748,6 @@ int main(int argc, char **argv)
 	// //Set the data
 	// menu.setData("Title", about, options);
 
-
    do{
    		timeNew = glfwGetTime();
 		audio.checkTime();
@@ -770,7 +755,6 @@ int main(int argc, char **argv)
 		
 		t += h;
 	
-
 		// Update every 60Hz
 		if(dtDraw >= (1.0 / 60.0) ) {
 			checkUserInput();
