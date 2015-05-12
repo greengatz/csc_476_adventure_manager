@@ -41,6 +41,7 @@ class HUD
 
 		bool on;
 		bool homeScreenOn;
+		bool deadScreenOn;
 
 	private:
 		Manager *man;
