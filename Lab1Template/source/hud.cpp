@@ -28,13 +28,6 @@ void HUD::initHUD(TextureLoader *texLoader)
 		1024.0f, 0, 1.0f
 	};
 
-	GLfloat homeVerts[] = {
-		0, 0, 1.0f,
-		0, 768.0f, 1.0f,
-		1024.0f, 768.0f, 1.0f,
-		1024.0f, 0, 1.0f 
-	};
-
     glGenBuffers(1, &posBufObjHUD);
     glBindBuffer(GL_ARRAY_BUFFER, posBufObjHUD);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vert), vert, GL_STATIC_DRAW);
