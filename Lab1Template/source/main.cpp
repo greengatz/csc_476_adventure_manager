@@ -361,6 +361,13 @@ void drawGL()
 	//****************The fade system******************
 	//NOTE: Keep fade system above HUD so we still show hud when fading.
 
+	if (wagon.getPosition().x > -54.0 && !fadeSystem.isFading())
+	{
+		manager.inTavern = manager.inTavern ? false : true;
+		audio.playBackgroundMusic(manager.inTavern);
+		fadeSystem.startFade(g_width, g_height);
+	}
+
 	if (fadeSystem.isFading())
 	{
 		fadeSystem.updateFade();
