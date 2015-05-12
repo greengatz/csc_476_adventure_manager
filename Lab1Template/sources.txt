@@ -30,6 +30,7 @@ set(HEADERS
    menu.h
    Skybox.h
    Tree.h
+   FadeSystem.h
 )
 
 # List all .c / .cpp files here
@@ -64,4 +65,5 @@ set(SOURCES
    menu.cpp
    Skybox.cpp
    Tree.cpp
+   FadeSystem.cpp
 )

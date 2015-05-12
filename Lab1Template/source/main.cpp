@@ -39,6 +39,7 @@
 #include "text2D.hpp"
 #include "SoundPlayer.h"
 #include "Skybox.h"
+#include "FadeSystem.h"
 
 using namespace std;
 using namespace glm;
@@ -138,6 +139,9 @@ SoundPlayer audio;
 //The skybox
 Skybox skybox;
 
+//Fading in and out
+FadeSystem fadeSystem;
+
 /**
  * For now, this just initializes the Shape object.
  * Later, we'll updated to initialize all objects moving.
@@ -172,6 +176,9 @@ void initModels()
 
 	//Initialize skybox
 	skybox.init(&texLoader);
+
+	//Initialize the fade in/out system
+	fadeSystem.init();
 
 	//initialize the modeltrans matrix stack
    ModelTrans.useModelViewMatrix();
@@ -351,6 +358,28 @@ void drawGL()
 		glUniform1i(terrainToggleID, 0);
 	}
 
+	//****************The fade system******************
+	//NOTE: Keep fade system above HUD so we still show hud when fading.
+
+	if (fadeSystem.isFading())
+	{
+		fadeSystem.updateFade();
+		if (fadeSystem.readyToChangeScene())
+		{
+			camera.toggleGameViews();
+			if (!camera.isTavernView())
+			{
+				wagon.startWagon();
+			}
+			else
+			{
+				terrain.createTrail();
+   			wagon.resetWagon();
+			}
+		}
+	}
+	
+
 	//**************Draw HUD START*********************
 
 	if(hud.on)
@@ -462,7 +491,6 @@ void checkUserInput()
    {
       camera.updateZoom(-view);
    }
-
 }
 
 void mouseScrollCB(GLFWwindow* window, double xoffset, double yoffset)
@@ -549,9 +577,11 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	//Leave Tavern
 	if (key == GLFW_KEY_X && action == GLFW_PRESS)
 	{
-        manager.inTavern = manager.inTavern ? false : true;
-		camera.toggleGameViews();
+      manager.inTavern = manager.inTavern ? false : true;
+		//camera.toggleGameViews();
 		audio.playBackgroundMusic(manager.inTavern);
+
+		fadeSystem.startFade(g_width, g_height);
 	}
 
    	//Toggle between lines and filled polygons
