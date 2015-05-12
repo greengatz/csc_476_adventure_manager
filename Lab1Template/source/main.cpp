@@ -532,13 +532,13 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	}
 	
 	//Buy food
-	if (key == GLFW_KEY_F && action == GLFW_PRESS)
+	if (key == GLFW_KEY_F && action == GLFW_PRESS && camera.isTavernView())
 	{
 		manager.buyFood();
 	}
 
 	//Buy beer
-	if (key == GLFW_KEY_B && action == GLFW_PRESS)
+	if (key == GLFW_KEY_B && action == GLFW_PRESS && camera.isTavernView())
 	{
 		manager.buyBeer();
 	}
@@ -566,6 +566,12 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	{
 		//manager.buyMercenary(key - GLFW_KEY_1, &tavern);
         hud.homeScreenOn = false;
+	}
+
+	if (key == GLFW_KEY_EQUAL && action == GLFW_PRESS)
+	{
+		//manager.buyMercenary(key - GLFW_KEY_1, &tavern);
+        hud.deadScreenOn = !hud.deadScreenOn;
 	}
 
 
