@@ -40,7 +40,7 @@ void CharDae::recursiveDraw(const aiNode* node) {
 
 void CharDae::drawChar() {
     if(scene) {
-        cout << "drawing a dae\n";
+//        cout << "drawing a dae\n";
         recursiveDraw(scene->mRootNode);
     }
 }
