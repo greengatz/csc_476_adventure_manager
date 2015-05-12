@@ -102,13 +102,11 @@ void FadeSystem::updateFade()
    if (dtTime < fadeDuration)
    {
       glUniform1f(h_alpha, (float)dtTime/fadeDuration);
-      printf("ALPHA(OUT): %lf\n", dtTime/fadeDuration);
       drawFadeOut();
    }
    else if (dtTime < fadeDuration * 2.0)
    {
       glUniform1f(h_alpha, (1.0 - (dtTime - fadeDuration)/fadeDuration));
-      printf("ALPHA(IN): %lf\n", (1.0 - (dtTime - fadeDuration)/fadeDuration));
       drawFadeOut();
       if (hasChanged)
       {
@@ -126,7 +124,6 @@ void FadeSystem::updateFade()
       changeScene = false;
       hasChanged = false;
    }
-   printf("dtTime: %lf\n", dtTime);
 
    // Unbind the program
    glUseProgram(0);
