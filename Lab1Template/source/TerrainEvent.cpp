@@ -355,19 +355,22 @@ void TerrainEvent::setBridge(double ltime)
 	// printf("ltime is %f and bridge ang is %f\n", ltime, bridgeAng);
 
 	// float timeInc = (float)ltime * 10;	//for those random times my computer speeds up -_-
-	// bridgeAng += (timeInc > 0.25) ? 0.25 : timeInc;
-	bridgeAng += 0.25;
+	// bridgeAng += (timeInc > 0.25) ? 0.25 : timeInc; according to ltime
+	// bridgeAng += 0.25; //too slow ver
+	bridgeAng += 0.65;
 	mat4 bridgeRot = glm::rotate(mat4(1.0f), bridgeAng, vec3(0, 0, 1.0f));
 	eventItems[BRIDGE_NUM].moveRot = glm::translate(mat4(1.0f), bridgeLoc) * bridgeRot;
 
 	// ropeScale += ltime / 12.0;
 	// timeInc = ltime / 12.0;	//for those random times my computer speeds up -_-
 	// ropeScale += (timeInc > 0.00165) ? 0.00165 : timeInc;
-	ropeScale += 0.00165;
+	// ropeScale += 0.00165; //too slow ver
+	ropeScale += 0.005;
 	eventItems[ROPE_NUM].scale = vec3(0.15, 0.15, ropeScale);
 	eventItems[ROPE_NUM + 1].scale = vec3(0.15, 0.15, ropeScale);
-	// ropeLoc = vec3(ropeLoc.x - .001, ropeLoc.y -.001, ropeLoc.z);
-	ropeLoc = vec3(ropeLoc.x - .00175, ropeLoc.y -.00175, ropeLoc.z);
+	// ropeLoc = vec3(ropeLoc.x - .001, ropeLoc.y -.001, ropeLoc.z); //ltime ver
+	// ropeLoc = vec3(ropeLoc.x - .00175, ropeLoc.y -.00175, ropeLoc.z); //too slow ver
+	ropeLoc = vec3(ropeLoc.x - .004, ropeLoc.y -.004, ropeLoc.z);
 	eventItems[ROPE_NUM].pos = ropeLoc;
 	eventItems[ROPE_NUM + 1].pos = vec3(ropeLoc.x, ropeLoc.y, ropeLoc.z + 0.5);
 	if (bridgeAng > 180) {
