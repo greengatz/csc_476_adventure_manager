@@ -106,8 +106,8 @@ void Mercenary::printDetails()
 
 void Mercenary::wave() {
     if(!isWaving) {
-        meshes[1].rot = glm::rotate(glm::mat4(1.0f), -50.0f, glm::vec3(0, 0, 1.0f));
+/*        meshes[1].rot = glm::rotate(glm::mat4(1.0f), -50.0f, glm::vec3(0, 0, 1.0f));
         animationStart = clock();
-        isWaving = true;
+        isWaving = true;*/
     }
 }

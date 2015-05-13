@@ -566,7 +566,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     if (key == GLFW_KEY_H && action == GLFW_PRESS)
 	{
 		//manager.buyMercenary(key - GLFW_KEY_1, &tavern);
-        tavern.tavernCharacters[0].wave();
+        //tavern.tavernCharacters[0].wave();
 	}
 
 	if (key == GLFW_KEY_ENTER && action == GLFW_PRESS)

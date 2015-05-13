@@ -226,7 +226,7 @@ void Terrain::createTrail(){
             changeInPath = (rand() % (maxShift - minShift)) + minShift;
             int newZ = (rand() % (maxShift - minShift)) * direction + splineSeed[splineSeed.size() - 1].y;
             splineSeed.push_back(glm::vec2(indexZ, newZ));
-            cout << splineSeed[splineSeed.size() - 1].x << ", " << splineSeed[splineSeed.size() - 1].y << "\n";
+            //cout << splineSeed[splineSeed.size() - 1].x << ", " << splineSeed[splineSeed.size() - 1].y << "\n";
         }
         else {//if(changeInPath == 1){
             changeInPath--;
@@ -238,9 +238,9 @@ void Terrain::createTrail(){
     path = new Spline(splineSeed, 0, 0);
 
     for(int i = 0; i < 50; i++) { // reverse these
-        cout << "cp: " << i << ", " << path->getY(i) << "\n";
+    //    cout << "cp: " << i << ", " << path->getY(i) << "\n";
         criticalPoints.push_back(glm::vec3(i, 0, path->getY(i)));
-        printf("criticalPoints[%d]:%f,%f,%f \n", i, criticalPoints[i].x,criticalPoints[i].y,criticalPoints[i].z);
+       // printf("criticalPoints[%d]:%f,%f,%f \n", i, criticalPoints[i].x,criticalPoints[i].y,criticalPoints[i].z);
     }
 
     // using the spline, draw generate a path
@@ -304,10 +304,6 @@ void Terrain::createTrail(){
         }
     }
 
-/*#define LNEARTRAIL 7
-#define RNEARTRAIL 8
-#define LFARTRAIL 9
-#define RFARTRAIL 10*/
     // flat trail sides
     for(indexZ = 0; indexZ < MAP_Z; indexZ++) {
         for(indexX = 0; indexX < MAP_X; indexX++) {

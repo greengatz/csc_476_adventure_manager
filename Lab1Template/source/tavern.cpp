@@ -119,10 +119,10 @@ void Tavern::addTavernCharacter(int index, glm::vec3 scale, glm::vec3 trans, glm
     vector<Obj3d> bodyParts;
 	Obj3d torso(&(tavernMeshes[index]), scale, trans, rot);
     // TODO our arm's translation should be based off rotation
-	Obj3d arm(&(tavernMeshes[CUBE]), glm::vec3(0.1, 0.5, 0.1), trans + glm::vec3(-0.3, 0.6, 0), rot);
-    arm.preTrans = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, -0.4, 0.0));
+	//Obj3d arm(&(tavernMeshes[CUBE]), glm::vec3(0.1, 0.5, 0.1), trans + glm::vec3(-0.3, 0.6, 0), rot);
+    //arm.preTrans = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, -0.4, 0.0));
     bodyParts.push_back(torso);
-    bodyParts.push_back(arm);
+    //bodyParts.push_back(arm);
     
 	tavernCharacters.push_back(*(new Mercenary(bodyParts)));
 }
