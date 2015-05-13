@@ -16,6 +16,7 @@
 #include "Tree.h"
 #include "Camera.h"
 #include "Materials.h"
+#include "ProjectMeshes.h"
 
 #define MERCHANT 1
 #define WANDERER 2
@@ -27,7 +28,7 @@ class Terrain
 public:
 	Terrain();
 	virtual ~Terrain();
-	void init(TextureLoader* texLoader, Materials *matSetter, FrustumCull *fCuller);
+	void init(TextureLoader* texLoader, Materials *matSetter, FrustumCull *fCuller, ProjectMeshes *newData);
 	void draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMatrix, Camera* camera, glm::vec3 wagonPos, GLuint* pid);
 	void createTrail();
 	void createEvents();
@@ -63,7 +64,6 @@ private:
     Spline* path;
     Tree tree;
     int startingSpot;
-
 
 };
 

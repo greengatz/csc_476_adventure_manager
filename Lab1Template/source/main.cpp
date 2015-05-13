@@ -40,6 +40,7 @@
 #include "SoundPlayer.h"
 #include "Skybox.h"
 #include "FadeSystem.h"
+#include "ProjectMeshes.h"
 
 using namespace std;
 using namespace glm;
@@ -135,6 +136,7 @@ HUD hud(&manager);
 Menu menu;
 double dtDraw;
 SoundPlayer audio;
+ProjectMeshes meshes;
 
 //The skybox
 Skybox skybox;
@@ -167,8 +169,14 @@ void spinOffNewShape(char * filename, float x, float z){
 
 void initModels()
 {
+	//Initialize meshes
+	meshes.loadMeshes();
+
+	//Initialize Tavern object
+	tavern.init(&matSetter, &fCuller, &meshes);
+
 	//Initialize Terrain object
-	terrain.init(&texLoader, &matSetter, &fCuller);
+	terrain.init(&texLoader, &matSetter, &fCuller, &meshes);
 	tavTerr.init(&texLoader);
 
 	//Initalize Wagon
@@ -754,8 +762,7 @@ int main(int argc, char **argv)
 	initGL();
 	installShaders("lab7_vert.glsl", "lab7_frag.glsl");
 	fCuller.init();
-	tavern.init(&matSetter, &fCuller);
-	// terrEv.init(&matSetter, &fCuller);
+	// terrEv.init(&matSetter, &fCuller, &meshes);
 	std::string str = "assets/bunny.obj";
 	// initShape(&str[0u]); //initShape(argv[0]);
 
@@ -765,7 +772,6 @@ int main(int argc, char **argv)
   	tavern.loadTavernMeshes(&texLoader);
 
  	//used only for testing purposes
-  	// terrEv.loadTerrEvMeshes(&texLoader);
   	// vec3 loc = terrain.getStartPosition();
   	// terrEv.addMerchantStand(vec3(loc.x - 95.5, loc.y, loc.z), glm::mat4(1.0f));
   	// terrEv.addMerchantStand(vec3(loc.x - 92.5, loc.y, loc.z), glm::rotate(glm::mat4(1.0f), (const float)90, glm::vec3(0, 1.0f, 0)));
