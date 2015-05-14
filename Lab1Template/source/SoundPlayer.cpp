@@ -5,7 +5,11 @@ const char *files[] = {"assets/music/trailMusic1.mp3",
 					   "assets/music/tavernMusic1.mp3",
 					   "assets/music/tavernMusic2.mp3",
                        "assets/music/magicMissile.mp3",
-                       "assets/music/explosion.mp3"};
+                       "assets/music/explosion.mp3",
+                       "assets/music/H01BanditB14.mp3",
+                       "assets/music/BanditYesAttack1.wav",
+                       "assets/music/VillagerM1.wav",
+                       "assets/music/GromYesAttack2.wav"};
 
 SoundPlayer::SoundPlayer()
 {
@@ -68,6 +72,7 @@ void SoundPlayer::playVoice(int file)
 
 void SoundPlayer::loadFile(int ndx)
 {
+    //printf("loading %s\n", files[ndx]);
 	if (success) {
 		result = FMOD_Sound_Release(sounds[ndx]);
 		result = FMOD_System_CreateStream(sys, files[ndx], FMOD_SOFTWARE, NULL, &(sounds[ndx]));
@@ -84,7 +89,7 @@ void SoundPlayer::play(FMOD_CHANNEL **channel, int ndx)
 	if (success) {
 		FMOD_Channel_SetPaused((*channel), true);
 		result = FMOD_System_PlaySound(sys, FMOD_CHANNEL_FREE, sounds[ndx], false, &(*channel));
-		// printf("Did not play sound because %d\n", result);
+		//printf("Did not play sound because %d\n", result);
 		FMOD_Channel_SetMode((*channel), FMOD_LOOP_OFF);
 		FMOD_System_Update(sys);
 		FMOD_Channel_SetVolume((*channel), sound_volume[ndx]);

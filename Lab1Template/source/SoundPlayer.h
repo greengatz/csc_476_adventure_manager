@@ -12,12 +12,16 @@
 #define TERR_MUSIC_2 1
 #define TAV_MUSIC_1 2
 #define TAV_MUSIC_2 3
-#define EXPLOSION_SOUND 4
-#define MAGMISS_VOICE 5
+#define EXPLOSION_SOUND 5
+#define MAGMISS_VOICE 4
+#define BANDIT_GREETING 6
+#define BANDIT_ATTACK 7
+#define VILLAGER_GREETING 8
+#define ANGRY_YELL 9
 
-const int NUM_SOUND_FILES = 6;
+const int NUM_SOUND_FILES = 10;
 
-const float sound_volume[] = {0.5, 0.5, 0.5, 0.5, 0.65, 0.65};
+const float sound_volume[] = {0.5, 0.5, 0.5, 0.5, 0.65, 0.65, 0.65, 0.65, 0.65, 0.65};
 const float song_length[] = {240, 95, 207, 252};
 
 class SoundPlayer

@@ -10,6 +10,7 @@
 #include "Wagon.h"
 #include "GLSL.h"
 #include "splineCurve.h"
+#include "SoundPlayer.h"
 #include <math.h>
 
 using namespace std;
@@ -45,7 +46,7 @@ Wagon::~Wagon()
 }
 
 
-void Wagon::init(TextureLoader* texLoader, Terrain* aTerrain, Menu* aMenu, bool* gP, Manager* mgr)
+void Wagon::init(TextureLoader* texLoader, Terrain* aTerrain, Menu* aMenu, bool* gP, Manager* mgr, SoundPlayer* audio)
 {
    manager = mgr;
    gamePaused = gP;
@@ -53,6 +54,7 @@ void Wagon::init(TextureLoader* texLoader, Terrain* aTerrain, Menu* aMenu, bool*
    menu = aMenu;
    //aPos relative to terrain generation
    resetWagon();
+   soundSys = audio;
 
    // Load geometry
   // Some obj files contain material information.
@@ -153,6 +155,8 @@ void Wagon::updateWagon(float globalTime)
   {
     int event = terrain->checkEvents(position);
     if(event == MERCHANT){
+      // TODO fix that one?
+        //soundSys->playVoice(VILLAGER_GREETING);
       *gamePaused = true;
       //Create about vector and add an element
       vector<string> about;
@@ -174,6 +178,7 @@ void Wagon::updateWagon(float globalTime)
 
     }
     if(event == SICKNESS){
+      soundSys->playVoice(ANGRY_YELL);
        *gamePaused = true;
       //Create about vector and add an element
       vector<string> about;
@@ -206,6 +211,7 @@ void Wagon::updateWagon(float globalTime)
       menu->setData("Wanderer", about, options);
     }
     if(event == AMBUSH){
+      soundSys->playVoice(BANDIT_GREETING);
       *gamePaused = true;
       //Create about vector and add an element
       vector<string> about;

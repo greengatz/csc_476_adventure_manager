@@ -20,6 +20,7 @@
 #include "Materials.h"
 #include "FrustumCull.h"
 #include "charDae.h"
+#include "ProjectMeshes.h"
 
 using namespace std;
 using namespace glm;
@@ -29,14 +30,14 @@ class Tavern
 	public:
 		
 		// GLint *h_vertPos, *h_norPos; //buffers to draw to
-		vector<Obj3dContainer> tavernMeshes; //obj meshes holding image data
+		// vector<Obj3dContainer> tavernMeshes; //obj meshes holding image data
 		vector<Obj3d> tavernItems; //data for each obj in the tavern - position, rotation, etc
 		vector<Mercenary> tavernCharacters;
 		vec3 getDoorLoc();
 		vec3 getBeerLoc();
 		vec3 getFoodLoc();
 		Tavern();
-		void init(Materials *newMatSetter, FrustumCull *newCuller);
+		void init(Materials *newMatSetter, FrustumCull *newCuller, ProjectMeshes *newData);
 		void loadTavernMeshes(TextureLoader* texLoader);
 		void showMercsForSale();
         //void buyMercenary(int mercenaryID, Manager* purchaser);
@@ -46,6 +47,7 @@ class Tavern
 		float curTime;
 		Materials *matSetter;
 		FrustumCull *fCuller;
+		ProjectMeshes *meshData;
 		vec3 doorLoc;
 		vec3 beerLoc;
 		vec3 foodLoc;
@@ -55,8 +57,8 @@ class Tavern
 		void createTable1(glm::vec3 initLoc, float ang);
 		void createPillar(glm::vec3 initLoc);
 		void createFirePlace(glm::vec3 init);
-		void addTavernMesh(const string filename, bool noNorms);
-		void addTavernItem(int index, glm::vec3 scale, glm::vec3 trans, glm::mat4 rot);
+		// void addTavernMesh(const string filename, bool noNorms);
+		void addTavernItem(int index, int vectMesh, glm::vec3 scale, glm::vec3 trans, glm::mat4 rot);
 		void addTavernCharacter(int index, glm::vec3 scale, glm::vec3 trans, glm::mat4 rot);
 		void enableTextureBuffer(GLint h_aTexCoord, GLuint texBuf,int id);
 		void enableBuff(GLint h_vertPos, GLint h_vertNor, GLuint posBuf, GLuint norBuf, GLuint indBuf);

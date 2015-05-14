@@ -14,13 +14,14 @@
 #include "Terrain.h"
 #include "manager.h"
 #include "menu.h"
+#include "SoundPlayer.h"
 
 class Wagon
 {
 public:
 	Wagon();
 	virtual ~Wagon();
-	void init(TextureLoader* texLoader, Terrain* aTerrain, Menu* aMenu, bool* gP, Manager* mgr);
+	void init(TextureLoader* texLoader, Terrain* aTerrain, Menu* aMenu, bool* gP, Manager* mgr, SoundPlayer* audio);
 	void draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMatrix, RenderingHelper* modelTrans);
 	void setPosition(float x, float y, float z);
 	glm::vec3 getPosition();
@@ -49,6 +50,7 @@ private:
 	float deltaTime;
 	bool wagonStart;
 	float velocity;
+    SoundPlayer* soundSys;
 	glm::vec3 direction;
 	glm::vec3 nextPoint;
 	glm::vec3 orientation;

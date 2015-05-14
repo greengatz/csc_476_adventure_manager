@@ -98,6 +98,7 @@ int Terrain::checkEvents(glm::vec3 aPos){
     }
     if(eventsMap[spot] == AMBUSH){
         printf("%s\n", "Bandits are ambushing your party!");
+        // play sound
         event = AMBUSH;
     }
     if(eventsMap[spot] == WANDERER){
@@ -353,9 +354,9 @@ void Terrain::createTrail(){
     createEvents();
 }
 
-void Terrain::init(TextureLoader* texLoader, Materials *matSetter, FrustumCull *fCuller)
+void Terrain::init(TextureLoader* texLoader, Materials *matSetter, FrustumCull *fCuller, ProjectMeshes *newData)
 {
-  terrainEvents.init(matSetter, fCuller);
+  terrainEvents.init(matSetter, fCuller, newData);
   terrainEvents.loadTerrEvMeshes(texLoader);
 	x.x = 0.0f;
 	x.y = 0.0f;

@@ -1,61 +1,62 @@
 #include "TerrainEvent.h"
 #include <time.h>
 
-#define SAMURAI 0
-#define SPEARMAN 1
-#define KNIGHT2 2
-#define WARRIOR 3
-#define STALL 4
-#define MERCHANT 5
-#define BOX 6
-#define START_CITY 7
-#define END_CITY 8
-#define ROPE 9
-#define BARREL 10
-#define BOTTLE 11
+// #define SAMURAI 0
+// #define SPEARMAN 1
+// #define KNIGHT2 2
+// #define WARRIOR 3
+// #define STALL 4
+// #define MERCHANT 5
+// #define BOX 6
+// #define START_CITY 7
+// #define END_CITY 8
+// #define ROPE 9
+// #define BARREL 10
+// #define BOTTLE 11
 
-#define NUM_TERR_EV_FILES 12
+// #define NUM_TERR_EV_FILES 12
 
-const string terrEvFiles[] = {"assets/events/samurai.obj",
-							  "assets/events/spearman.obj",
-							  "assets/events/knight2 split.obj",
-							  "assets/events/warrior split.obj",
-							  "assets/events/stall.obj",
-							  "assets/events/merchant.obj",
-							  "assets/events/box.obj",
-							  "assets/events/startCity.obj",
-							  "assets/events/endCity.obj",
-							  "assets/events/rope.obj",
-							  "assets/events/barrel.obj",
-							  "assets/events/bottle.obj"
-							 };
+// const string terrEvFiles[] = {"assets/events/samurai.obj",
+// 							  "assets/events/spearman.obj",
+// 							  "assets/events/knight2 split.obj",
+// 							  "assets/events/warrior split.obj",
+// 							  "assets/events/stall.obj",
+// 							  "assets/events/merchant.obj",
+// 							  "assets/events/box.obj",
+// 							  "assets/events/startCity.obj",
+// 							  "assets/events/endCity.obj",
+// 							  "assets/events/rope.obj",
+// 							  "assets/events/barrel.obj",
+// 							  "assets/events/bottle.obj"
+// 							 };
 
-const vec3 objScales[] = {vec3(0.09, 0.09, 0.09),
-		                  vec3(0.125, 0.125, 0.125),
-		                  vec3(1.0, 1.0, 1.0),
-		                  vec3(1.0, 1.0, 1.0),
-		                  vec3(0.39, 0.45, 0.39),
-		                  vec3(0.09, 0.09, 0.09),
-		                  vec3(0.415, 0.04, 0.305),
-						};
 
-const float objYTrans[] = {0.085,
-                           0.085,
-                           1.0,
-                           1.0,
-                           0.22,
+//rotations are such that they look right if one is staring directly at the front of the wagon
+
+//samurai, spearman
+const vec3 charScales[] = {vec3(0.09, 0.09, 0.09),
+		                   vec3(0.125, 0.125, 0.125),
+};
+const mat4 charRotates[] = {glm::rotate(mat4(1.0f), (const float)180, glm::vec3(0, 1.0f, 0)),
+						    glm::rotate(mat4(1.0f), (const float)180, glm::vec3(0, 1.0f, 0)),
+};
+const float charYTrans[] = {0.085,
+                            0.085,
+};
+
+
+const vec3 objScales[] = {vec3(0.39, 0.45, 0.39),   // stall
+		                  vec3(0.09, 0.09, 0.09),   // merchant
+		                  vec3(0.415, 0.04, 0.305), // roof
+};
+const float objYTrans[] = {0.22,
                            0.09,
-                           0.40};
-
-//characters rotate to face left of trail assuming right behind wagon
+                           0.40,
+};
 const mat4 objRotates[] = {glm::rotate(mat4(1.0f), (const float)180, glm::vec3(0, 1.0f, 0)),
-						   glm::rotate(mat4(1.0f), (const float)180, glm::vec3(0, 1.0f, 0)),
-						   mat4(1.0f),
-						   mat4(1.0f),
-						   glm::rotate(mat4(1.0f), (const float)180, glm::vec3(0, 1.0f, 0)),
 						   glm::rotate(mat4(1.0f), (const float)90, glm::vec3(1.0f, 0, 0)) * glm::rotate(mat4(1.0f), (const float)180, glm::vec3(0, 0, 1.0f)),
 						   glm::rotate(mat4(1.0f), (const float)180, glm::vec3(0, 1.0f, 0)), //faces toward the end city
-						};
+};
 
 // int TAV_CRATE_ID = 5000;
 // int TAV_ROCK_ID = 6500;
@@ -66,8 +67,6 @@ int TERR_EV_SPEARMAN_ID = 7400;
 int TERR_EV_SAMURAI_ID = 7500;
 int TERR_EV_CRATE_ID = 7700;
 int TERR_EV_ROOF_ID = 7800;
-
-// Obj3dContainer containers[std::extent<decltype(terrEvFiles)>::value];
 
 int BRIDGE_NUM, ROPE_NUM;
 
@@ -88,10 +87,11 @@ TerrainEvent::TerrainEvent()
 
 }
 
-void TerrainEvent::init(Materials *newMatSetter, FrustumCull *newCuller)
+void TerrainEvent::init(Materials *newMatSetter, FrustumCull *newCuller, ProjectMeshes *newData)
 {
 	matSetter = newMatSetter;
 	fCuller = newCuller;
+	meshData = newData;
 	moveBridge = false;
 	bridgeLoc = vec3(0, 0, 0);
 	ropeLoc = vec3(0, 0, 0);
@@ -111,19 +111,29 @@ void TerrainEvent::reset()
 	eventCharacters.clear();
 }
 
-void TerrainEvent::addEventMesh(const string filename, bool noNorms)
-{
-	Obj3dContainer temp;
-	temp.loadIntoTinyOBJ(filename);
-	temp.initBuffers(noNorms);
-	meshes.push_back(temp);
-}
+// void TerrainEvent::addEventMesh(const string filename, bool noNorms)
+// {
+// 	Obj3dContainer temp;
+// 	temp.loadIntoTinyOBJ(filename);
+// 	temp.initBuffers(noNorms);
+// 	meshes.push_back(temp);
+// }
 
-//index is the index of buffer info in tavernMeshes
-void TerrainEvent::addEventItem(int index, glm::vec3 scale, glm::vec3 trans, glm::mat4 rot)
+//index is the index of buffer info in tavernMeshes, vectMesh is the vector which stores the mesh for the obj3d
+void TerrainEvent::addEventItem(int index, int vectMesh, glm::vec3 scale, glm::vec3 trans, glm::mat4 rot)
 {
-	Obj3d temp(&(meshes[index]), scale, trans, rot);
-	eventItems.push_back(temp);
+	if (vectMesh == 1) {
+		Obj3d temp(&((*meshData).terrMeshes[index]), scale, trans, rot);
+		eventItems.push_back(temp);
+	}
+	else if (vectMesh == 2) {
+		Obj3d temp(&((*meshData).otherMeshes[index]), scale, trans, rot);
+		eventItems.push_back(temp);
+	}
+	else if (vectMesh == 3) {
+		Obj3d temp(&((*meshData).pplMeshes[index]), scale, trans, rot);
+		eventItems.push_back(temp);
+	}
 }
 
 //index is the index of buffer info in tavernMeshes
@@ -143,15 +153,15 @@ void TerrainEvent::addEventCharacter(int index, glm::vec3 scale, glm::vec3 trans
 void TerrainEvent::loadTerrEvMeshes(TextureLoader* texLoader)
 {
 	srand(time(NULL));
-	float ang;
-	glm::mat4 rot;
+	// float ang;
+	// glm::mat4 rot;
 
-	for (int iter = 0; iter < NUM_TERR_EV_FILES; iter++) {
-		if (iter == SPEARMAN || iter == BARREL)
-			addEventMesh(terrEvFiles[iter], true);
-		else
-			addEventMesh(terrEvFiles[iter], false);
-	}
+	// for (int iter = 0; iter < NUM_TERR_EV_FILES; iter++) {
+	// 	if (iter == SPEARMAN || iter == BARREL)
+	// 		addEventMesh(terrEvFiles[iter], true);
+	// 	else
+	// 		addEventMesh(terrEvFiles[iter], false);
+	// }
 
 	//load textures
 	texLoader->LoadTexture((char *)"assets/events/stone.bmp", TERR_EV_STONE_ID);
@@ -161,22 +171,11 @@ void TerrainEvent::loadTerrEvMeshes(TextureLoader* texLoader)
 	texLoader->LoadTexture((char *)"assets/events/samuraiTex.bmp", TERR_EV_SAMURAI_ID); //yeah i know... its bad
 	texLoader->LoadTexture((char *)"assets/events/crateTex.bmp", TERR_EV_CRATE_ID);
 	texLoader->LoadTexture((char *)"assets/events/roof.bmp", TERR_EV_ROOF_ID);
-	// texLoader->LoadTexture((char *)"assets/tavern/logTex.bmp", TAV_LOG_ID);
-	// texLoader->LoadTexture((char *)"assets/tavern/lumberjackTex.bmp", TAV_LUMBERJACK_ID);
-	// texLoader->LoadTexture((char *)"assets/tavern/samuraiTex.bmp", TAV_SAMURAI_ID);
-	// texLoader->LoadTexture((char *)"assets/tavern/bookshelfTex.bmp", TAV_SHELF_ID);
-	// texLoader->LoadTexture((char *)"assets/tavern/marbletopTex.bmp", TAV_MARBLE_ID);
-	// texLoader->LoadTexture((char *)"assets/tavern/branchTex.bmp", TAV_BRANCHES_ID);
-	// texLoader->LoadTexture((char *)"assets/tavern/roofTex.bmp", TAV_ROOF_ID);
-	// texLoader->LoadTexture((char *)"assets/tavern/torchTex.bmp", TAV_TORCH_ID);
-	// texLoader->LoadTexture((char *)"assets/tavern/plankTex.bmp", TAV_PLANK_ID);
-	// texLoader->LoadTexture((char *)"assets/tavern/rockTex.bmp", TAV_ROCK_ID);
-	// texLoader->LoadTexture((char *)"assets/tavern/dirtTex.bmp", TAV_DIRT_ID);	
 }
 
 void TerrainEvent::addAmbush(vec3 loc, mat4 rot)
 {
-	float ambushLoc[] = {0,  0,
+	float ambushLoc[] = {0,     0,
 	                     0.09,  0.12,
 	                     0.11, -0.16,
 	                    -0.15,  0.05,
@@ -185,9 +184,9 @@ void TerrainEvent::addAmbush(vec3 loc, mat4 rot)
 	int partySize = getRandInt(3) + 2;  //between 3 - 5 attackers
 	for (int iter = 0; iter < partySize; iter++) {
 		int num = getRandInt(2) - 1;
-		vec3 trans = vec3(loc.x + ambushLoc[iter * 2], objYTrans[num], loc.z + ambushLoc[iter * 2 + 1]);
-		mat4 newRot = rot * objRotates[num];
-		addEventItem(num, objScales[num], trans, newRot);
+		vec3 trans = vec3(loc.x + ambushLoc[iter * 2], charYTrans[num], loc.z + ambushLoc[iter * 2 + 1]);
+		mat4 newRot = rot * charRotates[num];
+		addEventItem(num, 3, charScales[num], trans, newRot);
 		eventItems[eventItems.size() - 1].loadTextureCoor(findTex(num));
 	}
 }
@@ -196,44 +195,44 @@ void TerrainEvent::addMerchantStand(vec3 loc, mat4 rot)
 {
 	//trans to final pos * rot corresponding to rot variable * trans to certain dist out * scale
 
-	mat4 newRot = rot * objRotates[STALL];
-	addEventItem(STALL, objScales[STALL], vec3(loc.x, objYTrans[STALL], loc.z), newRot);
+	mat4 newRot = rot * objRotates[0];
+	addEventItem(STALL, 1, objScales[0], vec3(loc.x, objYTrans[0], loc.z), newRot);
 	eventItems[eventItems.size() - 1].materialNdx = 7;
-	newRot = rot * objRotates[BOX];
-	addEventItem(BOX, objScales[BOX], vec3(loc.x, objYTrans[BOX], loc.z), newRot);
+	newRot = rot * objRotates[2];
+	addEventItem(CRATE, 2, objScales[2], vec3(loc.x, objYTrans[2], loc.z), newRot);
 	eventItems[eventItems.size() - 1].loadTextureCoor(TERR_EV_ROOF_ID);
-	newRot = rot * objRotates[MERCHANT];
-	addEventItem(MERCHANT, objScales[MERCHANT], vec3(0, 0.23, 0), mat4(1.0f));
+	newRot = rot * objRotates[1];
+	addEventItem(MERCHANT, 1, objScales[1], vec3(0, 0.23, 0), mat4(1.0f));
 	eventItems[eventItems.size() - 1].loadTextureCoor(TERR_EV_MERCHANT_ID);
-	eventItems[eventItems.size() - 1].moveRot = glm::translate(mat4(1.0f), vec3(loc.x, objYTrans[MERCHANT], loc.z)) * newRot;
+	eventItems[eventItems.size() - 1].moveRot = glm::translate(mat4(1.0f), vec3(loc.x, objYTrans[1], loc.z)) * newRot;
 
-	addEventItem(BOX, vec3(0.05, 0.05, 0.05), vec3(0.295, 0, .09), mat4(1.0f));
+	//boxes and barrels in the shop
+	addEventItem(CRATE, 2, vec3(0.05, 0.05, 0.05), vec3(0.295, 0, .09), mat4(1.0f));
 	eventItems[eventItems.size() - 1].moveRot = glm::translate(mat4(1.0f), vec3(loc.x, 0.05, loc.z)) * rot;
 	eventItems[eventItems.size() - 1].loadTextureCoor(TERR_EV_CRATE_ID);
-	addEventItem(BOX, vec3(0.05, 0.05, 0.05), vec3(0.165, 0, .1), mat4(1.0f));
+	addEventItem(CRATE, 2, vec3(0.05, 0.05, 0.05), vec3(0.165, 0, .1), mat4(1.0f));
 	eventItems[eventItems.size() - 1].moveRot = glm::translate(mat4(1.0f), vec3(loc.x, 0.05, loc.z)) * rot;
 	eventItems[eventItems.size() - 1].loadTextureCoor(TERR_EV_CRATE_ID);
-	addEventItem(BOX, vec3(0.05, 0.05, 0.05), vec3(0.225, 0, .098), mat4(1.0f));
+	addEventItem(CRATE, 2, vec3(0.05, 0.05, 0.05), vec3(0.225, 0, .098), mat4(1.0f));
 	eventItems[eventItems.size() - 1].moveRot = glm::translate(mat4(1.0f), vec3(loc.x, 0.15, loc.z)) * rot;
 	eventItems[eventItems.size() - 1].loadTextureCoor(TERR_EV_CRATE_ID);
 
-	addEventItem(BOX, vec3(0.05, 0.05, 0.05), vec3(0.26, 0, -.32), mat4(1.0f));
+	addEventItem(CRATE, 2, vec3(0.05, 0.05, 0.05), vec3(0.26, 0, -.32), mat4(1.0f));
 	eventItems[eventItems.size() - 1].moveRot = glm::translate(mat4(1.0f), vec3(loc.x, 0.05, loc.z)) * rot;
 	eventItems[eventItems.size() - 1].loadTextureCoor(TERR_EV_CRATE_ID);
-	addEventItem(BARREL, vec3(0.055, 0.055, 0.055), vec3(0.09, 0, -.17), mat4(1.0f));
+	addEventItem(BARREL, 2, vec3(0.055, 0.055, 0.055), vec3(0.09, 0, -.17), mat4(1.0f));
 	eventItems[eventItems.size() - 1].moveRot = glm::translate(mat4(1.0f), vec3(loc.x, 0.065, loc.z)) * rot;
 	eventItems[eventItems.size() - 1].materialNdx = 11;
-	addEventItem(BOTTLE, vec3(0.015, 0.015, 0.015), vec3(0.09, 0, -.17), mat4(1.0f));
+	addEventItem(BOTTLE, 2, vec3(0.015, 0.015, 0.015), vec3(0.09, 0, -.17), mat4(1.0f));
 	eventItems[eventItems.size() - 1].moveRot = glm::translate(mat4(1.0f), vec3(loc.x, 0.1, loc.z)) * rot;
 	eventItems[eventItems.size() - 1].materialNdx = 8;
 
-	addEventItem(BARREL, vec3(0.055, 0.055, 0.055), vec3(-0.09, 0, .065), mat4(1.0f));
+	addEventItem(BARREL, 2, vec3(0.055, 0.055, 0.055), vec3(-0.09, 0, .065), mat4(1.0f));
 	eventItems[eventItems.size() - 1].moveRot = glm::translate(mat4(1.0f), vec3(loc.x, 0.065, loc.z)) * rot;
 	eventItems[eventItems.size() - 1].materialNdx = 11;
-	addEventItem(BARREL, vec3(0.055, 0.055, 0.055), vec3(-0.2, 0, .08), mat4(1.0f));
+	addEventItem(BARREL, 2, vec3(0.055, 0.055, 0.055), vec3(-0.2, 0, .08), mat4(1.0f));
 	eventItems[eventItems.size() - 1].moveRot = glm::translate(mat4(1.0f), vec3(loc.x, 0.065, loc.z)) * rot;
 	eventItems[eventItems.size() - 1].materialNdx = 11;
-
 
 	float merchantLoc[] = {0.19, 0.3,
                            -0.35, 0.41,
@@ -243,9 +242,9 @@ void TerrainEvent::addMerchantStand(vec3 loc, mat4 rot)
 	for (int iter = 0; iter < numBodyGuard; iter++) {
 		int num = getRandInt(2) - 1;
 		vec3 trans = vec3(merchantLoc[iter * 2], 0, merchantLoc[iter * 2 + 1]);
-		mat4 newRot = rot * objRotates[num];
-		addEventItem(num, objScales[num], trans, glm::mat4(1.0f));
-		eventItems[eventItems.size() - 1].moveRot = glm::translate(mat4(1.0f), vec3(loc.x, objYTrans[num], loc.z)) * newRot;
+		mat4 newRot = rot * charRotates[num];
+		addEventItem(num, 3, charScales[num], trans, glm::mat4(1.0f));
+		eventItems[eventItems.size() - 1].moveRot = glm::translate(mat4(1.0f), vec3(loc.x, charYTrans[num], loc.z)) * newRot;
 		eventItems[eventItems.size() - 1].loadTextureCoor(findTex(num));
 	}
 }
@@ -253,25 +252,25 @@ void TerrainEvent::addMerchantStand(vec3 loc, mat4 rot)
 void TerrainEvent::addRandomDuder(vec3 loc, mat4 rot) 
 {
 	int randDude = getRandInt(2) - 1;
-	vec3 trans = vec3(loc.x, objYTrans[randDude], loc.z);
-	mat4 newRot = rot * objRotates[randDude];
-	addEventItem(randDude, objScales[randDude], trans, newRot);
+	vec3 trans = vec3(loc.x, charYTrans[randDude], loc.z);
+	mat4 newRot = rot * charRotates[randDude];
+	addEventItem(randDude, 3, charScales[randDude], trans, newRot);
 	eventItems[eventItems.size() - 1].loadTextureCoor(findTex(randDude));
 }
 
 void TerrainEvent::addStartCity(vec3 loc)
 {
 	printf("Position : %f,%f,%f\n ",loc.x,loc.y,loc.z);
-	addEventItem(START_CITY, vec3(1.65, 1.65, 1.65), vec3(loc.x, 0.685, loc.z), glm::rotate(mat4(1.0f), (const float)90, vec3(0, 1.0f, 0)));
+	addEventItem(START_CITY, 1, vec3(1.65, 1.65, 1.65), vec3(loc.x, 0.685, loc.z), glm::rotate(mat4(1.0f), (const float)90, vec3(0, 1.0f, 0)));
 	eventItems[eventItems.size() - 1].loadTextureCoor(TERR_EV_START_CITY_ID);
 }
 
 void TerrainEvent::addEndCity(vec3 loc)
 {
-	addEventItem(END_CITY, vec3(4.05, 4.05, 4.05), vec3(loc.x, 0.45, loc.z - 0.2), glm::rotate(mat4(1.0f), (const float)-90, vec3(0, 1.0f, 0)));
+	addEventItem(END_CITY, 1, vec3(4.05, 4.05, 4.05), vec3(loc.x, 0.45, loc.z - 0.2), glm::rotate(mat4(1.0f), (const float)-90, vec3(0, 1.0f, 0)));
 	eventItems[eventItems.size() - 1].loadTextureCoor(TERR_EV_STONE_ID);
 	
-	addEventItem(BOX, vec3(0.52, 0.05, 0.34), vec3(0.45, 0, 0), mat4(1.0f));
+	addEventItem(CRATE, 2, vec3(0.52, 0.05, 0.34), vec3(0.45, 0, 0), mat4(1.0f));
 	eventItems[eventItems.size() - 1].loadTextureCoor(TERR_EV_ROOF_ID);
 	BRIDGE_NUM = eventItems.size() - 1;
 	mat4 bridgeRot = glm::rotate(mat4(1.0f), bridgeAng, vec3(0, 0, 1.0f));
@@ -281,12 +280,12 @@ void TerrainEvent::addEndCity(vec3 loc)
 	ropeScale = 0.1;
 	mat4 ropeRot = glm::rotate(mat4(1.0f), (const float)-90, vec3(0, 1.0f, 0)) * glm::rotate(mat4(1.0f), (const float)45, vec3(1.0f, 0, 0));
 	ropeLoc = vec3(loc.x - 1.92, 0.9, loc.z - 1.32);
-	addEventItem(ROPE, vec3(0.15, 0.15, ropeScale), ropeLoc, ropeRot);
+	addEventItem(ROPE, 1, vec3(0.15, 0.15, ropeScale), ropeLoc, ropeRot);
 	ROPE_NUM = eventItems.size() - 1;
 
-	addEventItem(ROPE, vec3(0.15, 0.15, ropeScale), vec3(ropeLoc.x, ropeLoc.y, ropeLoc.z + 0.5), ropeRot);
+	addEventItem(ROPE, 1, vec3(0.15, 0.15, ropeScale), vec3(ropeLoc.x, ropeLoc.y, ropeLoc.z + 0.5), ropeRot);
 
-	addEventItem(BOX, vec3(0.15, 0.15, 0.42), vec3(loc.x - 1.9, 0.84, loc.z - 1.065), mat4(1.0f));
+	addEventItem(CRATE, 2, vec3(0.15, 0.15, 0.42), vec3(loc.x - 1.9, 0.84, loc.z - 1.065), mat4(1.0f));
 	eventItems[eventItems.size() - 1].loadTextureCoor(TERR_EV_STONE_ID);
 }
 
@@ -355,19 +354,22 @@ void TerrainEvent::setBridge(double ltime)
 	// printf("ltime is %f and bridge ang is %f\n", ltime, bridgeAng);
 
 	// float timeInc = (float)ltime * 10;	//for those random times my computer speeds up -_-
-	// bridgeAng += (timeInc > 0.25) ? 0.25 : timeInc;
-	bridgeAng += 0.25;
+	// bridgeAng += (timeInc > 0.25) ? 0.25 : timeInc; according to ltime
+	// bridgeAng += 0.25; //too slow ver
+	bridgeAng += 0.65;
 	mat4 bridgeRot = glm::rotate(mat4(1.0f), bridgeAng, vec3(0, 0, 1.0f));
 	eventItems[BRIDGE_NUM].moveRot = glm::translate(mat4(1.0f), bridgeLoc) * bridgeRot;
 
 	// ropeScale += ltime / 12.0;
 	// timeInc = ltime / 12.0;	//for those random times my computer speeds up -_-
 	// ropeScale += (timeInc > 0.00165) ? 0.00165 : timeInc;
-	ropeScale += 0.00165;
+	// ropeScale += 0.00165; //too slow ver
+	ropeScale += 0.005;
 	eventItems[ROPE_NUM].scale = vec3(0.15, 0.15, ropeScale);
 	eventItems[ROPE_NUM + 1].scale = vec3(0.15, 0.15, ropeScale);
-	// ropeLoc = vec3(ropeLoc.x - .001, ropeLoc.y -.001, ropeLoc.z);
-	ropeLoc = vec3(ropeLoc.x - .00175, ropeLoc.y -.00175, ropeLoc.z);
+	// ropeLoc = vec3(ropeLoc.x - .001, ropeLoc.y -.001, ropeLoc.z); //ltime ver
+	// ropeLoc = vec3(ropeLoc.x - .00175, ropeLoc.y -.00175, ropeLoc.z); //too slow ver
+	ropeLoc = vec3(ropeLoc.x - .004, ropeLoc.y -.004, ropeLoc.z);
 	eventItems[ROPE_NUM].pos = ropeLoc;
 	eventItems[ROPE_NUM + 1].pos = vec3(ropeLoc.x, ropeLoc.y, ropeLoc.z + 0.5);
 	if (bridgeAng > 180) {
