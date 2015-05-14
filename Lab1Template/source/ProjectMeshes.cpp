@@ -105,13 +105,19 @@ void ProjectMeshes::loadOnlyTrail()
 void ProjectMeshes::loadOther()
 {
 	for (int iter  = 0; iter < NUM_OTHER; iter++) {
-		addMesh(otherFiles[iter], &otherMeshes, false);
+		if (iter == BARREL)
+			addMesh(otherFiles[iter], &otherMeshes, true);
+		else 
+			addMesh(otherFiles[iter], &otherMeshes, false);
 	}
 }
 
 void ProjectMeshes::loadPpl()
 {
 	for (int iter  = 0; iter < NUM_PPL; iter++) {
-		addMesh(pplFiles[iter], &pplMeshes, false);
+		if (iter == SPEARMAN)
+			addMesh(pplFiles[iter], &pplMeshes, true);
+		else 
+			addMesh(pplFiles[iter], &pplMeshes, false);
 	}
 }
