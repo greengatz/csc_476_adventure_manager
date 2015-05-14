@@ -156,7 +156,7 @@ void Wagon::updateWagon(float globalTime)
     int event = terrain->checkEvents(position);
     if(event == MERCHANT){
       // TODO fix that one?
-        //soundSys->playVoice(VILLAGER_GREETING);
+      soundSys->playVoice(VILLAGER_GREETING);
       *gamePaused = true;
       //Create about vector and add an element
       vector<string> about;
