@@ -127,7 +127,6 @@ GLuint NumBufObj, NumIndBufObj, NumTexBufObj;
 //Rendering Helper
 RenderingHelper ModelTrans;
 Tavern tavern;
-TerrainEvent terrEv;
 Manager manager("The Dude");
 TavernTerrain tavTerr;
 Materials matSetter;
@@ -137,6 +136,8 @@ Menu menu;
 double dtDraw;
 SoundPlayer audio;
 ProjectMeshes meshes;
+
+// TerrainEvent terrEv; //this is only here for testing purposes
 
 //The skybox
 Skybox skybox;
@@ -432,7 +433,7 @@ void drawGL()
 	}
 
 	//**************Draw HUD FINISH********************
-	
+
 	// Unbind the program
 	glUseProgram(0);
 	// Pop stacks
@@ -674,10 +675,10 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
   //       }
         
     }
-	//lower drawbridge
 	if (key == GLFW_KEY_N && action == GLFW_PRESS)
 	{
-		terrEv.lowerBridge();
+		// terrEv.lowerBridge();
+
 	}
 	if (key == GLFW_KEY_Y && action == GLFW_PRESS)
 	{
