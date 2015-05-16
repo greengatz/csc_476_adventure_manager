@@ -46,7 +46,7 @@ using namespace std;
 #define END_CITY 1
 #define ROPE 2
 #define STALL 3
-#define MERCHANT 4
+#define VENDOR 4
 
 //other meshes
 #define CRATE 0

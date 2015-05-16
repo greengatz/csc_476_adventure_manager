@@ -150,7 +150,7 @@ void Tavern::loadBufferData(TextureLoader* texLoader)
 	//load textures
 	texLoader->LoadTexture((char *)"assets/tavern/crateTex.bmp", TAV_CRATE_ID);
 	texLoader->LoadTexture((char *)"assets/tavern/landlordTex.bmp", TAV_LANDLORD_ID);
-	texLoader->LoadTexture((char *)"assets/tavern/logTex.bmp", TAV_LOG_ID);
+	texLoader->LoadTexture((char *)"assets/tavern/firePitTex.bmp", TAV_LOG_ID);
 	texLoader->LoadTexture((char *)"assets/tavern/lumberjackTex.bmp", TAV_LUMBERJACK_ID);
 	texLoader->LoadTexture((char *)"assets/tavern/samuraiTex.bmp", TAV_SAMURAI_ID);
 	texLoader->LoadTexture((char *)"assets/tavern/bookshelfTex.bmp", TAV_SHELF_ID);
@@ -239,27 +239,35 @@ void Tavern::createTable1(glm::vec3 initLoc, float ang)
 	// }
 }
 
-void Tavern::createPillar(glm::vec3 initLoc)
+void Tavern::createPillar(glm::vec3 initLoc, bool north)
 {
 	// addTavernItem(CUBE, glm::vec3(0.2, 10.0, 0.2), initLoc, glm::mat4(1.0f));
 	float ang = 90;
 	glm::mat4 rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 0, 1.0f));
 	addTavernItem(PLANK, 1, glm::vec3(12, 15, 2.5), glm::vec3(initLoc.x, initLoc.y + 5.0, initLoc.z), rot);
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_PLANK_ID);
-	ang = 45;
-	rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(1.0f, 0, 0));
-	addTavernItem(TORCH, 1, glm::vec3(0.4, 0.4, 0.4), glm::vec3(initLoc.x, initLoc.y + 1.6, initLoc.z + 0.2), rot);
+	// ang = 45;
+	// rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(1.0f, 0, 0));
+	// addTavernItem(TORCH, 1, glm::vec3(0.4, 0.4, 0.4), glm::vec3(initLoc.x, initLoc.y + 1.6, initLoc.z + 0.2), rot);
+	// tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_TORCH_ID);
+	// rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 0, 1.0f));
+	// addTavernItem(TORCH, 1, glm::vec3(0.4, 0.4, 0.4), glm::vec3(initLoc.x - 0.2, initLoc.y + 1.6, initLoc.z), rot);
+	// tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_TORCH_ID);
+	
+	if (north) {
+		ang = -45;
+		rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(1.0f, 0, 0));
+		addTavernItem(TORCH, 1, glm::vec3(0.4, 0.4, 0.4), glm::vec3(initLoc.x, initLoc.y + 1.6, initLoc.z - 0.2), rot);
+		
+	}
+	else {
+		ang = 45;
+		rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(1.0f, 0, 0));
+		addTavernItem(TORCH, 1, glm::vec3(0.4, 0.4, 0.4), glm::vec3(initLoc.x, initLoc.y + 1.6, initLoc.z + 0.2), rot);
+	}
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_TORCH_ID);
-	rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 0, 1.0f));
-	addTavernItem(TORCH, 1, glm::vec3(0.4, 0.4, 0.4), glm::vec3(initLoc.x - 0.2, initLoc.y + 1.6, initLoc.z), rot);
-	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_TORCH_ID);
-	ang = -45;
-	rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(1.0f, 0, 0));
-	addTavernItem(TORCH, 1, glm::vec3(0.4, 0.4, 0.4), glm::vec3(initLoc.x, initLoc.y + 1.6, initLoc.z - 0.2), rot);
-	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_TORCH_ID);
-	rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 0, 1.0f));
-	addTavernItem(TORCH, 1, glm::vec3(0.4, 0.4, 0.4), glm::vec3(initLoc.x + 0.2, initLoc.y + 1.6, initLoc.z), rot);
-	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_TORCH_ID);
+	// rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 0, 1.0f));
+		// addTavernItem(TORCH, 1, glm::vec3(0.4, 0.4, 0.4), glm::vec3(initLoc.x + 0.2, initLoc.y + 1.6, initLoc.z), rot);
 }
 
 void Tavern::createFirePlace(glm::vec3 init)
@@ -267,12 +275,12 @@ void Tavern::createFirePlace(glm::vec3 init)
 	float ang;
 	glm::mat4 rot;
 	addTavernItem(POLE, 1, glm::vec3(1.5, 1.2, 1.4), init, glm::mat4(1.0f));
-	addTavernItem(FIREPLACE, 1, glm::vec3(0.6, 0.6, 0.6), glm::vec3(init.x, -0.05, init.z + 0.3), glm::mat4(1.0f));
+	addTavernItem(FIREPLACE, 1, glm::vec3(0.5, 0.5, 0.5), glm::vec3(init.x, 0.35, init.z), glm::mat4(1.0f));
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_LOG_ID);
-	addTavernItem(FIREPLACE, 1, glm::vec3(0.6, 0.6, 0.6), glm::vec3(init.x, -0.05, init.z - 0.3), glm::mat4(1.0f));
-	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_LOG_ID);
-	addTavernItem(FIREPLACE, 1, glm::vec3(0.6, 0.6, 0.6), glm::vec3(init.x, 0.1, init.z), glm::mat4(1.0f));
-	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_LOG_ID);
+	// addTavernItem(FIREPLACE, 1, glm::vec3(0.6, 0.6, 0.6), glm::vec3(init.x, -0.05, init.z - 0.3), glm::mat4(1.0f));
+	// tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_LOG_ID);
+	// addTavernItem(FIREPLACE, 1, glm::vec3(0.6, 0.6, 0.6), glm::vec3(init.x, 0.1, init.z), glm::mat4(1.0f));
+	// tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_LOG_ID);
 	addTavernItem(STICK, 1, glm::vec3(1.0, 1.5, 1.0), glm::vec3(init.x - 1.3, 0.5, init.z - 0.075), glm::mat4(1.0f));
 	tavernItems[tavernItems.size() - 1].materialNdx = 7;
 	addTavernItem(STICK, 1, glm::vec3(1.0, 1.5, 1.0), glm::vec3(init.x + 1.3, 0.5, init.z - 0.075), glm::mat4(1.0f));
@@ -340,10 +348,10 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_ROOF_ID);
 
 	//pillars
-	createPillar(glm::vec3(18.5, 1, -27.2));
-	createPillar(glm::vec3(27.6, 1, -27.2));
-	createPillar(glm::vec3(18.5, 1, -19.8));
-	createPillar(glm::vec3(27.6, 1, -19.8));
+	createPillar(glm::vec3(18.5, 1, -27.2), true);
+	createPillar(glm::vec3(27.6, 1, -27.2), true);
+	createPillar(glm::vec3(18.5, 1, -19.8), false);
+	createPillar(glm::vec3(27.6, 1, -19.8), false);
 
 	addTavernItem(CRATE, 2, glm::vec3(0.5, 1, 2), glm::vec3(21.9, 0.025, -13.5), glm::mat4(1.0f));
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_BRANCHES_ID);

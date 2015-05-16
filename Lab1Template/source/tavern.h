@@ -51,7 +51,7 @@ class Tavern
 		int getRandInt(int limit);
 		void loadBufferData(TextureLoader* texLoader);
 		void createTable1(glm::vec3 initLoc, float ang);
-		void createPillar(glm::vec3 initLoc);
+		void createPillar(glm::vec3 initLoc, bool north);
 		void createFirePlace(glm::vec3 init);
 		// void addTavernMesh(const string filename, bool noNorms);
 		void addTavernItem(int index, int vectMesh, glm::vec3 scale, glm::vec3 trans, glm::mat4 rot);

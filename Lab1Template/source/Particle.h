@@ -1,6 +1,6 @@
 #pragma once
-#ifndef _PARTICLE_H
-#define _PARTICLE_H
+#ifndef _PARTICLE_H_
+#define _PARTICLE_H_
 
 #include "GLSL.h"
 #include <stdio.h>
@@ -13,10 +13,13 @@
 class Particle
 {
 public:
-	Particle(glm::vec3 pos);
+	Particle();
 	void init();
-	void rebirth();
-	void update();
+	void rebirth(float curTime);
+	void update(float ltime, float h);
+	void draw(glm::vec3 loc, GLint h_scale, GLint h_color, GLint h_ModelViewMat, int indSize, glm::vec3 camPos); //soon to be deleted
+	void drawFirePlace(glm::vec3 loc, GLint h_scale, GLint h_color, GLint h_ModelViewMat, int indSize, glm::vec3 camPos);
+	void drawTorch(glm::vec3 loc, GLint h_scale, GLint h_color, GLint h_ModelViewMat, int indSize, glm::vec3 camPos);
 private:
 	float mass;
 	float damp;
@@ -25,7 +28,10 @@ private:
 	float lifespan;
 	float endLife;
 	float scale;
-	glm::vec4 col;
+	glm::vec4 startCol;
+	glm::vec4 endCol;
+	glm::vec4 curCol;
+	float randFloat(float low, float high);
 };
 
 #endif
