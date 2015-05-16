@@ -40,6 +40,7 @@
 #include "Skybox.h"
 #include "FadeSystem.h"
 #include "ProjectMeshes.h"
+#include "FireSystem.h"
 
 using namespace std;
 using namespace glm;
@@ -134,6 +135,7 @@ Menu menu;
 double dtDraw;
 SoundPlayer audio;
 ProjectMeshes meshes;
+FireSystem fire;
 
 // TerrainEvent terrEv; //this is only here for testing purposes
 
@@ -176,6 +178,9 @@ void initModels()
 
 	//Initialize the fade in/out system
 	fadeSystem.init();
+
+	//Initialize the fire particle system
+	fire.init(&texLoader);
 
 	//initialize the modeltrans matrix stack
    ModelTrans.useModelViewMatrix();
@@ -352,6 +357,7 @@ void drawGL()
 		ModelTrans.popMatrix();
 		matSetter.setMaterial(3);
 		tavern.drawTavern(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord, dtDraw);
+		fire.draw(&camera, view.topMatrix()); //draw fire
 		glUniform1i(terrainToggleID, 0);
 	}
 
@@ -666,6 +672,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	if (key == GLFW_KEY_N && action == GLFW_PRESS)
 	{
 		// terrEv.lowerBridge();
+		fire.toggle();
 
 	}
 	if (key == GLFW_KEY_Y && action == GLFW_PRESS)

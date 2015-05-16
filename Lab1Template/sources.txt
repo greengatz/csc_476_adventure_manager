@@ -31,6 +31,8 @@ set(HEADERS
    Tree.h
    FadeSystem.h
    ProjectMeshes.h
+   FireSystem.h
+   Particle.h
 )
 
 # List all .c / .cpp files here
@@ -66,4 +68,6 @@ set(SOURCES
    Tree.cpp
    FadeSystem.cpp
    ProjectMeshes.cpp
+   FireSystem.cpp
+   Particle.cpp
 )
