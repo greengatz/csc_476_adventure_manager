@@ -10,9 +10,6 @@
 #include "glm/gtc/matrix_transform.hpp" //perspective, trans etc
 #include "glm/gtc/type_ptr.hpp" //value_ptr
 
-// #include <glew.h>
-// #include <glfw3.h>
-
 using namespace std;
 using namespace glm;
 
@@ -27,6 +24,10 @@ class Obj3dContainer
 		void initBuffers(bool noNorms);
 		int getIndices();
 		void loadIntoTinyOBJ(const string name);
+		void resize_obj(std::vector<tinyobj::shape_t> &shapes);
+
+		float minX, minY, minZ;
+    	float maxX, maxY, maxZ;
 
 };
 

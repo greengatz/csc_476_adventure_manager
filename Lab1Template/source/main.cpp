@@ -14,7 +14,6 @@
 #include <cmath>
 #include "GLSL.h"
 #include "Camera.h"
-#include "Shape.h"
 #include "Terrain.h"
 #include "hud.h"
 #include "menu.h"
@@ -74,7 +73,6 @@ bool gamePaused = false;
 bool cull = false;
 glm::vec2 mouse;
 int shapeCount = 1;
-std::vector<Shape> shapes;
 //pid used for glUseProgram(pid);
 GLuint pid;
 GLint h_vertPos;
@@ -156,16 +154,6 @@ void initShape(char * filename)
 	h = 0.001f;
 
 	//Initialize shapes here
-}
-
-/**
- * Generalized approach to intialization.
- */
-void spinOffNewShape(char * filename, float x, float z){
-	Shape temp;
-	temp.load(filename);
-	temp.init(x, z);
-	shapes.push_back(temp);
 }
 
 void initModels()
@@ -566,7 +554,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		{
 			menu.selectOption(key - GLFW_KEY_1);
 		}
-		else
+		else if(camera.isTavernView())
 		{
 			manager.buyMercenary(key - GLFW_KEY_1, &tavern);
 		}

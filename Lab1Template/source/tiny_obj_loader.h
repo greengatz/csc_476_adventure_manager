@@ -85,6 +85,12 @@ std::string LoadObj(
     std::vector<shape_t>& shapes,   // [output]
     std::vector<material_t>& materials,   // [output]
     const char* filename,
+    float* minX,
+    float* maxX,
+    float* minY,
+    float* maxY,
+    float* minZ,
+    float* maxZ,
     const char* mtl_basepath = NULL);
 
 /// Loads object from a std::istream, uses GetMtlIStreamFn to retrieve
@@ -94,6 +100,12 @@ std::string LoadObj(
     std::vector<shape_t>& shapes,   // [output]
     std::vector<material_t>& materials,   // [output]
     std::istream& inStream,
+    float* minX,
+    float* maxX,
+    float* minY,
+    float* maxY,
+    float* minZ,
+    float* maxZ,
     MaterialReader& readMatFn);
 
 /// Loads materials into std::map
