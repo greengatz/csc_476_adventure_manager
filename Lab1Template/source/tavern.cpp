@@ -178,10 +178,11 @@ void Tavern::createTable1(glm::vec3 initLoc, float ang)
 	glm::mat4 rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 1.0f, 0));
 	addTavernItem(RECT_TABLE, 1, glm::vec3(1.6, 1.6, 1.6), glm::vec3(initLoc.x, initLoc.y + 0.5, initLoc.z), rot);
 	tavernItems[tavernItems.size() - 1].materialNdx = 6;
-	int numChairs = getRandInt(2);
+	// int numChairs = getRandInt(2);
+	int numChairs = 2;
 	glm::mat4 addedRot = glm::rotate(glm::mat4(1.0f), ang + 180, glm::vec3(0, 1.0f, 0));
 
-	if (numChairs == 2) { //4 chairs at table
+	// if (numChairs == 2) { //4 chairs at table
 		int start = (ang == 0) ? 0 : 8;
 		for (int iter = start; iter < 4 + start; iter += 2) {
 			addTavernItem(CHAIR, 1, glm::vec3(0.75, 0.75, 0.75), glm::vec3(initLoc.x + multInd[iter + 0], initLoc.y + 0.5, initLoc.z + multInd[iter + 1]), rot);
@@ -189,47 +190,49 @@ void Tavern::createTable1(glm::vec3 initLoc, float ang)
 			addTavernItem(CHAIR, 1, glm::vec3(0.75, 0.75, 0.75), glm::vec3(initLoc.x + multInd[iter + 4], initLoc.y + 0.5, initLoc.z + multInd[iter + 5]), addedRot);
 			tavernItems[tavernItems.size() - 1].materialNdx = 11;
 		}
-	}
-	else //3 chairs
-	{
-		int start = (ang == 0) ? 0 : 8;
+	// }
+	// else //3 chairs
+	// {
+	// 	int start = (ang == 0) ? 0 : 8;
 
-		float space = getRandFloat(2) - 1.0;
-		int rotEdit = getRandInt(90) - 45;
+	// 	float space = getRandFloat(2) - 1.0;
+	// 	int rotEdit = getRandInt(90) - 45;
 
-		if (ang == 0) {
-			glm::mat4 changedRot = glm::rotate(glm::mat4(1.0f), rotEdit + ang, glm::vec3(0, 1.0f, 0));
-			addTavernItem(CHAIR, 1, glm::vec3(0.75, 0.75, 0.75), glm::vec3(initLoc.x + space, initLoc.y + 0.5, initLoc.z + multInd[start + 1]), changedRot);
-			tavernItems[tavernItems.size() - 1].materialNdx = 11;
-			addTavernItem(CHAIR, 1, glm::vec3(0.75, 0.75, 0.75), glm::vec3(initLoc.x + multInd[start + 4], initLoc.y + 0.5, initLoc.z + multInd[start + 5]), addedRot);
-			tavernItems[tavernItems.size() - 1].materialNdx = 11;
-			addTavernItem(CHAIR, 1, glm::vec3(0.75, 0.75, 0.75), glm::vec3(initLoc.x + multInd[start + 6], initLoc.y + 0.5, initLoc.z + multInd[start + 7]), addedRot);
-			tavernItems[tavernItems.size() - 1].materialNdx = 11;
-		}
-		else {
-			rotEdit -= 90;
-			glm::mat4 changedRot = glm::rotate(glm::mat4(1.0f), (float)rotEdit, glm::vec3(0, 1.0f, 0));
-			addTavernItem(CHAIR, 1, glm::vec3(0.75, 0.75, 0.75), glm::vec3(initLoc.x + multInd[start], initLoc.y + 0.5, initLoc.z + multInd[start + 1]), rot);
-			tavernItems[tavernItems.size() - 1].materialNdx = 11;
-			addTavernItem(CHAIR, 1, glm::vec3(0.75, 0.75, 0.75), glm::vec3(initLoc.x + multInd[start + 2], initLoc.y + 0.5, initLoc.z + multInd[start + 3]), rot);
-			tavernItems[tavernItems.size() - 1].materialNdx = 11;
-			addTavernItem(CHAIR, 1, glm::vec3(0.75, 0.75, 0.75), glm::vec3(initLoc.x + multInd[start + 6], initLoc.y + 0.5, initLoc.z + space), changedRot);
-			tavernItems[tavernItems.size() - 1].materialNdx = 11;
-		}
-	}
+	// 	if (ang == 0) {
+	// 		glm::mat4 changedRot = glm::rotate(glm::mat4(1.0f), rotEdit + ang, glm::vec3(0, 1.0f, 0));
+	// 		addTavernItem(CHAIR, 1, glm::vec3(0.75, 0.75, 0.75), glm::vec3(initLoc.x + space, initLoc.y + 0.5, initLoc.z + multInd[start + 1]), changedRot);
+	// 		tavernItems[tavernItems.size() - 1].materialNdx = 11;
+	// 		addTavernItem(CHAIR, 1, glm::vec3(0.75, 0.75, 0.75), glm::vec3(initLoc.x + multInd[start + 4], initLoc.y + 0.5, initLoc.z + multInd[start + 5]), addedRot);
+	// 		tavernItems[tavernItems.size() - 1].materialNdx = 11;
+	// 		addTavernItem(CHAIR, 1, glm::vec3(0.75, 0.75, 0.75), glm::vec3(initLoc.x + multInd[start + 6], initLoc.y + 0.5, initLoc.z + multInd[start + 7]), addedRot);
+	// 		tavernItems[tavernItems.size() - 1].materialNdx = 11;
+	// 	}
+	// 	else {
+	// 		rotEdit -= 90;
+	// 		glm::mat4 changedRot = glm::rotate(glm::mat4(1.0f), (float)rotEdit, glm::vec3(0, 1.0f, 0));
+	// 		addTavernItem(CHAIR, 1, glm::vec3(0.75, 0.75, 0.75), glm::vec3(initLoc.x + multInd[start], initLoc.y + 0.5, initLoc.z + multInd[start + 1]), rot);
+	// 		tavernItems[tavernItems.size() - 1].materialNdx = 11;
+	// 		addTavernItem(CHAIR, 1, glm::vec3(0.75, 0.75, 0.75), glm::vec3(initLoc.x + multInd[start + 2], initLoc.y + 0.5, initLoc.z + multInd[start + 3]), rot);
+	// 		tavernItems[tavernItems.size() - 1].materialNdx = 11;
+	// 		addTavernItem(CHAIR, 1, glm::vec3(0.75, 0.75, 0.75), glm::vec3(initLoc.x + multInd[start + 6], initLoc.y + 0.5, initLoc.z + space), changedRot);
+	// 		tavernItems[tavernItems.size() - 1].materialNdx = 11;
+	// 	}
+	// }
 
 	//stuff on the table
-	if (getRandInt(3) > 1) {
-		float x = getRandFloat(1) - 0.5;
-		float z = getRandFloat(1) - 0.5;
-		float allDir = getRandFloat(360);
-		glm::mat4 newRot = glm::rotate(glm::mat4(1.0f), allDir, glm::vec3(0, 1.0f, 0));
-		addTavernItem(MUG, 1, glm::vec3(0.075, 0.075, 0.075), glm::vec3(initLoc.x + x, initLoc.y + 1.02, initLoc.z + z), newRot);
-		tavernItems[tavernItems.size() - 1].materialNdx = 7;
-		addTavernItem(BOTTLE, 2, glm::vec3(.15, .15, .15), glm::vec3(initLoc.x + x + .25, initLoc.y + 1.12, initLoc.z + z), newRot);
-		tavernItems[tavernItems.size() - 1].materialNdx = 8;
+	//********* Cups on table stuff here **********
+	//********* Taken out to remove randomness ****
+	// if (getRandInt(3) > 1) {
+	// 	float x = getRandFloat(1) - 0.5;
+	// 	float z = getRandFloat(1) - 0.5;
+	// 	float allDir = getRandFloat(360);
+	// 	glm::mat4 newRot = glm::rotate(glm::mat4(1.0f), allDir, glm::vec3(0, 1.0f, 0));
+	// 	addTavernItem(MUG, 1, glm::vec3(0.075, 0.075, 0.075), glm::vec3(initLoc.x + x, initLoc.y + 1.02, initLoc.z + z), newRot);
+	// 	tavernItems[tavernItems.size() - 1].materialNdx = 7;
+	// 	addTavernItem(BOTTLE, 2, glm::vec3(.15, .15, .15), glm::vec3(initLoc.x + x + .25, initLoc.y + 1.12, initLoc.z + z), newRot);
+	// 	tavernItems[tavernItems.size() - 1].materialNdx = 8;
 
-	}
+	// }
 
 	// if(getRandInt(2) > 1)
 	// {
