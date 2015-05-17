@@ -2,29 +2,11 @@
 
 //Given a vector of shapes which has already been read from an obj file
 // resize all vertices to the range [-1, 1]
-void resize_obj(std::vector<tinyobj::shape_t> &shapes){
-    float minX, minY, minZ;
-    float maxX, maxY, maxZ;
+void Obj3dContainer::resize_obj(std::vector<tinyobj::shape_t> &shapes){
     float scaleX, scaleY, scaleZ;
     float shiftX, shiftY, shiftZ;
     float epsilon = 0.001;
 
-    minX = minY = minZ = 1.1754E+38F;
-    maxX = maxY = maxZ = -1.1754E+38F;
-
-    //Go through all vertices to determine min and max of each dimension
-    for (size_t i = 0; i < shapes.size(); i++) {
-        for (size_t v = 0; v < shapes[i].mesh.positions.size() / 3; v++) {
-            if(shapes[i].mesh.positions[3*v+0] < minX) minX = shapes[i].mesh.positions[3*v+0];
-            if(shapes[i].mesh.positions[3*v+0] > maxX) maxX = shapes[i].mesh.positions[3*v+0];
-
-            if(shapes[i].mesh.positions[3*v+1] < minY) minY = shapes[i].mesh.positions[3*v+1];
-            if(shapes[i].mesh.positions[3*v+1] > maxY) maxY = shapes[i].mesh.positions[3*v+1];
-
-            if(shapes[i].mesh.positions[3*v+2] < minZ) minZ = shapes[i].mesh.positions[3*v+2];
-            if(shapes[i].mesh.positions[3*v+2] > maxZ) maxZ = shapes[i].mesh.positions[3*v+2];
-        }
-    }
    //From min and max compute necessary scale and shift for each dimension
    float maxExtent, xExtent, yExtent, zExtent;
    xExtent = maxX-minX;
@@ -64,7 +46,10 @@ void resize_obj(std::vector<tinyobj::shape_t> &shapes){
 
 //loads a tinyobj
 void Obj3dContainer::loadIntoTinyOBJ(const string name) {
-  string err = tinyobj::LoadObj(shape, material, name.c_str());
+  minX = minY = minZ = 1.1754E+38F;
+  maxX = maxY = maxZ = -1.1754E+38F;
+  string err = tinyobj::LoadObj(shape, material, name.c_str(), &minX,
+    &maxX, &minY, &maxY, &minZ, &maxZ);
   if(!err.empty()) {
     std::cerr << err << endl;
   }

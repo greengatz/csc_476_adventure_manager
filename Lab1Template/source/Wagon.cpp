@@ -48,6 +48,9 @@ Wagon::~Wagon()
 
 void Wagon::init(TextureLoader* texLoader, Terrain* aTerrain, Menu* aMenu, bool* gP, Manager* mgr, SoundPlayer* audio)
 {
+  float minX, minY, minZ;
+  float maxX, maxY, maxZ;
+
    manager = mgr;
    gamePaused = gP;
    terrain = aTerrain;
@@ -61,7 +64,8 @@ void Wagon::init(TextureLoader* texLoader, Terrain* aTerrain, Menu* aMenu, bool*
   // We'll ignore them for this assignment.
   std::vector<tinyobj::material_t> objMaterials;
   std::string meshName = "assets/caravan/caravan.obj";
-  string err = tinyobj::LoadObj(shapes, objMaterials, meshName.c_str());
+  string err = tinyobj::LoadObj(shapes, objMaterials, meshName.c_str(),
+    &minX, &maxX, &minY, &maxY, &minZ, &maxZ);
   if(!err.empty()) {
     cerr << err << endl;
   }

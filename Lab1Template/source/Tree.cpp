@@ -52,6 +52,9 @@ Tree::~Tree()
 
 void Tree::init(TextureLoader* texLoader)
 {
+  float minX, minY, minZ;
+  float maxX, maxY, maxZ;
+
    //initialize the modeltrans matrix stack
    ModelTrans.useModelViewMatrix();
    ModelTrans.loadIdentity();
@@ -79,7 +82,8 @@ void Tree::init(TextureLoader* texLoader)
   // Some obj files contain material information.
   std::vector<tinyobj::material_t> objMaterials;
   std::string meshName = "assets/trees/tree1/tree1a_lod0.obj";
-  string err = tinyobj::LoadObj(shapes, objMaterials, meshName.c_str());
+  string err = tinyobj::LoadObj(shapes, objMaterials, meshName.c_str(),
+    &minX, &maxX, &minY, &maxY, &minZ, &maxZ);
   if(!err.empty()) {
     cerr << err << endl;
   }

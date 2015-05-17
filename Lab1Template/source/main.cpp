@@ -14,7 +14,6 @@
 #include <cmath>
 #include "GLSL.h"
 #include "Camera.h"
-#include "Shape.h"
 #include "Terrain.h"
 #include "hud.h"
 #include "menu.h"
@@ -41,6 +40,7 @@
 #include "Skybox.h"
 #include "FadeSystem.h"
 #include "ProjectMeshes.h"
+#include "FireSystem.h"
 
 using namespace std;
 using namespace glm;
@@ -74,7 +74,6 @@ bool gamePaused = false;
 bool cull = false;
 glm::vec2 mouse;
 int shapeCount = 1;
-std::vector<Shape> shapes;
 //pid used for glUseProgram(pid);
 GLuint pid;
 GLint h_vertPos;
@@ -127,7 +126,6 @@ GLuint NumBufObj, NumIndBufObj, NumTexBufObj;
 //Rendering Helper
 RenderingHelper ModelTrans;
 Tavern tavern;
-TerrainEvent terrEv;
 Manager manager("The Dude");
 TavernTerrain tavTerr;
 Materials matSetter;
@@ -137,6 +135,9 @@ Menu menu;
 double dtDraw;
 SoundPlayer audio;
 ProjectMeshes meshes;
+FireSystem fire;
+
+// TerrainEvent terrEv; //this is only here for testing purposes
 
 //The skybox
 Skybox skybox;
@@ -155,16 +156,6 @@ void initShape(char * filename)
 	h = 0.001f;
 
 	//Initialize shapes here
-}
-
-/**
- * Generalized approach to intialization.
- */
-void spinOffNewShape(char * filename, float x, float z){
-	Shape temp;
-	temp.load(filename);
-	temp.init(x, z);
-	shapes.push_back(temp);
 }
 
 void initModels()
@@ -187,6 +178,9 @@ void initModels()
 
 	//Initialize the fade in/out system
 	fadeSystem.init();
+
+	//Initialize the fire particle system
+	fire.init(&texLoader);
 
 	//initialize the modeltrans matrix stack
    ModelTrans.useModelViewMatrix();
@@ -363,6 +357,7 @@ void drawGL()
 		ModelTrans.popMatrix();
 		matSetter.setMaterial(3);
 		tavern.drawTavern(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord, dtDraw);
+		fire.draw(&camera, view.topMatrix()); //draw fire
 		glUniform1i(terrainToggleID, 0);
 	}
 
@@ -432,7 +427,7 @@ void drawGL()
 	}
 
 	//**************Draw HUD FINISH********************
-	
+
 	// Unbind the program
 	glUseProgram(0);
 	// Pop stacks
@@ -565,7 +560,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		{
 			menu.selectOption(key - GLFW_KEY_1);
 		}
-		else
+		else if(camera.isTavernView())
 		{
 			manager.buyMercenary(key - GLFW_KEY_1, &tavern);
 		}
@@ -674,10 +669,11 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
   //       }
         
     }
-	//lower drawbridge
 	if (key == GLFW_KEY_N && action == GLFW_PRESS)
 	{
-		terrEv.lowerBridge();
+		// terrEv.lowerBridge();
+		fire.toggle();
+
 	}
 	if (key == GLFW_KEY_Y && action == GLFW_PRESS)
 	{

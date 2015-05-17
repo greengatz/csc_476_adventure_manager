@@ -7,7 +7,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
-#include <iomanip>
 #include "tiny_obj_loader.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp" //perspective, trans etc
@@ -47,7 +46,7 @@ using namespace std;
 #define END_CITY 1
 #define ROPE 2
 #define STALL 3
-#define MERCHANT 4
+#define VENDOR 4
 
 //other meshes
 #define CRATE 0
