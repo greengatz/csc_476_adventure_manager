@@ -122,7 +122,7 @@ void Particle::draw(glm::vec3 loc, GLint h_scale, GLint h_color, GLint h_ModelVi
 {
 	//set handles for the particle
 	glUniform1f(h_scale, scale);
-	glUniform4f(h_color, curCol.r, curCol.g, curCol.b, curCol.w);
+	glUniform4f(h_color, curCol.x, curCol.y, curCol.z, curCol.w);
 
 	glm::vec3 curPos = glm::vec3(loc.x + pos.x, loc.y + pos.y, loc.z + pos.z);
 	glm::mat4 trans = glm::translate(glm::mat4(1.0f), curPos);
@@ -152,7 +152,7 @@ void Particle::drawFirePlace(glm::vec3 loc, GLint h_scale, GLint h_color, GLint 
 {
 	//set handles for the particle
 	glUniform1f(h_scale, scale);
-	glUniform4f(h_color, curCol.r, curCol.g, curCol.b, curCol.w);
+	glUniform4f(h_color, curCol.x, curCol.y, curCol.z, curCol.w);
 
 	glm::vec3 curPos = glm::vec3(loc.x + pos.x, loc.y + pos.y, loc.z + pos.z);
 	glm::mat4 trans = glm::translate(glm::mat4(1.0f), curPos);
@@ -182,7 +182,7 @@ void Particle::drawTorch(glm::vec3 loc, GLint h_scale, GLint h_color, GLint h_Mo
 {
 	//set handles for the particle
 	glUniform1f(h_scale, scale);
-	glUniform4f(h_color, curCol.r, curCol.g, curCol.b, curCol.w);
+	glUniform4f(h_color, curCol.x, curCol.y, curCol.z, curCol.w);
 
 	glm::vec3 curPos = glm::vec3(loc.x + (pos.x / 1.85), loc.y + (pos.y / 1.25), loc.z + (pos.z / 1.85));
 	glm::mat4 trans = glm::translate(glm::mat4(1.0f), curPos);
