@@ -436,6 +436,11 @@ void drawGL()
 
 bool hasCollided(glm::vec3 incr)
 {
+	if (camera.isFreeRoam())
+	{
+		return false;
+	}
+
 	vector<Obj3d> temp = tavern.tavernItems;
 	glm::vec3 camPos = camera.getPosition() + incr;
 
@@ -458,14 +463,7 @@ bool hasCollided(glm::vec3 incr)
 		}
 	}
 
-	if (camera.isFreeRoam())
-	{
-		return false;
-	}
-	else
-	{
-		return validMove;
-	}
+	return validMove;
 }
 
 /**
