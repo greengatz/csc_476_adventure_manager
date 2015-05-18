@@ -202,7 +202,7 @@ void TerrainEvent::addMerchantStand(vec3 loc, mat4 rot)
 	addEventItem(CRATE, 2, objScales[2], vec3(loc.x, objYTrans[2], loc.z), newRot);
 	eventItems[eventItems.size() - 1].loadTextureCoor(TERR_EV_ROOF_ID);
 	newRot = rot * objRotates[1];
-	addEventItem(MERCHANT, 1, objScales[1], vec3(0, 0.23, 0), mat4(1.0f));
+	addEventItem(VENDOR, 1, objScales[1], vec3(0, 0.23, 0), mat4(1.0f));
 	eventItems[eventItems.size() - 1].loadTextureCoor(TERR_EV_MERCHANT_ID);
 	eventItems[eventItems.size() - 1].moveRot = glm::translate(mat4(1.0f), vec3(loc.x, objYTrans[1], loc.z)) * newRot;
 

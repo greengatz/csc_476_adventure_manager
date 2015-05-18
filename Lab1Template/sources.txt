@@ -7,7 +7,6 @@ set(HEADERS
    Camera.h
    MatrixStack.h
    #Program.h
-   Shape.h
    Terrain.h
    TextureLoader.h
    tavern.h
@@ -32,6 +31,8 @@ set(HEADERS
    Tree.h
    FadeSystem.h
    ProjectMeshes.h
+   FireSystem.h
+   Particle.h
 )
 
 # List all .c / .cpp files here
@@ -43,7 +44,6 @@ set(SOURCES
    Camera.cpp
    MatrixStack.cpp
    #Program.cpp
-   Shape.cpp
    Terrain.cpp
    TextureLoader.cpp
    tavern.cpp
@@ -68,4 +68,6 @@ set(SOURCES
    Tree.cpp
    FadeSystem.cpp
    ProjectMeshes.cpp
+   FireSystem.cpp
+   Particle.cpp
 )

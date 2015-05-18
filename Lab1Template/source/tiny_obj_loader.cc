@@ -498,6 +498,12 @@ LoadObj(
   std::vector<shape_t>& shapes,
   std::vector<material_t>& materials,   // [output]
   const char* filename,
+    float* minX,
+  float* maxX,
+  float* minY,
+  float* maxY,
+  float* minZ,
+  float* maxZ,
   const char* mtl_basepath)
 {
 
@@ -516,14 +522,23 @@ LoadObj(
     basePath = mtl_basepath;
   }
   MaterialFileReader matFileReader( basePath );
+  // float minX, minY, minZ;
+  // float maxX, maxY, maxZ;
   
-  return LoadObj(shapes, materials, ifs, matFileReader);
+  return LoadObj(shapes, materials, ifs, 
+    minX, maxX, minY, maxY, minZ, maxZ, matFileReader);
 }
 
 std::string LoadObj(
   std::vector<shape_t>& shapes,
   std::vector<material_t>& materials,   // [output]
   std::istream& inStream,
+  float* minX,
+  float* maxX,
+  float* minY,
+  float* maxY,
+  float* minZ,
+  float* maxZ,
   MaterialReader& readMatFn)
 {
   std::stringstream err;
@@ -578,6 +593,34 @@ std::string LoadObj(
       v.push_back(x);
       v.push_back(y);
       v.push_back(z);
+      if(x > *maxX)
+      {
+        *maxX = x;
+      }
+      else if(x < *minX)
+      {
+        *minX = x;
+      }
+
+      if(y > *maxY)
+      {
+        *maxY = y;
+      }
+      else if(y < *minY)
+      {
+        *minY = y;
+      }
+
+      if(z > *maxZ)
+      {
+        *maxZ = z;
+      }
+      else if(z < *minZ)
+      {
+        *minZ = z;
+      }
+
+
       continue;
     }
 
