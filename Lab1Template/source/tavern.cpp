@@ -73,7 +73,7 @@ int TAV_DIRT_ID = 6600;
 int TURKEY_NUM;
 
 Tavern::Tavern() :
-    sam(CharDae("a"))
+    sam(CharDae("not_a_file"))
 {
 	doorLoc = vec3(7.5, 1.35, -23);
 	beerLoc = vec3(35.0, 1.0, -35.0);
@@ -505,9 +505,11 @@ void Tavern::enableBuff(GLint h_vertPos, GLint h_vertNor, GLuint posBuf, GLuint 
   GLSL::enableVertexAttribArray(h_vertPos); //position
   glBindBuffer(GL_ARRAY_BUFFER, posBuf);
   glVertexAttribPointer(h_vertPos, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
   GLSL::enableVertexAttribArray(h_vertNor); //normals
   glBindBuffer(GL_ARRAY_BUFFER, norBuf);
   glVertexAttribPointer(h_vertNor, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indBuf);
 }
 
@@ -582,7 +584,7 @@ void Tavern::drawTavern(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor, G
 	}
 
     // TODO remove this
-    sam.drawChar();
+    //sam.drawChar(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord);
 }
 
 void Tavern::applyTurkeySpin(double ltime)
