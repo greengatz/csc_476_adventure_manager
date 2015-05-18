@@ -14,12 +14,25 @@
 
 using namespace std;
 
+
+string Ailment[] = {"small pox", "medieval depression", "mad cow disease", "bird flu", "a case of the frownies", 
+                "soberitis"};
+int ailmentCount = 6;
+
+int MAX_MERC = 8;
 int WAGON_TEX_ID = 111;
 float neg = 1.0;
 void (*fpFood)(void *, bool *) = NULL;
 void (*fpBeer)(void *, bool *) = NULL;
 void (*fpResume)(void *, bool *) = NULL;
 void (*fpMercenary)(void *, bool *) = NULL;
+void (*fpHeal)(void *, bool *) = NULL;
+void (*fpHurt)(void *, bool *) = NULL;
+void (*fpRob)(void *, bool *) = NULL;
+void (*fpFight)(void *, bool *) = NULL;
+void (*fpFlee)(void *, bool *) = NULL;
+void (*fpReturnTavern)(void *, bool *) = NULL;
+void (*fpRestartTrail)(void *, bool *) = NULL;
 
 Wagon::Wagon() :
 	position(0.6f, 0.05f, -0.5f),
@@ -45,12 +58,14 @@ Wagon::~Wagon()
 }
 
 
-void Wagon::init(TextureLoader* texLoader, Terrain* aTerrain, Menu* aMenu, bool* gP, Manager* mgr)
+void Wagon::init(TextureLoader* texLoader, Terrain* aTerrain, Menu* aMenu, bool* gP, Manager* mgr, ProjectMeshes* newData)
 {
    manager = mgr;
    gamePaused = gP;
    terrain = aTerrain;
    menu = aMenu;
+   meshData = newData;
+
    //aPos relative to terrain generation
    resetWagon();
 
@@ -127,19 +142,21 @@ void Wagon::startWagon()
 void buyFood(void* mgr, bool* gamePaused){
   // *gamePaused = false;
   Manager* manager = (Manager*)mgr;
-  manager->buyFood();
+  manager->buyFood(manager->medFoodCost);
 }
 
 void buyBeer(void* mgr, bool* gamePaused){
   // *gamePaused = false;
+
   Manager* manager = (Manager*)mgr;
-  manager->buyBeer();
+  manager->buyBeer(manager->medBeerCost);
 }
 
 void buyMercenary(void* mgr, bool* gamePaused){
   // *gamePaused = false;
   Manager* manager = (Manager*)mgr;
-  // manager->buyMercenary();
+  // manager->buyMercenary(manager->medGoldCost);
+  *gamePaused = false;
 }
 
 void resumeGame(void* mgr, bool* gamePaused){
@@ -147,26 +164,113 @@ void resumeGame(void* mgr, bool* gamePaused){
   *gamePaused = false;
 }
 
-void Wagon::updateWagon(float globalTime)
-{
-  if (wagonStart && !terrain->atEnd(position))
-  {
+void healMercenary(void* mgr, bool* gamePaused){
+  // *gamePaused = false;
+  Manager* manager = (Manager*)mgr;
+  // manager->healMercenary()
+  // manager->mercs[index].setBeer(manager->mercs[index].getBeer() - cost);
+  manager->setBeer(manager->getBeer() - manager->medBeerCost);
+  manager->setFood(manager->getFood() - manager->medFoodCost);
+
+  //SET FOCUS MERC IN MANAGER AND EDIT HIM
+  *gamePaused = false;
+}
+
+void hurtMercenary(void* mgr, bool* gamePaused){
+  // *gamePaused = false;
+  Manager* manager = (Manager*)mgr;
+  // manager->healMercenary()
+  manager->lowerDamage(manager->focusedMerc);
+
+  *gamePaused = false;
+}
+
+void robMerch(void* mgr, bool* gamePaused){
+  // *gamePaused = false;
+  Manager* manager = (Manager*)mgr;
+  // manager->healMercenary()
+
+  *gamePaused = false;
+}
+
+void fightAmbush(void* mgr, bool* gamePaused){
+  // *gamePaused = false;
+  Manager* manager = (Manager*)mgr;
+  // manager->healMercenary()
+  *gamePaused = false;
+}
+
+void restartTrail(void* mgr, bool* gamePaused){
+  // *gamePaused = false;
+  Manager* manager = (Manager*)mgr;
+  // manager->healMercenary()
+}
+
+void returnTavern(void* mgr, bool* gamePaused){
+  // *gamePaused = false;
+  Manager* manager = (Manager*)mgr;
+  // manager->healMercenary()
+}
+
+void fleeAmbush(void* mgr, bool* gamePaused){
+  // *gamePaused = false;
+  Manager* manager = (Manager*)mgr;
+  // manager->healMercenary()
+
+  int captured = manager->fleeingFromAmbush();
+  cout << manager->getName(captured) + " has been captured!" << endl;
+  *gamePaused = false;
+}
+
+void Wagon::updateWagon(float globalTime) {
+  if (wagonStart && !terrain->atEnd(position)) {
     int event = terrain->checkEvents(position);
-    if(event == MERCHANT){
+    if(manager->partyDead()){
       *gamePaused = true;
+      vector<string> about;
+      about.push_back("All your troops are dead.");
+      about.push_back("Smooth move " + manager->getManagerName());
+      //Create an option and add it to a vector
+      fpRestartTrail = restartTrail;
+      fpReturnTavern = returnTavern;
+      option trailOpt = {"Restart trail", fpRestartTrail, false};
+      option tavOpt = {"Return to previous tavern", fpReturnTavern, false};
+      vector<option> options;
+      options.push_back(trailOpt);
+      options.push_back(tavOpt);
+
+      //Set the data
+      menu->setData("Deadsies", about, options);
+    }
+    if(event == MERCHANTEVENT){
+      *gamePaused = true;
+      int beerCost = (rand() % 4) + 2;
+      int foodCost = (rand() % 4) + 2;
+      manager->setMedFoodCost(foodCost);
+      manager->setMedBeerCost(beerCost);
       //Create about vector and add an element
       vector<string> about;
-      about.push_back("Meat is 5 gold and Beer is 2 gold!");
+
+      string aboutString = "Meat is  ";
+      aboutString += to_string(manager->medFoodCost);
+      aboutString += " gold and Beer is ";
+      aboutString += to_string(manager->medBeerCost);
+      aboutString += " gold!";
+      about.push_back(aboutString);
+      about.push_back("Merchant looks like a wimp though");
       //Create an option and add it to a vector
       fpFood = buyFood;
       fpBeer = buyBeer;
       fpResume = resumeGame;
+      fpRob = robMerch;
       option foodOpt = {"Buy Meat", fpFood, false};
       option beerOpt = {"Buy Beer", fpBeer, false};
+      option robOpt = {"Rob Merchant", fpRob, true};
       option resumeOpt = {"Continue On", fpResume, true};
       vector<option> options;
       options.push_back(foodOpt);
       options.push_back(beerOpt);
+      options.push_back(robOpt);
       options.push_back(resumeOpt);
 
       //Set the data
@@ -177,29 +281,76 @@ void Wagon::updateWagon(float globalTime)
        *gamePaused = true;
       //Create about vector and add an element
       vector<string> about;
-      about.push_back("It appears that on of your mercenaries");
-      about.push_back("has come down with smallpox!");
-      //Create an option and add it to a vector
-      fpResume = resumeGame;
-      option resumeOpt = {"Continue On", fpResume, true};
-      vector<option> options;
-      options.push_back(resumeOpt);
+      srand(time(NULL));
+      int beerCost = (rand() % 4) + 2;
+      int foodCost = (rand() % 4) + 2;
+      int index = manager->getRandomAliveMercIndex();
+      manager->setFocus(index);
+      manager->setMedFoodCost(beerCost);
+      manager->setMedBeerCost(foodCost);
+      
+      string sickness = Ailment[rand() % ailmentCount];
+      string name = manager->getName(index);
+      cout << name + " just got " + sickness << endl;
 
+      about.push_back(name + " came down with " + sickness + ",");
+      vector<option> options;
+      if(manager->getBeer() >= manager->medBeerCost &&
+        manager->getFood() >= manager->medFoodCost){
+        string aboutString = "Use ";
+        aboutString += to_string(manager->medFoodCost);
+        aboutString += " meat and ";
+        aboutString += to_string(manager->medBeerCost);
+        aboutString += " beer?";
+        about.push_back(aboutString);
+        about.push_back("Otherwise their damage will drop");
+        fpHeal = healMercenary;
+        fpHurt = hurtMercenary;
+        option healOpt = {"Heal " + name, fpHeal, true};
+        option hurtOpt = { "'" + name + " will be fine!'", fpHurt, true};
+        options.push_back(healOpt);
+        options.push_back(hurtOpt);
+      }else{
+        about.push_back("But it looks like you don't have enough");
+        about.push_back("beer and meat to treat them like they deserve!");
+        fpResume = resumeGame;
+        option resumeOpt = {"Continue On", fpResume, true};
+        options.push_back(resumeOpt);
+      }
       //Set the data
       menu->setData("Sickness", about, options);
     }
     if(event == WANDERER){
+      vector<string> about;
+      srand(time(NULL));
+      int cost = (rand() % 20) + 25;
+      int index = manager->getRandomAliveMercIndex();
+      manager->setFocus(index);
+      manager->setMedGoldCost(cost);
       *gamePaused = true;
       //Create about vector and add an element
-      vector<string> about;
-      about.push_back("Buy this mercenary for 25 gold?");
-      //Create an option and add it to a vector
-      fpMercenary = buyMercenary;
-      option mercOpt = {"Buy mercenary", fpMercenary, false};
+      vector<option> options;
+      // Obj3d temp(&((*meshData).terrMeshes[1]), scale, trans, rot);
+      // Mercenary *newMerc = new Mercenary(meshData->);
+      string name = manager->getName(index);
+      about.push_back(name + " wants to join your party,");
+
+      if(manager->getMercs() >= MAX_MERC){
+        about.push_back("but your crew at max size!");
+      }else if(manager->getGold() < cost){
+        about.push_back("but you're a little short on gold!");
+      }else{
+
+        string aboutString = "buy this mercenary for ";
+        aboutString += to_string(cost);
+        aboutString += " gold?";
+        about.push_back(aboutString);
+        fpMercenary = buyMercenary;
+        option mercOpt = {"Buy mercenary", fpMercenary, false};
+        options.push_back(mercOpt);
+      }
       fpResume = resumeGame;
       option resumeOpt = {"Continue On", fpResume, true};
-      vector<option> options;
-      options.push_back(mercOpt);
       options.push_back(resumeOpt);
 
       //Set the data
@@ -211,9 +362,10 @@ void Wagon::updateWagon(float globalTime)
       vector<string> about;
       about.push_back("Bandits are ambushing your party");
       //Create an option and add it to a vector
-      fpResume = resumeGame;
-      option fightOpt = {"Fight", fpResume, true};
-      option fleeOpt = {"Flee", fpResume, true};
+      fpFight = fightAmbush;
+      fpFlee = fleeAmbush;
+      option fightOpt = {"Fight", fpFight, true};
+      option fleeOpt = {"Flee", fpFlee, true};
       vector<option> options;
       options.push_back(fightOpt);
       options.push_back(fleeOpt);
@@ -241,8 +393,8 @@ void Wagon::updateWagon(float globalTime)
     rotate = 90.0f + -1.0 * atan(terrain->getSpline()->getDY(position.x)) * (180.0 / 3.14);
 
     startTime += deltaTime;
-
-  }
+    }  
+  
 }
 
 bool Wagon::hasStarted()

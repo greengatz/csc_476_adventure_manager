@@ -181,7 +181,7 @@ void initModels()
 	tavTerr.init(&texLoader);
 
 	//Initalize Wagon
-	wagon.init(&texLoader, &terrain, &menu, &gamePaused, &manager);
+	wagon.init(&texLoader, &terrain, &menu, &gamePaused, &manager, &meshes);
 
 	//Initialize skybox
 	skybox.init(&texLoader);
@@ -550,13 +550,13 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	//Buy food
 	if (key == GLFW_KEY_F && action == GLFW_PRESS && camera.isTavernView())
 	{
-		manager.buyFood();
+		manager.buyFood(5);
 	}
 
 	//Buy beer
 	if (key == GLFW_KEY_B && action == GLFW_PRESS && camera.isTavernView())
 	{
-		manager.buyBeer();
+		manager.buyBeer(2);
 	}
 	
 	if (key >= GLFW_KEY_1 && key <= GLFW_KEY_5 && action == GLFW_PRESS)

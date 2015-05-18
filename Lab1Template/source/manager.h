@@ -7,6 +7,7 @@
 #include <iostream>
 #include "GLSL.h"
 #include "Camera.h"
+#include "math.h"
 #include "tiny_obj_loader.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp" //perspective, trans etc
@@ -23,16 +24,35 @@ class Manager
 {
 	public:
 		
+		int focusedMerc;
+		int medFoodCost;
+		int medBeerCost;
+		int medGoldCost;
 		bool inTavern;
 		Manager(string name);
 		void buyMercenary(int key, Tavern* tavern);
 		void reportStats();
-		void buyFood();
-		void buyBeer();
+		void buyFood(int cost);
+		void buyBeer(int cost);
+		string getName(int index);
+		string getManagerName();
 		int getGold();
 		int getFood();
 		int getBeer();
 		int getMercs();
+		void setGold(int newGold);
+		void setFood(int newFood);
+		void setBeer(int newBeer);
+		void setFocus(int index);
+		void lowerDamage(int index);
+		int reportTotalDamage();
+		void setMedFoodCost(int cost);
+		void setMedBeerCost(int cost);
+		void setMedGoldCost(int cost);
+		int getRandomAliveMercIndex();
+		int fleeingFromAmbush();
+		Mercenary getFocus();
+		bool partyDead();
 
 
 	private:

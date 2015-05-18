@@ -18,7 +18,7 @@
 #include "Materials.h"
 #include "ProjectMeshes.h"
 
-#define MERCHANT 1
+#define MERCHANTEVENT 1
 #define WANDERER 2
 #define AMBUSH 3
 #define SICKNESS 4
@@ -64,6 +64,7 @@ private:
     Spline* path;
     Tree tree;
     int startingSpot;
+
 
 };
 

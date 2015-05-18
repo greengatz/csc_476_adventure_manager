@@ -92,9 +92,9 @@ int Terrain::checkEvents(glm::vec3 aPos){
     if(spot > MAP_Z - 10){
       terrainEvents.lowerBridge();
     }
-    if(eventsMap[spot] == MERCHANT){
+    if(eventsMap[spot] == MERCHANTEVENT){
         printf("%s\n", "You stumbled upon a merchant.");
-        event = MERCHANT;
+        event = MERCHANTEVENT;
     }
     if(eventsMap[spot] == AMBUSH){
         printf("%s\n", "Bandits are ambushing your party!");
@@ -122,7 +122,7 @@ void Terrain::placeEvents(){
       printf("Placing ambush at %f, %f\n", temp.x, temp.z);
 
     }
-    if(eventsMap[i] == MERCHANT){
+    if(eventsMap[i] == MERCHANTEVENT){
       temp.x -= 100;
       temp.z += 1.5;
       terrainEvents.addMerchantStand(temp, glm::mat4(1.0f));
@@ -130,7 +130,7 @@ void Terrain::placeEvents(){
     }
     if(eventsMap[i] == WANDERER){
       temp.x -= 100;
-      // temp.z += 0.5;
+      temp.z += 0.5;
       terrainEvents.addRandomDuder(temp, glm::mat4(1.0f));
       printf("Placing merchant at %f, %f\n", temp.x, temp.z);
     }
@@ -155,7 +155,7 @@ void Terrain::createEvents(){
     for(int i = 0; i <= merchCount; i++){
         int random = ((rand() % (MAP_X - startingOffset - endingOffset)) +  startingOffset);
         if(eventsMap[random] == 0 && eventsMap[random + 1] == 0 && eventsMap[random - 1] == 0)
-            eventsMap[random] = MERCHANT; 
+            eventsMap[random] = MERCHANTEVENT; 
         else
             merchCount++;
     }

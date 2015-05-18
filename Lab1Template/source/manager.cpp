@@ -7,8 +7,63 @@ Manager::Manager(string newName)
 	gold = 100.00;
 	food = 0;
 	beer = 0;
-
+	focusedMerc = 0;
+	medFoodCost = 5;
+	medBeerCost = 2;
 //	reportStats();
+}
+
+
+string Manager::getManagerName(){
+	return name;
+}
+
+void Manager::setFocus(int index){
+	focusedMerc = index;
+}
+
+Mercenary Manager::getFocus(){
+	return mercs[focusedMerc];
+}
+
+bool Manager::partyDead(){
+	for (int i = 0; i < mercs.size(); i++)
+	{
+	    if(mercs[i].dead == false)
+	    	return false;
+    }
+    return true;
+}
+
+int Manager::getRandomAliveMercIndex(){
+	srand(time(NULL));
+	bool found = false;
+	int index = 0;
+	while (!found)
+	{
+	    index = rand() % mercs.size();
+	    cout << "Mercenary index: " + to_string(index) << endl;
+	    if(mercs[index].dead == false){
+	    	found = true;
+	    }
+    }
+    return index;
+}
+
+int Manager::fleeingFromAmbush(){
+	srand(time(NULL));
+	bool found = false;
+	int index = 0;
+	while (!found)
+	{
+	    index = rand() % mercs.size();
+	    cout << "Mercenary index: " + to_string(index) << endl;
+	    if(mercs[index].dead == false){
+	    	mercs[index].dead = true;
+	    	found = true;
+	    }
+    }
+    return index;
 }
 
 void Manager::reportStats()
@@ -26,14 +81,19 @@ void Manager::reportStats()
     }
 }
 
-void Manager::buyFood()
+string Manager::getName(int index)
+{
+	return mercs[index].firstName;
+}
+
+void Manager::buyFood(int cost)
 {
 	//add food
-	if (gold >= 5)
+	if (gold >= cost)
 	{
 		food++;
-		gold -= 5;
-		cout << "Bought 1 food for 5 gold" << endl;
+		gold -= cost;
+		cout << "Bought 1 food for " + to_string(static_cast<long double>(cost)) + " gold" << endl;
 	}
 	else
 	{
@@ -43,14 +103,14 @@ void Manager::buyFood()
 	reportStats();
 }
 
-void Manager::buyBeer()
+void Manager::buyBeer(int cost)
 {
 	//add beer
-	if (gold >= 2)
+	if (gold >= cost)
 	{
 		beer++;
-		gold -= 2;
-		cout << "Bought 1 beer for 2 gold\n";
+		gold -= cost;
+		cout << "Bought 1 beer for " + to_string(static_cast<long double>(cost)) + " gold\n";
 	}
 	else
 	{
@@ -89,4 +149,51 @@ int Manager::getBeer()
 int Manager::getMercs()
 {
 	return mercs.size();
+}
+
+void Manager::setGold(int newGold)
+{
+	if(newGold > 0){
+		gold = newGold;
+	}
+}
+
+void Manager::setFood(int newFood)
+{
+	if(newFood > 0){
+		food = newFood; 
+	}
+}
+
+void Manager::setBeer(int newBeer)
+{
+	if(newBeer > 0){
+		beer = newBeer;
+	}
+}
+
+void Manager::lowerDamage(int index)
+{
+	mercs[index].currDamage -= floor((float)(mercs[index].currDamage / 2.0));
+}
+
+int Manager::reportTotalDamage() {
+   int damage = 0, i;
+   for (i = 0; i < mercs.size(); i++)
+	{
+	    damage += mercs[i].currDamage;
+    }
+    return damage;
+}
+
+void Manager::setMedFoodCost(int cost){
+	medFoodCost = cost;
+}
+
+void Manager::setMedBeerCost(int cost){
+	medBeerCost = cost;
+}
+
+void Manager::setMedGoldCost(int cost){
+	medGoldCost = cost;
 }

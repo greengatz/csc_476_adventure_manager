@@ -53,9 +53,9 @@ Mercenary::Mercenary(vector<Obj3d> m) :
 	title(randTitle()),
     
     job(rand() % classes::size),
-    
+    dead(false),
     maxHealth(BaseHealth[job] + rand() % HEALTH_VARIANCE),
-    damage(BaseDamage[job] + rand() % DAMAGE_VARIANCE),
+    maxDamage(BaseDamage[job] + rand() % DAMAGE_VARIANCE),
     hungerRate(BaseHungerRate[job] + rand() % HUNGER_VARIANCE),
     beerRate(BaseBeerRate[job] + rand() % BEER_VARIANCE),
 
@@ -64,11 +64,11 @@ Mercenary::Mercenary(vector<Obj3d> m) :
     isWaving(false)
 {
     cost += maxHealth - BaseHealth[job];
-    cost += damage - BaseDamage[job];
+    cost += maxDamage - BaseDamage[job];
     cost -= hungerRate - BaseHungerRate[job];
     cost -= beerRate - BaseBeerRate[job];
-
-    curHealth = maxHealth;
+    currDamage = maxDamage;
+    currHealth = maxHealth;
 }
 
 void Mercenary::draw(GLint h_uModelMatrix, int meshIndex)
@@ -97,8 +97,8 @@ void Mercenary::printDetails()
 {
 	cout << firstName + " " + lastName + ", the " + title + "\n";
 	cout << "   class: " + JobNames[job] + "\n";
-	cout << "   health: " + to_string(static_cast<long long int>(curHealth)) + "/" + to_string(static_cast<long long int>(maxHealth)) + "\n";
-	cout << "   damage: " +  to_string(static_cast<long long int>(damage)) + "\n";
+	cout << "   health: " + to_string(static_cast<long long int>(currHealth)) + "/" + to_string(static_cast<long long int>(maxHealth)) + "\n";
+	cout << "   damage: " +  to_string(static_cast<long long int>(currDamage)) + "\n";
 	cout << "   hunger rate: " +  to_string(static_cast<long long int>(hungerRate)) + "\n";
 	cout << "   beer rate: " + to_string(static_cast<long long int>(beerRate)) + "\n";
 	cout << "   cost: " +  to_string(static_cast<long long int>(cost)) + "\n";
@@ -111,3 +111,4 @@ void Mercenary::wave() {
         isWaving = true;
     }
 }
+
