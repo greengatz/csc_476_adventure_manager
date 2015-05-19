@@ -19,6 +19,8 @@ CharDae::CharDae(const string source) {
     meshes = scene->mMeshes;
     cout << "scene " << scene << "\n";
     cout << "meshes " << meshes << "\n";
+    cout << "number of bones " << meshes[0]->mNumBones << "\n";
+    recursivePrint(root, 0, meshes);
 
     position[0] = 26.56f; // magic to put in view
     position[1] = 2.0f;
@@ -125,8 +127,8 @@ void CharDae::drawChar(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor, GL
     }
 
     printf("beginning dae draw\n");
-    cout << scene->mMeshes << "\n";
-    cout << scene->mMeshes[0]->mNumVertices << "\n";
+    //cout << scene->mMeshes << "\n";
+    //cout << scene->mMeshes[0]->mNumVertices << "\n";
     
     printf("enabling buffers...\n");
     GLSL::enableVertexAttribArray(h_vertPos); // position

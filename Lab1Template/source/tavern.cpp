@@ -72,8 +72,8 @@ int TAV_DIRT_ID = 6600;
 
 int TURKEY_NUM;
 
-Tavern::Tavern() :
-    sam(CharDae("not_a_file"))
+Tavern::Tavern()// :
+    //sam(CharDae("not_a_file"))
 {
 	doorLoc = vec3(7.5, 1.35, -23);
 	beerLoc = vec3(35.0, 1.0, -35.0);
@@ -498,7 +498,7 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 
     // try some assimp stuff
     // TODO
-    sam = CharDae("assets/characters/samurai.dae");
+    //sam = CharDae("assets/characters/samurai.dae");
 }
 
 void Tavern::enableBuff(GLint h_vertPos, GLint h_vertNor, GLuint posBuf, GLuint norBuf, GLuint indBuf) {
