@@ -34,6 +34,8 @@ set(HEADERS
    ProjectMeshes.h
    FireSystem.h
    Particle.h
+   ShadowMapFBO.h
+   ShadowMapTechnique.h
 )
 
 # List all .c / .cpp files here
@@ -72,4 +74,6 @@ set(SOURCES
    ProjectMeshes.cpp
    FireSystem.cpp
    Particle.cpp
+   ShadowMapFBO.cpp
+   ShadowMapTechnique.cpp
 )
