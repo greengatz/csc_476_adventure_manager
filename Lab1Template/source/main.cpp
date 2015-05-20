@@ -194,8 +194,6 @@ void initGL()
 	// Enable z-buffer test
 	glEnable(GL_DEPTH_TEST);
 
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // TODO remove this
-
 	/* texture specific settings */
     glEnable(GL_TEXTURE_2D);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
