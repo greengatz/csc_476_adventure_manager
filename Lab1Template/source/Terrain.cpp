@@ -354,7 +354,7 @@ void Terrain::createTrail(){
     createEvents();
 }
 
-void Terrain::init(TextureLoader* texLoader, Materials *matSetter, FrustumCull *fCuller, ProjectMeshes *newData)
+void Terrain::init(TextureLoader* texLoader, Materials *matSetter, FrustumCull *fCuller, ProjectMeshes *newData, glm::vec3 lightPosition)
 {
   terrainEvents.init(matSetter, fCuller, newData);
   terrainEvents.loadTerrEvMeshes(texLoader);
@@ -482,13 +482,14 @@ void Terrain::init(TextureLoader* texLoader, Materials *matSetter, FrustumCull *
   	//unbind the arrays
   	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-   tree.init(texLoader);
+   tree.init(texLoader, lightPosition);
    
 	assert(glGetError() == GL_NO_ERROR);
 }
 
 
-void Terrain::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMatrix, Camera* camera, glm::vec3 wagonPos, GLuint* pid)
+void Terrain::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMatrix, Camera* camera, 
+                   glm::vec3 wagonPos, GLuint* pid)
 {
   //set up the texture unit
    glEnable(GL_TEXTURE_2D);
