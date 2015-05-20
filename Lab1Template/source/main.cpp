@@ -41,6 +41,8 @@
 #include "FadeSystem.h"
 #include "ProjectMeshes.h"
 #include "FireSystem.h"
+#include "ShadowMapFBO.h"
+#include "ShadowMapTechnique.h"
 
 using namespace std;
 using namespace glm;
@@ -145,6 +147,14 @@ Skybox skybox;
 //Fading in and out
 FadeSystem fadeSystem;
 
+//Shadow Information
+ShadowMapTechnique* m_pShadowMapTech;
+//TODO: Eventually have this light move across with wagon
+//or have multiple lights across the trail.
+glm::vec3 outsideLightPos = glm::vec3(-90.0, 15.0, -53.0);
+glm::vec3 outsideLightLookat = glm::vec3(-90.0, 0.0, -29.0);
+ShadowMapFBO m_shadowMapFBO;
+
 /**
  * For now, this just initializes the Shape object.
  * Later, we'll updated to initialize all objects moving.
@@ -181,6 +191,11 @@ void initModels()
 
 	//Initialize the fire particle system
 	fire.init(&texLoader);
+
+	//Initalize some shadow information
+	m_shadowMapFBO.init(g_width, g_height);
+	m_pShadowMapTech = new ShadowMapTechnique();
+	m_pShadowMapTech->init();
 
 	//initialize the modeltrans matrix stack
    ModelTrans.useModelViewMatrix();
@@ -278,6 +293,45 @@ bool installShaders(const string &vShaderName, const string &fShaderName)
 	return true;
 }
 
+//TODO: RIGHT NOW THIS ONLY CREATES LIGHT MAP FOR WAGON. MUST EXPAND TO EVERYTHING.
+void ShadowMapPass()
+{
+	m_pShadowMapTech->enableProgram();
+
+	m_shadowMapFBO.bindForWriting();
+
+	glClear(GL_DEPTH_BUFFER_BIT);
+
+	camera.setShadowMapPass(outsideLightPos, outsideLightLookat);
+
+	ModelTrans.loadIdentity();
+		ModelTrans.pushMatrix();
+			ModelTrans.translate(glm::vec3(-100.0, 0.0, 0.0));
+			glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(ModelTrans.modelViewMatrix));
+			ModelTrans.pushMatrix();
+				wagon.draw(h_vertPos, h_vertNor, h_aTexCoord, h_ModelMatrix, &ModelTrans);
+			ModelTrans.popMatrix();
+		ModelTrans.popMatrix();
+
+	camera.finishShadowMapPass();
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glUseProgram(0);
+}
+
+void setProjView()
+{
+	//Set projection matrix
+	MatrixStack proj, view;
+	proj.pushMatrix();
+	camera.applyProjectionMatrix(&proj);
+	glUniformMatrix4fv( h_ProjMatrix, 1, GL_FALSE, glm::value_ptr( proj.topMatrix()));
+	proj.pushMatrix();
+	camera.applyViewMatrix(&view, wagon.getPosition());
+	glUniformMatrix4fv(h_ViewMatrix, 1, GL_FALSE, glm::value_ptr(view.topMatrix()));
+	
+	fCuller.setProjMat(proj.topMatrix(), view.topMatrix());
+}
+
 void drawGL()
 {
 	// Clear buffers
@@ -300,7 +354,6 @@ void drawGL()
 	glUniform1f(h_option, optionS);
 	
 	// Bind the program
-	
 	//Set projection matrix
 	MatrixStack proj, view;
 	proj.pushMatrix();
@@ -314,19 +367,34 @@ void drawGL()
 	
 	matSetter.setMaterial(2);
 
+	m_shadowMapFBO.bindForWriting();
+
 	//========================== DRAW OUTSIDE SCENE ====================
 	if (!camera.isTavernView() || camera.isFreeRoam())
 	{
+		//Prepass to get light map. 1st render
+		ShadowMapPass();
+
+		//2nd Render
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glUseProgram(pid);
+		setProjView();
+		glUniform1i(h_flag, 0);
+		glUniform3fv(h_lightPos1, 1, glm::value_ptr(glm::vec3(23.05f, 4.0f, -23.5f)));
+		glUniform3fv(h_lightPos2, 1, glm::value_ptr(glm::vec3(-125.0f, 4.0f, 25.0f)));
+		glUniform1f(h_option, optionS);
+		m_shadowMapFBO.bindForReading(GL_TEXTURE0);
+
 		glUniform1i(terrainToggleID, 1);
 		glUniform1i(h_uTexUnit, 0);
 		ModelTrans.loadIdentity();
 		ModelTrans.pushMatrix();
 			ModelTrans.translate(glm::vec3(-100.0, 0.0, 0.0));
 			glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(ModelTrans.modelViewMatrix));
-			//ModelTrans.popMatrix();
 			ModelTrans.pushMatrix();
 				terrain.draw(h_vertPos, h_vertNor, h_aTexCoord, h_ModelMatrix, &camera, wagon.getPosition(), &pid);
             glUseProgram(pid);
+            setProjView();
 				wagon.draw(h_vertPos, h_vertNor, h_aTexCoord, h_ModelMatrix, &ModelTrans);
 			ModelTrans.popMatrix();
 		ModelTrans.popMatrix();
@@ -334,8 +402,6 @@ void drawGL()
 		ModelTrans.loadIdentity();
 		ModelTrans.pushMatrix();
 		ModelTrans.popMatrix();
-		// terrEv.drawTerrainEvents(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord);
-		// terrEv.drawTerrainEvents(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord, dtDraw);
 		glUniform1i(terrainToggleID, 0);
       //Draw the skybox
       skybox.draw(&camera, wagon.getPosition());
@@ -343,6 +409,8 @@ void drawGL()
       glUniform1i(terrainToggleID, 0);
 	}
 	glUseProgram(pid);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	m_shadowMapFBO.bindForReading(GL_TEXTURE0);
 
 	//========================= END OUTSIDE SCENE =======================
 
@@ -390,10 +458,9 @@ void drawGL()
 		}
 	}
 	
-
 	//**************Draw HUD START*********************
 
-	if(hud.on)
+	if(hud.on && !camera.isShadowMapView() && !camera.isFreeRoam())
 	{
 		glUseProgram(pid);
 		glUniform1i(h_flag, 1);
@@ -670,9 +737,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     }
 	if (key == GLFW_KEY_N && action == GLFW_PRESS)
 	{
-		// terrEv.lowerBridge();
 		fire.toggle();
-
 	}
 	if (key == GLFW_KEY_Y && action == GLFW_PRESS)
 	{
@@ -686,6 +751,28 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	{
 		audio.playVoice(BANDIT_GREETING);
 	}
+
+	//DO NOT DELETE THE BELOW CODE THAT IS COMMENTED!!!!!!!!!!
+
+	/*if (key == GLFW_KEY_M && action == GLFW_PRESS)
+	{
+		if (camera.isShadowMapView())
+		{
+			camera.finishShadowMapPass();
+		}
+		else
+		{
+			camera.setShadowMapPass(glm::vec3(-91.0, 15.0, -53.0), glm::vec3(-91.0, 0.0, -29.0));
+			if (camera.isTavernView())
+			{
+				camera.toggleGameViews();
+			}
+			else if (camera.isFreeRoam())
+			{
+				camera.toggleFreeRoam();
+			}
+		}
+	}*/
 }
 
 void window_size_callback(GLFWwindow* window, int w, int h){
