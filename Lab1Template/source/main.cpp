@@ -194,8 +194,6 @@ void initGL()
 	// Enable z-buffer test
 	glEnable(GL_DEPTH_TEST);
 
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // TODO remove this
-
 	/* texture specific settings */
     glEnable(GL_TEXTURE_2D);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -295,7 +293,6 @@ void drawGL()
 
   	glfwGetCursorPos(window, &xpos, &ypos);
 	camera.update(xpos, ypos, wagon.getPosition());
-    printf("camera at %f, %f\n", camera.getPosition().x, camera.getPosition().z); // TODO remove this
 
 	glUniform3fv(h_lightPos1, 1, glm::value_ptr(glm::vec3(23.05f, 4.0f, -23.5f)));
 	glUniform3fv(h_lightPos2, 1, glm::value_ptr(glm::vec3(-125.0f, 4.0f, 25.0f)));
