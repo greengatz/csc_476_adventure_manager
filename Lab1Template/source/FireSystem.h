@@ -51,6 +51,7 @@ private:
 
 	bool on;
 	void loadBuffers();
+	void enableTex(int targetTex);
 };
 
 #endif
