@@ -352,10 +352,10 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_ROOF_ID);
 
 	//pillars
-	createPillar(glm::vec3(18.5, 1, -27.2), true);
-	createPillar(glm::vec3(27.6, 1, -27.2), true);
-	createPillar(glm::vec3(18.5, 1, -19.8), false);
-	createPillar(glm::vec3(27.6, 1, -19.8), false);
+	// createPillar(glm::vec3(18.5, 1, -27.2), true);
+	// createPillar(glm::vec3(27.6, 1, -27.2), true);
+	// createPillar(glm::vec3(18.5, 1, -19.8), false);
+	// createPillar(glm::vec3(27.6, 1, -19.8), false);
 
 	addTavernItem(CRATE, 2, glm::vec3(0.5, 1, 2), glm::vec3(21.9, 0.025, -13.5), glm::mat4(1.0f));
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_BRANCHES_ID);
@@ -486,7 +486,7 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_LANDLORD_ID);
 	addTavernItem(LUMBERJACK, 1, glm::vec3(1, 1, 1), glm::vec3(15.5, .99, -16), glm::mat4(1.0f));
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_LUMBERJACK_ID);
-	
+
 	//fireplace and roasting
 	addTavernCharacter(SAMURAI, glm::vec3(1, 1, 1), glm::vec3(20.05, 1.3, -23.5), glm::mat4(1.0f));
 	tavernCharacters[tavernCharacters.size() - 1].meshes[0].loadTextureCoor(TAV_SAMURAI_ID);

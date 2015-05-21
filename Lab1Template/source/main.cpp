@@ -12,6 +12,7 @@
 #include <iostream>
 #include <cassert>
 #include <cmath>
+#include <algorithm>
 #include "GLSL.h"
 #include "Camera.h"
 #include "Terrain.h"
@@ -154,6 +155,14 @@ ShadowMapTechnique* m_pShadowMapTech;
 glm::vec3 outsideLightPos = glm::vec3(-90.0, 15.0, -53.0);
 glm::vec3 outsideLightLookat = glm::vec3(-90.0, 0.0, -29.0);
 ShadowMapFBO m_shadowMapFBO;
+
+vector<Obj3d> objs;
+
+//Spatial Grid
+vector<vector<vector<Obj3d>>> grid;
+int minX = 5;
+int minZ = -40;
+int gridSize = 7;
 
 /**
  * For now, this just initializes the Shape object.
@@ -509,7 +518,6 @@ bool hasCollided(glm::vec3 incr)
 		return false;
 	}
 
-	vector<Obj3d> temp = tavern.tavernItems;
 	glm::vec3 camPos = camera.getPosition() + incr;
 
 	float curCam[6] = {
@@ -522,9 +530,40 @@ bool hasCollided(glm::vec3 incr)
 
 	bool validMove = (curCam[0] < 6.75 || curCam[1] > 39.5 || curCam[4] < -36.0 || curCam[5] > -11.4);
 
-	for (std::vector<Obj3d>::iterator it1 = temp.begin(); it1 != temp.end(); ++it1)
+	// for (std::vector<Obj3d>::iterator it1 = objs.begin(); it1 != objs.end(); ++it1)
+	// {
+	// 	glm::vec3 pos1 = it1 ->getCurSpot();
+	// 	if(it1->bound.checkCollision(curCam, it1->scale, pos1))
+	// 	{
+	// 		validMove = true;
+	// 	}
+	// }
+
+	int row, col;
+  	row = (camPos.x - minX)/gridSize;
+ 	col = (camPos.z - minZ)/gridSize;
+	vector<Obj3d> currentCellObjs = grid[row][col];
+	printf("Checking %d collisions!!\n", currentCellObjs.size());
+
+ 	// for(int i = 0; i < currentCellObjs.size(); i++)
+ 	// {
+ 	// 	vec3 curTrans = currentCellObjs[i].getCurSpot();
+
+ 	// 	if (currentCellObjs[i].bound.checkCollision(curCam, currentCellObjs[i].scale, curTrans))
+ 	// 	{
+ 	//   		if(!currentCellObjs[i].done)
+  //     		{
+  //       		currentCellObjs[i].hit();
+  //       		printf("Hit item %d at %lf, %lf\n", i, camPos.x, camPos.z);
+  //     		}
+
+  //   		validMove = false;
+  //   	}
+  // 	}
+
+	for(vector<Obj3d>::iterator it1 = currentCellObjs.begin(); it1 != currentCellObjs.end(); ++it1)
 	{
-		glm::vec3 pos1 = it1 ->getCurSpot();
+		vec3 pos1 = it1 ->getCurSpot();
 		if(it1->bound.checkCollision(curCam, it1->scale, pos1))
 		{
 			validMove = true;
@@ -806,6 +845,12 @@ int main(int argc, char **argv)
         return -1;
     }
 
+    //Initialize Spatial Grid
+    grid.resize(5);
+  	for (int i = 0; i < 5; ++i) {
+    	grid[i].resize(5);
+  	}
+
    glfwWindowHint(GLFW_SAMPLES, 4);
    glfwWindowHint(GLFW_RESIZABLE,GL_FALSE);
    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
@@ -878,6 +923,52 @@ int main(int argc, char **argv)
 
 	// //Set the data
 	// menu.setData("Title", about, options);
+
+	objs = tavern.tavernItems;
+	int exptX, exptZ, loopi, loopj, col, row;
+
+	for(int k = 6; k < objs.size(); k++)
+    {
+    	vec3 curPos = objs[k].getCurSpot();
+    	printf("curPos x: %lf, curPos z: %lf\n", curPos.x, curPos.z);
+    	float curBox[6] = {
+     	objs[k].bound.minX * objs[k].scale.x + curPos.x, 
+     	objs[k].bound.maxX * objs[k].scale.x + curPos.x,
+     	objs[k].bound.minY * objs[k].scale.y,
+     	objs[k].bound.maxY * objs[k].scale.y,
+     	objs[k].bound.minZ * objs[k].scale.z + curPos.z,
+     	objs[k].bound.maxZ * objs[k].scale.z + curPos.z};
+
+    // exptX = (objs[k].bound.maxX - objs[k].bound.minX);
+    // loopi = std::max((int)exptX, 1);
+    // exptZ = (objs[k].bound.maxZ - objs[k].bound.minZ);
+    // loopj = std::max((int)exptZ, 1);
+
+    	printf("maxX: %lf, minX: %lf\n", curBox[1], curBox[0]);
+
+    	exptX = (curBox[1] - curBox[0])/gridSize;
+    	loopi = std::max((int)exptX + 1, 1);
+    	exptZ = (curBox[5] - curBox[4])/gridSize;
+    	loopj = std::max((int)exptZ + 1, 1);
+
+    	printf("exptX: %d, exptZ: %d\n", exptX, exptZ);
+
+    	col = (curBox[0] - minX)/gridSize;
+   		row = (curBox[4] - minZ)/gridSize;
+
+    	printf("col: %d, row: %d\n", col, row);
+
+    	// printf("loopi = %d, loopj = %d\n", loopi, loopj);
+
+    	for(int i = col; i < loopi + col; i++)
+    	{
+      		for(int j = row; j < loopj + row; j++)
+      		{
+       		  grid[i][j].push_back(objs[k]);
+      		  printf("gridsize at %d, %d: %d\n", i, j, grid[i][j].size());
+     		 }
+    	}
+  	}
 
    do{
    		timeNew = glfwGetTime();
