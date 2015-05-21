@@ -1,14 +1,14 @@
 #include "charDae.h"
 
 CharDae::CharDae(const string source) {
-    int i, j;
+    int i, j, k;
     cout << "\n\ntrying to load " << source << "\n";
-
-    scene = importer.ReadFile(source, aiProcess_GenNormals);
+    importer = new Assimp::Importer();
+    scene = importer->ReadFile(source, aiProcess_GenNormals);
 
     if(!scene) {
         cout << "couldn't read dae\n";
-        cout << "reason: " << importer.GetErrorString() << "\n";
+        cout << "reason: " << importer->GetErrorString() << "\n";
         root = NULL;
         return;
     }
@@ -78,6 +78,28 @@ CharDae::CharDae(const string source) {
     // aiVertexWeight -> vertexId -> u int for which vertex
     //                -> mWeight  -> how much this bone affects that vertex (float, 0.0 - 1.0)
     
+    // keep a count for every vertex
+    int* boneCounter = (int*) calloc(numInd, sizeof(int));
+    aiMesh* mesh = meshes[0];
+    int boneNum = mesh->mNumBones;
+    float totalAffected = 0;
+    cout << boneNum << " bones\n";
+    int max = 0;
+    int temp;
+
+    for(i = 0; i < boneNum; i++) {
+        cout << mesh->mBones[i]->mNumWeights << " vertices affected by bone " << i << "\n";
+        totalAffected += mesh->mBones[i]->mNumWeights;
+        for(j = 0; j < mesh->mBones[i]->mNumWeights; j++) {
+            temp = mesh->mBones[i]->mWeights[j].mVertexId;
+            max = temp > max ? temp : max;
+        }
+    }
+    cout << totalAffected << " total affected\n";
+    cout << numInd << " total indices\n";
+    cout << max << " max index\n";
+    cout << totalAffected / (float) numInd << "average\n";
+
     cout << "finished loading " << source << "\n\n";
 }
 
@@ -150,7 +172,11 @@ void CharDae::drawChar(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor, GL
     if(root == NULL) {
         return;
     }
-    
+    const aiScene* last = importer->GetScene();
+    cout << "scene loc " << scene << "\n";
+    cout << "num meshes... should be 1.... " << scene->mNumMeshes << "\n";
+    cout << "done with data \n";
+ 
     // indices
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indBuf);
     

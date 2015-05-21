@@ -23,7 +23,7 @@ class CharDae
 
     private:
         const aiScene* scene;
-        Assimp::Importer importer;
+        Assimp::Importer* importer;
         TextureLoader texLoader;
 
         aiNode* root;
@@ -31,6 +31,8 @@ class CharDae
 
         unsigned int numInd;
         unsigned int* indices;
+        unsigned int boneCount;
+        // keep track of all the bones
         float* normals;
         float* positions;
         float* texture;
