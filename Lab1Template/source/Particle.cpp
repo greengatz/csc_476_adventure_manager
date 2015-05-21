@@ -9,7 +9,6 @@ float Particle::randFloat(float low, float high)
 Particle::Particle()
 {
 	mass = 0.01;
-	damp = 0;
 	lifespan = 1.0;
 	scale = 1.0;
 }
@@ -29,8 +28,6 @@ void Particle::init(int staggerTime, bool isSmoke)
 
 void Particle::rebirth(float curTime)
 {
-	damp = randFloat(0.0f, 0.01f);
-
 	if (!smoke) {
 		pos.x = randFloat(-0.2f, 0.2f);
 		pos.y = randFloat(-0.15f, 0.15f);
@@ -95,13 +92,10 @@ void Particle::update(float ltime, float timeIncr)
 	}
 }
 
-//need to clean up these parameters eventually
-void Particle::drawFirePlace(glm::vec3 loc, GLint h_scale, GLint h_color, GLint h_ModelViewMat, int indSize, glm::vec3 camPos)
+void Particle::drawFirePlace(glm::vec3 loc, GLint h_color, GLint h_ModelViewMat, int indSize, glm::vec3 camPos)
 {
 	if (stagger <= 0) {
 		//set handles for the particle
-		glUniform1f(h_scale, scale); //delete this eventually
-
 		glUniform4f(h_color, col.x, col.y, col.z, col.w);
 
 		glm::vec3 curPos = glm::vec3(loc.x + pos.x, loc.y + pos.y, loc.z + pos.z);
@@ -128,12 +122,10 @@ void Particle::drawFirePlace(glm::vec3 loc, GLint h_scale, GLint h_color, GLint 
 	}
 }
 
-//need to clean up these parameters eventually
-void Particle::drawTorch(glm::vec3 loc, GLint h_scale, GLint h_color, GLint h_ModelViewMat, int indSize, glm::vec3 camPos)
+void Particle::drawTorch(glm::vec3 loc, GLint h_color, GLint h_ModelViewMat, int indSize, glm::vec3 camPos)
 {
 	if (stagger <= 0) {
 		//set handles for the particle
-		glUniform1f(h_scale, scale);
 		glUniform4f(h_color, col.x, col.y, col.z, col.w);
 
 		glm::vec3 curPos = glm::vec3(loc.x + (pos.x / 1.85), loc.y + (pos.y / 1.25), loc.z + (pos.z / 1.85));
