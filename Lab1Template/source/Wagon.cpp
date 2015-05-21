@@ -311,7 +311,7 @@ void Wagon::updateWagon(float globalTime) {
         fpHeal = healMercenary;
         fpHurt = hurtMercenary;
         option healOpt = {"Heal " + name, fpHeal, true};
-        option hurtOpt = { "'" + name + " will be fine!'", fpHurt, true};
+        option hurtOpt = { name + " will be fine!", fpHurt, true};
         options.push_back(healOpt);
         options.push_back(hurtOpt);
       }else{

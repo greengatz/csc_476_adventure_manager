@@ -131,6 +131,19 @@ void Manager::buyMercenary(int mercenaryID, Tavern* tav)
 	reportStats();
 }
 
+// void Manager::buyMercenaryTrail(int mercenaryID. int cost)
+// {
+// 	if(gold >= cost){
+// 		Mercenary merc = new Mercenary();
+// 		cout << "Buying " + tav->tavernCharacters[mercenaryID].firstName + "\n";
+// 		mercs.push_back(tav->tavernCharacters[mercenaryID]);
+// 		gold -= tav->tavernCharacters[mercenaryID].cost;
+// 		tav->tavernCharacters.erase(tav->tavernCharacters.begin() + mercenaryID);
+// 	}
+
+// 	reportStats();
+// }
+
 int Manager::getGold()
 {
 	return gold;
