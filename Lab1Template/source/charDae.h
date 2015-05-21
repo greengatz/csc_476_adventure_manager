@@ -34,6 +34,7 @@ class CharDae
         float* normals;
         float* positions;
         float* texture;
+
         GLuint posBuf;
         GLuint norBuf;
         GLuint indBuf;

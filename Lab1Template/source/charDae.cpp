@@ -35,6 +35,7 @@ CharDae::CharDae(const string source) {
     glBindBuffer(GL_ARRAY_BUFFER, posBuf);
     glBufferData(GL_ARRAY_BUFFER, numInd * 3 * sizeof(float), positions, GL_STATIC_DRAW);
 
+
     // normals
     normals = (float*) malloc(meshes[0]->mNumVertices * 3 * sizeof(float));
     memcpy(normals, meshes[0]->mNormals, numInd * 3 * sizeof(float));
@@ -42,6 +43,7 @@ CharDae::CharDae(const string source) {
     glGenBuffers(1, &norBuf);
     glBindBuffer(GL_ARRAY_BUFFER, norBuf);
     glBufferData(GL_ARRAY_BUFFER, numInd * 3 * sizeof(float), normals, GL_STATIC_DRAW);
+
 
     // indices (face)
     indices = (unsigned int*) malloc(meshes[0]->mNumFaces * 3 * sizeof(unsigned int));
@@ -55,13 +57,26 @@ CharDae::CharDae(const string source) {
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, meshes[0]->mNumFaces * 3 * sizeof(int), indices, GL_STATIC_DRAW);
 
 
-    //texture
+    // texture
     texture = (float*) malloc(numInd * 3 * sizeof(float));
     memcpy(positions, meshes[0]->mTextureCoords, numInd * 3 * sizeof(float));
 
     glGenBuffers(1, &texBuf);
     glBindBuffer(GL_ARRAY_BUFFER, texBuf);
     glBufferData(GL_ARRAY_BUFFER, numInd * 3 * sizeof(float), texture, GL_STATIC_DRAW);
+
+
+    // TODO bones
+    // boneNum = max number of bones for any vertex
+    // boneId -> boneNum ids for every vertex (which bones affect this vertex)
+    // weights -> boneNum weights for every vertex (how much those bones affect this vertex)
+    // bones -> a mat4 for every bone containing its current model transform
+    //       -> this will update with time
+
+    // aiMesh -> mBones and mNumBones
+    // aiBone -> mWeights and mNumWeights
+    // aiVertexWeight -> vertexId -> u int for which vertex
+    //                -> mWeight  -> how much this bone affects that vertex (float, 0.0 - 1.0)
     
     cout << "finished loading " << source << "\n\n";
 }
@@ -149,7 +164,7 @@ void CharDae::drawChar(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor, GL
     glBindBuffer(GL_ARRAY_BUFFER, norBuf);
     glVertexAttribPointer(h_vertNor, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-    // texture
+    // texture TODO
     // gl buff, coords, id
     glEnable(GL_TEXTURE_2D);
     glActiveTexture(GL_TEXTURE0);
@@ -164,6 +179,13 @@ void CharDae::drawChar(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor, GL
     glm::mat4 translate = glm::translate(glm::mat4(1.0f), position);
     glm::mat4 result = translate * glm::scale(mat4(1.0f), glm::vec3(0.2f, 0.2f, 0.2f));
     glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(result));
+
+    // TODO
+    // scene -> animation -> node animation
+    // bone transforms
+    // we will pass several bones
+    // each bone will have an ID and a Weight
+    // these will be new buffers
 
     // actual draw call
     glDrawElements(GL_TRIANGLES, numInd, GL_UNSIGNED_INT, 0);
