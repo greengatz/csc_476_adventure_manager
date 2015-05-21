@@ -186,7 +186,7 @@ void initModels()
 	tavern.init(&matSetter, &fCuller, &meshes);
 
 	//Initialize Terrain object
-	terrain.init(&texLoader, &matSetter, &fCuller, &meshes);
+	terrain.init(&texLoader, &matSetter, &fCuller, &meshes, outsideLightPos);
 	tavTerr.init(&texLoader);
 
 	//Initalize Wagon
@@ -392,6 +392,7 @@ void drawGL()
 		glUniform3fv(h_lightPos1, 1, glm::value_ptr(glm::vec3(23.05f, 4.0f, -23.5f)));
 		glUniform3fv(h_lightPos2, 1, glm::value_ptr(glm::vec3(-125.0f, 4.0f, 25.0f)));
 		glUniform1f(h_option, optionS);
+      m_pShadowMapTech->setTextureUnit(0);
 		m_shadowMapFBO.bindForReading(GL_TEXTURE0);
 
 		glUniform1i(terrainToggleID, 1);

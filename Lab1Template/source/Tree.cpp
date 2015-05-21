@@ -44,14 +44,26 @@ Tree::Tree() :
 
    scale(0.05f)
 {
+   //Shadow Shader Information
+   pidShadow = 0;
+   h_vertPosShadow = 0;
+   h_vertNorShadow = 0;
+   h_ViewMatrixShadow = 0;
+   h_ModelMatrixShadow = 0;
+   h_ProjMatrixShadow = 0;
+   //planeNormal = gml::vec4(0.0f, 1.0f, 0.0f, 0.0f); We don't need this. We are going to cheat.
+   lightPos = glm::vec3(0.0f, 0.0f, 0.0f);
+
 }
 
 Tree::~Tree()
 {
 }
 
-void Tree::init(TextureLoader* texLoader)
+void Tree::init(TextureLoader* texLoader, glm::vec3 lightPosition)
 {
+   lightPos = lightPosition;
+
   float minX, minY, minZ;
   float maxX, maxY, maxZ;
 
@@ -77,6 +89,14 @@ void Tree::init(TextureLoader* texLoader)
   h_kd = GLSL::getUniformLocation(pid, "kd");
   h_ks = GLSL::getUniformLocation(pid, "ks");
   h_s = GLSL::getUniformLocation(pid, "s");
+
+  pidShadow = LoadShaders("Shaders/projection_vert.glsl", "Shaders/projection_frag.glsl");
+  h_vertPosShadow = GLSL::getAttribLocation(pid, "vertPos");
+  h_vertNorShadow = GLSL::getAttribLocation(pid, "vertNor");
+
+  h_ViewMatrixShadow = GLSL::getUniformLocation(pid, "uViewMatrix");
+  h_ModelMatrixShadow = GLSL::getUniformLocation(pid, "uModelMatrix");
+  h_ProjMatrixShadow = GLSL::getUniformLocation(pid, "uProjMatrix");
 
   // Load geometry
   // Some obj files contain material information.
@@ -277,9 +297,60 @@ void Tree::drawBillboard(glm::vec3 treePosition, Camera *camera, glm::vec3 wagon
 void Tree::draw(glm::vec3 treePosition, Camera *camera, glm::vec3 wagonPos)
 {
    //Using another shader program
-   glUseProgram(pid);
+   glUseProgram(pidShadow);
+   glDisable(GL_DEPTH_TEST);
 
-   glUniform1i(leafToggleID, 0);
+   //Set projection matrix
+   MatrixStack viewShadow;
+   //glUniformMatrix4fv( h_ProjMatrixShadow, 1, GL_FALSE, glm::value_ptr( projShadow.topMatrix()));
+   camera->applyViewMatrix(&viewShadow, wagonPos);
+   glUniformMatrix4fv(h_ViewMatrixShadow, 1, GL_FALSE, glm::value_ptr(viewShadow.topMatrix()));
+
+   //Position Wagon along the trail
+   ModelTrans.pushMatrix();
+      ModelTrans.translate(treePosition + position); //this was just "position". Can get rid of this after.
+      ModelTrans.scale(scale, scale, scale);
+      glUniformMatrix4fv(h_ModelMatrixShadow, 1, GL_FALSE, glm::value_ptr(ModelTrans.modelViewMatrix));
+   ModelTrans.popMatrix();
+
+   float projArray[16] = {
+      lightPos.y/lightPos.y, 0.0, 0.0, 0.0,
+      -lightPos.x/lightPos.y, 0.0, -lightPos.z/lightPos.y, -1.0f/lightPos.y,
+      0.0, 0.0, lightPos.y/lightPos.y, 0.0,
+      0.0, 0.0, 0.0, lightPos.y/lightPos.y
+   };
+
+   glm::mat4 shadowProjection = glm::make_mat4(projArray);
+   //glm::mat4 shadowProjectionT = glm::transpose(shadowProjection);
+   glUniformMatrix4fv(h_ProjMatrixShadow, 1, GL_FALSE, glm::value_ptr(shadowProjection));
+
+   //Enable and bind position array for drawing
+   GLSL::enableVertexAttribArray(h_vertPosShadow);
+   glBindBuffer(GL_ARRAY_BUFFER, posBufObjTree);
+   glVertexAttribPointer(h_vertPosShadow, 3, GL_FLOAT, GL_FALSE, 0, 0);
+   
+   // Enable and bind normal array for drawing
+   GLSL::enableVertexAttribArray(h_vertNorShadow);
+   glBindBuffer(GL_ARRAY_BUFFER, norBufObjTree);
+   glVertexAttribPointer(h_vertNorShadow, 3, GL_FLOAT, GL_FALSE, 0, 0);
+   
+   // Bind index array for drawing
+   int nIndices = (int)shapes[0].mesh.indices.size();
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indBufObjTree);
+
+   glDrawElements(GL_TRIANGLES, nIndices, GL_UNSIGNED_INT, 0);
+
+   GLSL::disableVertexAttribArray(h_vertPosShadow);
+   GLSL::disableVertexAttribArray(h_vertNorShadow);
+   glBindBuffer(GL_ARRAY_BUFFER, 0);
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+   glEnable(GL_DEPTH_TEST);
+   glUseProgram(0);
+
+   //===================================== Second Render Pass =========================//
+
+   glUseProgram(pid);
 
    //Set projection matrix
    MatrixStack proj, view;
@@ -290,14 +361,16 @@ void Tree::draw(glm::vec3 treePosition, Camera *camera, glm::vec3 wagonPos)
    camera->applyViewMatrix(&view, wagonPos);
    glUniformMatrix4fv(h_ViewMatrix, 1, GL_FALSE, glm::value_ptr(view.topMatrix()));
 
-   glUniform3fv(lightPosID, 1, glm::value_ptr(glm::vec3(-75.0f, 0.0f, -25.0f)));
-
    //Position Wagon along the trail
    ModelTrans.pushMatrix();
       ModelTrans.translate(treePosition + position); //this was just "position". Can get rid of this after.
       ModelTrans.scale(scale, scale, scale);
       glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(ModelTrans.modelViewMatrix));
    ModelTrans.popMatrix();
+
+   glUniform1i(leafToggleID, 0);
+
+   glUniform3fv(lightPosID, 1, glm::value_ptr(glm::vec3(-75.0f, 0.0f, -25.0f)));
 
    //set up the texture unit
    glEnable(GL_TEXTURE_2D);
@@ -325,7 +398,7 @@ void Tree::draw(glm::vec3 treePosition, Camera *camera, glm::vec3 wagonPos)
    glVertexAttribPointer(h_vertNor, 3, GL_FLOAT, GL_FALSE, 0, 0);
    
    // Bind index array for drawing
-   int nIndices = (int)shapes[0].mesh.indices.size();
+   nIndices = (int)shapes[0].mesh.indices.size();
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indBufObjTree);
 
    glDrawElements(GL_TRIANGLES, nIndices, GL_UNSIGNED_INT, 0);

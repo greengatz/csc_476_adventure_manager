@@ -3,8 +3,7 @@
 #include "MatrixStack.h"
 
 const glm::vec3 fireLoc[] = {glm::vec3(23.05, 0.4, -23.5), //center fireplace
-							 // glm::vec3(20.0, 2.0, -19.0), //eventually need 4 other locations for fire
-							 glm::vec3(18.5, 2.9, -27.7),
+							 glm::vec3(18.5, 2.9, -27.7), //torch locations
 							 glm::vec3(27.6, 2.9, -27.7),
 							 glm::vec3(18.5, 2.9, -19.3),
 							 glm::vec3(27.6, 2.9, -19.3)
@@ -12,7 +11,6 @@ const glm::vec3 fireLoc[] = {glm::vec3(23.05, 0.4, -23.5), //center fireplace
 
 int FIRE_PARTICLE_1_ID = 8000;
 int SMOKE_PARTICLE_1_ID = 8100;
-// int FIRE_PARTICLE_3_ID = 8200;
 
 FireSystem::FireSystem()
 {
@@ -75,18 +73,8 @@ void FireSystem::init(TextureLoader *texLoader)
 	// Initialize Shader
     pid = LoadShaders("Shaders/Fire_vert.glsl", "Shaders/Fire_frag.glsl");
 
-    // glClearColor(0, 0, 0, 0);
-
-	// attribute vec4 vertPosition;
-	// attribute vec2 vertTexCoords;
-	// uniform float scale;
-	// uniform sampler2D alphaTexture;
-	// uniform vec4 color;
-	// uniform mat4 P;
-	// uniform mat4 MV;
     h_vertPos = GLSL::getAttribLocation(pid, "vertPosition");
     h_vertTexCoor = GLSL::getAttribLocation(pid, "vertTexCoords");
-    h_scale = GLSL::getUniformLocation(pid, "scale");
     h_tex = GLSL::getUniformLocation(pid, "tex");
     h_color = GLSL::getUniformLocation(pid, "color");
     h_ProjMat = GLSL::getUniformLocation(pid, "P");
@@ -95,21 +83,12 @@ void FireSystem::init(TextureLoader *texLoader)
 
     texLoader->LoadTexture((char *)"assets/smoke.bmp", FIRE_PARTICLE_1_ID);
     texLoader->LoadTexture((char *)"assets/smoke.bmp", SMOKE_PARTICLE_1_ID);
-    // texLoader->LoadTexture((char *)"assets/fire3.bmp", FIRE_PARTICLE_3_ID);
 
     loadBuffers();
     ltime = 0;
     timeIncr = 0.001;
     on = true;
 
- //    int torchSize = 1;
-	// for (int iter = 0; iter < torchSize; iter++) {
-	// 	Particle temp;
-	// 	torch.push_back(temp);
-	// 	torch[iter].init(0);
-	// }
-
-	// int numParticles = 1000;
 	int numParticles = 1000;
 	for (int iter = 0; iter < numParticles; iter++) {
 		Particle temp;
@@ -135,7 +114,7 @@ void FireSystem::enableTex(int targetTex)
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, targetTex);
 
-	//mipmap                              --- we'll see if we need this later
+	//mipmap
 	glGenerateMipmap(GL_TEXTURE_2D);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -149,8 +128,9 @@ void FireSystem::enableTex(int targetTex)
 
 void FireSystem::draw(Camera *cam, glm::mat4 viewMat)
 {
-	if (!on)
+	if (!on) {
 		return;
+	}
 
 	glUseProgram(pid);
 
@@ -164,10 +144,7 @@ void FireSystem::draw(Camera *cam, glm::mat4 viewMat)
 	cam->applyProjectionMatrix(&proj);
 	glUniformMatrix4fv(h_ProjMat, 1, GL_FALSE, glm::value_ptr( proj.topMatrix()));
 	proj.pushMatrix();
-	// camera->applyViewMatrix(&view, wagonPos);
-	// glUniformMatrix4fv(h_ViewMatrix, 1, GL_FALSE, glm::value_ptr(view.topMatrix()));
 
-	// glUniformMatrix4fv(h_ProjMat, 1, GL_FALSE, glm::value_ptr(projMat));
 	glUniformMatrix4fv(h_ViewMat, 1, GL_FALSE, glm::value_ptr(viewMat));
 
 	//enables the buffers
@@ -177,22 +154,6 @@ void FireSystem::draw(Camera *cam, glm::mat4 viewMat)
 	
 	// Bind index array for drawing
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indBufID);
-
-	//enabling same texture for all since is the same
-	// glEnable(GL_TEXTURE_2D);
-	// glActiveTexture(GL_TEXTURE0);
-	// glBindTexture(GL_TEXTURE_2D, FIRE_PARTICLE_1_ID);
-
-	// //mipmap                              --- we'll see if we need this later
-	// glGenerateMipmap(GL_TEXTURE_2D);
-	// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-
-	// GLSL::enableVertexAttribArray(h_vertTexCoor);
-	// glBindBuffer(GL_ARRAY_BUFFER, texBufID);
-	// glVertexAttribPointer(h_vertTexCoor, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
 	enableTex(FIRE_PARTICLE_1_ID);
 	glm::vec3 camPos = cam->getPosition();
@@ -211,28 +172,19 @@ void FireSystem::draw(Camera *cam, glm::mat4 viewMat)
 
 		//center fireplace
 		firePlace[iter].update(ltime, timeIncr);
-		firePlace[iter].drawFirePlace(fireLoc[0], h_scale, h_color, h_ModelMat, (int)indBuf.size(), camPos);
-		// glDrawElements(GL_TRIANGLE_STRIP, (int)indBuf.size(), GL_UNSIGNED_INT, 0);
+		firePlace[iter].drawFirePlace(fireLoc[0], h_color, h_ModelMat, (int)indBuf.size(), camPos);
 
 		//torches
-		firePlace[iter].drawTorch(fireLoc[curTorch], h_scale, h_color, h_ModelMat, (int)indBuf.size(), camPos);
-		firePlace[iter].drawTorch(fireLoc[curTorch + 1], h_scale, h_color, h_ModelMat, (int)indBuf.size(), camPos);
-		curTorch = (curTorch ==  1) ? 3 : 1;
+		firePlace[iter].drawTorch(fireLoc[curTorch], h_color, h_ModelMat, (int)indBuf.size(), camPos);
+		firePlace[iter].drawTorch(fireLoc[curTorch + 1], h_color, h_ModelMat, (int)indBuf.size(), camPos);
+		curTorch = (curTorch ==  1) ? 3 : 1; //switch which torches are drawn on
 	}
-
-	//need 4 other loops for those particles
-	// for(int iter = 0; iter < torch.size(); iter++) {
-	// 	// torch[iter].update(ltime, timeIncr);
-	// 	torch[iter].draw(fireLoc[1], h_scale, h_color, h_ModelMat, (int)indBuf.size(), camPos);
-	// 	// glDrawElements(GL_TRIANGLE_STRIP, (int)indBuf.size(), GL_UNSIGNED_INT, 0);
-	// }
 
 	//disable buffers
 	GLSL::disableVertexAttribArray(h_vertTexCoor);
 	GLSL::disableVertexAttribArray(h_vertPos);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
 	glDisable(GL_TEXTURE_2D);
 }
 
