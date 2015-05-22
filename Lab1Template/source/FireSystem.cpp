@@ -84,7 +84,7 @@ void FireSystem::init(TextureLoader *texLoader)
     h_ViewMat = GLSL::getUniformLocation(pid, "V");
 
     texLoader->LoadTexture((char *)"assets/newFireTex.bmp", FIRE_PARTICLE_1_ID);
-    texLoader->LoadTexture((char *)"assets/smoketest.bmp", SMOKE_PARTICLE_1_ID);
+    texLoader->LoadTexture((char *)"assets/smoke.bmp", SMOKE_PARTICLE_1_ID);
     texLoader->LoadTexture((char *)"assets/alpha.bmp", CENTER_ORB_ID);
 
     loadBuffers();
