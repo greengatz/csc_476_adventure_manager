@@ -356,7 +356,7 @@ void drawGL()
 
   	glfwGetCursorPos(window, &xpos, &ypos);
 	camera.update(xpos, ypos, wagon.getPosition());
-    printf("camera at %f, %f\n", camera.getPosition().x, camera.getPosition().z); // TODO remove this
+    //printf("camera at %f, %f\n", camera.getPosition().x, camera.getPosition().z); // TODO remove this
 
 	glUniform3fv(h_lightPos1, 1, glm::value_ptr(glm::vec3(23.05f, 4.0f, -23.5f)));
 	glUniform3fv(h_lightPos2, 1, glm::value_ptr(glm::vec3(-125.0f, 4.0f, 25.0f)));
@@ -568,6 +568,8 @@ bool hasCollided(glm::vec3 incr)
 		if(it1->bound.checkCollision(curCam, it1->scale, pos1))
 		{
 			validMove = true;
+			printf("Hit object at %lf, %lf\n!!", camPos.x, camPos.z);
+
 		}
 	}
 
