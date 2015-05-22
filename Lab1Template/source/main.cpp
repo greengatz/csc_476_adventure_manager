@@ -777,7 +777,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     }
 	if (key == GLFW_KEY_N && action == GLFW_PRESS)
 	{
-		fire.toggle();
+		// fire.toggle();
+		tavern.newEmblem();
 	}
 	if (key == GLFW_KEY_Y && action == GLFW_PRESS)
 	{
@@ -792,7 +793,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		audio.playVoice(BANDIT_GREETING);
 	}
 
-	//DO NOT DELETE THE BELOW CODE THAT IS COMMENTED!!!!!!!!!!
+	//DO NOT DELETE THE BELOW CODE THAT IS COMMENTED!!!!!!!!!!, OKAY I PROMISE I WONT
 
 	/*if (key == GLFW_KEY_M && action == GLFW_PRESS)
 	{

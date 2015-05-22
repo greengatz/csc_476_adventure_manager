@@ -214,7 +214,7 @@ void FireSystem::draw(Camera *cam, glm::mat4 viewMat)
 		firePlace[iter].drawFirePlace(fireLoc[0], h_color, h_ModelMat, (int)indBuf.size(), camPos);
 
 		//torches each torch has 1 /4 of the total particles
-		firePlace[iter].drawTorch(fireLoc[iter % 4], h_color, h_ModelMat, (int)indBuf.size(), camPos);
+		firePlace[iter].drawTorch(fireLoc[iter % 4 + 1], h_color, h_ModelMat, (int)indBuf.size(), camPos);
 		// firePlace[iter].drawTorch(fireLoc[curTorch], h_color, h_ModelMat, (int)indBuf.size(), camPos);
 		// firePlace[iter].drawTorch(fireLoc[curTorch + 1], h_color, h_ModelMat, (int)indBuf.size(), camPos);
 		// curTorch = (curTorch ==  1) ? 3 : 1; //switch which torches are drawn on

@@ -125,7 +125,7 @@ void Particle::drawFirePlace(glm::vec3 loc, GLint h_color, GLint h_ModelViewMat,
 		glUniformMatrix4fv(h_ModelViewMat, 1, GL_FALSE, glm::value_ptr(result));
 
 		// printf("pos: %f %f %f, life: %f, col: %f %f %f %f\n", loc.x + pos.x, loc.y + pos.y, loc.z + pos.z, lifespan, curCol.r, curCol.g, curCol.b, curCol.w);
-		if (col.w > 0.05) {
+		if (col.w > 0.1) {
 			glDrawElements(GL_TRIANGLE_STRIP, indSize, GL_UNSIGNED_INT, 0);
 		}
 	}
@@ -137,7 +137,7 @@ void Particle::drawTorch(glm::vec3 loc, GLint h_color, GLint h_ModelViewMat, int
 		//set handles for the particle
 		glUniform4f(h_color, col.x, col.y, col.z, col.w);
 
-		glm::vec3 curPos = glm::vec3(loc.x + (pos.x / 1.85), loc.y + (pos.y / 1.25), loc.z + (pos.z / 1.85));
+		glm::vec3 curPos = glm::vec3(loc.x + (pos.x / 1.85), loc.y + (pos.y / 1.25) - 0.2, loc.z + (pos.z / 1.85));
 		glm::mat4 trans = glm::translate(glm::mat4(1.0f), curPos);
 
 		//billboard the particle
