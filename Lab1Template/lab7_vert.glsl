@@ -13,11 +13,6 @@ uniform int terrainToggle;
 //GUI toggle
 uniform int flag;
 
-varying vec3 color; // Pass to fragment shader
-varying vec4 pos;
-varying vec3 normal;	
-varying vec2 vTexCoord;
-
 // bone adjustments
 const int MAX_BONES = 100;
 uniform int boneToggle;
@@ -25,12 +20,18 @@ attribute ivec4 boneIds;
 attribute vec4 boneWeights;
 uniform mat4 bones[MAX_BONES];
 
+varying vec3 color; // Pass to fragment shader
+varying vec4 pos;
+varying vec3 normal;	
+varying vec2 vTexCoord;
+
 void main()
 {
-	vec4 norm = (uViewMatrix * uModelMatrix) * vec4(vertNor, 0.0);
-	normal = norm.xyz;
-	pos = uViewMatrix * uModelMatrix * vertPos;
-   gl_Position = uProjMatrix * uViewMatrix * uModelMatrix * vertPos;
+    vec4 norm = (uViewMatrix * uModelMatrix) * vec4(vertNor, 0.0);
+    normal = norm.xyz;
+    pos = uViewMatrix * uModelMatrix * vertPos;
+    //gl_Position = uProjMatrix * uViewMatrix * uModelMatrix * vertPos;
+    gl_Position = uProjMatrix * pos;
    
 	if(flag == 1)
 	{
@@ -50,7 +51,8 @@ void main()
         boneTrans += bones[boneIds[2]] * boneWeights[2];
         boneTrans += bones[boneIds[3]] * boneWeights[3];
 
-        pos = boneTrans * pos;
+        gl_Position = uProjMatrix * uViewMatrix * uModelMatrix * boneTrans * vertPos;
+        pos = uViewMatrix * boneTrans * uModelMatrix * vertPos;
         //normal = boneTrans * vec4(1.0, 1.0, 1.0, 0.0);
         normal = (boneTrans * vec4(normal, 1.0)).xyz;
     }

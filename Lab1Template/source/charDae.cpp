@@ -12,24 +12,28 @@ CharDae::CharDae(const string source) {
         root = NULL;
         return;
     }
+
+    // TODO remove this magic
+    meshInd = 1;
+
     cout << "root " << scene->mRootNode << "\n";
     root = scene->mRootNode;
     meshes = scene->mMeshes;
     cout << "scene " << scene << "\n";
     cout << "meshes " << meshes << "\n";
-    cout << "facees in mesh 0 " << meshes[0]->mNumFaces << "\n";
-    cout << "number of bones " << meshes[0]->mNumBones << "\n";
+    cout << "facees in mesh 1 " << meshes[meshInd]->mNumFaces << "\n";
+    cout << "number of bones " << meshes[meshInd]->mNumBones << "\n";
 
     position[0] = 26.56f; // magic to put in view
     position[1] = 0.0f;
     position[2] = -30.77f;
 
-    numInd = meshes[0]->mNumVertices;
+    numInd = meshes[meshInd]->mNumVertices;
     // TODO iterate through every mesh
 
     // positions
     positions = (float*) malloc(numInd * 3 * sizeof(float));
-    memcpy(positions, meshes[0]->mVertices, numInd * 3 * sizeof(float));
+    memcpy(positions, meshes[meshInd]->mVertices, numInd * 3 * sizeof(float));
 
     glGenBuffers(1, &posBuf);
     glBindBuffer(GL_ARRAY_BUFFER, posBuf);
@@ -37,8 +41,8 @@ CharDae::CharDae(const string source) {
 
 
     // normals
-    normals = (float*) malloc(meshes[0]->mNumVertices * 3 * sizeof(float));
-    memcpy(normals, meshes[0]->mNormals, numInd * 3 * sizeof(float));
+    normals = (float*) malloc(meshes[meshInd]->mNumVertices * 3 * sizeof(float));
+    memcpy(normals, meshes[meshInd]->mNormals, numInd * 3 * sizeof(float));
 
     glGenBuffers(1, &norBuf);
     glBindBuffer(GL_ARRAY_BUFFER, norBuf);
@@ -46,20 +50,20 @@ CharDae::CharDae(const string source) {
 
 
     // indices (face)
-    indices = (unsigned int*) malloc(meshes[0]->mNumFaces * 3 * sizeof(unsigned int));
-    for (i = 0; i < meshes[0]->mNumFaces; i++) {
-        const aiFace* face = &(meshes[0]->mFaces[i]);
+    indices = (unsigned int*) malloc(meshes[meshInd]->mNumFaces * 3 * sizeof(unsigned int));
+    for (i = 0; i < meshes[meshInd]->mNumFaces; i++) {
+        const aiFace* face = &(meshes[meshInd]->mFaces[i]);
         memcpy(&indices[i * 3], face->mIndices, 3 * sizeof(unsigned int));
     }
 
     glGenBuffers(1, &indBuf);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indBuf);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, meshes[0]->mNumFaces * 3 * sizeof(int), indices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, meshes[meshInd]->mNumFaces * 3 * sizeof(int), indices, GL_STATIC_DRAW);
 
 
     // texture
     texture = (float*) malloc(numInd * 3 * sizeof(float));
-    memcpy(positions, meshes[0]->mTextureCoords, numInd * 3 * sizeof(float));
+    memcpy(positions, meshes[meshInd]->mTextureCoords, numInd * 3 * sizeof(float));
 
     glGenBuffers(1, &texBuf);
     glBindBuffer(GL_ARRAY_BUFFER, texBuf);
@@ -90,10 +94,10 @@ CharDae::CharDae(const string source) {
     aiVertexWeight boneVertex;
 
     // for every bone
-    for(i = 0; i < meshes[0]->mNumBones; i++) {
+    for(i = 0; i < meshes[meshInd]->mNumBones; i++) {
         // mark which vertices this bone affects
-        for(j = 0; j < meshes[0]->mBones[i]->mNumWeights; j++) {
-            boneVertex = meshes[0]->mBones[i]->mWeights[j];
+        for(j = 0; j < meshes[meshInd]->mBones[i]->mNumWeights; j++) {
+            boneVertex = meshes[meshInd]->mBones[i]->mWeights[j];
 
             boneId[(boneVertex.mVertexId * 4) + numBones[boneVertex.mVertexId]] = i;
             boneWeight[(boneVertex.mVertexId * 4) + numBones[boneVertex.mVertexId]] = boneVertex.mWeight;
@@ -115,6 +119,8 @@ CharDae::CharDae(const string source) {
     // TODO make the model buffer
     // will need to update that buffers data pretty frequently...
     // GL_UNIFORM_BUFFER
+    //glGenBuffers(1, &boneTransforms);
+    floatModel = (float*) calloc(sizeof(float) * 16, boneCount);
 
     /*for(i = 0; i < numInd; i++) {
         cout << "vertex " << i << " has " << numBones[i] << " bones: ";
@@ -192,6 +198,32 @@ void CharDae::recursiveDraw(aiNode* node) {
     }
 }
 
+
+void CharDae::updateBones() {
+    int bones = meshes[meshInd]->mNumBones;
+    int i, j, k;
+
+    //cout << "updating " << bones << " bones\n";
+
+    boneModels.clear();
+    for (i = 0; i < bones; i++) {
+    //    cout << "bone " << i << "\n";
+        aiMatrix4x4 boneModel = meshes[meshInd]->mBones[i]->mOffsetMatrix;
+        boneModels.push_back(mat4(1.0));
+        for(j = 0; j < 4; j++) {
+            for(k = 0; k < 4; k++) {
+      //          cout << boneModel[j][k] << " ";
+                //floatModel[(i * 16) + (j * 4) + k] = boneModels[i][j][k];
+                floatModel[(i * 16) + (j * 4) + k] = boneModels[i][j][k];
+                //cout << floatModel[i * 16 + j * 4 + k] << " ";
+            }
+            //cout << "\n";
+        }
+        //cout << "\n";
+    }
+}
+
+
 void CharDae::drawChar(GLint h_ModelMatrix, GLint h_vertPos, 
             GLint h_vertNor, GLint h_aTexCoord, GLint h_boneFlag, 
             GLint h_boneIds, GLint h_boneWeights, 
@@ -200,9 +232,6 @@ void CharDae::drawChar(GLint h_ModelMatrix, GLint h_vertPos,
         return;
     }
     const aiScene* last = importer->GetScene();
-    cout << "scene loc " << scene << "\n";
-    cout << "num meshes... should be 1.... " << scene->mNumMeshes << "\n";
-    cout << "done with data \n";
  
     // indices
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indBuf);
@@ -233,12 +262,35 @@ void CharDae::drawChar(GLint h_ModelMatrix, GLint h_vertPos,
     glm::mat4 result = translate * glm::scale(mat4(1.0f), glm::vec3(0.2f, 0.2f, 0.2f));
     glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(result));
 
+    // enable bones
+    glUniform1i(h_boneFlag, 1);
+
+    // bone id
+    GLSL::enableVertexAttribArray(h_boneIds);
+    glBindBuffer(GL_ARRAY_BUFFER, boneIdBuf);
+    glVertexAttribPointer(h_boneIds, 4, GL_FLOAT, GL_FALSE, 0, 0);
+    
+    // bone weight
+    GLSL::enableVertexAttribArray(h_boneWeights);
+    glBindBuffer(GL_ARRAY_BUFFER, boneWeightBuf);
+    glVertexAttribPointer(h_boneWeights, 4, GL_FLOAT, GL_FALSE, 0, 0);
+
+    // bone models
+    updateBones();
+    //GLSL::enable
+
+    // bind buffer
+    // buffer data
+    // push buffer
+
     // TODO
     // scene -> animation -> node animation
     // bone transforms
     // we will pass several bones
     // each bone will have an ID and a Weight
     // these will be new buffers
+    glUniformMatrix4fv(h_boneTransforms, boneCount, (GLboolean) false, 
+            floatModel);
 
     // actual draw call
     glDrawElements(GL_TRIANGLES, numInd, GL_UNSIGNED_INT, 0);
@@ -246,4 +298,7 @@ void CharDae::drawChar(GLint h_ModelMatrix, GLint h_vertPos,
     GLSL::disableVertexAttribArray(h_vertPos); // position
     GLSL::disableVertexAttribArray(h_vertNor); // normals
     GLSL::disableVertexAttribArray(h_aTexCoord); // texture
+    GLSL::disableVertexAttribArray(h_boneIds); // texture
+    GLSL::disableVertexAttribArray(h_boneWeights); // texture
+    glUniform1i(h_boneFlag, 0);
 }

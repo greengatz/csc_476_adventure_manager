@@ -5,6 +5,7 @@
 #include <scene.h>
 #include <postprocess.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include "GLSL.h"
 #include <iostream>
 #include "glm/glm.hpp"
@@ -41,9 +42,13 @@ class CharDae
         float* texture;
 
         unsigned int* numBones; // number of bones affecting a given vertex
-        unsigned int* boneId; // 5 per vertex
-        float* boneWeight; // 5 per vertex
-        
+        unsigned int* boneId; // 4 per vertex
+        float* boneWeight; // 4 per vertex
+        //vector<Matrix4f>& boneModels;
+        vector<mat4> boneModels;
+        float* floatModel;
+       
+        int meshInd; 
 
         GLuint posBuf;
         GLuint norBuf;
@@ -57,6 +62,7 @@ class CharDae
 
         void recursiveDraw(aiNode* toDraw);
         void recursivePrint(const aiNode* toPrint, int level, aiMesh** meshes);
+        void updateBones();
 };
 
 #endif
