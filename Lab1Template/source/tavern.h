@@ -41,7 +41,10 @@ class Tavern
 		void loadTavernMeshes(TextureLoader* texLoader);
 		void showMercsForSale();
         //void buyMercenary(int mercenaryID, Manager* purchaser);
-		void drawTavern(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor, GLint h_aTexCoord, double ltime);
+		void drawTavern(GLint h_ModelMatrix, GLint h_vertPos, 
+                    GLint h_vertNor, GLint h_aTexCoord, double ltime,
+                    GLint h_boneFlag, GLint h_boneIds, 
+                    GLint h_boneWeights, GLint h_boneTransforms);
 
 	private:
 		float curTime;

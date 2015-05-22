@@ -19,7 +19,10 @@ class CharDae
 {
     public:
         CharDae(const string file);
-        void drawChar(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor, GLint h_aTexCoord);
+        void drawChar(GLint h_ModelMatrix, GLint h_vertPos, 
+                GLint h_vertNor, GLint h_aTexCoord, GLint h_boneFlag,
+                GLint h_boneIds, GLint h_boneWeights,
+                GLint h_boneTransforms);
 
     private:
         const aiScene* scene;
@@ -37,10 +40,18 @@ class CharDae
         float* positions;
         float* texture;
 
+        unsigned int* numBones; // number of bones affecting a given vertex
+        unsigned int* boneId; // 5 per vertex
+        float* boneWeight; // 5 per vertex
+        
+
         GLuint posBuf;
         GLuint norBuf;
         GLuint indBuf;
         GLuint texBuf;
+        GLuint boneIdBuf;
+        GLuint boneWeightBuf;
+        GLuint boneTransforms;
 
         vec3 position;
 

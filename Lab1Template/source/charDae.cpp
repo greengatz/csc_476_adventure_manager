@@ -79,26 +79,50 @@ CharDae::CharDae(const string source) {
     //                -> mWeight  -> how much this bone affects that vertex (float, 0.0 - 1.0)
     
     // keep a count for every vertex
-    int* boneCounter = (int*) calloc(numInd, sizeof(int));
-    aiMesh* mesh = meshes[0];
-    int boneNum = mesh->mNumBones;
-    float totalAffected = 0;
-    cout << boneNum << " bones\n";
-    int max = 0;
-    int temp;
+    // 220 of 7xxx indices are affected by 2 bones
+    // will 5 bones be enough for every vertex? this number can change, but we want it tight
 
-    for(i = 0; i < boneNum; i++) {
-        cout << mesh->mBones[i]->mNumWeights << " vertices affected by bone " << i << "\n";
-        totalAffected += mesh->mBones[i]->mNumWeights;
-        for(j = 0; j < mesh->mBones[i]->mNumWeights; j++) {
-            temp = mesh->mBones[i]->mWeights[j].mVertexId;
-            max = temp > max ? temp : max;
+    // numBones, boneId, boneWeight
+    // boneCount
+    numBones = (unsigned int*) calloc(sizeof(unsigned int), numInd);
+    boneId = (unsigned int*) calloc(sizeof(unsigned int) * 4, numInd);
+    boneWeight = (float*) calloc(sizeof(float) * 4, numInd);
+    aiVertexWeight boneVertex;
+
+    // for every bone
+    for(i = 0; i < meshes[0]->mNumBones; i++) {
+        // mark which vertices this bone affects
+        for(j = 0; j < meshes[0]->mBones[i]->mNumWeights; j++) {
+            boneVertex = meshes[0]->mBones[i]->mWeights[j];
+
+            boneId[(boneVertex.mVertexId * 4) + numBones[boneVertex.mVertexId]] = i;
+            boneWeight[(boneVertex.mVertexId * 4) + numBones[boneVertex.mVertexId]] = boneVertex.mWeight;
+
+            numBones[boneVertex.mVertexId]++;
         }
     }
-    cout << totalAffected << " total affected\n";
-    cout << numInd << " total indices\n";
-    cout << max << " max index\n";
-    cout << totalAffected / (float) numInd << "average\n";
+
+    // fill the bone Id buffer
+    glGenBuffers(1, &boneIdBuf);
+    glBindBuffer(GL_ARRAY_BUFFER, boneIdBuf);
+    glBufferData(GL_ARRAY_BUFFER, numInd * 4 * sizeof(unsigned int), boneId, GL_STATIC_DRAW);
+    
+    // fill the bone Weights buffer
+    glGenBuffers(1, &boneWeightBuf);
+    glBindBuffer(GL_ARRAY_BUFFER, boneWeightBuf);
+    glBufferData(GL_ARRAY_BUFFER, numInd * 4 * sizeof(float), boneWeight, GL_STATIC_DRAW);
+
+    // TODO make the model buffer
+    // will need to update that buffers data pretty frequently...
+    // GL_UNIFORM_BUFFER
+
+    /*for(i = 0; i < numInd; i++) {
+        cout << "vertex " << i << " has " << numBones[i] << " bones: ";
+        for(j = 0; j < numBones[i]; j++) {
+            cout << " bone " << boneWeight[i*5 + j];
+        }
+        cout << "\n";
+    }*/
 
     cout << "finished loading " << source << "\n\n";
 }
@@ -168,7 +192,10 @@ void CharDae::recursiveDraw(aiNode* node) {
     }
 }
 
-void CharDae::drawChar(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor, GLint h_aTexCoord) {
+void CharDae::drawChar(GLint h_ModelMatrix, GLint h_vertPos, 
+            GLint h_vertNor, GLint h_aTexCoord, GLint h_boneFlag, 
+            GLint h_boneIds, GLint h_boneWeights, 
+            GLint h_boneTransforms) {
     if(root == NULL) {
         return;
     }
