@@ -33,25 +33,34 @@ void Particle::rebirth(float curTime)
 		pos.y = randFloat(-0.15f, 0.15f);
 		pos.z = randFloat(-0.2f, 0.2f);
 		vel.x = randFloat(-0.001f, 0.001f);
-		vel.y = randFloat(0.0f, 0.005f);
+		// vel.y = randFloat(0.0f, 0.005f);
 		vel.z = randFloat(-0.001f, 0.001f);
-		lifespan = randFloat(0.08f, 0.125f);
+		// vel.x = randFloat(-0.01f, 0.01f);
+		// vel.y = randFloat(0.0f, 0.015f);
+		vel.y = randFloat(0.03f, 0.0175f);
+		// vel.z = randFloat(-0.01f, 0.01f);
+		// lifespan = randFloat(0.08f, 0.125f);
+		lifespan = randFloat(0.01f, 0.04f);
 		endLife = curTime + lifespan;
-		scale = randFloat(0.075f, 0.1f);
+		// scale = randFloat(0.075f, 0.1f);
+		scale = randFloat(0.175f, 0.4f);
 		col = glm::vec4(1.0f, randFloat(0.92f, 1.0f), 0, randFloat(0.8f, 1.0f));
+		origTrans = col.w;
 	}
 	else {
 		pos.x = randFloat(-0.15f, 0.15f);
-		pos.y = randFloat(0.15f, 0.25f);
+		pos.y = randFloat(1.0f, 1.1f);
 		pos.z = randFloat(-0.15f, 0.15f);
 		vel.x = randFloat(-0.001f, 0.0005f);
-		vel.y = randFloat(0.02f, 0.004f);
+		vel.y = randFloat(0.005f, 0.01f);
 		vel.z = randFloat(-0.001f, 0.0005f);
 		lifespan = randFloat(0.08f, 0.125f);
 		endLife = curTime + lifespan;
-		scale = randFloat(0.05f, 0.075f);
+		// scale = randFloat(0.05f, 0.075f);
+		scale = randFloat(0.2f, 0.3f);
 		float greyScale = randFloat(0.5686f, 0.8039f);
 		col = glm::vec4(greyScale, greyScale, greyScale, 0.9);
+		origTrans = col.w;
 	}
 }
 
@@ -72,18 +81,17 @@ void Particle::update(float ltime, float timeIncr)
 		//move particle up
 		pos += vel;
 
-		if (!smoke) {
-			//change color
-			float division = lifespan / timeIncr;
-			if (col.y > 0.1686) {
-				col.y -= col.y / division;
-			}
-
-			//fade
-			if (col.w > 0) {
-				col.w -= col.w / division * 0.75;
-			}
+		float division = lifespan / timeIncr;
+		//fade
+		if (col.w > 0) {
+			col.w -= origTrans / division;
 		}
+
+		//change color
+		if (!smoke && col.y > 0.1686) {
+			col.y -= col.y / division;
+		}
+		
 	}
 	else {
 		if (--stagger == 0) {
@@ -117,8 +125,9 @@ void Particle::drawFirePlace(glm::vec3 loc, GLint h_color, GLint h_ModelViewMat,
 		glUniformMatrix4fv(h_ModelViewMat, 1, GL_FALSE, glm::value_ptr(result));
 
 		// printf("pos: %f %f %f, life: %f, col: %f %f %f %f\n", loc.x + pos.x, loc.y + pos.y, loc.z + pos.z, lifespan, curCol.r, curCol.g, curCol.b, curCol.w);
-
-		glDrawElements(GL_TRIANGLE_STRIP, indSize, GL_UNSIGNED_INT, 0);
+		if (col.w > 0.1) {
+			glDrawElements(GL_TRIANGLE_STRIP, indSize, GL_UNSIGNED_INT, 0);
+		}
 	}
 }
 
@@ -128,7 +137,7 @@ void Particle::drawTorch(glm::vec3 loc, GLint h_color, GLint h_ModelViewMat, int
 		//set handles for the particle
 		glUniform4f(h_color, col.x, col.y, col.z, col.w);
 
-		glm::vec3 curPos = glm::vec3(loc.x + (pos.x / 1.85), loc.y + (pos.y / 1.25), loc.z + (pos.z / 1.85));
+		glm::vec3 curPos = glm::vec3(loc.x + (pos.x / 1.85), loc.y + (pos.y / 1.25) - 0.2, loc.z + (pos.z / 1.85));
 		glm::mat4 trans = glm::translate(glm::mat4(1.0f), curPos);
 
 		//billboard the particle

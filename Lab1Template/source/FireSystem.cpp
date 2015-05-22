@@ -6,11 +6,13 @@ const glm::vec3 fireLoc[] = {glm::vec3(23.05, 0.4, -23.5), //center fireplace
 							 glm::vec3(18.5, 2.9, -27.7), //torch locations
 							 glm::vec3(27.6, 2.9, -27.7),
 							 glm::vec3(18.5, 2.9, -19.3),
-							 glm::vec3(27.6, 2.9, -19.3)
+							 glm::vec3(27.6, 2.9, -19.3),
+							 glm::vec3(23.05, 0.5, -23.5) //center orb
 };
 
 int FIRE_PARTICLE_1_ID = 8000;
 int SMOKE_PARTICLE_1_ID = 8100;
+int CENTER_ORB_ID = 8200;
 
 FireSystem::FireSystem()
 {
@@ -81,8 +83,9 @@ void FireSystem::init(TextureLoader *texLoader)
     h_ModelMat = GLSL::getUniformLocation(pid, "M");
     h_ViewMat = GLSL::getUniformLocation(pid, "V");
 
-    texLoader->LoadTexture((char *)"assets/smoke.bmp", FIRE_PARTICLE_1_ID);
+    texLoader->LoadTexture((char *)"assets/flame.bmp", FIRE_PARTICLE_1_ID);
     texLoader->LoadTexture((char *)"assets/smoke.bmp", SMOKE_PARTICLE_1_ID);
+    texLoader->LoadTexture((char *)"assets/alpha.bmp", CENTER_ORB_ID);
 
     loadBuffers();
     ltime = 0;
@@ -94,11 +97,13 @@ void FireSystem::init(TextureLoader *texLoader)
 		Particle temp;
 		firePlace.push_back(temp);
 		
-		if (iter < numParticles / 10 * 9) {
-			firePlace[iter].init(iter / 10 * 5, false);
+		// if (iter < numParticles / 10 * 9) {
+		if (iter < 900) {
+			firePlace[iter].init(iter / 10 * 2.5, false);
 		}
 		else {
-			firePlace[iter].init(iter - (numParticles / 10 * 9) / 10 * 10, true);
+			firePlace[iter].init((iter - 899) / 5 * 2.5, true);
+			// firePlace[iter].init(iter - (numParticles / 10 * 9) / 10 * 10, true);
 		}
 	}
 
@@ -126,6 +131,35 @@ void FireSystem::enableTex(int targetTex)
 	glVertexAttribPointer(h_vertTexCoor, 2, GL_FLOAT, GL_FALSE, 0, 0);
 }
 
+void FireSystem::drawOrb(glm::vec3 camPos) //remove this, its unneeded
+{
+	glUniform4f(h_color, 253.0 / 255.0, 253.0 / 255.0, 87.0 / 255.0, 0.95);
+
+	glm::vec3 toCam = camPos - fireLoc[5];
+	// glm::vec3 toCam = fireLoc[5];
+	glm::vec3 curPos = glm::vec3(fireLoc[5].x + toCam.x * 0.065, fireLoc[5].y + toCam.y * 0.065, fireLoc[5].z + toCam.z * 0.065);
+	glm::mat4 trans = glm::translate(glm::mat4(1.0f), curPos);
+
+	//billboard the particle
+	glm::vec3 up = glm::vec3(0.0, 1.0, 0.0);
+    glm::vec3 look = camPos - curPos;
+    look.y = 0.0;
+    look = glm::normalize(look);
+    glm::vec3 lookAt = glm::vec3(0.0, 0.0, -1.0);
+
+    float angle = glm::dot(lookAt, look);
+    glm::vec3 upAux = glm::cross(lookAt, look);
+    float ang = acos(angle)*180/3.14;
+    glm::mat4 rot = glm::rotate(glm::mat4(1.0f), ang, upAux);
+
+    glm::mat4 result = trans * rot * glm::scale(glm::mat4(1.0f), glm::vec3(0.35, 0.35, 0.35));
+	glUniformMatrix4fv(h_ModelMat, 1, GL_FALSE, glm::value_ptr(result));
+
+	// printf("pos: %f %f %f, life: %f, col: %f %f %f %f\n", loc.x + pos.x, loc.y + pos.y, loc.z + pos.z, lifespan, curCol.r, curCol.g, curCol.b, curCol.w);
+
+	glDrawElements(GL_TRIANGLE_STRIP, (int)indBuf.size(), GL_UNSIGNED_INT, 0);
+}
+
 void FireSystem::draw(Camera *cam, glm::mat4 viewMat)
 {
 	if (!on) {
@@ -135,8 +169,8 @@ void FireSystem::draw(Camera *cam, glm::mat4 viewMat)
 	glUseProgram(pid);
 
 	glEnable(GL_BLEND);
-	glBlendEquation(GL_FUNC_ADD);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	// glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
 	//set projection matrix
 	MatrixStack proj;
@@ -165,20 +199,29 @@ void FireSystem::draw(Camera *cam, glm::mat4 viewMat)
 	for(int iter = 0; iter < firePlace.size(); iter++) {
 		if (firePlace[iter].isSmokey() && curTex != SMOKE_PARTICLE_1_ID) {
 			enableTex(SMOKE_PARTICLE_1_ID);
+			// glEnable(GL_BLEND);
+			// // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			// glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 		}
 		else if (!firePlace[iter].isSmokey() && curTex != FIRE_PARTICLE_1_ID) {
 			enableTex(FIRE_PARTICLE_1_ID);
+			// glEnable(GL_BLEND);
+			// glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 		}
 
 		//center fireplace
 		firePlace[iter].update(ltime, timeIncr);
 		firePlace[iter].drawFirePlace(fireLoc[0], h_color, h_ModelMat, (int)indBuf.size(), camPos);
 
-		//torches
-		firePlace[iter].drawTorch(fireLoc[curTorch], h_color, h_ModelMat, (int)indBuf.size(), camPos);
-		firePlace[iter].drawTorch(fireLoc[curTorch + 1], h_color, h_ModelMat, (int)indBuf.size(), camPos);
-		curTorch = (curTorch ==  1) ? 3 : 1; //switch which torches are drawn on
+		//torches each torch has 1 /4 of the total particles
+		firePlace[iter].drawTorch(fireLoc[iter % 4 + 1], h_color, h_ModelMat, (int)indBuf.size(), camPos);
+		// firePlace[iter].drawTorch(fireLoc[curTorch], h_color, h_ModelMat, (int)indBuf.size(), camPos);
+		// firePlace[iter].drawTorch(fireLoc[curTorch + 1], h_color, h_ModelMat, (int)indBuf.size(), camPos);
+		// curTorch = (curTorch ==  1) ? 3 : 1; //switch which torches are drawn on
 	}
+
+	enableTex(CENTER_ORB_ID);
+	drawOrb(camPos);
 
 	//disable buffers
 	GLSL::disableVertexAttribArray(h_vertTexCoor);
@@ -186,6 +229,9 @@ void FireSystem::draw(Camera *cam, glm::mat4 viewMat)
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glDisable(GL_TEXTURE_2D);
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void FireSystem::toggle()

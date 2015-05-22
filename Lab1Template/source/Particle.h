@@ -22,6 +22,7 @@ public:
 	bool isSmokey();
 private:
 	int stagger;
+	float origTrans;
 	bool smoke;
 	float mass;
 	glm::vec3 pos;
