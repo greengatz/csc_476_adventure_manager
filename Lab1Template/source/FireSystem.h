@@ -50,6 +50,7 @@ private:
 	bool on;
 	void loadBuffers();
 	void enableTex(int targetTex);
+	void drawOrb(glm::vec3 camPos);
 };
 
 #endif

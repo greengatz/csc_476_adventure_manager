@@ -21,6 +21,8 @@
 using namespace std;
 using namespace glm;
 
+class Menu;
+
 class Manager
 {
 	public:
@@ -31,6 +33,7 @@ class Manager
 		int medGoldCost;
 		bool inTavern;
 		Manager(string name);
+		void init(Menu *m, bool *gp);
 		void buyMercenary(int key, Tavern* tavern);
 		void buyMercenaryTrail(int cost);
 		void reportStats();
@@ -52,9 +55,13 @@ class Manager
 		void setMedBeerCost(int cost);
 		void setMedGoldCost(int cost);
 		int getRandomAliveMercIndex();
-		int fleeingFromAmbush();
+		void fleeingFromAmbush();
+		void fightingFromAmbush(int numBandits, int banditDamage);
+		void fightingFromMerchant(int numGaurds, int gaurdDamage);
 		Mercenary getFocus();
 		bool partyDead();
+		void drawMenuManager();
+		bool getInMenu();
 
 
 	private:
@@ -64,6 +71,8 @@ class Manager
 		int food;
 		int beer;
 		vector<Mercenary> mercs;
+		Menu *menu;
+		bool *gamePaused;
 };
 
 #endif

@@ -193,16 +193,14 @@ void hurtMercenary(void* mgr, bool* gamePaused){
 void robMerch(void* mgr, bool* gamePaused){
   // *gamePaused = false;
   Manager* manager = (Manager*)mgr;
-  // manager->healMercenary()
+  manager->fightingFromMerchant(2, 15);
 
-  *gamePaused = false;
 }
 
 void fightAmbush(void* mgr, bool* gamePaused){
   // *gamePaused = false;
   Manager* manager = (Manager*)mgr;
-  // manager->healMercenary()
-  *gamePaused = false;
+  manager->fightingFromAmbush(3, 6);
 }
 
 void restartTrail(void* mgr, bool* gamePaused){
@@ -217,21 +215,18 @@ void returnTavern(void* mgr, bool* gamePaused){
   // manager->healMercenary()
 }
 
-void fleeAmbush(void* mgr, bool* gamePaused){
+void fleeAmbush(void* mgr, bool* gamePaused ){
   // *gamePaused = false;
   Manager* manager = (Manager*)mgr;
   // manager->healMercenary()
-
-  int captured = manager->fleeingFromAmbush();
-  cout << manager->getName(captured) + " has been captured!" << endl;
-  *gamePaused = false;
+  manager->fleeingFromAmbush();
 }
 
 void Wagon::updateWagon(float globalTime) {
   if (wagonStart && !terrain->atEnd(position)) {
     int event = terrain->checkEvents(position);
 
-    if(manager->partyDead()){
+    if(!manager->partyDead()){
 
       if(event == MERCHANTEVENT){
         soundSys->playVoice(VILLAGER_GREETING);
@@ -300,7 +295,7 @@ void Wagon::updateWagon(float globalTime) {
           about.push_back("Otherwise their damage will drop");
           fpHeal = healMercenary;
           fpHurt = hurtMercenary;
-          option healOpt = {"Heal " + name, fpHeal, true};
+          option healOpt = {"Restore " + name + "'s damage", fpHeal, true};
           option hurtOpt = { name + " will be fine!", fpHurt, true};
           options.push_back(healOpt);
           options.push_back(hurtOpt);
@@ -340,7 +335,7 @@ void Wagon::updateWagon(float globalTime) {
           aboutString += " gold?";
           about.push_back(aboutString);
           fpMercenary = buyMercenary;
-          option mercOpt = {"Buy mercenary", fpMercenary, false};
+          option mercOpt = {"Buy mercenary", fpMercenary, true};
           options.push_back(mercOpt);
         }
         fpResume = resumeGame;
@@ -390,7 +385,7 @@ void Wagon::updateWagon(float globalTime) {
       startTime += deltaTime;
     }
     else{
-      printf("YOU DEAD");
+      printf("YOU DEAD\n");
     }  
   }
 }

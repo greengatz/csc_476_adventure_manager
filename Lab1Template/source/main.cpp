@@ -185,6 +185,9 @@ void initModels()
 	//Initialize Tavern object
 	tavern.init(&matSetter, &fCuller, &meshes);
 
+	//Initialize Manager object
+	manager.init(&menu, &gamePaused);
+
 	//Initialize Terrain object
 	terrain.init(&texLoader, &matSetter, &fCuller, &meshes, outsideLightPos);
 	tavTerr.init(&texLoader);
@@ -209,6 +212,7 @@ void initModels()
 	//initialize the modeltrans matrix stack
    ModelTrans.useModelViewMatrix();
    ModelTrans.loadIdentity();
+
 }
 
 void initGL()
@@ -356,6 +360,7 @@ void drawGL()
 
   	glfwGetCursorPos(window, &xpos, &ypos);
 	camera.update(xpos, ypos, wagon.getPosition());
+    //printf("camera at %f, %f\n", camera.getPosition().x, camera.getPosition().z); // TODO remove this
 
 	glUniform3fv(h_lightPos1, 1, glm::value_ptr(glm::vec3(23.05f, 4.0f, -23.5f)));
 	glUniform3fv(h_lightPos2, 1, glm::value_ptr(glm::vec3(-125.0f, 4.0f, 25.0f)));
@@ -479,6 +484,13 @@ void drawGL()
 			menu.drawMenu();
 			glUseProgram(pid);
 		}
+		// }
+		// if(manager.getInMenu()){
+		// 	printf("Menu is up!");
+		// 	glUseProgram(pid);
+		// 	manager.drawMenuManager();
+		// 	glUseProgram(pid);
+		// }
 		hud.drawHud(h_ModelMatrix, h_vertPos, g_width, g_height, h_aTexCoord);
 		glUniform1i(h_flag, 0);
 
@@ -567,6 +579,8 @@ bool hasCollided(glm::vec3 incr)
 		if(it1->bound.checkCollision(curCam, it1->scale, pos1))
 		{
 			validMove = true;
+			printf("Hit object at %lf, %lf\n!!", camPos.x, camPos.z);
+
 		}
 	}
 
@@ -776,7 +790,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     }
 	if (key == GLFW_KEY_N && action == GLFW_PRESS)
 	{
-		fire.toggle();
+		// fire.toggle();
+		tavern.newEmblem();
 	}
 	if (key == GLFW_KEY_Y && action == GLFW_PRESS)
 	{
@@ -791,7 +806,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		audio.playVoice(BANDIT_GREETING);
 	}
 
-	//DO NOT DELETE THE BELOW CODE THAT IS COMMENTED!!!!!!!!!!
+	//DO NOT DELETE THE BELOW CODE THAT IS COMMENTED!!!!!!!!!!, OKAY I PROMISE I WONT
 
 	/*if (key == GLFW_KEY_M && action == GLFW_PRESS)
 	{

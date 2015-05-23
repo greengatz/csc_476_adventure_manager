@@ -99,7 +99,9 @@ void Mercenary::draw(GLint h_uModelMatrix, int meshIndex)
 {
     // animate here
     clock_t delta = clock();
-
+    if(currHealth == 0){
+        dead = true;
+    }
     if((delta - animationStart) > 1000000 && isWaving) {
         isWaving = false;
     }

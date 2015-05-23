@@ -1,4 +1,8 @@
 #include "manager.h"
+#include "Menu.h"
+
+void (*fpContinue)(void *, bool *) = NULL;
+
 
 Manager::Manager(string newName)
 {
@@ -13,6 +17,10 @@ Manager::Manager(string newName)
 //	reportStats();
 }
 
+void Manager::init(Menu *m, bool *gp){
+	menu = m;
+	gamePaused = gp;
+}
 
 string Manager::getManagerName(){
 	return name;
@@ -31,39 +39,257 @@ bool Manager::partyDead(){
 	{
 	    if(mercs[i].dead == false)
 	    	return false;
+	    else
     }
     return true;
 }
 
 int Manager::getRandomAliveMercIndex(){
-	srand(time(NULL));
 	bool found = false;
-	int index = 0;
-	while (!found)
+	int index, i;
+	index = rand() % mercs.size();
+
+	for(i = 0; i < mercs.size(); i++)
 	{
-	    index = rand() % mercs.size();
-	    cout << "Mercenary index: " + to_string(index) << endl;
-	    if(mercs[index].dead == false){
+	    if(mercs[i].dead == false){
 	    	found = true;
 	    }
     }
-    return index;
+
+    if(found){
+    	found = false;
+    	while(!found){
+    		if(mercs[index].dead == false){
+    			found = true;
+    		}else{
+    			index = rand() % mercs.size();
+    		}
+    	}
+    	return index;
+    }
+
+    return -1;
 }
 
-int Manager::fleeingFromAmbush(){
+
+void continueGame(void* mgr, bool* gamePaused){
+  // *gamePaused = false;
+  *gamePaused = false;
+}
+
+void Manager::fleeingFromAmbush(){
+	
 	srand(time(NULL));
 	bool found = false;
 	int index = 0;
-	while (!found)
-	{
-	    index = rand() % mercs.size();
-	    cout << "Mercenary index: " + to_string(index) << endl;
-	    if(mercs[index].dead == false){
-	    	mercs[index].dead = true;
-	    	found = true;
-	    }
+	int goldLoss = (rand() % 10 )+ 1, oldGold = gold;
+	
+	int foodLoss = (rand() % 2 ) + 1, oldMeat = food;
+	
+	int beerLoss = (rand() % 2 ) + 1, oldBeer = beer;
+	
+	int randDamage = (rand() % 20) + 10;
+ 	vector<string> about;
+ 	*gamePaused = true;
+	about.push_back("While you were cowardly fleeing the bandits,");
+
+	
+	if(gold - goldLoss <= 0){
+		goldLoss = gold;
+		gold = 0;
+	}else{
+		gold = gold - goldLoss;
+	}
+	if(food - foodLoss <= 0){
+		foodLoss = food;
+		food = 0;
+	}else{
+		food = food - foodLoss;
+	}
+	if(beer - beerLoss <= 0){
+		beerLoss = beer;
+		beer = 0;
+	}else{
+		beer -= beerLoss;
+	}
+	about.push_back("They took " + to_string((goldLoss)) + ",");
+
+	if((oldBeer - beer < 1 && oldMeat - food < 1 && oldGold - gold < 5)){
+		
+		
+		int i = Manager::getRandomAliveMercIndex();
+		if(i >= 0){
+			mercs[i].currHealth -= randDamage;
+			if(mercs[i].currHealth <= 0){
+				mercs[i].currHealth = 0;
+				mercs[i].dead = true;
+				string aboutString = "and sent " + mercs[i].firstName + "to swim with the fishes.";
+				about.push_back(aboutString);
+			}else{
+				string aboutString = "and roughed up  " + mercs[i].firstName + " a bit!";
+				about.push_back(aboutString);
+			}
+		}
+	}else{
+
+		
+		string aboutString = "They took " + to_string((goldLoss)) + "gold,";
+		about.push_back(aboutString);
+	
+		aboutString = ", " + to_string(foodLoss) + "food, and" + to_string(beerLoss) + "beer!";
+		about.push_back(aboutString);
+	}
+
+    fpContinue = continueGame;
+    option resumeOpt = {"Continue On", fpContinue, true};
+    vector<option> options;
+    options.push_back(resumeOpt);
+    //Set the data
+    menu->setData("Coward", about, options);
+    if(menu->inMenu){
+    	printf("In mesnu is true!\n");
     }
-    return index;
+}
+
+void Manager::fightingFromAmbush(int numBandits, int banditDamage){
+	
+	srand(time(NULL));
+	int index = 0;
+	int goldGain = (rand() % 20 ) + 10;
+	int foodGain = (rand() % 2 ) + 1;
+	int beerGain = (rand() % 2 ) + 1;
+
+	int incomingDamage = 0; 
+	int defendingDamage = 0;
+
+ 	vector<string> about;
+ 	*gamePaused = true;
+	
+	for(index = 0; index < numBandits; index++){
+		incomingDamage += ((rand() % 3) - 1) + banditDamage;
+	}
+	incomingDamage *= 2;
+	for(index = 0; index < mercs.size(); index++){
+		defendingDamage += mercs[index].currDamage;
+	}
+
+	incomingDamage -= defendingDamage;
+
+	Manager::reportStats();
+	cout << "Incoming damage: " + to_string(incomingDamage) << endl;
+	
+
+	for(index = 0; index < incomingDamage; index++){
+		int i = Manager::getRandomAliveMercIndex();
+		if(i >= 0){
+			if(mercs[i].currHealth == 0){
+				mercs[i].dead = true;
+			}else{
+				mercs[i].currHealth--;
+			}
+		}
+	}
+
+	if(Manager::getRandomAliveMercIndex() < 0){
+		string aboutString = "The bandits crushed your whole team";
+			about.push_back(aboutString);
+	    fpContinue = continueGame;
+	    option resumeOpt = {"Restart from trail", fpContinue, false};
+	    option resume2Opt = {"Restart from tavern", fpContinue, false};
+	    vector<option> options;
+	    options.push_back(resumeOpt);
+	    options.push_back(resume2Opt);
+	    //Set the data
+	    menu->setData("Close but no pipe", about, options);
+	}else{
+		gold += goldGain;
+		food += foodGain;
+		beer += beerGain;
+		string aboutString = "You conquered bandit scumbags!";
+		about.push_back(aboutString);
+		aboutString = "You gained " + to_string(goldGain) + "gold, " + to_string(beerGain) + "beer, " + to_string(foodGain) + "meat!";
+		about.push_back(aboutString);
+	    fpContinue = continueGame;
+	    option resumeOpt = {"Continue On", fpContinue, true};
+	    vector<option> options;
+	    options.push_back(resumeOpt);
+	    //Set the data
+	    menu->setData("Great slayin' ", about, options);
+	}
+		
+	Manager::reportStats();
+		
+}
+
+void Manager::fightingFromMerchant(int numGaurds, int gaurdDamage){
+	
+	srand(time(NULL));
+	int index = 0;
+	int goldGain = (rand() % 40 ) + 20;
+	int foodGain = (rand() % 5 ) + 1;
+	int beerGain = (rand() % 5 ) + 1;
+
+	int incomingDamage = 0; 
+	int defendingDamage = 0;
+
+ 	vector<string> about;
+ 	*gamePaused = true;
+	
+	for(index = 0; index < numGaurds; index++){
+		incomingDamage += ((rand() % 3) - 1) + gaurdDamage;
+	}
+	incomingDamage *= 2;
+	for(index = 0; index < mercs.size(); index++){
+		defendingDamage += mercs[index].currDamage;
+	}
+
+	incomingDamage -= defendingDamage;
+
+	Manager::reportStats();
+	cout << "Incoming damage: " + to_string(incomingDamage) << endl;
+	
+
+	for(index = 0; index < incomingDamage; index++){
+		int i = Manager::getRandomAliveMercIndex();
+		if(i >= 0){
+			if(mercs[i].currHealth == 0){
+				mercs[i].dead = true;
+			}else{
+				mercs[i].currHealth--;
+			}
+		}
+	}
+
+	if(Manager::getRandomAliveMercIndex() < 0){
+		string aboutString = "The merchant demolished your team!";
+		about.push_back(aboutString);
+	    fpContinue = continueGame;
+	    option resumeOpt = {"Restart from trail", fpContinue, false};
+	    option resume2Opt = {"Restart from tavern", fpContinue, false};
+	    vector<option> options;
+	    options.push_back(resumeOpt);
+	    options.push_back(resume2Opt);
+	    //Set the data
+	    menu->setData("Skilled merchant", about, options);
+	}else{
+		gold += goldGain;
+		food += foodGain;
+		beer += beerGain;
+		string aboutString = "You reaped " + to_string(goldGain) + "gold, " + to_string(beerGain) + "beer, " + to_string(foodGain) + "meat!";
+		about.push_back(aboutString);
+		about.push_back("Hopefully it was worth it");
+		about.push_back("and you can sleep at night!");
+
+	    fpContinue = continueGame;
+	    option resumeOpt = {"Continue On", fpContinue, true};
+	    vector<option> options;
+	    options.push_back(resumeOpt);
+	    //Set the data
+	    menu->setData("Rad robbery", about, options);
+	}
+		
+	Manager::reportStats();
+		
 }
 
 void Manager::reportStats()
@@ -140,6 +366,10 @@ void Manager::buyMercenaryTrail(int cost)
 	reportStats();
 }
 
+void Manager::drawMenuManager(){
+	menu->drawMenu();
+}
+
 int Manager::getGold()
 {
 	return gold;
@@ -206,3 +436,14 @@ void Manager::setMedBeerCost(int cost){
 void Manager::setMedGoldCost(int cost){
 	medGoldCost = cost;
 }
+
+bool Manager::getInMenu(){
+    if(menu->inMenu){
+    	printf("In mesnu is true!\n");
+    }else{
+    	printf("In mesnu is false!\n");
+    }
+	return menu->inMenu;
+}
+
+
