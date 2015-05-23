@@ -62,7 +62,16 @@ class CharDae
 
         void recursiveDraw(aiNode* toDraw);
         void recursivePrint(const aiNode* toPrint, int level, aiMesh** meshes);
+        void recursiveUpdate(const aiNode* toUpdate);
+
+        // methods to interpolate transform between animation frames
+        aiQuaternion intRot(float time, const aiNodeAnim* nodeAnim);
+        aiVector3D intScale(float time, const aiNodeAnim* nodeAnim);
+        aiVector3D intTrans(float time, const aiNodeAnim* nodeAnim);
         void updateBones();
+        const aiNodeAnim* findNodeAnim(const aiAnimation* anim, const aiNode* toFind);
+
+        int findBone(const aiNode* toFind);
 };
 
 #endif

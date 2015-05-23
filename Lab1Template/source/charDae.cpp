@@ -23,13 +23,16 @@ CharDae::CharDae(const string source) {
     cout << "meshes " << meshes << "\n";
     cout << "facees in mesh 1 " << meshes[meshInd]->mNumFaces << "\n";
     cout << "number of bones " << meshes[meshInd]->mNumBones << "\n";
+    cout << "number of animations " << scene->mNumAnimations << "\n";
 
+    // 26.56
     position[0] = 26.56f; // magic to put in view
     position[1] = 0.0f;
     position[2] = -30.77f;
 
     numInd = meshes[meshInd]->mNumVertices;
     // TODO iterate through every mesh
+    recursivePrint(scene->mRootNode, 0, meshes);
 
     // positions
     positions = (float*) malloc(numInd * 3 * sizeof(float));
@@ -139,25 +142,15 @@ void CharDae::recursivePrint(const aiNode* node, int level, aiMesh** meshes) {
     for (i = 0; i < level; i++) {
         printf("  -");
     }
-    cout << "num meshes " << node->mNumMeshes << "\n";
 
-    for (j = 0; j < node->mNumMeshes; j++) {
-        for (i = 0; i < level; i++) {
-            printf("  -");
-        }
-        cout << "mesh " << node->mMeshes[j];
-        cout << ", face count " << meshes[node->mMeshes[j]]->mNumFaces; 
-        cout << ", bones? " << meshes[node->mMeshes[j]]->HasBones(); 
-        cout << ", normals? " << meshes[node->mMeshes[j]]->HasNormals(); 
-        cout << ", positions? " << meshes[node->mMeshes[j]]->HasPositions(); 
-        cout << "\n";
-    }
+    //cout << "mesh " << node->mMeshes[0];
+    cout << "name " << node->mName.data;
+    //cout << ", face count " << meshes[node->mMeshes[0]]->mNumFaces; 
+    //cout << ", bones? " << meshes[node->mMeshes[0]]->HasBones(); 
+    //cout << ", normals? " << meshes[node->mMeshes[0]]->HasNormals(); 
+    //cout << ", positions? " << meshes[node->mMeshes[0]]->HasPositions(); 
+    cout << "\n";
     
-    for (i = 0; i < level; i++) {
-        printf("  -");
-    }
-    cout << "num children " << node->mNumChildren << "\n";
-
     for (i = 0; i < node->mNumChildren; i++) {
         recursivePrint(node->mChildren[i], level + 1, meshes);
     }
@@ -202,25 +195,154 @@ void CharDae::recursiveDraw(aiNode* node) {
 void CharDae::updateBones() {
     int bones = meshes[meshInd]->mNumBones;
     int i, j, k;
+    const aiAnimation* anim = scene->mAnimations[0];
 
     //cout << "updating " << bones << " bones\n";
+    recursiveUpdate(scene->mRootNode);
+    
 
     boneModels.clear();
     for (i = 0; i < bones; i++) {
-    //    cout << "bone " << i << "\n";
+        cout << "bone " << i << ", " << meshes[meshInd]->mBones[i]->mName.data << "\n";
         aiMatrix4x4 boneModel = meshes[meshInd]->mBones[i]->mOffsetMatrix;
         boneModels.push_back(mat4(1.0));
         for(j = 0; j < 4; j++) {
             for(k = 0; k < 4; k++) {
       //          cout << boneModel[j][k] << " ";
-                //floatModel[(i * 16) + (j * 4) + k] = boneModels[i][j][k];
-                floatModel[(i * 16) + (j * 4) + k] = boneModels[i][j][k];
+                //floatModel[(i * 16) + (j * 4) + k] = boneModel[j][k];
+               // floatModel[(i * 16) + (j * 4) + k] = boneModels[i][j][k];
                 //cout << floatModel[i * 16 + j * 4 + k] << " ";
+/*
+                if(j == 3) {
+                    if(k == 0) {
+                        floatModel[(i * 16) + (j * 4) + k] += i;
+                    } else if (k == 1) {
+                        floatModel[(i * 16) + (j * 4) + k] += 0;
+                    } else if (k == 2) {
+                    }
+                }*/
             }
             //cout << "\n";
         }
         //cout << "\n";
     }
+}
+
+void CharDae::recursiveUpdate(const aiNode* toUpdate) {
+    aiMatrix4x4t<float> parent, us; // default to identity
+    int i, j;
+    int updateId = findBone(toUpdate);
+    const aiAnimation* anim = scene->mAnimations[0];
+    const aiNodeAnim* nodeAnim = findNodeAnim(anim, toUpdate);
+
+    us = toUpdate->mTransformation;
+    if(nodeAnim != NULL) {
+        // interpolate from where we are in the animation
+        aiMatrix4x4t<float> sMat, pMat, rMat;
+        aiVector3D scale = intScale(0.0f, nodeAnim);
+        aiVector3D pos = intTrans(0.0f, nodeAnim);
+        aiQuaternion rot = intRot(0.0f, nodeAnim);
+
+        sMat = aiMatrix4x4t<float>::Scaling(scale, sMat);
+        pMat = aiMatrix4x4t<float>::Translation(pos, pMat);
+        rMat = aiMatrix4x4t<float>(rot.GetMatrix());
+
+        us = pMat * rMat * sMat;
+    }
+
+    // TODO should store this data, wasted lookups
+    const aiNode* temp = toUpdate->mParent;
+    while(temp != NULL) {
+        const aiNodeAnim* pAnim = findNodeAnim(anim, temp);
+        if(pAnim != NULL) {
+            // use int parent
+            aiMatrix4x4t<float> sMatP, pMatP, rMatP;
+            aiVector3D scaleP = intScale(0.0f, pAnim);
+            aiVector3D posP = intTrans(0.0f, pAnim);
+            aiQuaternion rotP = intRot(0.0f, pAnim);
+
+            sMatP = aiMatrix4x4t<float>::Scaling(scaleP, sMatP);
+            pMatP = aiMatrix4x4t<float>::Translation(posP, pMatP);
+            rMatP = aiMatrix4x4t<float>(rotP.GetMatrix());
+
+            parent = pMatP * rMatP * sMatP * parent;
+        } else {
+            parent = temp->mTransformation * parent;
+        }
+        temp = temp->mParent;
+    }
+
+    us = parent * us;
+    
+
+    //cout << "bone " << toUpdate->mName.data << "\n";
+    //cout << "id " << updateId << "\n";
+
+    if(updateId != -1) {
+        us = us * meshes[meshInd]->mBones[updateId]->mOffsetMatrix;
+        us = us.Transpose();
+
+        for(i = 0; i < 4; i++) {
+            for(j = 0; j < 4; j++) {
+//                cout << us[i][j] << " ";
+            
+                floatModel[(updateId * 16) + (i * 4) + j] = us[i][j];
+            } 
+//            cout << "\n";
+        }
+//        cout << "\n";
+    }
+
+    for(i = 0; i < toUpdate->mNumChildren; i++) {
+        recursiveUpdate(toUpdate->mChildren[i]);
+    }
+
+    // get our parents transform
+    // multiply that by our transform
+    // set our bones transform to that and the bones transform
+}
+
+int CharDae::findBone(const aiNode* toFind) {
+    int i;
+    for(i = 0; i < meshes[meshInd]->mNumBones; i++) {
+        if(toFind->mName == meshes[meshInd]->mBones[i]->mName) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+const aiNodeAnim* CharDae::findNodeAnim(const aiAnimation* anim, const aiNode* toFind) {
+    int i;
+    for(i = 0; i < anim->mNumChannels; i++) {
+        if(anim->mChannels[i]->mNodeName == toFind->mName) {
+            return anim->mChannels[i];
+        }
+    }
+    return NULL;
+}
+
+
+
+// TODO, actually interpolate
+aiQuaternion CharDae::intRot(float time, const aiNodeAnim* nodeAnim) {
+    int i = 0; // int between i and i+1
+
+    const aiQuaternion startRot = nodeAnim->mRotationKeys[i].mValue;
+    return startRot;
+}
+
+aiVector3D CharDae::intScale(float time, const aiNodeAnim* nodeAnim) {
+    return aiVector3D(1.0, 1.0, 1.0);
+}
+
+aiVector3D CharDae::intTrans(float time, const aiNodeAnim* nodeAnim) {
+    int i = 0;
+    vec3 toRet = vec3(1.0, 1.0, 1.0);
+    
+    aiVector3D startTrans = nodeAnim->mPositionKeys[i].mValue;
+
+    return startTrans;
 }
 
 
@@ -259,7 +381,8 @@ void CharDae::drawChar(GLint h_ModelMatrix, GLint h_vertPos,
    
     // model transform
     glm::mat4 translate = glm::translate(glm::mat4(1.0f), position);
-    glm::mat4 result = translate * glm::scale(mat4(1.0f), glm::vec3(0.2f, 0.2f, 0.2f));
+    glm::mat4 result = translate * glm::scale(mat4(1.0f), glm::vec3(8.0f, 8.0f, 8.0f));
+    //glm::mat4 result = translate * glm::scale(mat4(1.0f), glm::vec3(0.2f, 0.2f, 0.2f));
     glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(result));
 
     // enable bones
@@ -289,8 +412,9 @@ void CharDae::drawChar(GLint h_ModelMatrix, GLint h_vertPos,
     // we will pass several bones
     // each bone will have an ID and a Weight
     // these will be new buffers
-    glUniformMatrix4fv(h_boneTransforms, boneCount, (GLboolean) false, 
-            floatModel);
+
+    // TODO may need to transpose this, ai matrices are row major
+    glUniformMatrix4fv(h_boneTransforms, boneCount, (GLboolean) false, floatModel);
 
     // actual draw call
     glDrawElements(GL_TRIANGLES, numInd, GL_UNSIGNED_INT, 0);
