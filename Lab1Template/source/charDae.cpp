@@ -6,6 +6,7 @@ CharDae::CharDae(const string source) {
     importer = new Assimp::Importer();
     scene = importer->ReadFile(source, aiProcess_GenNormals);
 
+    animChoice = -1;
     if(!scene) {
         cout << "couldn't read dae\n";
         cout << "reason: " << importer->GetErrorString() << "\n";
@@ -24,6 +25,9 @@ CharDae::CharDae(const string source) {
     cout << "facees in mesh 1 " << meshes[meshInd]->mNumFaces << "\n";
     cout << "number of bones " << meshes[meshInd]->mNumBones << "\n";
     cout << "number of animations " << scene->mNumAnimations << "\n";
+    cout << "duration of 1 " << scene->mAnimations[0]->mDuration << "\n";
+    cout << "tps " << scene->mAnimations[0]->mTicksPerSecond << "\n";
+    cout << "number of frames in 1 " << scene->mAnimations[0]->mChannels[0]->mNumRotationKeys << "\n";
 
     // 26.56
     position[0] = 26.56f; // magic to put in view
@@ -123,7 +127,10 @@ CharDae::CharDae(const string source) {
     // will need to update that buffers data pretty frequently...
     // GL_UNIFORM_BUFFER
     //glGenBuffers(1, &boneTransforms);
+    boneCount = meshes[meshInd]->mNumBones;
     floatModel = (float*) calloc(sizeof(float) * 16, boneCount);
+    cout << "floatModel at " << floatModel << "\n";
+    cout << "boneCount " << boneCount << "\n";
 
     /*for(i = 0; i < numInd; i++) {
         cout << "vertex " << i << " has " << numBones[i] << " bones: ";
@@ -158,54 +165,21 @@ void CharDae::recursivePrint(const aiNode* node, int level, aiMesh** meshes) {
 
 // go through hierarchy of nodes in scene
 void CharDae::recursiveDraw(aiNode* node) {
-    int i;
-    // draw this node
-
-//    glBindVertexArray();
-    //
-    //GLSL::enableVertexAttribArray(vao);
-    //cout << "root " << node << "\n";
-    //cout << "children " << node->mNumChildren << "\n";
-    cout << "in\n";
-    for (i = 0; i < node->mNumMeshes; i++) {
-        // draw every one of our meshes
-        cout << "i=" << i << "\n";
-        cout << "mesh: " << node->mMeshes[i];
-        cout << ", faces: " << meshes[node->mMeshes[i]]->mNumFaces; 
-        cout << "\n";
-
-        //TODO
-        // bind positions, normals, indices
-        // try to draw
-        // glBindBuffer(GL_ARRAY_BUFFER, posBuf)
-        // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indBuf)
-    }
-
-    //glDrawElements(GL_TRIANGLES, node->mNumMeshes, GL_UNSIGNED_INT, 0);
-    //GLSL::disableVertexAttribArray(vao);
-
-    cout << "recursing...\n";
-    // draw its children
-    for (i = 0; i < node->mNumChildren; i++) {
-        recursiveDraw(node->mChildren[i]);
-    }
 }
 
-
-void CharDae::updateBones() {
+void CharDae::updateBones(float time) {
     int bones = meshes[meshInd]->mNumBones;
     int i, j, k;
     const aiAnimation* anim = scene->mAnimations[0];
 
-    //cout << "updating " << bones << " bones\n";
-    recursiveUpdate(scene->mRootNode);
+    recursiveUpdate(scene->mRootNode, time);
     
 
     boneModels.clear();
     for (i = 0; i < bones; i++) {
-        cout << "bone " << i << ", " << meshes[meshInd]->mBones[i]->mName.data << "\n";
-        aiMatrix4x4 boneModel = meshes[meshInd]->mBones[i]->mOffsetMatrix;
-        boneModels.push_back(mat4(1.0));
+        //cout << "bone " << i << ", " << meshes[meshInd]->mBones[i]->mName.data << "\n";
+   //     aiMatrix4x4 boneModel = meshes[meshInd]->mBones[i]->mOffsetMatrix;
+     //   boneModels.push_back(mat4(1.0));
         for(j = 0; j < 4; j++) {
             for(k = 0; k < 4; k++) {
       //          cout << boneModel[j][k] << " ";
@@ -228,7 +202,7 @@ void CharDae::updateBones() {
     }
 }
 
-void CharDae::recursiveUpdate(const aiNode* toUpdate) {
+void CharDae::recursiveUpdate(const aiNode* toUpdate, float time) {
     aiMatrix4x4t<float> parent, us; // default to identity
     int i, j;
     int updateId = findBone(toUpdate);
@@ -239,9 +213,9 @@ void CharDae::recursiveUpdate(const aiNode* toUpdate) {
     if(nodeAnim != NULL) {
         // interpolate from where we are in the animation
         aiMatrix4x4t<float> sMat, pMat, rMat;
-        aiVector3D scale = intScale(0.0f, nodeAnim);
-        aiVector3D pos = intTrans(0.0f, nodeAnim);
-        aiQuaternion rot = intRot(0.0f, nodeAnim);
+        aiVector3D scale = intScale(time - animStart, nodeAnim);
+        aiVector3D pos = intTrans(time - animStart, nodeAnim);
+        aiQuaternion rot = intRot(time - animStart, nodeAnim);
 
         sMat = aiMatrix4x4t<float>::Scaling(scale, sMat);
         pMat = aiMatrix4x4t<float>::Translation(pos, pMat);
@@ -257,9 +231,9 @@ void CharDae::recursiveUpdate(const aiNode* toUpdate) {
         if(pAnim != NULL) {
             // use int parent
             aiMatrix4x4t<float> sMatP, pMatP, rMatP;
-            aiVector3D scaleP = intScale(0.0f, pAnim);
-            aiVector3D posP = intTrans(0.0f, pAnim);
-            aiQuaternion rotP = intRot(0.0f, pAnim);
+            aiVector3D scaleP = intScale(time - animStart, pAnim);
+            aiVector3D posP = intTrans(time - animStart, pAnim);
+            aiQuaternion rotP = intRot(time - animStart, pAnim);
 
             sMatP = aiMatrix4x4t<float>::Scaling(scaleP, sMatP);
             pMatP = aiMatrix4x4t<float>::Translation(posP, pMatP);
@@ -285,8 +259,8 @@ void CharDae::recursiveUpdate(const aiNode* toUpdate) {
         for(i = 0; i < 4; i++) {
             for(j = 0; j < 4; j++) {
 //                cout << us[i][j] << " ";
-            
                 floatModel[(updateId * 16) + (i * 4) + j] = us[i][j];
+                //floatModel[(updateId * 16) + (i * 4) + j] = 0;
             } 
 //            cout << "\n";
         }
@@ -294,7 +268,7 @@ void CharDae::recursiveUpdate(const aiNode* toUpdate) {
     }
 
     for(i = 0; i < toUpdate->mNumChildren; i++) {
-        recursiveUpdate(toUpdate->mChildren[i]);
+        recursiveUpdate(toUpdate->mChildren[i], time);
     }
 
     // get our parents transform
@@ -327,34 +301,84 @@ const aiNodeAnim* CharDae::findNodeAnim(const aiAnimation* anim, const aiNode* t
 // TODO, actually interpolate
 aiQuaternion CharDae::intRot(float time, const aiNodeAnim* nodeAnim) {
     int i = 0; // int between i and i+1
+    int key;
+    
+    for(i = 0; i < nodeAnim->mNumRotationKeys - 1; i++) {
+        if(time < (float) nodeAnim->mRotationKeys[i + 1].mTime) {
+            key = i;
+            break;
+        }
+    }
 
-    const aiQuaternion startRot = nodeAnim->mRotationKeys[i].mValue;
-    return startRot;
+    const aiQuaternion startRot = nodeAnim->mRotationKeys[key].mValue;
+    const aiQuaternion endRot = nodeAnim->mRotationKeys[key + 1].mValue;
+    float dt = nodeAnim->mRotationKeys[key + 1].mTime - 
+                nodeAnim->mRotationKeys[key].mTime;
+    float factor = (time - nodeAnim->mRotationKeys[key].mTime) / dt;
+
+    aiQuaternion ret;
+    aiQuaternion::Interpolate(ret, startRot, endRot, factor);
+
+    return ret;
 }
 
+// note: our animations don't change scale yet
 aiVector3D CharDae::intScale(float time, const aiNodeAnim* nodeAnim) {
     return aiVector3D(1.0, 1.0, 1.0);
 }
 
 aiVector3D CharDae::intTrans(float time, const aiNodeAnim* nodeAnim) {
-    int i = 0;
-    vec3 toRet = vec3(1.0, 1.0, 1.0);
+    int i = 0; // int between i and i+1
+    int key;
     
-    aiVector3D startTrans = nodeAnim->mPositionKeys[i].mValue;
+    for(i = 0; i < nodeAnim->mNumPositionKeys - 1; i++) {
+        if(time < (float) nodeAnim->mPositionKeys[i + 1].mTime) {
+            key = i;
+            break;
+        }
+    }
 
-    return startTrans;
+    const aiVector3D startPos = nodeAnim->mPositionKeys[key].mValue;
+    const aiVector3D endPos = nodeAnim->mPositionKeys[key + 1].mValue;
+    float dt = nodeAnim->mPositionKeys[key + 1].mTime - 
+                nodeAnim->mPositionKeys[key].mTime;
+    float factor = (time - nodeAnim->mPositionKeys[key].mTime) / dt;
+
+    aiVector3D ret;
+    ret += startPos * factor;
+    ret += endPos * (1.0f - factor);
+   // aiVector3D::Interpolate(ret, startPos, endPos, factor);
+
+    return ret;
+}
+
+
+void CharDae::startAnimation(string animation) {
+    // TODO find the animation
+    animChoice = 0;
 }
 
 
 void CharDae::drawChar(GLint h_ModelMatrix, GLint h_vertPos, 
             GLint h_vertNor, GLint h_aTexCoord, GLint h_boneFlag, 
             GLint h_boneIds, GLint h_boneWeights, 
-            GLint h_boneTransforms) {
+            GLint h_boneTransforms, float time) {
     if(root == NULL) {
         return;
     }
-    const aiScene* last = importer->GetScene();
- 
+
+    // prepare to start an animation
+    // TODO
+    if(animChoice == -1) {
+        animStart = time;
+    } else {
+        // check if animation is finished
+        if (time - animStart > scene->mAnimations[animChoice]->mDuration) {
+            animChoice = -1;
+            animStart = time;
+        }
+    }
+
     // indices
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indBuf);
     
@@ -399,7 +423,7 @@ void CharDae::drawChar(GLint h_ModelMatrix, GLint h_vertPos,
     glVertexAttribPointer(h_boneWeights, 4, GL_FLOAT, GL_FALSE, 0, 0);
 
     // bone models
-    updateBones();
+    updateBones(time);
     //GLSL::enable
 
     // bind buffer

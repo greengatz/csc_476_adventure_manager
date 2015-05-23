@@ -23,7 +23,9 @@ class CharDae
         void drawChar(GLint h_ModelMatrix, GLint h_vertPos, 
                 GLint h_vertNor, GLint h_aTexCoord, GLint h_boneFlag,
                 GLint h_boneIds, GLint h_boneWeights,
-                GLint h_boneTransforms);
+                GLint h_boneTransforms, float time);
+        void startAnimation(string animation);
+        int animChoice;
 
     private:
         const aiScene* scene;
@@ -47,6 +49,8 @@ class CharDae
         //vector<Matrix4f>& boneModels;
         vector<mat4> boneModels;
         float* floatModel;
+        
+        float animStart;
        
         int meshInd; 
 
@@ -62,14 +66,15 @@ class CharDae
 
         void recursiveDraw(aiNode* toDraw);
         void recursivePrint(const aiNode* toPrint, int level, aiMesh** meshes);
-        void recursiveUpdate(const aiNode* toUpdate);
+        void recursiveUpdate(const aiNode* toUpdate, float time);
 
         // methods to interpolate transform between animation frames
         aiQuaternion intRot(float time, const aiNodeAnim* nodeAnim);
         aiVector3D intScale(float time, const aiNodeAnim* nodeAnim);
         aiVector3D intTrans(float time, const aiNodeAnim* nodeAnim);
-        void updateBones();
+        void updateBones(float time);
         const aiNodeAnim* findNodeAnim(const aiAnimation* anim, const aiNode* toFind);
+
 
         int findBone(const aiNode* toFind);
 };

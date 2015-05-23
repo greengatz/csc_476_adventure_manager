@@ -587,7 +587,12 @@ void Tavern::drawTavern(GLint h_ModelMatrix, GLint h_vertPos,
 	}
 
     // TODO remove this
-    sam.drawChar(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord, h_boneFlag, h_boneIds, h_boneWeights, h_boneTransforms);
+    sam.drawChar(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord, h_boneFlag, h_boneIds, h_boneWeights, h_boneTransforms, ltime);
+    
+    if(sam.animChoice == -1) {
+        cout << "starting animation\n";
+        sam.startAnimation("run");
+    }
 }
 
 void Tavern::applyTurkeySpin(double ltime)
