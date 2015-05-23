@@ -10,6 +10,7 @@
 #include "Wagon.h"
 #include "GLSL.h"
 #include "splineCurve.h"
+#include "SoundPlayer.h"
 #include <math.h>
 
 using namespace std;
@@ -57,8 +58,7 @@ Wagon::~Wagon()
 {
 }
 
-
-void Wagon::init(TextureLoader* texLoader, Terrain* aTerrain, Menu* aMenu, bool* gP, Manager* mgr, ProjectMeshes* newData)
+void Wagon::init(TextureLoader* texLoader, Terrain* aTerrain, Menu* aMenu, bool* gP, Manager* mgr, ProjectMeshes* newData, SoundPlayer* audio)
 {
   float minX, minY, minZ;
   float maxX, maxY, maxZ;
@@ -71,6 +71,7 @@ void Wagon::init(TextureLoader* texLoader, Terrain* aTerrain, Menu* aMenu, bool*
 
    //aPos relative to terrain generation
    resetWagon();
+   soundSys = audio;
 
    // Load geometry
   // Some obj files contain material information.
@@ -159,7 +160,7 @@ void buyBeer(void* mgr, bool* gamePaused){
 void buyMercenary(void* mgr, bool* gamePaused){
   // *gamePaused = false;
   Manager* manager = (Manager*)mgr;
-  // manager->buyMercenary(manager->medGoldCost);
+  manager->buyMercenaryTrail(manager->medGoldCost);
   *gamePaused = false;
 }
 
@@ -229,176 +230,169 @@ void fleeAmbush(void* mgr, bool* gamePaused){
 void Wagon::updateWagon(float globalTime) {
   if (wagonStart && !terrain->atEnd(position)) {
     int event = terrain->checkEvents(position);
+
     if(manager->partyDead()){
-      *gamePaused = true;
-      vector<string> about;
-      about.push_back("All your troops are dead.");
-      about.push_back("Smooth move " + manager->getManagerName());
-      //Create an option and add it to a vector
-      fpRestartTrail = restartTrail;
-      fpReturnTavern = returnTavern;
-      option trailOpt = {"Restart trail", fpRestartTrail, false};
-      option tavOpt = {"Return to previous tavern", fpReturnTavern, false};
-      vector<option> options;
-      options.push_back(trailOpt);
-      options.push_back(tavOpt);
 
-      //Set the data
-      menu->setData("Deadsies", about, options);
-    }
-    if(event == MERCHANTEVENT){
-      *gamePaused = true;
-      int beerCost = (rand() % 4) + 2;
-      int foodCost = (rand() % 4) + 2;
-      manager->setMedFoodCost(foodCost);
-      manager->setMedBeerCost(beerCost);
-      //Create about vector and add an element
-      vector<string> about;
+      if(event == MERCHANTEVENT){
+        soundSys->playVoice(VILLAGER_GREETING);
 
-      string aboutString = "Meat is  ";
-      aboutString += to_string(manager->medFoodCost);
-      aboutString += " gold and Beer is ";
-      aboutString += to_string(manager->medBeerCost);
-      aboutString += " gold!";
-      about.push_back(aboutString);
-      about.push_back("Merchant looks like a wimp though");
-      //Create an option and add it to a vector
-      fpFood = buyFood;
-      fpBeer = buyBeer;
-      fpResume = resumeGame;
-      fpRob = robMerch;
-      option foodOpt = {"Buy Meat", fpFood, false};
-      option beerOpt = {"Buy Beer", fpBeer, false};
-      option robOpt = {"Rob Merchant", fpRob, true};
-      option resumeOpt = {"Continue On", fpResume, true};
-      vector<option> options;
-      options.push_back(foodOpt);
-      options.push_back(beerOpt);
-      options.push_back(robOpt);
-      options.push_back(resumeOpt);
+        *gamePaused = true;
+        int beerCost = (rand() % 4) + 2;
+        int foodCost = (rand() % 4) + 2;
+        manager->setMedFoodCost(foodCost);
+        manager->setMedBeerCost(beerCost);
+        //Create about vector and add an element
+        vector<string> about;
 
-      //Set the data
-      menu->setData("Merchant", about, options);
-
-    }
-    if(event == SICKNESS){
-       *gamePaused = true;
-      //Create about vector and add an element
-      vector<string> about;
-      srand(time(NULL));
-      int beerCost = (rand() % 4) + 2;
-      int foodCost = (rand() % 4) + 2;
-      int index = manager->getRandomAliveMercIndex();
-      manager->setFocus(index);
-      manager->setMedFoodCost(beerCost);
-      manager->setMedBeerCost(foodCost);
-      
-      string sickness = Ailment[rand() % ailmentCount];
-      string name = manager->getName(index);
-      cout << name + " just got " + sickness << endl;
-
-      about.push_back(name + " came down with " + sickness + ",");
-      vector<option> options;
-      if(manager->getBeer() >= manager->medBeerCost &&
-        manager->getFood() >= manager->medFoodCost){
-        string aboutString = "Use ";
+        string aboutString = "Meat is  ";
         aboutString += to_string(manager->medFoodCost);
-        aboutString += " meat and ";
+        aboutString += " gold and Beer is ";
         aboutString += to_string(manager->medBeerCost);
-        aboutString += " beer?";
+        aboutString += " gold!";
         about.push_back(aboutString);
-        about.push_back("Otherwise their damage will drop");
-        fpHeal = healMercenary;
-        fpHurt = hurtMercenary;
-        option healOpt = {"Heal " + name, fpHeal, true};
-        option hurtOpt = { name + " will be fine!", fpHurt, true};
-        options.push_back(healOpt);
-        options.push_back(hurtOpt);
-      }else{
-        about.push_back("But it looks like you don't have enough");
-        about.push_back("beer and meat to treat them like they deserve!");
+        about.push_back("Merchant looks like a wimp though");
+        //Create an option and add it to a vector
+        fpFood = buyFood;
+        fpBeer = buyBeer;
+        fpResume = resumeGame;
+        fpRob = robMerch;
+        option foodOpt = {"Buy Meat", fpFood, false};
+        option beerOpt = {"Buy Beer", fpBeer, false};
+        option robOpt = {"Rob Merchant", fpRob, true};
+        option resumeOpt = {"Continue On", fpResume, true};
+        vector<option> options;
+        options.push_back(foodOpt);
+        options.push_back(beerOpt);
+        options.push_back(robOpt);
+        options.push_back(resumeOpt);
+
+        //Set the data
+        menu->setData("Merchant", about, options);
+
+      }
+      if(event == SICKNESS){
+        soundSys->playVoice(ANGRY_YELL);
+         *gamePaused = true;
+        //Create about vector and add an element
+        vector<string> about;
+        srand(time(NULL));
+        int beerCost = (rand() % 4) + 2;
+        int foodCost = (rand() % 4) + 2;
+        int index = manager->getRandomAliveMercIndex();
+        manager->setFocus(index);
+        manager->setMedFoodCost(beerCost);
+        manager->setMedBeerCost(foodCost);
+        
+        string sickness = Ailment[rand() % ailmentCount];
+        string name = manager->getName(index);
+        cout << name + " just got " + sickness << endl;
+
+        about.push_back(name + " came down with " + sickness + ",");
+        vector<option> options;
+        if(manager->getBeer() >= manager->medBeerCost &&
+          manager->getFood() >= manager->medFoodCost){
+          string aboutString = "Use ";
+          aboutString += to_string(manager->medFoodCost);
+          aboutString += " meat and ";
+          aboutString += to_string(manager->medBeerCost);
+          aboutString += " beer?";
+          about.push_back(aboutString);
+          about.push_back("Otherwise their damage will drop");
+          fpHeal = healMercenary;
+          fpHurt = hurtMercenary;
+          option healOpt = {"Heal " + name, fpHeal, true};
+          option hurtOpt = { name + " will be fine!", fpHurt, true};
+          options.push_back(healOpt);
+          options.push_back(hurtOpt);
+        }else{
+          about.push_back("But it looks like you don't have enough");
+          about.push_back("beer and meat to treat them like they deserve!");
+          fpResume = resumeGame;
+          option resumeOpt = {"Continue On", fpResume, true};
+          options.push_back(resumeOpt);
+        }
+        //Set the data
+        menu->setData("Sickness", about, options);
+      }
+      if(event == WANDERER){
+        vector<string> about;
+        srand(time(NULL));
+        int cost = (rand() % 20) + 25;
+        int index = manager->getRandomAliveMercIndex();
+        manager->setFocus(index);
+        manager->setMedGoldCost(cost);
+        *gamePaused = true;
+        //Create about vector and add an element
+        vector<option> options;
+        // Obj3d temp(&((*meshData).terrMeshes[1]), scale, trans, rot);
+        // Mercenary *newMerc = new Mercenary(meshData->);
+        string name = manager->getName(index);
+        about.push_back(name + " wants to join your party,");
+
+        if(manager->getMercs() >= MAX_MERC){
+          about.push_back("but your crew at max size!");
+        }else if(manager->getGold() < cost){
+          about.push_back("but you're a little short on gold!");
+        }else{
+
+          string aboutString = "buy this mercenary for ";
+          aboutString += to_string(cost);
+          aboutString += " gold?";
+          about.push_back(aboutString);
+          fpMercenary = buyMercenary;
+          option mercOpt = {"Buy mercenary", fpMercenary, false};
+          options.push_back(mercOpt);
+        }
         fpResume = resumeGame;
         option resumeOpt = {"Continue On", fpResume, true};
         options.push_back(resumeOpt);
-      }
-      //Set the data
-      menu->setData("Sickness", about, options);
-    }
-    if(event == WANDERER){
-      vector<string> about;
-      srand(time(NULL));
-      int cost = (rand() % 20) + 25;
-      int index = manager->getRandomAliveMercIndex();
-      manager->setFocus(index);
-      manager->setMedGoldCost(cost);
-      *gamePaused = true;
-      //Create about vector and add an element
-      vector<option> options;
-      // Obj3d temp(&((*meshData).terrMeshes[1]), scale, trans, rot);
-      // Mercenary *newMerc = new Mercenary(meshData->);
-      string name = manager->getName(index);
-      about.push_back(name + " wants to join your party,");
 
-      if(manager->getMercs() >= MAX_MERC){
-        about.push_back("but your crew at max size!");
-      }else if(manager->getGold() < cost){
-        about.push_back("but you're a little short on gold!");
+        //Set the data
+        menu->setData("Wanderer", about, options);
+      }
+      if(event == AMBUSH){
+        soundSys->playVoice(BANDIT_GREETING);
+        *gamePaused = true;
+        //Create about vector and add an element
+        vector<string> about;
+        about.push_back("Bandits are ambushing your party");
+        //Create an option and add it to a vector
+        fpFight = fightAmbush;
+        fpFlee = fleeAmbush;
+        option fightOpt = {"Fight", fpFight, true};
+        option fleeOpt = {"Flee", fpFlee, true};
+        vector<option> options;
+        options.push_back(fightOpt);
+        options.push_back(fleeOpt);
+
+        //Set the data
+        menu->setData("Ambush", about, options);
+      }
+      
+      deltaTime = glfwGetTime() - startTime;
+
+      if (position.x >= nextPoint.x)
+      {
+        nextPoint = terrain->nextCriticalPoint(position);
+        direction = glm::normalize(nextPoint - position);
+        neg = -neg;
+        rotate = neg * cos((glm::dot(direction, orientation)/(glm::length(orientation) * glm::length(direction)))) * (180.0/3.14);
+      }
+      if(*gamePaused == true){
+        startTime = glfwGetTime() - deltaTime ;
       }else{
-
-        string aboutString = "buy this mercenary for ";
-        aboutString += to_string(cost);
-        aboutString += " gold?";
-        about.push_back(aboutString);
-        fpMercenary = buyMercenary;
-        option mercOpt = {"Buy mercenary", fpMercenary, false};
-        options.push_back(mercOpt);
+        position += direction * deltaTime * velocity;
       }
-      fpResume = resumeGame;
-      option resumeOpt = {"Continue On", fpResume, true};
-      options.push_back(resumeOpt);
+      position.y = 0.05;
+      position.z = terrain->getSpline()->getY(position.x);
+      rotate = 90.0f + -1.0 * atan(terrain->getSpline()->getDY(position.x)) * (180.0 / 3.14);
 
-      //Set the data
-      menu->setData("Wanderer", about, options);
+      startTime += deltaTime;
     }
-    if(event == AMBUSH){
-      *gamePaused = true;
-      //Create about vector and add an element
-      vector<string> about;
-      about.push_back("Bandits are ambushing your party");
-      //Create an option and add it to a vector
-      fpFight = fightAmbush;
-      fpFlee = fleeAmbush;
-      option fightOpt = {"Fight", fpFight, true};
-      option fleeOpt = {"Flee", fpFlee, true};
-      vector<option> options;
-      options.push_back(fightOpt);
-      options.push_back(fleeOpt);
-
-      //Set the data
-      menu->setData("Ambush", about, options);
-    }
-    
-    deltaTime = glfwGetTime() - startTime;
-
-    if (position.x >= nextPoint.x)
-    {
-      nextPoint = terrain->nextCriticalPoint(position);
-      direction = glm::normalize(nextPoint - position);
-      neg = -neg;
-      rotate = neg * cos((glm::dot(direction, orientation)/(glm::length(orientation) * glm::length(direction)))) * (180.0/3.14);
-    }
-    if(*gamePaused == true){
-      startTime = glfwGetTime() - deltaTime ;
-    }else{
-      position += direction * deltaTime * velocity;
-    }
-    position.y = 0.05;
-    position.z = terrain->getSpline()->getY(position.x);
-    rotate = 90.0f + -1.0 * atan(terrain->getSpline()->getDY(position.x)) * (180.0 / 3.14);
-
-    startTime += deltaTime;
+    else{
+      printf("YOU DEAD");
     }  
-  
+  }
 }
 
 bool Wagon::hasStarted()

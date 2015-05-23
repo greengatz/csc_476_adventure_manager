@@ -54,6 +54,7 @@ class Mercenary
 
         // method prototypes
 		Mercenary(vector<Obj3d> mesh);
+		Mercenary();
 		void draw(GLint h_uModelMatrix, int meshIndex);
 		void update();
         void printDetails();

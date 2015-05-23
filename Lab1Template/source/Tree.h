@@ -20,7 +20,7 @@ class Tree
 public:
    Tree();
    virtual ~Tree();
-   void init(TextureLoader* texLoader);
+   void init(TextureLoader* texLoader, glm::vec3 lightPosition);
    void draw(glm::vec3 treePosition, Camera* camera, glm::vec3 wagonPos);
    void drawBillboard(glm::vec3 treePosition, Camera *camera, glm::vec3 wagonPos);
 
@@ -29,6 +29,14 @@ private:
    GLint h_vertPos;
    GLint h_vertNor;
    GLint h_aTexCoord;
+
+   //Shadow Shader Information
+   GLuint pidShadow;
+   GLint h_vertPosShadow;
+   GLint h_vertNorShadow;
+   GLint h_ProjMatrixShadow;
+   GLint h_ViewMatrixShadow;
+   GLint h_ModelMatrixShadow;
 
    //Handles to the shader data
    GLint h_uTexUnit;
@@ -65,6 +73,7 @@ private:
    glm::vec3 position;
    //Light position
    GLuint lightPosID;
+   glm::vec3 lightPos;
 
    //Rendering Helper
    RenderingHelper ModelTrans;

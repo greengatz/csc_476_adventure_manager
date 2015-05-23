@@ -28,11 +28,14 @@ set(HEADERS
    shader.hpp
    menu.h
    Skybox.h
+#   charDae.h
    Tree.h
    FadeSystem.h
    ProjectMeshes.h
    FireSystem.h
    Particle.h
+   ShadowMapFBO.h
+   ShadowMapTechnique.h
 )
 
 # List all .c / .cpp files here
@@ -65,9 +68,12 @@ set(SOURCES
    shader.cpp
    menu.cpp
    Skybox.cpp
+ #  charDae.cpp
    Tree.cpp
    FadeSystem.cpp
    ProjectMeshes.cpp
    FireSystem.cpp
    Particle.cpp
+   ShadowMapFBO.cpp
+   ShadowMapTechnique.cpp
 )

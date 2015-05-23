@@ -72,7 +72,8 @@ int TAV_DIRT_ID = 6600;
 
 int TURKEY_NUM;
 
-Tavern::Tavern()
+Tavern::Tavern()// :
+    //sam(CharDae("not_a_file"))
 {
 	doorLoc = vec3(7.5, 1.35, -23);
 	beerLoc = vec3(35.0, 1.0, -35.0);
@@ -129,10 +130,10 @@ void Tavern::addTavernCharacter(int index, glm::vec3 scale, glm::vec3 trans, glm
     vector<Obj3d> bodyParts;
 	Obj3d torso(&((*meshData).pplMeshes[index]), scale, trans, rot);
     // TODO our arm's translation should be based off rotation
-	Obj3d arm(&((*meshData).tavMeshes[CUBE]), glm::vec3(0.1, 0.5, 0.1), trans + glm::vec3(-0.3, 0.6, 0), rot);
-    arm.preTrans = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, -0.4, 0.0));
+	//Obj3d arm(&(tavernMeshes[CUBE]), glm::vec3(0.1, 0.5, 0.1), trans + glm::vec3(-0.3, 0.6, 0), rot);
+    //arm.preTrans = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, -0.4, 0.0));
     bodyParts.push_back(torso);
-    bodyParts.push_back(arm);
+    //bodyParts.push_back(arm);
     
 	tavernCharacters.push_back(*(new Mercenary(bodyParts)));
 }
@@ -351,10 +352,10 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_ROOF_ID);
 
 	//pillars
-	createPillar(glm::vec3(18.5, 1, -27.2), true);
-	createPillar(glm::vec3(27.6, 1, -27.2), true);
-	createPillar(glm::vec3(18.5, 1, -19.8), false);
-	createPillar(glm::vec3(27.6, 1, -19.8), false);
+	// createPillar(glm::vec3(18.5, 1, -27.2), true);
+	// createPillar(glm::vec3(27.6, 1, -27.2), true);
+	// createPillar(glm::vec3(18.5, 1, -19.8), false);
+	// createPillar(glm::vec3(27.6, 1, -19.8), false);
 
 	addTavernItem(CRATE, 2, glm::vec3(0.5, 1, 2), glm::vec3(21.9, 0.025, -13.5), glm::mat4(1.0f));
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_BRANCHES_ID);
@@ -485,7 +486,7 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_LANDLORD_ID);
 	addTavernItem(LUMBERJACK, 1, glm::vec3(1, 1, 1), glm::vec3(15.5, .99, -16), glm::mat4(1.0f));
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_LUMBERJACK_ID);
-	
+
 	//fireplace and roasting
 	addTavernCharacter(SAMURAI, glm::vec3(1, 1, 1), glm::vec3(20.05, 1.3, -23.5), glm::mat4(1.0f));
 	tavernCharacters[tavernCharacters.size() - 1].meshes[0].loadTextureCoor(TAV_SAMURAI_ID);
@@ -494,15 +495,21 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 	addTavernCharacter(SAMURAI, glm::vec3(1, 1, 1), glm::vec3(21.05, 1.3, -22.5), glm::mat4(1.0f));
 	tavernCharacters[tavernCharacters.size() - 1].meshes[0].loadTextureCoor(TAV_SAMURAI_ID);
 	createFirePlace(glm::vec3(23.05, 1.5, -23.5));
+
+    // try some assimp stuff
+    // TODO
+    //sam = CharDae("assets/characters/samurai.dae");
 }
 
 void Tavern::enableBuff(GLint h_vertPos, GLint h_vertNor, GLuint posBuf, GLuint norBuf, GLuint indBuf) {
   GLSL::enableVertexAttribArray(h_vertPos); //position
   glBindBuffer(GL_ARRAY_BUFFER, posBuf);
   glVertexAttribPointer(h_vertPos, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
   GLSL::enableVertexAttribArray(h_vertNor); //normals
   glBindBuffer(GL_ARRAY_BUFFER, norBuf);
   glVertexAttribPointer(h_vertNor, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indBuf);
 }
 
@@ -561,15 +568,23 @@ void Tavern::drawTavern(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor, G
 	for (int iter = 0; iter < tavernCharacters.size(); iter++) {
         for(int meshIter = 0; meshIter < tavernCharacters[iter].meshes.size(); meshIter++) {
         	if ((*fCuller).checkCull(tavernCharacters[iter].meshes[meshIter])) {
-			    enableBuff(h_vertPos, h_vertNor, (*tavernCharacters[iter].meshes[meshIter].cont).posBuf, (*tavernCharacters[iter].meshes[meshIter].cont).norBuf, (*tavernCharacters[iter].meshes[meshIter].cont).indBuf);
+			    enableBuff(h_vertPos, h_vertNor, 
+                    (*tavernCharacters[iter].meshes[meshIter].cont).posBuf, 
+                    (*tavernCharacters[iter].meshes[meshIter].cont).norBuf, 
+                    (*tavernCharacters[iter].meshes[meshIter].cont).indBuf);
 			    if (tavernCharacters[iter].meshes[meshIter].hasTexture) {
-			    	enableTextureBuffer(h_aTexCoord, tavernCharacters[iter].meshes[meshIter].texBuf, tavernCharacters[iter].meshes[meshIter].textureNdx);
+			    	enableTextureBuffer(h_aTexCoord, 
+                        tavernCharacters[iter].meshes[meshIter].texBuf, 
+                        tavernCharacters[iter].meshes[meshIter].textureNdx);
 			    }
 			    tavernCharacters[iter].draw(h_ModelMatrix, meshIter);
 			    disableBuff(h_vertPos, h_vertNor, h_aTexCoord);
 			}
         }
 	}
+
+    // TODO remove this
+    //sam.drawChar(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord);
 }
 
 void Tavern::applyTurkeySpin(double ltime)

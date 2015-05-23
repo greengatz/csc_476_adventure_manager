@@ -47,10 +47,10 @@ string randTitle() {
 
 
 Mercenary::Mercenary(vector<Obj3d> m) :
-	meshes(m),
-	firstName(randFirstName()),
-	lastName(randLastName()),
-	title(randTitle()),
+    meshes(m),
+    firstName(randFirstName()),
+    lastName(randLastName()),
+    title(randTitle()),
     
     job(rand() % classes::size),
     dead(false),
@@ -59,7 +59,31 @@ Mercenary::Mercenary(vector<Obj3d> m) :
     hungerRate(BaseHungerRate[job] + rand() % HUNGER_VARIANCE),
     beerRate(BaseBeerRate[job] + rand() % BEER_VARIANCE),
 
-	cost(BaseCost[job]),
+    cost(BaseCost[job]),
+
+    isWaving(false)
+{
+    cost += maxHealth - BaseHealth[job];
+    cost += maxDamage - BaseDamage[job];
+    cost -= hungerRate - BaseHungerRate[job];
+    cost -= beerRate - BaseBeerRate[job];
+    currDamage = maxDamage;
+    currHealth = maxHealth;
+}
+
+Mercenary::Mercenary() :
+    firstName(randFirstName()),
+    lastName(randLastName()),
+    title(randTitle()),
+    
+    job(rand() % classes::size),
+    dead(false),
+    maxHealth(BaseHealth[job] + rand() % HEALTH_VARIANCE),
+    maxDamage(BaseDamage[job] + rand() % DAMAGE_VARIANCE),
+    hungerRate(BaseHungerRate[job] + rand() % HUNGER_VARIANCE),
+    beerRate(BaseBeerRate[job] + rand() % BEER_VARIANCE),
+
+    cost(BaseCost[job]),
 
     isWaving(false)
 {
@@ -106,9 +130,9 @@ void Mercenary::printDetails()
 
 void Mercenary::wave() {
     if(!isWaving) {
-        meshes[1].rot = glm::rotate(glm::mat4(1.0f), -50.0f, glm::vec3(0, 0, 1.0f));
+/*        meshes[1].rot = glm::rotate(glm::mat4(1.0f), -50.0f, glm::vec3(0, 0, 1.0f));
         animationStart = clock();
-        isWaving = true;
+        isWaving = true;*/
     }
 }
 

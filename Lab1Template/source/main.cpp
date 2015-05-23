@@ -12,6 +12,7 @@
 #include <iostream>
 #include <cassert>
 #include <cmath>
+#include <algorithm>
 #include "GLSL.h"
 #include "Camera.h"
 #include "Terrain.h"
@@ -41,6 +42,8 @@
 #include "FadeSystem.h"
 #include "ProjectMeshes.h"
 #include "FireSystem.h"
+#include "ShadowMapFBO.h"
+#include "ShadowMapTechnique.h"
 
 using namespace std;
 using namespace glm;
@@ -145,6 +148,22 @@ Skybox skybox;
 //Fading in and out
 FadeSystem fadeSystem;
 
+//Shadow Information
+ShadowMapTechnique* m_pShadowMapTech;
+//TODO: Eventually have this light move across with wagon
+//or have multiple lights across the trail.
+glm::vec3 outsideLightPos = glm::vec3(-90.0, 15.0, -53.0);
+glm::vec3 outsideLightLookat = glm::vec3(-90.0, 0.0, -29.0);
+ShadowMapFBO m_shadowMapFBO;
+
+vector<Obj3d> objs;
+
+//Spatial Grid
+vector<vector<vector<Obj3d>>> grid;
+int minX = 5;
+int minZ = -40;
+int gridSize = 7;
+
 /**
  * For now, this just initializes the Shape object.
  * Later, we'll updated to initialize all objects moving.
@@ -167,11 +186,11 @@ void initModels()
 	tavern.init(&matSetter, &fCuller, &meshes);
 
 	//Initialize Terrain object
-	terrain.init(&texLoader, &matSetter, &fCuller, &meshes);
+	terrain.init(&texLoader, &matSetter, &fCuller, &meshes, outsideLightPos);
 	tavTerr.init(&texLoader);
 
 	//Initalize Wagon
-	wagon.init(&texLoader, &terrain, &menu, &gamePaused, &manager, &meshes);
+	wagon.init(&texLoader, &terrain, &menu, &gamePaused, &manager, &meshes, &audio);
 
 	//Initialize skybox
 	skybox.init(&texLoader);
@@ -181,6 +200,11 @@ void initModels()
 
 	//Initialize the fire particle system
 	fire.init(&texLoader);
+
+	//Initalize some shadow information
+	m_shadowMapFBO.init(g_width, g_height);
+	m_pShadowMapTech = new ShadowMapTechnique();
+	m_pShadowMapTech->init();
 
 	//initialize the modeltrans matrix stack
    ModelTrans.useModelViewMatrix();
@@ -278,6 +302,45 @@ bool installShaders(const string &vShaderName, const string &fShaderName)
 	return true;
 }
 
+//TODO: RIGHT NOW THIS ONLY CREATES LIGHT MAP FOR WAGON. MUST EXPAND TO EVERYTHING.
+void ShadowMapPass()
+{
+	m_pShadowMapTech->enableProgram();
+
+	m_shadowMapFBO.bindForWriting();
+
+	glClear(GL_DEPTH_BUFFER_BIT);
+
+	camera.setShadowMapPass(outsideLightPos, outsideLightLookat);
+
+	ModelTrans.loadIdentity();
+		ModelTrans.pushMatrix();
+			ModelTrans.translate(glm::vec3(-100.0, 0.0, 0.0));
+			glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(ModelTrans.modelViewMatrix));
+			ModelTrans.pushMatrix();
+				wagon.draw(h_vertPos, h_vertNor, h_aTexCoord, h_ModelMatrix, &ModelTrans);
+			ModelTrans.popMatrix();
+		ModelTrans.popMatrix();
+
+	camera.finishShadowMapPass();
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glUseProgram(0);
+}
+
+void setProjView()
+{
+	//Set projection matrix
+	MatrixStack proj, view;
+	proj.pushMatrix();
+	camera.applyProjectionMatrix(&proj);
+	glUniformMatrix4fv( h_ProjMatrix, 1, GL_FALSE, glm::value_ptr( proj.topMatrix()));
+	proj.pushMatrix();
+	camera.applyViewMatrix(&view, wagon.getPosition());
+	glUniformMatrix4fv(h_ViewMatrix, 1, GL_FALSE, glm::value_ptr(view.topMatrix()));
+	
+	fCuller.setProjMat(proj.topMatrix(), view.topMatrix());
+}
+
 void drawGL()
 {
 	// Clear buffers
@@ -299,7 +362,6 @@ void drawGL()
 	glUniform1f(h_option, optionS);
 	
 	// Bind the program
-	
 	//Set projection matrix
 	MatrixStack proj, view;
 	proj.pushMatrix();
@@ -313,19 +375,35 @@ void drawGL()
 	
 	matSetter.setMaterial(2);
 
+	m_shadowMapFBO.bindForWriting();
+
 	//========================== DRAW OUTSIDE SCENE ====================
 	if (!camera.isTavernView() || camera.isFreeRoam())
 	{
+		//Prepass to get light map. 1st render
+		ShadowMapPass();
+
+		//2nd Render
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glUseProgram(pid);
+		setProjView();
+		glUniform1i(h_flag, 0);
+		glUniform3fv(h_lightPos1, 1, glm::value_ptr(glm::vec3(23.05f, 4.0f, -23.5f)));
+		glUniform3fv(h_lightPos2, 1, glm::value_ptr(glm::vec3(-125.0f, 4.0f, 25.0f)));
+		glUniform1f(h_option, optionS);
+      m_pShadowMapTech->setTextureUnit(0);
+		m_shadowMapFBO.bindForReading(GL_TEXTURE0);
+
 		glUniform1i(terrainToggleID, 1);
 		glUniform1i(h_uTexUnit, 0);
 		ModelTrans.loadIdentity();
 		ModelTrans.pushMatrix();
 			ModelTrans.translate(glm::vec3(-100.0, 0.0, 0.0));
 			glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(ModelTrans.modelViewMatrix));
-			//ModelTrans.popMatrix();
 			ModelTrans.pushMatrix();
 				terrain.draw(h_vertPos, h_vertNor, h_aTexCoord, h_ModelMatrix, &camera, wagon.getPosition(), &pid);
             glUseProgram(pid);
+            setProjView();
 				wagon.draw(h_vertPos, h_vertNor, h_aTexCoord, h_ModelMatrix, &ModelTrans);
 			ModelTrans.popMatrix();
 		ModelTrans.popMatrix();
@@ -333,8 +411,6 @@ void drawGL()
 		ModelTrans.loadIdentity();
 		ModelTrans.pushMatrix();
 		ModelTrans.popMatrix();
-		// terrEv.drawTerrainEvents(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord);
-		// terrEv.drawTerrainEvents(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord, dtDraw);
 		glUniform1i(terrainToggleID, 0);
       //Draw the skybox
       skybox.draw(&camera, wagon.getPosition());
@@ -342,6 +418,8 @@ void drawGL()
       glUniform1i(terrainToggleID, 0);
 	}
 	glUseProgram(pid);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	m_shadowMapFBO.bindForReading(GL_TEXTURE0);
 
 	//========================= END OUTSIDE SCENE =======================
 
@@ -353,7 +431,7 @@ void drawGL()
 		ModelTrans.loadIdentity();
 		ModelTrans.pushMatrix();
 		tavTerr.draw(h_vertPos, h_vertNor, h_aTexCoord, h_ModelMatrix, &ModelTrans);
-		matSetter.setMaterial(4);
+		matSetter.setMaterial(4); // TODO does this line do anything?
 		ModelTrans.popMatrix();
 		matSetter.setMaterial(3);
 		tavern.drawTavern(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord, dtDraw);
@@ -367,7 +445,7 @@ void drawGL()
 	if (wagon.getPosition().x > -54.0 && !fadeSystem.isFading())
 	{
 		manager.inTavern = manager.inTavern ? false : true;
-		audio.playBackgroundMusic(manager.inTavern);
+        audio.playBackgroundMusic(manager.inTavern);
 		fadeSystem.startFade(g_width, g_height);
 	}
 
@@ -389,10 +467,9 @@ void drawGL()
 		}
 	}
 	
-
 	//**************Draw HUD START*********************
 
-	if(hud.on)
+	if(hud.on && !camera.isShadowMapView() && !camera.isFreeRoam())
 	{
 		glUseProgram(pid);
 		glUniform1i(h_flag, 1);
@@ -441,7 +518,6 @@ bool hasCollided(glm::vec3 incr)
 		return false;
 	}
 
-	vector<Obj3d> temp = tavern.tavernItems;
 	glm::vec3 camPos = camera.getPosition() + incr;
 
 	float curCam[6] = {
@@ -454,9 +530,40 @@ bool hasCollided(glm::vec3 incr)
 
 	bool validMove = (curCam[0] < 6.75 || curCam[1] > 39.5 || curCam[4] < -36.0 || curCam[5] > -11.4);
 
-	for (std::vector<Obj3d>::iterator it1 = temp.begin(); it1 != temp.end(); ++it1)
+	// for (std::vector<Obj3d>::iterator it1 = objs.begin(); it1 != objs.end(); ++it1)
+	// {
+	// 	glm::vec3 pos1 = it1 ->getCurSpot();
+	// 	if(it1->bound.checkCollision(curCam, it1->scale, pos1))
+	// 	{
+	// 		validMove = true;
+	// 	}
+	// }
+
+	int row, col;
+  	row = (camPos.x - minX)/gridSize;
+ 	col = (camPos.z - minZ)/gridSize;
+	vector<Obj3d> currentCellObjs = grid[row][col];
+	printf("Checking %d collisions!!\n", currentCellObjs.size());
+
+ 	// for(int i = 0; i < currentCellObjs.size(); i++)
+ 	// {
+ 	// 	vec3 curTrans = currentCellObjs[i].getCurSpot();
+
+ 	// 	if (currentCellObjs[i].bound.checkCollision(curCam, currentCellObjs[i].scale, curTrans))
+ 	// 	{
+ 	//   		if(!currentCellObjs[i].done)
+  //     		{
+  //       		currentCellObjs[i].hit();
+  //       		printf("Hit item %d at %lf, %lf\n", i, camPos.x, camPos.z);
+  //     		}
+
+  //   		validMove = false;
+  //   	}
+  // 	}
+
+	for(vector<Obj3d>::iterator it1 = currentCellObjs.begin(); it1 != currentCellObjs.end(); ++it1)
 	{
-		glm::vec3 pos1 = it1 ->getCurSpot();
+		vec3 pos1 = it1 ->getCurSpot();
 		if(it1->bound.checkCollision(curCam, it1->scale, pos1))
 		{
 			validMove = true;
@@ -567,7 +674,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     if (key == GLFW_KEY_H && action == GLFW_PRESS)
 	{
 		//manager.buyMercenary(key - GLFW_KEY_1, &tavern);
-        tavern.tavernCharacters[0].wave();
+        //tavern.tavernCharacters[0].wave();
 	}
 
 	if (key == GLFW_KEY_ENTER && action == GLFW_PRESS)
@@ -669,9 +776,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     }
 	if (key == GLFW_KEY_N && action == GLFW_PRESS)
 	{
-		// terrEv.lowerBridge();
 		fire.toggle();
-
 	}
 	if (key == GLFW_KEY_Y && action == GLFW_PRESS)
 	{
@@ -683,8 +788,30 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	}
 	if (key == GLFW_KEY_I && action == GLFW_PRESS)
 	{
-		audio.playVoice(MAGMISS_VOICE);
+		audio.playVoice(BANDIT_GREETING);
 	}
+
+	//DO NOT DELETE THE BELOW CODE THAT IS COMMENTED!!!!!!!!!!
+
+	/*if (key == GLFW_KEY_M && action == GLFW_PRESS)
+	{
+		if (camera.isShadowMapView())
+		{
+			camera.finishShadowMapPass();
+		}
+		else
+		{
+			camera.setShadowMapPass(glm::vec3(-91.0, 15.0, -53.0), glm::vec3(-91.0, 0.0, -29.0));
+			if (camera.isTavernView())
+			{
+				camera.toggleGameViews();
+			}
+			else if (camera.isFreeRoam())
+			{
+				camera.toggleFreeRoam();
+			}
+		}
+	}*/
 }
 
 void window_size_callback(GLFWwindow* window, int w, int h){
@@ -717,6 +844,12 @@ int main(int argc, char **argv)
         fprintf( stderr, "Failed to initialize GLFW\n" );
         return -1;
     }
+
+    //Initialize Spatial Grid
+    grid.resize(5);
+  	for (int i = 0; i < 5; ++i) {
+    	grid[i].resize(5);
+  	}
 
    glfwWindowHint(GLFW_SAMPLES, 4);
    glfwWindowHint(GLFW_RESIZABLE,GL_FALSE);
@@ -790,6 +923,52 @@ int main(int argc, char **argv)
 
 	// //Set the data
 	// menu.setData("Title", about, options);
+
+	objs = tavern.tavernItems;
+	int exptX, exptZ, loopi, loopj, col, row;
+
+	for(int k = 6; k < objs.size(); k++)
+    {
+    	vec3 curPos = objs[k].getCurSpot();
+    	printf("curPos x: %lf, curPos z: %lf\n", curPos.x, curPos.z);
+    	float curBox[6] = {
+     	objs[k].bound.minX * objs[k].scale.x + curPos.x, 
+     	objs[k].bound.maxX * objs[k].scale.x + curPos.x,
+     	objs[k].bound.minY * objs[k].scale.y,
+     	objs[k].bound.maxY * objs[k].scale.y,
+     	objs[k].bound.minZ * objs[k].scale.z + curPos.z,
+     	objs[k].bound.maxZ * objs[k].scale.z + curPos.z};
+
+    // exptX = (objs[k].bound.maxX - objs[k].bound.minX);
+    // loopi = std::max((int)exptX, 1);
+    // exptZ = (objs[k].bound.maxZ - objs[k].bound.minZ);
+    // loopj = std::max((int)exptZ, 1);
+
+    	printf("maxX: %lf, minX: %lf\n", curBox[1], curBox[0]);
+
+    	exptX = (curBox[1] - curBox[0])/gridSize;
+    	loopi = std::max((int)exptX + 1, 1);
+    	exptZ = (curBox[5] - curBox[4])/gridSize;
+    	loopj = std::max((int)exptZ + 1, 1);
+
+    	printf("exptX: %d, exptZ: %d\n", exptX, exptZ);
+
+    	col = (curBox[0] - minX)/gridSize;
+   		row = (curBox[4] - minZ)/gridSize;
+
+    	printf("col: %d, row: %d\n", col, row);
+
+    	// printf("loopi = %d, loopj = %d\n", loopi, loopj);
+
+    	for(int i = col; i < loopi + col; i++)
+    	{
+      		for(int j = row; j < loopj + row; j++)
+      		{
+       		  grid[i][j].push_back(objs[k]);
+      		  printf("gridsize at %d, %d: %d\n", i, j, grid[i][j].size());
+     		 }
+    	}
+  	}
 
    do{
    		timeNew = glfwGetTime();

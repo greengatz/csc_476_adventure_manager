@@ -31,7 +31,12 @@ Camera::Camera() :
 	theZoom(0.0f, 1.0f, -25.0f),
 	freeRoam(false),
 	wagonZoom(1.0f),
-	tavernView(true)
+	tavernView(true),
+
+	//Light/shadow pass
+	shadowMapPass(false),
+	lightEye(0.0f, 0.0f, 0.0f),
+	lightLookat(0.0f, 0.0f, 0.0f)
 
 {
 	bound.createBounds(vec2(-0.6, 0.6), vec2(0, 1.0), vec2(-0.6, 0.6));
@@ -54,6 +59,10 @@ glm::vec3 Camera::getTheEye()
 
 glm::vec3 Camera::getPosition()
 {
+	if (shadowMapPass)
+	{
+		return lightEye;
+	}
 	if (tavernView || freeRoam)
 	{
 		return theStrafe + theZoom;
@@ -101,6 +110,27 @@ void Camera::toggleFreeRoam()
 	}
 	freeRoam = !freeRoam;
 }
+
+//======================== Shadow Map Functions ==================
+
+bool Camera::isShadowMapView()
+{
+	return shadowMapPass;
+}
+
+void Camera::setShadowMapPass(glm::vec3 aPos, glm::vec3 lookAtPos)
+{
+	shadowMapPass = true;
+	lightEye = aPos;
+	lightLookat = lookAtPos;
+}
+
+void Camera::finishShadowMapPass()
+{
+	shadowMapPass = false;
+}
+
+//======================== End Shadow Map Functions ===============
 
 void Camera::updateStrafe(glm::vec3 dStrafe)
 {
@@ -203,7 +233,12 @@ void Camera::applyProjectionMatrix(MatrixStack *P) const
 
 void Camera::applyViewMatrix(MatrixStack *MV, glm::vec3 wagonPos) const
 {
-	if (tavernView || freeRoam)
+	if (shadowMapPass)
+	{
+		glm::mat4 View = glm::lookAt(lightEye, lightLookat, glm::vec3(0, 1, 0));
+		MV->multMatrix(View);
+	}
+	else if (tavernView || freeRoam)
 	{
 		glm::mat4 View = glm::lookAt((theEye + theStrafe + theZoom), 
 			(lookAtPoint + theStrafe + theZoom), glm::vec3(0, 1, 0));

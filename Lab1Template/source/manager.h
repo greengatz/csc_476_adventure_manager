@@ -13,6 +13,7 @@
 #include "glm/gtc/matrix_transform.hpp" //perspective, trans etc
 #include "glm/gtc/type_ptr.hpp" //value_ptr
 #include "obj3dcontainer.h"
+#include "ProjectMeshes.h"
 #include "obj3d.h"
 #include "mercenary.h"
 #include "tavern.h"
@@ -31,6 +32,7 @@ class Manager
 		bool inTavern;
 		Manager(string name);
 		void buyMercenary(int key, Tavern* tavern);
+		void buyMercenaryTrail(int cost);
 		void reportStats();
 		void buyFood(int cost);
 		void buyBeer(int cost);

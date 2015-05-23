@@ -44,10 +44,16 @@ public:
 	void toggleFreeRoam();
 	void setTavernView();
 	void setTrailView();
+
 	bool isTavernView();
 	bool isFreeRoam();
+	bool isShadowMapView();
+
 	void toggleGameViews();
 	void setPosition(glm::vec3 aPos);
+
+	void setShadowMapPass(glm::vec3 aPos, glm::vec3 lookAtPos);
+	void finishShadowMapPass();
 
 	BoundingBox bound;
 	float horizontalAngle = -3.14f/2.0f;
@@ -84,6 +90,11 @@ private:
 	glm::vec3 theWagonEye;
 	glm::vec3 theStrafe;
 	glm::vec3 theZoom;
+
+	//Light map views
+	bool shadowMapPass;
+	glm::vec3 lightEye;
+	glm::vec3 lightLookat;
 };
 
 #endif

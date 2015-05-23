@@ -98,6 +98,7 @@ int Terrain::checkEvents(glm::vec3 aPos){
     }
     if(eventsMap[spot] == AMBUSH){
         printf("%s\n", "Bandits are ambushing your party!");
+        // play sound
         event = AMBUSH;
     }
     if(eventsMap[spot] == WANDERER){
@@ -226,7 +227,7 @@ void Terrain::createTrail(){
             changeInPath = (rand() % (maxShift - minShift)) + minShift;
             int newZ = (rand() % (maxShift - minShift)) * direction + splineSeed[splineSeed.size() - 1].y;
             splineSeed.push_back(glm::vec2(indexZ, newZ));
-            cout << splineSeed[splineSeed.size() - 1].x << ", " << splineSeed[splineSeed.size() - 1].y << "\n";
+            //cout << splineSeed[splineSeed.size() - 1].x << ", " << splineSeed[splineSeed.size() - 1].y << "\n";
         }
         else {//if(changeInPath == 1){
             changeInPath--;
@@ -238,9 +239,9 @@ void Terrain::createTrail(){
     path = new Spline(splineSeed, 0, 0);
 
     for(int i = 0; i < 50; i++) { // reverse these
-        cout << "cp: " << i << ", " << path->getY(i) << "\n";
+    //    cout << "cp: " << i << ", " << path->getY(i) << "\n";
         criticalPoints.push_back(glm::vec3(i, 0, path->getY(i)));
-        printf("criticalPoints[%d]:%f,%f,%f \n", i, criticalPoints[i].x,criticalPoints[i].y,criticalPoints[i].z);
+       // printf("criticalPoints[%d]:%f,%f,%f \n", i, criticalPoints[i].x,criticalPoints[i].y,criticalPoints[i].z);
     }
 
     // using the spline, draw generate a path
@@ -304,10 +305,6 @@ void Terrain::createTrail(){
         }
     }
 
-/*#define LNEARTRAIL 7
-#define RNEARTRAIL 8
-#define LFARTRAIL 9
-#define RFARTRAIL 10*/
     // flat trail sides
     for(indexZ = 0; indexZ < MAP_Z; indexZ++) {
         for(indexX = 0; indexX < MAP_X; indexX++) {
@@ -357,7 +354,7 @@ void Terrain::createTrail(){
     createEvents();
 }
 
-void Terrain::init(TextureLoader* texLoader, Materials *matSetter, FrustumCull *fCuller, ProjectMeshes *newData)
+void Terrain::init(TextureLoader* texLoader, Materials *matSetter, FrustumCull *fCuller, ProjectMeshes *newData, glm::vec3 lightPosition)
 {
   terrainEvents.init(matSetter, fCuller, newData);
   terrainEvents.loadTerrEvMeshes(texLoader);
@@ -485,13 +482,14 @@ void Terrain::init(TextureLoader* texLoader, Materials *matSetter, FrustumCull *
   	//unbind the arrays
   	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-   tree.init(texLoader);
+   tree.init(texLoader, lightPosition);
    
 	assert(glGetError() == GL_NO_ERROR);
 }
 
 
-void Terrain::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMatrix, Camera* camera, glm::vec3 wagonPos, GLuint* pid)
+void Terrain::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMatrix, Camera* camera, 
+                   glm::vec3 wagonPos, GLuint* pid)
 {
   //set up the texture unit
    glEnable(GL_TEXTURE_2D);
