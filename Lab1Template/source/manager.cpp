@@ -39,7 +39,6 @@ bool Manager::partyDead(){
 	{
 	    if(mercs[i].dead == false)
 	    	return false;
-	    else
     }
     return true;
 }
