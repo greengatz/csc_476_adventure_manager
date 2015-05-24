@@ -24,7 +24,6 @@ public:
 	void draw(Camera *cam, glm::mat4 viewMat);
 	void toggle();
 private:
-	vector<Particle> torch; //plan: 1 torch particle system draw 4 times
 	vector<Particle> firePlace;
 
 	GLuint pid;
@@ -32,7 +31,6 @@ private:
 	//handles
 	GLint h_vertPos;
 	GLint h_vertTexCoor;
-	GLint h_scale;
 	GLint h_tex;
 	GLint h_color;
 	GLint h_ProjMat;
@@ -51,6 +49,8 @@ private:
 
 	bool on;
 	void loadBuffers();
+	void enableTex(int targetTex);
+	void drawOrb(glm::vec3 camPos);
 };
 
 #endif

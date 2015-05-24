@@ -52,20 +52,22 @@ void Menu::initMenu(TextureLoader *texLoader, GLint h_ModelMatrixA, GLint h_vert
 
 void Menu::setData(char* titleA, vector<string> aboutA, vector<option> optionsA)
 {
+
 	inMenu = true;
 	title = titleA;
 	about = aboutA;
 	options = optionsA;
+	printf("menu true\n");
 }
 
 void Menu::selectOption(int num)
 {
 	if(num < options.size())
 	{
-		options[num].funct(manager, gamePaused);
 		if(options[num].close == true){
 			inMenu = false;
 		}
+		options[num].funct(manager, gamePaused);
 	}
 }
 

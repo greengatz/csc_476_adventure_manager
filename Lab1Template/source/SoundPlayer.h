@@ -22,7 +22,7 @@
 const int NUM_SOUND_FILES = 10;
 
 const float sound_volume[] = {0.5, 0.5, 0.5, 0.5, 0.65, 0.65, 0.65, 0.65, 0.65, 0.65};
-const float song_length[] = {240, 95, 207, 252};
+const float song_length[] = {240, 95, 207, 252}; //only for background music
 
 class SoundPlayer
 {
@@ -47,6 +47,9 @@ private:
 	FMOD_CHANNEL *music;
 	FMOD_CHANNEL *voice;
 	FMOD_CHANNEL *soundEffect;
+	FMOD_CHANNELGROUP *musicGroup;
+	FMOD_CHANNELGROUP *voiceGroup;
+	FMOD_CHANNELGROUP *soundEffectGroup;
 	bool pauseSound;
 	bool success;
 	void play(FMOD_CHANNEL **channel, int ndx);

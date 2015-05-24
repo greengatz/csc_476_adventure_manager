@@ -21,7 +21,8 @@ class Wagon
 public:
 	Wagon();
 	virtual ~Wagon();
-	void init(TextureLoader* texLoader, Terrain* aTerrain, Menu* aMenu, bool* gP, Manager* mgr, SoundPlayer* audio);
+
+	void init(TextureLoader* texLoader, Terrain* aTerrain, Menu* aMenu, bool* gP, Manager* mgr, ProjectMeshes *newData, SoundPlayer* audio);
 	void draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMatrix, RenderingHelper* modelTrans);
 	void setPosition(float x, float y, float z);
 	glm::vec3 getPosition();
@@ -46,6 +47,7 @@ private:
 	Terrain* terrain;
 	Menu* menu;
 	Manager* manager;
+	ProjectMeshes *meshData;
 	bool* gamePaused;
 	float deltaTime;
 	bool wagonStart;

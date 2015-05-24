@@ -18,7 +18,7 @@
 #include "Materials.h"
 #include "ProjectMeshes.h"
 
-#define MERCHANT 1
+#define MERCHANTEVENT 1
 #define WANDERER 2
 #define AMBUSH 3
 #define SICKNESS 4
@@ -28,8 +28,10 @@ class Terrain
 public:
 	Terrain();
 	virtual ~Terrain();
-	void init(TextureLoader* texLoader, Materials *matSetter, FrustumCull *fCuller, ProjectMeshes *newData);
-	void draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMatrix, Camera* camera, glm::vec3 wagonPos, GLuint* pid);
+	void init(TextureLoader* texLoader, Materials *matSetter, FrustumCull *fCuller, 
+             ProjectMeshes *newData, glm::vec3 lightPosition);
+	void draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMatrix, 
+             Camera* camera, glm::vec3 wagonPos, GLuint* pid);
 	void createTrail();
 	void createEvents();
 	glm::vec3 getStartPosition();
@@ -64,6 +66,7 @@ private:
     Spline* path;
     Tree tree;
     int startingSpot;
+
 
 };
 

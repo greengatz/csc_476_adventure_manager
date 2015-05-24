@@ -92,9 +92,9 @@ int Terrain::checkEvents(glm::vec3 aPos){
     if(spot > MAP_Z - 10){
       terrainEvents.lowerBridge();
     }
-    if(eventsMap[spot] == MERCHANT){
+    if(eventsMap[spot] == MERCHANTEVENT){
         printf("%s\n", "You stumbled upon a merchant.");
-        event = MERCHANT;
+        event = MERCHANTEVENT;
     }
     if(eventsMap[spot] == AMBUSH){
         printf("%s\n", "Bandits are ambushing your party!");
@@ -123,7 +123,7 @@ void Terrain::placeEvents(){
       printf("Placing ambush at %f, %f\n", temp.x, temp.z);
 
     }
-    if(eventsMap[i] == MERCHANT){
+    if(eventsMap[i] == MERCHANTEVENT){
       temp.x -= 100;
       temp.z += 1.5;
       terrainEvents.addMerchantStand(temp, glm::mat4(1.0f));
@@ -131,7 +131,7 @@ void Terrain::placeEvents(){
     }
     if(eventsMap[i] == WANDERER){
       temp.x -= 100;
-      // temp.z += 0.5;
+      temp.z += 0.5;
       terrainEvents.addRandomDuder(temp, glm::mat4(1.0f));
       printf("Placing merchant at %f, %f\n", temp.x, temp.z);
     }
@@ -156,7 +156,7 @@ void Terrain::createEvents(){
     for(int i = 0; i <= merchCount; i++){
         int random = ((rand() % (MAP_X - startingOffset - endingOffset)) +  startingOffset);
         if(eventsMap[random] == 0 && eventsMap[random + 1] == 0 && eventsMap[random - 1] == 0)
-            eventsMap[random] = MERCHANT; 
+            eventsMap[random] = MERCHANTEVENT; 
         else
             merchCount++;
     }
@@ -354,7 +354,7 @@ void Terrain::createTrail(){
     createEvents();
 }
 
-void Terrain::init(TextureLoader* texLoader, Materials *matSetter, FrustumCull *fCuller, ProjectMeshes *newData)
+void Terrain::init(TextureLoader* texLoader, Materials *matSetter, FrustumCull *fCuller, ProjectMeshes *newData, glm::vec3 lightPosition)
 {
   terrainEvents.init(matSetter, fCuller, newData);
   terrainEvents.loadTerrEvMeshes(texLoader);
@@ -482,13 +482,14 @@ void Terrain::init(TextureLoader* texLoader, Materials *matSetter, FrustumCull *
   	//unbind the arrays
   	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-   tree.init(texLoader);
+   tree.init(texLoader, lightPosition);
    
 	assert(glGetError() == GL_NO_ERROR);
 }
 
 
-void Terrain::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMatrix, Camera* camera, glm::vec3 wagonPos, GLuint* pid)
+void Terrain::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMatrix, Camera* camera, 
+                   glm::vec3 wagonPos, GLuint* pid)
 {
   //set up the texture unit
    glEnable(GL_TEXTURE_2D);

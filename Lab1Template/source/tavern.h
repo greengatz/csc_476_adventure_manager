@@ -40,6 +40,7 @@ class Tavern
 		void init(Materials *newMatSetter, FrustumCull *newCuller, ProjectMeshes *newData);
 		void loadTavernMeshes(TextureLoader* texLoader);
 		void showMercsForSale();
+		void newEmblem();
         //void buyMercenary(int mercenaryID, Manager* purchaser);
 		void drawTavern(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor, GLint h_aTexCoord, double ltime);
 
@@ -51,12 +52,14 @@ class Tavern
 		vec3 doorLoc;
 		vec3 beerLoc;
 		vec3 foodLoc;
+		int wallEmblem;
 		float getRandFloat(float limit);
 		int getRandInt(int limit);
 		void loadBufferData(TextureLoader* texLoader);
 		void createTable1(glm::vec3 initLoc, float ang);
 		void createPillar(glm::vec3 initLoc, bool north);
 		void createFirePlace(glm::vec3 init);
+		void createEmblems();
 		// void addTavernMesh(const string filename, bool noNorms);
 		void addTavernItem(int index, int vectMesh, glm::vec3 scale, glm::vec3 trans, glm::mat4 rot);
 		void addTavernCharacter(int index, glm::vec3 scale, glm::vec3 trans, glm::mat4 rot);

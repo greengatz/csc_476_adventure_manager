@@ -39,8 +39,9 @@ class Mercenary
 
 		// these are temporary, edit them as you need
 		int maxHealth;
-		int curHealth;
-		int damage; // power if a healer
+		int currHealth;
+		int maxDamage; // power if a healer
+		int currDamage;
 
 		int maxHunger;
 		int currentHunger;
@@ -49,9 +50,11 @@ class Mercenary
 		int maxHappiness;
 		int currentHappiness;
 		int beerRate;
+        bool dead;
 
         // method prototypes
 		Mercenary(vector<Obj3d> mesh);
+		Mercenary();
 		void draw(GLint h_uModelMatrix, int meshIndex);
 		void update();
         void printDetails();

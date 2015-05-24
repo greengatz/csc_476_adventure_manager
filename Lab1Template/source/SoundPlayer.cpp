@@ -34,6 +34,16 @@ SoundPlayer::SoundPlayer()
 		success = false;
 	}
 
+	if (result == FMOD_OK) {
+		FMOD_System_CreateChannelGroup(sys, NULL, &musicGroup);
+		FMOD_System_CreateChannelGroup(sys, NULL, &voiceGroup);
+		FMOD_System_CreateChannelGroup(sys, NULL, &soundEffectGroup);
+	}
+	else {
+		printf("Failed to initialze sound system\n");
+		success = false;
+	}
+
 	if (success) {
 		printf("Successful initialization of sound system\n");
 	}
@@ -53,21 +63,38 @@ SoundPlayer::~SoundPlayer()
 
 void SoundPlayer::playBackgroundMusic(bool tav)
 {
+	printf("called play background music and tav is %d\n", tav);
 	//gets a 0 or 1 if trail, 2 or 3 if tavern
 	curBkgSong = (tav) ? getRandInt(2) + 1 : getRandInt(2) - 1;
 	play(&music, curBkgSong);
+	FMOD_Channel_SetChannelGroup(music, musicGroup);
+	FMOD_ChannelGroup_SetVolume(musicGroup, sound_volume[curBkgSong]);
+	FMOD_Channel_SetPaused(music, false);
 	startTime = time(0);
 	pausedTime = 0;
+	FMOD_System_Update(sys);
 }
 
 void SoundPlayer::playSoundEffect(int file)
 {
 	play(&soundEffect, file);
+	FMOD_Channel_SetChannelGroup(soundEffect, soundEffectGroup);
+	FMOD_ChannelGroup_SetVolume(soundEffectGroup, sound_volume[file]);
+	FMOD_Channel_SetPaused(soundEffect, false);
+	FMOD_System_Update(sys);
 }
 
 void SoundPlayer::playVoice(int file)
 {
 	play(&voice, file);
+	play(&soundEffect, file);
+	//set channel group
+	FMOD_Channel_SetChannelGroup(voice, voiceGroup);
+	//set volume
+	FMOD_ChannelGroup_SetVolume(voiceGroup, sound_volume[file]);
+	//unpause
+	FMOD_Channel_SetPaused(voice, false);
+	FMOD_System_Update(sys); //throw this after everything
 }
 
 void SoundPlayer::loadFile(int ndx)
@@ -88,12 +115,11 @@ void SoundPlayer::play(FMOD_CHANNEL **channel, int ndx)
 {
 	if (success) {
 		FMOD_Channel_SetPaused((*channel), true);
-		result = FMOD_System_PlaySound(sys, FMOD_CHANNEL_FREE, sounds[ndx], false, &(*channel));
-		//printf("Did not play sound because %d\n", result);
+		result = FMOD_System_PlaySound(sys, FMOD_CHANNEL_REUSE, sounds[ndx], false, &(*channel));
 		FMOD_Channel_SetMode((*channel), FMOD_LOOP_OFF);
+		// FMOD_Channel_SetVolume((*channel), sound_volume[ndx]);
+		// FMOD_Channel_SetPaused((*channel), false);
 		FMOD_System_Update(sys);
-		FMOD_Channel_SetVolume((*channel), sound_volume[ndx]);
-		FMOD_Channel_SetPaused((*channel), false);
 	}
 }
 

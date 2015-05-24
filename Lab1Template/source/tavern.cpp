@@ -67,6 +67,12 @@ int TAV_TORCH_ID = 6300;
 int TAV_PLANK_ID = 6400;
 int TAV_ROCK_ID = 6500;
 int TAV_DIRT_ID = 6600;
+int MINOTAUR_EMBLEM_ID = 4400;
+int CENTAUR_EMBLEM_ID = 4500;
+int DRAGON_EMBLEM_ID = 4600;
+int PEGASUS_EMBLEM_ID = 4700;
+int PHOENIX_EMBLEM_ID = 4800;
+int HYDRA_EMBLEM_ID = 4900;
 
 // Obj3dContainer containers[std::extent<decltype(tavObjFiles)>::value];
 
@@ -162,6 +168,12 @@ void Tavern::loadBufferData(TextureLoader* texLoader)
 	texLoader->LoadTexture((char *)"assets/tavern/plankTex.bmp", TAV_PLANK_ID);
 	texLoader->LoadTexture((char *)"assets/tavern/rockTex.bmp", TAV_ROCK_ID);
 	texLoader->LoadTexture((char *)"assets/tavern/dirtTex.bmp", TAV_DIRT_ID);
+	texLoader->LoadTexture((char *)"assets/tavern/minotaurTex.bmp", MINOTAUR_EMBLEM_ID);
+	texLoader->LoadTexture((char *)"assets/tavern/centaurTex.bmp", CENTAUR_EMBLEM_ID);
+	texLoader->LoadTexture((char *)"assets/tavern/dragonTex.bmp", DRAGON_EMBLEM_ID);
+	texLoader->LoadTexture((char *)"assets/tavern/pegasusTex.bmp", PEGASUS_EMBLEM_ID);
+	texLoader->LoadTexture((char *)"assets/tavern/phoenixTex.bmp", PHOENIX_EMBLEM_ID);
+	texLoader->LoadTexture((char *)"assets/tavern/hydraTex.bmp", HYDRA_EMBLEM_ID);
 }
 
 void Tavern::createTable1(glm::vec3 initLoc, float ang)
@@ -327,6 +339,33 @@ void Tavern::createFirePlace(glm::vec3 init)
 	TURKEY_NUM = tavernItems.size() -1;
 }
 
+void Tavern::newEmblem()
+{
+	int emblemTex = getRandInt(6) * 100 + 4300;
+	tavernItems[wallEmblem].loadTextureCoor(emblemTex);
+	tavernItems[wallEmblem - 1].loadTextureCoor(emblemTex);
+	tavernItems[wallEmblem - 2].loadTextureCoor(emblemTex);
+	tavernItems[wallEmblem - 3].loadTextureCoor(emblemTex);
+}
+
+void Tavern::createEmblems()
+{
+	int emblemTex = getRandInt(6) * 100 + 4300;
+	// int emblemTex = WOLF_EMBLEM_ID;
+	glm::vec3 scaler = glm::vec3(0.5, 0.5, 0.5);
+	glm::mat4 rot = glm::rotate(glm::mat4(1.0f), (const float)90, glm::vec3(0, 1.0f, 0));
+	addTavernItem(CRATE, 2, scaler, glm::vec3(7.1, 3.5, -23.0), glm::mat4(1.0f));
+	tavernItems[tavernItems.size() - 1].loadTextureCoor(emblemTex);
+	addTavernItem(CRATE, 2, scaler, glm::vec3(38.9, 3.5, -23.5), glm::mat4(1.0f));
+	tavernItems[tavernItems.size() - 1].loadTextureCoor(emblemTex);
+
+	addTavernItem(CRATE, 2, scaler, glm::vec3(23.05, 3.5, -11.6), rot);
+	tavernItems[tavernItems.size() - 1].loadTextureCoor(emblemTex);
+	addTavernItem(CRATE, 2, scaler, glm::vec3(23.05, 3.5, -35.4), rot);
+	tavernItems[tavernItems.size() - 1].loadTextureCoor(emblemTex);
+	wallEmblem = tavernItems.size() - 1;
+}
+
 void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 {
 	srand(time(NULL));
@@ -352,10 +391,10 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_ROOF_ID);
 
 	//pillars
-	createPillar(glm::vec3(18.5, 1, -27.2), true);
-	createPillar(glm::vec3(27.6, 1, -27.2), true);
-	createPillar(glm::vec3(18.5, 1, -19.8), false);
-	createPillar(glm::vec3(27.6, 1, -19.8), false);
+	// createPillar(glm::vec3(18.5, 1, -27.2), true);
+	// createPillar(glm::vec3(27.6, 1, -27.2), true);
+	// createPillar(glm::vec3(18.5, 1, -19.8), false);
+	// createPillar(glm::vec3(27.6, 1, -19.8), false);
 
 	addTavernItem(CRATE, 2, glm::vec3(0.5, 1, 2), glm::vec3(21.9, 0.025, -13.5), glm::mat4(1.0f));
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_BRANCHES_ID);
@@ -486,7 +525,7 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_LANDLORD_ID);
 	addTavernItem(LUMBERJACK, 1, glm::vec3(1, 1, 1), glm::vec3(15.5, .99, -16), glm::mat4(1.0f));
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_LUMBERJACK_ID);
-	
+
 	//fireplace and roasting
 	addTavernCharacter(SAMURAI, glm::vec3(1, 1, 1), glm::vec3(20.05, 1.3, -23.5), glm::mat4(1.0f));
 	tavernCharacters[tavernCharacters.size() - 1].meshes[0].loadTextureCoor(TAV_SAMURAI_ID);
@@ -495,6 +534,7 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 	addTavernCharacter(SAMURAI, glm::vec3(1, 1, 1), glm::vec3(21.05, 1.3, -22.5), glm::mat4(1.0f));
 	tavernCharacters[tavernCharacters.size() - 1].meshes[0].loadTextureCoor(TAV_SAMURAI_ID);
 	createFirePlace(glm::vec3(23.05, 1.5, -23.5));
+	createEmblems();
 
     // try some assimp stuff
     // TODO
