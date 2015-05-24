@@ -1,9 +1,5 @@
 #include "manager.h"
-<<<<<<< HEAD
 #include "menu.h"
-=======
-#include "Menu.h"
->>>>>>> e3305868ea59f5c040e6d003dac308e33379f753
 
 void (*fpContinue)(void *, bool *) = NULL;
 
