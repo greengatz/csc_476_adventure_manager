@@ -17,6 +17,8 @@ varying vec4 pos;
 varying vec3 normal;
 varying vec2 vTexCoord;
 
+varying float fogDist;
+
 void main()
 {
    vec3 n,e,l1,h1,color,light1;
@@ -34,5 +36,13 @@ void main()
       discard;
    }
 
-   gl_FragColor = texColor * vec4(color.x, color.y, color.z, 1.0);
+   vec4 fogColor = vec4(0.4, 0.4, 0.4, 1.0);
+   // float fogFactor = (5 - fogDist)/(5 - 8); //linear fog equation
+   float fogFactor = 1.0 - 1.0 / exp(fogDist * 0.15); //fog density is 0.15
+   fogFactor = clamp(fogFactor, 0.0, 1.0);
+
+   vec4 targetCol = texColor * vec4(color.x, color.y, color.z, 1.0);
+   gl_FragColor = mix(targetCol, fogColor, fogFactor);
+
+   // gl_FragColor = texColor * vec4(color.x, color.y, color.z, 1.0);
 }

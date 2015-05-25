@@ -18,12 +18,16 @@ varying vec4 pos;
 varying vec3 normal;	
 varying vec2 vTexCoord;
 
+//fog
+uniform int inTav;
+varying float fogDist;
+
 void main()
 {
 	vec4 norm = (uViewMatrix * uModelMatrix) * vec4(vertNor, 0.0);
 	normal = norm.xyz;
 	pos = uViewMatrix * uModelMatrix * vertPos;
-   gl_Position = uProjMatrix * uViewMatrix * uModelMatrix * vertPos;
+    gl_Position = uProjMatrix * uViewMatrix * uModelMatrix * vertPos;
    
 	if(flag == 1)
 	{
@@ -34,5 +38,10 @@ void main()
 	if (terrainToggle == 1)
 	{
 		vTexCoord = aTexCoord;
+	}
+
+	if (inTav == 0)
+	{
+		fogDist = abs(pos.z / pos.w);
 	}
 }

@@ -8,7 +8,6 @@ float Particle::randFloat(float low, float high)
 
 Particle::Particle()
 {
-	mass = 0.01;
 	lifespan = 1.0;
 	scale = 1.0;
 }
@@ -20,7 +19,6 @@ bool Particle::isSmokey()
 
 void Particle::init(int staggerTime, bool isSmoke)
 {
-	mass = 0.01;
 	smoke = isSmoke;
 	stagger = staggerTime;
 	rebirth(0.0);
@@ -157,6 +155,8 @@ void Particle::drawTorch(glm::vec3 loc, GLint h_color, GLint h_ModelViewMat, int
 
 		// printf("pos: %f %f %f, life: %f, col: %f %f %f %f\n", loc.x + pos.x, loc.y + pos.y, loc.z + pos.z, lifespan, curCol.r, curCol.g, curCol.b, curCol.w);
 
-		glDrawElements(GL_TRIANGLE_STRIP, indSize, GL_UNSIGNED_INT, 0);
+		if (col.w > 0.15) {
+			glDrawElements(GL_TRIANGLE_STRIP, indSize, GL_UNSIGNED_INT, 0);
+		}
 	}
 }
