@@ -15,7 +15,7 @@ CharDae::CharDae(const string source) {
     }
 
     // TODO remove this magic
-    meshInd = 1;
+    meshInd = 0;
 
     cout << "root " << scene->mRootNode << "\n";
     root = scene->mRootNode;

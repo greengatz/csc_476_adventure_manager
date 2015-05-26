@@ -498,7 +498,7 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 
     // try some assimp stuff
     // TODO
-    sam = CharDae("assets/characters/badAnim.dae");
+    sam = CharDae("assets/characters/betterAnim.dae");
 }
 
 void Tavern::enableBuff(GLint h_vertPos, GLint h_vertNor, GLuint posBuf, GLuint norBuf, GLuint indBuf) {
