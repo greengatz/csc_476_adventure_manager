@@ -37,12 +37,13 @@ void main()
 	light2 = (ka + (kd * max(dot(l2,n), 0.0)) + (ks * pow(max(dot(h2,n), 0.0), s))) * intensity;
 	color = light1 + light2;
 
+   vec4 fogColor = vec4(0.4, 0.4, 0.4, 1.0);
+   // float fogFactor = (5 - fogDist)/(5 - 8); //linear fog equation
+   float fogFactor = 1.0 - 1.0 / exp(fogDist * 0.15); //fog density is 0.05
+   
 	if (inTav == 0)
 	{
-		vec4 fogColor = vec4(0.4, 0.4, 0.4, 1.0);
-		// float fogFactor = (5 - fogDist)/(5 - 8); //linear fog equation
-		float fogFactor = 1.0 - 1.0 / exp(fogDist * 0.15); //fog density is 0.05
-   		fogFactor = clamp(fogFactor, 0.0, 1.0);
+   	fogFactor = clamp(fogFactor, 0.0, 1.0);
 	}
 
 	if (terrainToggle == 1 || flag == 1)
