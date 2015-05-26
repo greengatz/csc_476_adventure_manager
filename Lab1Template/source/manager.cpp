@@ -1,5 +1,5 @@
 #include "manager.h"
-#include "Menu.h"
+#include "menu.h"
 
 void (*fpContinue)(void *, bool *) = NULL;
 
