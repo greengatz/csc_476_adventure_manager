@@ -98,6 +98,12 @@ GLint h_option;
 GLint h_flag;
 GLint h_inTav;
 
+// bone handles
+GLint h_boneFlag;
+GLint h_boneIds;
+GLint h_boneWeights;
+GLint h_boneTransforms;
+
 bool keyToggles[256] = {false};
 float t = 0.0f;
 float h = 0.1f;
@@ -297,6 +303,11 @@ bool installShaders(const string &vShaderName, const string &fShaderName)
 	h_flag = GLSL::getUniformLocation(pid, "flag");
 	h_inTav = GLSL::getUniformLocation(pid, "inTav");
 
+    h_boneFlag = GLSL::getUniformLocation(pid, "boneToggle");
+    h_boneIds = GLSL::getAttribLocation(pid, "boneIds");
+    h_boneWeights = GLSL::getAttribLocation(pid, "boneWeights");
+    h_boneTransforms = GLSL::getUniformLocation(pid, "bones");
+
 	/*Toggle for plane coloring*/
     terrainToggleID = GLSL::getUniformLocation(pid, "terrainToggle");
 
@@ -362,7 +373,6 @@ void drawGL()
 
   	glfwGetCursorPos(window, &xpos, &ypos);
 	camera.update(xpos, ypos, wagon.getPosition());
-    //printf("camera at %f, %f\n", camera.getPosition().x, camera.getPosition().z); // TODO remove this
 
 	glUniform3fv(h_lightPos1, 1, glm::value_ptr(glm::vec3(23.05f, 4.0f, -23.5f)));
 	glUniform3fv(h_lightPos2, 1, glm::value_ptr(glm::vec3(-125.0f, 4.0f, 25.0f)));
@@ -443,7 +453,9 @@ void drawGL()
 		matSetter.setMaterial(4); // TODO does this line do anything?
 		ModelTrans.popMatrix();
 		matSetter.setMaterial(3);
-		tavern.drawTavern(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord, dtDraw);
+		tavern.drawTavern(h_ModelMatrix, h_vertPos, h_vertNor, 
+                h_aTexCoord, dtDraw, h_boneFlag, h_boneIds, 
+                h_boneWeights, h_boneTransforms);
 		fire.draw(&camera, view.topMatrix()); //draw fire
 		glUniform1i(terrainToggleID, 0);
 	}
