@@ -78,8 +78,8 @@ int HYDRA_EMBLEM_ID = 4900;
 
 int TURKEY_NUM;
 
-Tavern::Tavern()// :
-    //sam(CharDae("not_a_file"))
+Tavern::Tavern() :
+    sam(CharDae("not_a_file"))
 {
 	doorLoc = vec3(7.5, 1.35, -23);
 	beerLoc = vec3(35.0, 1.0, -35.0);
@@ -538,7 +538,7 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 
     // try some assimp stuff
     // TODO
-    //sam = CharDae("assets/characters/samurai.dae");
+    sam = CharDae("assets/characters/betterAnim.dae");
 }
 
 void Tavern::enableBuff(GLint h_vertPos, GLint h_vertNor, GLuint posBuf, GLuint norBuf, GLuint indBuf) {
@@ -581,7 +581,10 @@ void Tavern::enableTextureBuffer(GLint h_aTexCoord, GLuint texBuf, int id)
   glVertexAttribPointer(h_aTexCoord, 2, GL_FLOAT, GL_FALSE, 0, 0);
 }
 
-void Tavern::drawTavern(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor, GLint h_aTexCoord, double ltime)
+void Tavern::drawTavern(GLint h_ModelMatrix, GLint h_vertPos, 
+                GLint h_vertNor, GLint h_aTexCoord, double ltime,
+                GLint h_boneFlag, GLint h_boneIds,
+                GLint h_boneWeights, GLint h_boneTransforms)
 {
 	applyTurkeySpin(ltime);
 	for (int iter = 0; iter < tavernItems.size(); iter++) {
@@ -624,7 +627,12 @@ void Tavern::drawTavern(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor, G
 	}
 
     // TODO remove this
-    //sam.drawChar(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord);
+    sam.drawChar(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord, h_boneFlag, h_boneIds, h_boneWeights, h_boneTransforms, ltime);
+    
+    if(sam.animChoice == -1) {
+        cout << "starting animation\n";
+        sam.startAnimation("run");
+    }
 }
 
 void Tavern::applyTurkeySpin(double ltime)
