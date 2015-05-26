@@ -7,6 +7,8 @@ uniform mat4 uProjMatrix;
 uniform mat4 uViewMatrix;
 uniform mat4 uModelMatrix;
 
+varying float fogDist;
+
 varying vec2 vTexCoord;
 
 void main()
@@ -15,4 +17,8 @@ void main()
    gl_Position = uProjMatrix * uViewMatrix * uModelMatrix * vertPos;
    
 	vTexCoord = aTexCoord;
+
+	//fog
+	vec4 pos = uViewMatrix * uModelMatrix * vertPos;
+	fogDist = abs(pos.z / pos.w);
 }

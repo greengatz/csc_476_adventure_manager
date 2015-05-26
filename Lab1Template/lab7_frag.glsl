@@ -19,6 +19,9 @@ varying vec3 color; // passed from the vertex shader
 varying vec4 pos;
 varying vec3 normal;
 
+uniform int inTav;
+varying float fogDist;
+
 void main()
 {
 	vec3 n,e,l1,l2,h1,h2,color,light1,light2;
@@ -34,10 +37,23 @@ void main()
 	light2 = (ka + (kd * max(dot(l2,n), 0.0)) + (ks * pow(max(dot(h2,n), 0.0), s))) * intensity;
 	color = light1 + light2;
 
+   vec4 fogColor = vec4(0.4, 0.4, 0.4, 1.0);
+   // float fogFactor = (5 - fogDist)/(5 - 8); //linear fog equation
+   float fogFactor = 1.0 - 1.0 / exp(fogDist * 0.15); //fog density is 0.05
+   
+	if (inTav == 0)
+	{
+   	fogFactor = clamp(fogFactor, 0.0, 1.0);
+	}
+
 	if (terrainToggle == 1 || flag == 1)
 	{
 		vec4 texColor1 = texture2D(uTexUnit, vTexCoord);
-		gl_FragColor = texColor1 * 2.0 * vec4(color.r, color.g, color.b, 1.0);
+		vec4 targetCol = texColor1 * 2.0 * vec4(color.r, color.g, color.b, 1.0);
+		gl_FragColor = mix(targetCol, fogColor, fogFactor);
+
+		// vec4 texColor1 = texture2D(uTexUnit, vTexCoord);
+		// gl_FragColor = texColor1 * 2.0 * vec4(color.r, color.g, color.b, 1.0);
 	}
 	else
 	{

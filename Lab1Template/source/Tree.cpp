@@ -17,6 +17,7 @@ int TREE_LEAFS_TEX = 81;
 int TREE1_BOARD_TEX = 82;
 
 Tree::Tree() :
+   //Position translates the entire scene to to the location of the trail
    position(-100.0f, 0.0f, 25.0f),
    lightPosID(0),
    //Skybox Buffer
@@ -240,8 +241,7 @@ void Tree::drawBillboard(glm::vec3 treePosition, Camera *camera, glm::vec3 wagon
    glm::vec3 camPos = camera->getPosition();
 
    glm::vec3 up = glm::vec3(0.0, 1.0, 0.0);
-   glm::vec3 look = camPos - 
-      (treePosition + position + glm::vec3(0.0, 0.88, 0.0));
+   glm::vec3 look = camPos - (treePosition + position);
    look.y = 0.0;
    look = normalize(look);
    glm::vec3 lookAt = glm::vec3(0.0, 0.0, -1.0);
@@ -308,7 +308,7 @@ void Tree::draw(glm::vec3 treePosition, Camera *camera, glm::vec3 wagonPos)
 
    //Position Wagon along the trail
    ModelTrans.pushMatrix();
-      ModelTrans.translate(treePosition + position); //this was just "position". Can get rid of this after.
+      ModelTrans.translate(treePosition + position);
       ModelTrans.scale(scale, scale, scale);
       glUniformMatrix4fv(h_ModelMatrixShadow, 1, GL_FALSE, glm::value_ptr(ModelTrans.modelViewMatrix));
    ModelTrans.popMatrix();

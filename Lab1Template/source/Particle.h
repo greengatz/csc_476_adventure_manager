@@ -24,7 +24,6 @@ private:
 	int stagger;
 	float origTrans;
 	bool smoke;
-	float mass;
 	glm::vec3 pos;
 	glm::vec3 vel;
 	float lifespan;

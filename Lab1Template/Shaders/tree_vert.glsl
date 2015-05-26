@@ -14,6 +14,8 @@ varying vec4 pos;
 varying vec3 normal; 
 varying vec2 vTexCoord;
 
+varying float fogDist;
+
 void main()
 {
    vec4 norm = (uViewMatrix * uModelMatrix) * vec4(vertNor, 0.0);
@@ -22,4 +24,8 @@ void main()
    gl_Position = uProjMatrix * uViewMatrix * uModelMatrix * vertPos;
    
    vTexCoord = aTexCoord;
+
+   	//fog
+	vec4 pos = uViewMatrix * uModelMatrix * vertPos;
+	fogDist = abs(pos.z / pos.w);
 }

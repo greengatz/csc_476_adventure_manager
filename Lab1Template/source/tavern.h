@@ -19,7 +19,7 @@
 #include "TextureLoader.h"
 #include "Materials.h"
 #include "FrustumCull.h"
-//#include "charDae.h"
+#include "charDae.h"
 #include "ProjectMeshes.h"
 
 using namespace std;
@@ -42,7 +42,10 @@ class Tavern
 		void showMercsForSale();
 		void newEmblem();
         //void buyMercenary(int mercenaryID, Manager* purchaser);
-		void drawTavern(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor, GLint h_aTexCoord, double ltime);
+		void drawTavern(GLint h_ModelMatrix, GLint h_vertPos, 
+                    GLint h_vertNor, GLint h_aTexCoord, double ltime,
+                    GLint h_boneFlag, GLint h_boneIds, 
+                    GLint h_boneWeights, GLint h_boneTransforms);
 
 	private:
 		float curTime;
@@ -68,7 +71,7 @@ class Tavern
 		void disableBuff(GLint h_vertPos, GLint h_vertNor, GLint h_aTexCoord);
 		void applyTurkeySpin(double ltime);
 
-        //CharDae sam;
+        CharDae sam;
 };
 
 #endif

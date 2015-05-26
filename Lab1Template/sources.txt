@@ -28,7 +28,7 @@ set(HEADERS
    shader.hpp
    menu.h
    Skybox.h
-#   charDae.h
+   charDae.h
    Tree.h
    FadeSystem.h
    ProjectMeshes.h
@@ -68,7 +68,7 @@ set(SOURCES
    shader.cpp
    menu.cpp
    Skybox.cpp
- #  charDae.cpp
+   charDae.cpp
    Tree.cpp
    FadeSystem.cpp
    ProjectMeshes.cpp
