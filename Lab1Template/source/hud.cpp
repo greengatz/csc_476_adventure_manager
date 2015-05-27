@@ -1,5 +1,6 @@
 #include "hud.h"
 int HUD_ID = 4000;
+int SIDEHUD_ID = 4004;
 int HOME_ID = 4001;
 int DEAD_ID = 4002;
 
@@ -12,8 +13,11 @@ HUD::HUD(Manager *newMan)
 	GrndTexBuffObj = 0;
 	GIndxBuffObj = 0;
 	posBufObjMenu = 0;
+  posBufObjSideHUD = 0;
 	indxBuffObjMenu = 0;
+  indxBuffObjSideHUD = 0;
 	textBuffMenu = 0;
+  textBuffSideHud = 0;
 	on = true;
 	homeScreenOn = true;
   deadScreenOn = false;
@@ -80,6 +84,40 @@ void HUD::initHUD(TextureLoader *texLoader)
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(idx), idx, GL_STATIC_DRAW);
 }
 
+void HUD::initSideHud(TextureLoader *texLoader)
+{
+  texLoader->LoadTexture((char *)"assets/hud.bmp", SIDEHUD_ID);
+
+
+  GLfloat homeVerts[] = {
+    800.0f, 78.0f, 1.0f,
+    800.0f, 750.0f, 1.0f,
+    1024.0f, 750.0f, 1.0f,
+    1024.0f, 78.0f, 1.0f 
+  };
+
+    glGenBuffers(1, &posBufObjSideHUD);
+    glBindBuffer(GL_ARRAY_BUFFER, posBufObjSideHUD);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(homeVerts), homeVerts, GL_STATIC_DRAW);
+
+  static GLfloat GrndTex[] = {
+      0, 1, // back
+      0, 0,
+      1, 0,
+      1, 1 };
+
+    unsigned short idx[] = {0, 1, 2, 0, 2, 3};
+
+    g_GiboLen = 6;
+    glGenBuffers(1, &textBuffSideHud);
+    glBindBuffer(GL_ARRAY_BUFFER, textBuffSideHud);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GrndTex), GrndTex, GL_STATIC_DRAW);
+
+    glGenBuffers(1, &indxBuffObjSideHUD);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indxBuffObjSideHUD);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(idx), idx, GL_STATIC_DRAW);
+}
+
 void HUD::initHomeScreen(TextureLoader *texLoader)
 {
 	texLoader->LoadTexture((char *)"assets/homeScreen.bmp", HOME_ID);
@@ -123,7 +161,7 @@ void HUD::drawHud(Camera * camera, int width, int height)
   glUniformMatrix4fv( h_ProjMatrix, 1, GL_FALSE, glm::value_ptr( proj.topMatrix()));
   proj.pushMatrix();
 	// enableBuff(h_vertPos, h_aTexCoord);
-  enableBuff();
+  enableBuff(posBufObjHUD, HUD_ID);
 
 	mat4 Ortho = glm::ortho(0.0f, (float)width, (float)height, 0.0f);
  
@@ -141,9 +179,37 @@ void HUD::drawHud(Camera * camera, int width, int height)
   proj.popMatrix();
 }
 
-void HUD::enableBuff() {
+void HUD::drawSideHud(Camera * camera, int width, int height)
+{
+  glUseProgram(pid);
+  MatrixStack proj;
+  proj.pushMatrix();
+  camera->applyProjectionMatrix(&proj);
+  glUniformMatrix4fv( h_ProjMatrix, 1, GL_FALSE, glm::value_ptr( proj.topMatrix()));
+  proj.pushMatrix();
+  // enableBuff(h_vertPos, h_aTexCoord);
+
+  enableBuff(posBufObjSideHUD, SIDEHUD_ID);
+
+  mat4 Ortho = glm::ortho(0.0f, (float)width, (float)height, 0.0f);
+ 
+  glDisable(GL_DEPTH_TEST); // Disable the Depth-testing
+   
+  glm::mat4 _guiMVP;
+  _guiMVP = Ortho * glm::mat4(1.0f); // Identity Matrix
+   
+  glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(_guiMVP));
+  
+  glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0); // draw first object
+  
+  glEnable(GL_DEPTH_TEST); // Enable the Depth-testing
+  disableBuff();
+  proj.popMatrix();
+}
+
+void HUD::enableBuff(GLuint posBufObjA, int ID) {
 	glEnable(GL_TEXTURE_2D);
-    glActiveTexture(GL_TEXTURE0);
+  glActiveTexture(GL_TEXTURE0);
 
   GLSL::enableVertexAttribArray(h_vertPos); //position
   if(homeScreenOn || deadScreenOn)
@@ -152,7 +218,7 @@ void HUD::enableBuff() {
   }
   else
   {
-  	glBindBuffer(GL_ARRAY_BUFFER, posBufObjHUD);
+  	glBindBuffer(GL_ARRAY_BUFFER, posBufObjA);
   }
   glVertexAttribPointer(h_vertPos, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
@@ -166,7 +232,7 @@ void HUD::enableBuff() {
   }
   else
   {
-  	glBindTexture(GL_TEXTURE_2D, HUD_ID);
+  	glBindTexture(GL_TEXTURE_2D, ID);
   }
 
   GLSL::enableVertexAttribArray(h_aTexCoord);

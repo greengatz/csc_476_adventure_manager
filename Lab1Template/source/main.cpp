@@ -611,6 +611,7 @@ void drawGL()
 		// }
 		// hud.drawHud(h_ModelMatrix, h_vertPos, g_width, g_height, h_aTexCoord);
 		hud.drawHud(&camera, g_width, g_height);
+		hud.drawSideHud(&camera, g_width, g_height);
 		glUniform1i(h_flag, 0);
 
 		if(!hud.homeScreenOn)
@@ -1043,6 +1044,7 @@ int main(int argc, char **argv)
   	//Create about vector and add an element
 
   	hud.initHUD(&texLoader);
+  	hud.initSideHud(&texLoader);
   	hud.initHomeScreen(&texLoader);
   	initText2D( "Holstein.DDS" );
   	dtDraw = 0;

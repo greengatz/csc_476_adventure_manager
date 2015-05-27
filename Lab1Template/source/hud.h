@@ -26,21 +26,26 @@ class HUD
 		
 		HUD(Manager *newMan);
 		void drawHud(Camera * camera, int width, int height);
+		void drawSideHud(Camera * camera, int width, int height);
 		void initHUD(TextureLoader *texLoader);
 		void initHomeScreen(TextureLoader *texLoader);
-		void enableBuff();
+		void initSideHud(TextureLoader *texLoader);
+		void enableBuff(GLuint posBufObjA, int ID);
 		void disableBuff();//GLint h_vertPos, GLint h_aTexCoord);
 		GLuint posBufObjHUD;
+		GLuint posBufObjSideHUD;
 		GLuint posBufObjMenu;
 
 		GLuint texBuffObjMenu;
 		GLuint indxBuffObjMenu;
+		GLuint indxBuffObjSideHUD;
 		GLuint GIndxBuffObj;
 
 		GLuint colorBufObjHUD;
 
 		GLuint GrndTexBuffObj;
 		GLuint textBuffMenu;
+		GLuint textBuffSideHud;
 
 		bool on;
 		bool homeScreenOn;
