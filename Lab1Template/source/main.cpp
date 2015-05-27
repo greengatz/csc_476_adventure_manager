@@ -67,7 +67,7 @@ int points = 0;
 
 Terrain terrain;
 //Plane toggle for coloring
-GLint terrainToggleID;
+GLint terrainToggleID, trailTerrainToggleID;
 
 Wagon wagon;
 
@@ -78,31 +78,30 @@ bool cull = false;
 glm::vec2 mouse;
 int shapeCount = 1;
 //pid used for glUseProgram(pid);
-GLuint pid;
-GLint h_vertPos;
-GLint h_vertNor;
-GLint h_aTexCoord;
+GLuint pid, trailPid;
+GLint h_vertPos, h_trail_vertPos;
+GLint h_vertNor, h_trail_vertNor;
+GLint h_aTexCoord, h_trail_aTexCoord;
 //Handles to the shader data
-GLint h_uTexUnit;
-GLint h_ProjMatrix;
-GLint h_ViewMatrix;
-GLint h_ModelMatrix;
+GLint h_uTexUnit, h_trail_uTexUnit;
+GLint h_ProjMatrix, h_trail_ProjMatrix;
+GLint h_ViewMatrix, h_trail_ViewMatrix;
+GLint h_ModelMatrix, h_trail_ModelMatrix;
 
-GLint h_lightPos1;
-GLint h_lightPos2;
-GLint h_ka;
-GLint h_kd;
-GLint h_ks;
-GLint h_s;
-GLint h_option;
-GLint h_flag;
-GLint h_inTav;
+GLint h_lightPos1, h_trail_lightPos1;
+GLint h_lightPos2, h_trail_lightPos2;
+GLint h_ka, h_trail_ka;
+GLint h_kd, h_trail_kd;
+GLint h_ks, h_trail_ks;
+GLint h_s, h_trail_s;
+GLint h_option, h_trail_option;
+GLint h_flag, h_trail_flag;
 
 // bone handles
-GLint h_boneFlag;
-GLint h_boneIds;
-GLint h_boneWeights;
-GLint h_boneTransforms;
+GLint h_boneFlag, h_trail_boneFlag;
+GLint h_boneIds, h_trail_boneIds;
+GLint h_boneWeights, h_trail_boneWeights;
+GLint h_boneTransforms, h_trail_boneTransforms;
 
 bool keyToggles[256] = {false};
 float t = 0.0f;
@@ -138,7 +137,7 @@ RenderingHelper ModelTrans;
 Tavern tavern;
 Manager manager("The Dude");
 TavernTerrain tavTerr;
-Materials matSetter;
+Materials matSetter, trailMatSetter;
 FrustumCull fCuller;
 HUD hud(&manager);
 Menu menu;
@@ -196,7 +195,7 @@ void initModels()
 	manager.init(&menu, &gamePaused);
 
 	//Initialize Terrain object
-	terrain.init(&texLoader, &matSetter, &fCuller, &meshes, outsideLightPos);
+	terrain.init(&texLoader, &trailMatSetter, &fCuller, &meshes, outsideLightPos);
 	tavTerr.init(&texLoader);
 
 	//Initalize Wagon
@@ -240,7 +239,7 @@ void initGL()
 /**
  * Initialize the shaders passed to the function
  */
-bool installShaders(const string &vShaderName, const string &fShaderName)
+bool installTavShader(const string &vShaderName, const string &fShaderName)
 {		
 	GLint rc;
 
@@ -301,7 +300,6 @@ bool installShaders(const string &vShaderName, const string &fShaderName)
 	h_s = GLSL::getUniformLocation(pid, "s");
 	h_option = GLSL::getUniformLocation(pid, "option");
 	h_flag = GLSL::getUniformLocation(pid, "flag");
-	h_inTav = GLSL::getUniformLocation(pid, "inTav");
 
     h_boneFlag = GLSL::getUniformLocation(pid, "boneToggle");
     h_boneIds = GLSL::getAttribLocation(pid, "boneIds");
@@ -312,6 +310,87 @@ bool installShaders(const string &vShaderName, const string &fShaderName)
     terrainToggleID = GLSL::getUniformLocation(pid, "terrainToggle");
 
     matSetter.init(&pid, &h_ka, &h_kd, &h_ks, &h_s);
+
+	// Check GLSL
+	GLSL::checkVersion();
+	assert(glGetError() == GL_NO_ERROR);
+	return true;
+}
+
+/**
+ * Initialize the shaders passed to the function
+ */
+bool installTrailShader(const string &vShaderName, const string &fShaderName)
+{		
+	GLint rc2;
+
+	// Create shader handles
+	GLuint VS2 = glCreateShader(GL_VERTEX_SHADER);
+	GLuint FS2 = glCreateShader(GL_FRAGMENT_SHADER);
+	
+	// Read shader sources
+	const char *vshader2 = GLSL::textFileRead(vShaderName.c_str());
+	const char *fshader2 = GLSL::textFileRead(fShaderName.c_str());
+	glShaderSource(VS2, 1, &vshader2, NULL);
+	glShaderSource(FS2, 1, &fshader2, NULL);
+	
+	// Compile vertex shader
+	glCompileShader(VS2);
+	GLSL::printError();
+	glGetShaderiv(VS2, GL_COMPILE_STATUS, &rc2);
+	GLSL::printShaderInfoLog(VS2);
+	if(!rc2) {
+		printf("Error compiling vertex shader %s\n", vShaderName.c_str());
+	}
+	
+	// Compile fragment shader
+	glCompileShader(FS2);
+	GLSL::printError();
+	glGetShaderiv(FS2, GL_COMPILE_STATUS, &rc2);
+	GLSL::printShaderInfoLog(FS2);
+	if(!rc2) {
+		printf("Error compiling fragment shader %s\n", fShaderName.c_str());
+	}
+	
+	// Create the program and link
+	trailPid = glCreateProgram();
+	glAttachShader(trailPid, VS2);
+	glAttachShader(trailPid, FS2);
+	glLinkProgram(trailPid);
+	GLSL::printError();
+	glGetProgramiv(trailPid, GL_LINK_STATUS, &rc2);
+	GLSL::printProgramInfoLog(trailPid);
+	if(!rc2) {
+		printf("Error linking shaders %s and %s\n", vShaderName.c_str(), fShaderName.c_str());
+	}
+	
+	h_trail_vertPos = GLSL::getAttribLocation(trailPid, "vertPos");
+	h_trail_vertNor = GLSL::getAttribLocation(trailPid, "vertNor");
+	h_trail_aTexCoord = GLSL::getAttribLocation(trailPid, "aTexCoord");
+	h_trail_ProjMatrix = GLSL::getUniformLocation(trailPid, "uProjMatrix");
+	h_trail_ViewMatrix = GLSL::getUniformLocation(trailPid, "uViewMatrix");
+	h_trail_ModelMatrix = GLSL::getUniformLocation(trailPid, "uModelMatrix");
+
+	h_trail_uTexUnit = GLSL::getUniformLocation(trailPid, "uTexUnit");
+
+	h_trail_lightPos1 = GLSL::getUniformLocation(trailPid, "lightPos1");
+	h_trail_lightPos2 = GLSL::getUniformLocation(trailPid, "lightPos2");
+	h_trail_ka = GLSL::getUniformLocation(trailPid, "ka");
+	h_trail_kd = GLSL::getUniformLocation(trailPid, "kd");
+	h_trail_ks = GLSL::getUniformLocation(trailPid, "ks");
+	h_trail_s = GLSL::getUniformLocation(trailPid, "s");
+	h_trail_option = GLSL::getUniformLocation(trailPid, "option");
+	h_trail_flag = GLSL::getUniformLocation(trailPid, "flag");
+
+    h_trail_boneFlag = GLSL::getUniformLocation(trailPid, "boneToggle");
+    h_trail_boneIds = GLSL::getAttribLocation(trailPid, "boneIds");
+    h_trail_boneWeights = GLSL::getAttribLocation(trailPid, "boneWeights");
+    h_trail_boneTransforms = GLSL::getUniformLocation(trailPid, "bones");
+
+	/*Toggle for plane coloring*/
+    trailTerrainToggleID = GLSL::getUniformLocation(trailPid, "terrainToggle");
+
+    trailMatSetter.init(&trailPid, &h_trail_ka, &h_trail_kd, &h_trail_ks, &h_trail_s);
 
 	// Check GLSL
 	GLSL::checkVersion();
@@ -335,7 +414,7 @@ void ShadowMapPass()
 			ModelTrans.translate(glm::vec3(-100.0, 0.0, 0.0));
 			glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(ModelTrans.modelViewMatrix));
 			ModelTrans.pushMatrix();
-				wagon.draw(h_vertPos, h_vertNor, h_aTexCoord, h_ModelMatrix, &ModelTrans);
+				wagon.draw(h_trail_vertPos, h_trail_vertNor, h_trail_aTexCoord, h_trail_ModelMatrix, &ModelTrans);
 			ModelTrans.popMatrix();
 		ModelTrans.popMatrix();
 
@@ -344,16 +423,16 @@ void ShadowMapPass()
 	glUseProgram(0);
 }
 
-void setProjView()
+void setProjView(GLint *projMat, GLint *viewMat)
 {
 	//Set projection matrix
 	MatrixStack proj, view;
 	proj.pushMatrix();
 	camera.applyProjectionMatrix(&proj);
-	glUniformMatrix4fv( h_ProjMatrix, 1, GL_FALSE, glm::value_ptr( proj.topMatrix()));
+	glUniformMatrix4fv( (*projMat), 1, GL_FALSE, glm::value_ptr( proj.topMatrix()));
 	proj.pushMatrix();
 	camera.applyViewMatrix(&view, wagon.getPosition());
-	glUniformMatrix4fv(h_ViewMatrix, 1, GL_FALSE, glm::value_ptr(view.topMatrix()));
+	glUniformMatrix4fv((*viewMat), 1, GL_FALSE, glm::value_ptr(view.topMatrix()));
 	
 	fCuller.setProjMat(proj.topMatrix(), view.topMatrix());
 }
@@ -364,8 +443,14 @@ void drawGL()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	//Probably replace this sometime with different shaders....
-	glUseProgram(pid);
-	glUniform1i(h_flag, 0);
+	if (camera.isTavernView()) {
+		glUseProgram(pid);
+		glUniform1i(h_flag, 0);
+	}
+	else {
+		glUseProgram(trailPid);
+		glUniform1i(h_trail_flag, 0);
+	}
 
 	//Update Camera
 	// Get mouse position
@@ -374,23 +459,41 @@ void drawGL()
   	glfwGetCursorPos(window, &xpos, &ypos);
 	camera.update(xpos, ypos, wagon.getPosition());
 
-	glUniform3fv(h_lightPos1, 1, glm::value_ptr(glm::vec3(23.05f, 4.0f, -23.5f)));
-	glUniform3fv(h_lightPos2, 1, glm::value_ptr(glm::vec3(-125.0f, 4.0f, 25.0f)));
-	glUniform1f(h_option, optionS);
+	if (camera.isTavernView()) {
+		glUniform3fv(h_lightPos1, 1, glm::value_ptr(glm::vec3(23.05f, 4.0f, -23.5f)));
+		glUniform3fv(h_lightPos2, 1, glm::value_ptr(glm::vec3(-125.0f, 4.0f, 25.0f)));
+		glUniform1f(h_option, optionS);
+	}
+	else {
+		glUniform3fv(h_trail_lightPos1, 1, glm::value_ptr(glm::vec3(23.05f, 4.0f, -23.5f)));
+		glUniform3fv(h_trail_lightPos2, 1, glm::value_ptr(glm::vec3(-125.0f, 4.0f, 25.0f)));
+		glUniform1f(h_trail_option, optionS);
+	}
 	
 	// Bind the program
 	//Set projection matrix
 	MatrixStack proj, view;
 	proj.pushMatrix();
 	camera.applyProjectionMatrix(&proj);
-	glUniformMatrix4fv( h_ProjMatrix, 1, GL_FALSE, glm::value_ptr( proj.topMatrix()));
+	if (camera.isTavernView()) {
+		glUniformMatrix4fv( h_ProjMatrix, 1, GL_FALSE, glm::value_ptr( proj.topMatrix()));
+	}
+	else {
+		glUniformMatrix4fv( h_trail_ProjMatrix, 1, GL_FALSE, glm::value_ptr( proj.topMatrix()));
+	}
 	proj.pushMatrix();
 	camera.applyViewMatrix(&view, wagon.getPosition());
-	glUniformMatrix4fv(h_ViewMatrix, 1, GL_FALSE, glm::value_ptr(view.topMatrix()));
+	if (camera.isTavernView()) {
+		glUniformMatrix4fv(h_ViewMatrix, 1, GL_FALSE, glm::value_ptr(view.topMatrix()));
+	}
+	else {
+		glUniformMatrix4fv(h_trail_ViewMatrix, 1, GL_FALSE, glm::value_ptr(view.topMatrix()));
+	}
 	
 	fCuller.setProjMat(proj.topMatrix(), view.topMatrix());
 	
-	matSetter.setMaterial(2);
+	matSetter.setMaterial(2); //is this old code that we should delete?
+	trailMatSetter.setMaterial(2);
 
 	m_shadowMapFBO.bindForWriting();
 
@@ -402,40 +505,39 @@ void drawGL()
 
 		//2nd Render
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glUseProgram(pid);
-		setProjView();
-		glUniform1i(h_flag, 0);
-		glUniform1i(h_inTav, 0);
-		glUniform3fv(h_lightPos1, 1, glm::value_ptr(glm::vec3(23.05f, 4.0f, -23.5f)));
-		glUniform3fv(h_lightPos2, 1, glm::value_ptr(glm::vec3(-125.0f, 4.0f, 25.0f)));
-		glUniform1f(h_option, optionS);
+		glUseProgram(trailPid);
+		setProjView(&h_trail_ProjMatrix, &h_trail_ViewMatrix);
+		glUniform1i(h_trail_flag, 0);
+		glUniform3fv(h_trail_lightPos1, 1, glm::value_ptr(glm::vec3(23.05f, 4.0f, -23.5f)));
+		glUniform3fv(h_trail_lightPos2, 1, glm::value_ptr(glm::vec3(-125.0f, 4.0f, 25.0f)));
+		glUniform1f(h_trail_option, optionS);
       m_pShadowMapTech->setTextureUnit(0);
 		m_shadowMapFBO.bindForReading(GL_TEXTURE0);
 
-		glUniform1i(terrainToggleID, 1);
-		glUniform1i(h_uTexUnit, 0);
+		glUniform1i(trailTerrainToggleID, 1);
+		glUniform1i(h_trail_uTexUnit, 0);
 		ModelTrans.loadIdentity();
 		ModelTrans.pushMatrix();
 			ModelTrans.translate(glm::vec3(-100.0, 0.0, 0.0));
-			glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(ModelTrans.modelViewMatrix));
+			glUniformMatrix4fv(h_trail_ModelMatrix, 1, GL_FALSE, glm::value_ptr(ModelTrans.modelViewMatrix));
 			ModelTrans.pushMatrix();
-				terrain.draw(h_vertPos, h_vertNor, h_aTexCoord, h_ModelMatrix, &camera, wagon.getPosition(), &pid);
-            glUseProgram(pid);
-            setProjView();
-				wagon.draw(h_vertPos, h_vertNor, h_aTexCoord, h_ModelMatrix, &ModelTrans);
+				terrain.draw(h_trail_vertPos, h_trail_vertNor, h_trail_aTexCoord, h_trail_ModelMatrix, &camera, wagon.getPosition(), &trailPid);
+            glUseProgram(trailPid);
+            setProjView(&h_trail_ProjMatrix, &h_trail_ViewMatrix);
+				wagon.draw(h_trail_vertPos, h_trail_vertNor, h_trail_aTexCoord, h_trail_ModelMatrix, &ModelTrans);
 			ModelTrans.popMatrix();
 		ModelTrans.popMatrix();
 		
 		ModelTrans.loadIdentity();
 		ModelTrans.pushMatrix();
 		ModelTrans.popMatrix();
-		glUniform1i(terrainToggleID, 0);
+		glUniform1i(trailTerrainToggleID, 0);
       //Draw the skybox
       skybox.draw(&camera, wagon.getPosition());
 
-      glUniform1i(terrainToggleID, 0);
+      glUniform1i(trailTerrainToggleID, 0);
 	}
-	glUseProgram(pid);
+	glUseProgram(trailPid);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	m_shadowMapFBO.bindForReading(GL_TEXTURE0);
 
@@ -444,8 +546,8 @@ void drawGL()
 	if (camera.isTavernView() || camera.isFreeRoam())
 	{
 		//Draw TAVERN
+		glUseProgram(pid);
 		glUniform1i(terrainToggleID, 1);
-		glUniform1i(h_inTav, 1);
 		glUniform1i(h_uTexUnit, 0);
 		ModelTrans.loadIdentity();
 		ModelTrans.pushMatrix();
@@ -918,7 +1020,8 @@ int main(int argc, char **argv)
     glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	initGL();
-	installShaders("lab7_vert.glsl", "lab7_frag.glsl");
+	installTavShader("Shaders/tav_vert.glsl", "Shaders/tav_frag.glsl");
+	installTrailShader("Shaders/trail_vert.glsl", "Shaders/trail_frag.glsl");
 	fCuller.init();
 	// terrEv.init(&matSetter, &fCuller, &meshes);
 	std::string str = "assets/bunny.obj";
