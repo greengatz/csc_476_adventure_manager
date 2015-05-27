@@ -121,7 +121,7 @@ void HUD::drawHud(Camera * camera, int width, int height)
   proj.pushMatrix();
   camera->applyProjectionMatrix(&proj);
   glUniformMatrix4fv( h_ProjMatrix, 1, GL_FALSE, glm::value_ptr( proj.topMatrix()));
-   proj.pushMatrix();
+  proj.pushMatrix();
 	// enableBuff(h_vertPos, h_aTexCoord);
   enableBuff();
 

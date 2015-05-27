@@ -1028,7 +1028,7 @@ int main(int argc, char **argv)
 	std::string str = "assets/bunny.obj";
 	// initShape(&str[0u]); //initShape(argv[0]);
 
-	menu.initMenu(&texLoader, h_ModelMatrix, h_vertPos, g_width, g_height, h_aTexCoord, &manager, &gamePaused);
+	menu.initMenu(&camera, &texLoader, g_width, g_height, &manager, &gamePaused);
   	
   	initModels();
   	tavern.loadTavernMeshes(&texLoader);

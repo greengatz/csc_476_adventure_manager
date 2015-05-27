@@ -2,16 +2,29 @@
 
 int MENU_ID = 4004;
 
-void Menu::initMenu(TextureLoader *texLoader, GLint h_ModelMatrixA, GLint h_vertPosA, int widthA, int heightA, GLint h_aTexCoordA, Manager *mgr, bool* gameP)
+void Menu::initMenu(Camera * cameraA, TextureLoader *texLoader, int widthA, int heightA, Manager *mgr, bool* gameP)
 {
+	ModelTrans.useModelViewMatrix();
+	ModelTrans.loadIdentity();
+
+	// Initialize Shader
+	pid = LoadShaders( "Shaders/HUD_vert.glsl", 
+	    "Shaders/HUD_frag.glsl" );
+
+	h_vertPos = GLSL::getAttribLocation(pid, "vertPos");
+	h_vertNor = GLSL::getAttribLocation(pid, "vertNor");
+	h_aTexCoord = GLSL::getAttribLocation(pid, "aTexCoord");
+	h_ProjMatrix = GLSL::getUniformLocation(pid, "uProjMatrix");
+	h_ViewMatrix = GLSL::getUniformLocation(pid, "uViewMatrix");
+	h_ModelMatrix = GLSL::getUniformLocation(pid, "uModelMatrix");
+	h_uTexUnit = GLSL::getUniformLocation(pid, "uTexUnit");
+
+	camera = cameraA;
 	gamePaused = gameP;
 	manager = mgr;
 	inMenu = false;
-	h_ModelMatrix = h_ModelMatrixA;
-	h_vertPos = h_vertPosA;
 	width = widthA;
 	height = heightA;
-	h_aTexCoord = h_aTexCoordA;
 	posBufObjHUD = 0;
 	GrndTexBuffObj = 0;
 	GIndxBuffObj = 0;
@@ -73,8 +86,16 @@ void Menu::selectOption(int num)
 
 void Menu::drawMenu()
 {
+	glUseProgram(pid);
+	MatrixStack proj;
+	proj.pushMatrix();
+	camera->applyProjectionMatrix(&proj);
+	glUniformMatrix4fv( h_ProjMatrix, 1, GL_FALSE, glm::value_ptr( proj.topMatrix()));
+	proj.pushMatrix();
+
 	//Enable Buffers
-	enableBuff(h_vertPos, h_aTexCoord);
+	glUseProgram(pid);
+	enableBuff();
 
 	//Ortho Call
 	mat4 Ortho = glm::ortho(0.0f, (float)width, (float)height, 0.0f);
@@ -91,7 +112,7 @@ void Menu::drawMenu()
 	
 	glEnable(GL_DEPTH_TEST); // Enable the Depth-testing
 	//Disable Buffers
-	disableBuff(h_vertPos, h_aTexCoord);
+	disableBuff();
 
 	//sprintf(info,"x %d", manager.getMercs());
 	printText2D(title, 350, 470, 28);
@@ -112,7 +133,7 @@ void Menu::drawMenu()
 	offset = -40;
 }
 
-void Menu::enableBuff(GLint h_vertPos, GLint h_aTexCoord) {
+void Menu::enableBuff() {
 	glEnable(GL_TEXTURE_2D);
     glActiveTexture(GL_TEXTURE0);
 
@@ -129,7 +150,7 @@ void Menu::enableBuff(GLint h_vertPos, GLint h_aTexCoord) {
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, GIndxBuffObj);
 }
 
-void Menu::disableBuff(GLint h_vertPos, GLint h_aTexCoord) {
+void Menu::disableBuff() {
   GLSL::disableVertexAttribArray(h_vertPos);
   GLSL::disableVertexAttribArray(h_aTexCoord);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
