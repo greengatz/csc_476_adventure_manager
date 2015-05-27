@@ -78,8 +78,9 @@ int HYDRA_EMBLEM_ID = 4900;
 
 int TURKEY_NUM;
 
-Tavern::Tavern() :
-    sam(CharDae("not_a_file"))
+// TODO uncomment
+Tavern::Tavern() //:
+    //sam(CharDae("not_a_file"))
 {
 	doorLoc = vec3(7.5, 1.35, -23);
 	beerLoc = vec3(35.0, 1.0, -35.0);
@@ -538,7 +539,7 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 
     // try some assimp stuff
     // TODO
-    sam = CharDae("assets/characters/betterAnim.dae");
+   // sam = CharDae("assets/characters/betterAnim.dae");
 }
 
 void Tavern::enableBuff(GLint h_vertPos, GLint h_vertNor, GLuint posBuf, GLuint norBuf, GLuint indBuf) {
@@ -627,12 +628,12 @@ void Tavern::drawTavern(GLint h_ModelMatrix, GLint h_vertPos,
 	}
 
     // TODO remove this
-    sam.drawChar(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord, h_boneFlag, h_boneIds, h_boneWeights, h_boneTransforms, ltime);
+    /*sam.drawChar(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord, h_boneFlag, h_boneIds, h_boneWeights, h_boneTransforms, ltime);
     
     if(sam.animChoice == -1) {
         cout << "starting animation\n";
         sam.startAnimation("run");
-    }
+    }*/
 }
 
 void Tavern::applyTurkeySpin(double ltime)
