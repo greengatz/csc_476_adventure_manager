@@ -581,13 +581,13 @@ void drawGL()
 
 	if(hud.on && !camera.isShadowMapView() && !camera.isFreeRoam())
 	{
-		glUseProgram(pid);
-		glUniform1i(h_flag, 1);
+		//glUseProgram(pid);
+		//glUniform1i(h_flag, 1);
 		if(menu.inMenu)
 		{
-			glUseProgram(pid);
+			//glUseProgram(pid);
 			menu.drawMenu();
-			glUseProgram(pid);
+			//glUseProgram(pid);
 		}
 		// }
 		// if(manager.getInMenu()){
@@ -599,7 +599,7 @@ void drawGL()
 		// hud.drawHud(h_ModelMatrix, h_vertPos, g_width, g_height, h_aTexCoord);
 		hud.drawHud(&camera, g_width, g_height);
 		hud.drawSideHud(&camera, g_width, g_height);
-		glUniform1i(h_flag, 0);
+		//glUniform1i(h_flag, 0);
 
 		if(!hud.homeScreenOn)
 		{
