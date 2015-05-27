@@ -13,6 +13,9 @@
 #include "tavern.h"
 #include "manager.h"
 #include "TextureLoader.h"
+#include "RenderingHelper.h"
+#include "MatrixStack.h"
+#include "shader.hpp"
 
 using namespace std;
 using namespace glm;
@@ -22,11 +25,11 @@ class HUD
 	public:
 		
 		HUD(Manager *newMan);
-		void drawHud(GLint h_ModelMatrix, GLint h_vertPos, int width, int height, GLint h_aTexCoord);
+		void drawHud(Camera * camera, int width, int height);
 		void initHUD(TextureLoader *texLoader);
 		void initHomeScreen(TextureLoader *texLoader);
-		void enableBuff(GLint h_vertPos, GLint h_aTexCoord);
-		void disableBuff(GLint h_vertPos, GLint h_aTexCoord);
+		void enableBuff();
+		void disableBuff();//GLint h_vertPos, GLint h_aTexCoord);
 		GLuint posBufObjHUD;
 		GLuint posBufObjMenu;
 
@@ -44,8 +47,18 @@ class HUD
 		bool deadScreenOn;
 
 	private:
+		GLuint pid;
+		GLint h_vertPos;
+		GLint h_vertNor;
+		GLint h_aTexCoord;
+		//Handles to the shader data
+		GLint h_uTexUnit;
+		GLint h_ProjMatrix;
+		GLint h_ViewMatrix;
+		GLint h_ModelMatrix;
 		Manager *man;
 		int g_GiboLen;
+		RenderingHelper ModelTrans;
 };
 
 #endif

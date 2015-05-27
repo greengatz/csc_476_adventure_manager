@@ -33,11 +33,11 @@ void main()
     //gl_Position = uProjMatrix * uViewMatrix * uModelMatrix * vertPos;
     gl_Position = uProjMatrix * pos;
    
-	if(flag == 1)
-	{
-		gl_Position = uModelMatrix * vertPos;
-		vTexCoord = aTexCoord;
-	}
+	// if(flag == 1)
+	// {
+	// 	gl_Position = uModelMatrix * vertPos;
+	// 	vTexCoord = aTexCoord;
+	// }
 
 	if (terrainToggle == 1)
 	{

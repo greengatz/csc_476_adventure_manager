@@ -21,6 +21,21 @@ HUD::HUD(Manager *newMan)
 
 void HUD::initHUD(TextureLoader *texLoader)
 {
+  ModelTrans.useModelViewMatrix();
+  ModelTrans.loadIdentity();
+
+  // Initialize Shader
+  pid = LoadShaders( "Shaders/HUD_vert.glsl", 
+      "Shaders/HUD_frag.glsl" );
+
+  h_vertPos = GLSL::getAttribLocation(pid, "vertPos");
+  h_vertNor = GLSL::getAttribLocation(pid, "vertNor");
+  h_aTexCoord = GLSL::getAttribLocation(pid, "aTexCoord");
+  h_ProjMatrix = GLSL::getUniformLocation(pid, "uProjMatrix");
+  h_ViewMatrix = GLSL::getUniformLocation(pid, "uViewMatrix");
+  h_ModelMatrix = GLSL::getUniformLocation(pid, "uModelMatrix");
+  h_uTexUnit = GLSL::getUniformLocation(pid, "uTexUnit");
+
 	texLoader->LoadTexture((char *)"assets/hud.bmp", HUD_ID);
   texLoader->LoadTexture((char *)"assets/deadScreen.bmp", DEAD_ID);
 
@@ -99,9 +114,16 @@ void HUD::initHomeScreen(TextureLoader *texLoader)
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(idx), idx, GL_STATIC_DRAW);
 }
 
-void HUD::drawHud(GLint h_ModelMatrix, GLint h_vertPos, int width, int height, GLint h_aTexCoord)
+void HUD::drawHud(Camera * camera, int width, int height)
 {
-	enableBuff(h_vertPos, h_aTexCoord);
+  glUseProgram(pid);
+  MatrixStack proj;
+  proj.pushMatrix();
+  camera->applyProjectionMatrix(&proj);
+  glUniformMatrix4fv( h_ProjMatrix, 1, GL_FALSE, glm::value_ptr( proj.topMatrix()));
+   proj.pushMatrix();
+	// enableBuff(h_vertPos, h_aTexCoord);
+  enableBuff();
 
 	mat4 Ortho = glm::ortho(0.0f, (float)width, (float)height, 0.0f);
  
@@ -115,10 +137,11 @@ void HUD::drawHud(GLint h_ModelMatrix, GLint h_vertPos, int width, int height, G
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0); // draw first object
 	
 	glEnable(GL_DEPTH_TEST); // Enable the Depth-testing
-	disableBuff(h_vertPos, h_aTexCoord);
+	disableBuff();
+  proj.popMatrix();
 }
 
-void HUD::enableBuff(GLint h_vertPos, GLint h_aTexCoord) {
+void HUD::enableBuff() {
 	glEnable(GL_TEXTURE_2D);
     glActiveTexture(GL_TEXTURE0);
 
@@ -168,7 +191,7 @@ void HUD::enableBuff(GLint h_vertPos, GLint h_aTexCoord) {
   }
 }
 
-void HUD::disableBuff(GLint h_vertPos, GLint h_aTexCoord) {
+void HUD::disableBuff() {
   GLSL::disableVertexAttribArray(h_vertPos);
   GLSL::disableVertexAttribArray(h_aTexCoord);
   glBindBuffer(GL_ARRAY_BUFFER, 0);

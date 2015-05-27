@@ -34,7 +34,7 @@ void main()
 	light2 = (ka + (kd * max(dot(l2,n), 0.0)) + (ks * pow(max(dot(h2,n), 0.0), s))) * intensity;
 	color = light1 + light2;
 
-	if (terrainToggle == 1 || flag == 1)
+	if (terrainToggle == 1)
 	{
 		vec4 texColor1 = texture2D(uTexUnit, vTexCoord);
 		gl_FragColor = texColor1 * 2.0 * vec4(color.r, color.g, color.b, 1.0);
