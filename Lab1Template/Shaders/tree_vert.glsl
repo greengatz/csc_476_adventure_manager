@@ -25,7 +25,7 @@ void main()
    
    vTexCoord = aTexCoord;
 
-   	//fog
+   //fog
 	vec4 pos = uViewMatrix * uModelMatrix * vertPos;
 	fogDist = abs(pos.z / pos.w);
 }

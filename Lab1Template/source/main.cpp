@@ -224,7 +224,7 @@ void initGL()
 }
 
 /**
- * Initialize the shaders passed to the function
+ * Initialize the shaders passed to the function TODO--> There is already a class that does this.....
  */
 bool installTavShader(const string &vShaderName, const string &fShaderName)
 {		
