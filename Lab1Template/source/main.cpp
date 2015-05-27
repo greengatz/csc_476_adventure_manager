@@ -876,7 +876,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	}
 
 	//if (key == GLFW_KEY_5 && action == GLFW_PRESS)
-    {
+    //{
     	//Create about vector and add an element
 	 //  	vector<string> about;
 		// about.push_back("about test");
