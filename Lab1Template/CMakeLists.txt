@@ -31,14 +31,13 @@ endif(APPLE)
 
 # assimp
 message("-- Including assimp...")
-message("-- NOT. UPDATE CMAKELISTS")
-#set (ASSIMP_DIR "${DEP_DIR}/assimp-3.1.1")
-#list(APPEND INCLUDES
-#    ${ASSIMP_DIR}/include/assimp
-#)
-#list(APPEND LIBS
-#    ${ASSIMP_DIR}/lib/libassimp.so
-#)
+set (ASSIMP_DIR "${DEP_DIR}/assimp-3.1.1")
+list(APPEND INCLUDES
+    ${ASSIMP_DIR}/include/assimp
+)
+list(APPEND LIBS
+    ${ASSIMP_DIR}/lib/libassimp.so
+)
 
 # GLFW
 set(GLFW_DIR "${DEP_DIR}/glfw")

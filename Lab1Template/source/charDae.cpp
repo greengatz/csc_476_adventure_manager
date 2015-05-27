@@ -1,5 +1,23 @@
 #include "charDae.h"
 
+enum daeTypes {
+    samurai
+};
+
+enum animations {
+    walk,
+    punch
+};
+
+int startWalk[] = {1};
+int endWalk[] = {30};
+int punchStart[] = {31};
+int punchEnd[] = {70};
+int startAnim[][punch + 1] = {{1, 31}};
+int endAnim[][punch + 1] = {{30, 70}};
+
+int framesPerSec = 24;
+
 CharDae::CharDae(const string source) {
     int i, j, k;
     cout << "\n\ntrying to load " << source << "\n";
@@ -16,6 +34,7 @@ CharDae::CharDae(const string source) {
 
     // TODO remove this magic
     meshInd = 0;
+    daeType = 0;
 
     cout << "root " << scene->mRootNode << "\n";
     root = scene->mRootNode;
@@ -76,22 +95,6 @@ CharDae::CharDae(const string source) {
     glBindBuffer(GL_ARRAY_BUFFER, texBuf);
     glBufferData(GL_ARRAY_BUFFER, numInd * 3 * sizeof(float), texture, GL_STATIC_DRAW);
 
-
-    // TODO bones
-    // boneNum = max number of bones for any vertex
-    // boneId -> boneNum ids for every vertex (which bones affect this vertex)
-    // weights -> boneNum weights for every vertex (how much those bones affect this vertex)
-    // bones -> a mat4 for every bone containing its current model transform
-    //       -> this will update with time
-
-    // aiMesh -> mBones and mNumBones
-    // aiBone -> mWeights and mNumWeights
-    // aiVertexWeight -> vertexId -> u int for which vertex
-    //                -> mWeight  -> how much this bone affects that vertex (float, 0.0 - 1.0)
-    
-    // keep a count for every vertex
-    // 220 of 7xxx indices are affected by 2 bones
-    // will 5 bones be enough for every vertex? this number can change, but we want it tight
 
     // numBones, boneId, boneWeight
     // boneCount
@@ -208,14 +211,18 @@ void CharDae::recursiveUpdate(const aiNode* toUpdate, float time) {
     int updateId = findBone(toUpdate);
     const aiAnimation* anim = scene->mAnimations[0];
     const aiNodeAnim* nodeAnim = findNodeAnim(anim, toUpdate);
+    float timeOffset = 0;
+    if(isAnimating()) {
+        timeOffset = ((float) startAnim[daeType][animChoice]) / ((float) framesPerSec);
+    }
 
     us = toUpdate->mTransformation;
     if(nodeAnim != NULL) {
         // interpolate from where we are in the animation
         aiMatrix4x4t<float> sMat, pMat, rMat;
-        aiVector3D scale = intScale(time - animStart, nodeAnim);
-        aiVector3D pos = intTrans(time - animStart, nodeAnim);
-        aiQuaternion rot = intRot(time - animStart, nodeAnim);
+        aiVector3D scale = intScale(time - animStart + timeOffset, nodeAnim);
+        aiVector3D pos = intTrans(time - animStart + timeOffset, nodeAnim);
+        aiQuaternion rot = intRot(time - animStart + timeOffset, nodeAnim);
 
         sMat = aiMatrix4x4t<float>::Scaling(scale, sMat);
         pMat = aiMatrix4x4t<float>::Translation(pos, pMat);
@@ -231,9 +238,9 @@ void CharDae::recursiveUpdate(const aiNode* toUpdate, float time) {
         if(pAnim != NULL) {
             // use int parent
             aiMatrix4x4t<float> sMatP, pMatP, rMatP;
-            aiVector3D scaleP = intScale(time - animStart, pAnim);
-            aiVector3D posP = intTrans(time - animStart, pAnim);
-            aiQuaternion rotP = intRot(time - animStart, pAnim);
+            aiVector3D scaleP = intScale(time - animStart + timeOffset, pAnim);
+            aiVector3D posP = intTrans(time - animStart + timeOffset, pAnim);
+            aiQuaternion rotP = intRot(time - animStart + timeOffset, pAnim);
 
             sMatP = aiMatrix4x4t<float>::Scaling(scaleP, sMatP);
             pMatP = aiMatrix4x4t<float>::Translation(posP, pMatP);
@@ -354,8 +361,24 @@ aiVector3D CharDae::intTrans(float time, const aiNodeAnim* nodeAnim) {
 
 
 void CharDae::startAnimation(string animation) {
-    // TODO find the animation
-    animChoice = 0;
+    animStart = lastTime;
+
+    animChoice = -1;
+    if(strcmp(animation.c_str(), "run") == 0) {
+        animChoice = walk;
+    } else if(strcmp(animation.c_str(), "punch") == 0) {
+        animChoice = punch;
+    }
+
+    if(animChoice != -1) {
+        int numFrames = endAnim[daeType][animChoice] - startAnim[daeType][animChoice];
+        // frames / fps
+        endTime = (((float) numFrames) / ((float) framesPerSec)) + animStart;
+    }
+}
+
+bool CharDae::isAnimating() {
+    return animChoice != -1;
 }
 
 
@@ -369,14 +392,9 @@ void CharDae::drawChar(GLint h_ModelMatrix, GLint h_vertPos,
 
     // prepare to start an animation
     // TODO
-    if(animChoice == -1) {
-        animStart = time;
-    } else {
-        // check if animation is finished
-        if (time - animStart > scene->mAnimations[animChoice]->mDuration) {
-            animChoice = -1;
-            animStart = time;
-        }
+    lastTime = time;
+    if (time > endTime) {
+        animChoice = -1;
     }
 
     // indices
