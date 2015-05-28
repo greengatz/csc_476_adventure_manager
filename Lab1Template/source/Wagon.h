@@ -23,7 +23,12 @@ public:
 	virtual ~Wagon();
 
 	void init(TextureLoader* texLoader, Terrain* aTerrain, Menu* aMenu, bool* gP, Manager* mgr, ProjectMeshes *newData, SoundPlayer* audio);
-	void draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMatrix, RenderingHelper* modelTrans);
+	void draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, 
+        GLint h_ModelMatrix, RenderingHelper* modelTrans);
+	void drawMercs(GLint h_ModelMatrix, GLint h_vertPos, 
+            GLint h_vertNor, GLint h_aTexCoord, GLint h_boneFlag,
+            GLint h_boneIds, GLint h_boneWeights,
+            GLint h_boneTransforms, float time);
 	void setPosition(float x, float y, float z);
 	glm::vec3 getPosition();
 	void setScale(glm::vec3 aScale);

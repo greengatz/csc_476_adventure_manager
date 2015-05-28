@@ -522,9 +522,18 @@ void drawGL()
 			glUniformMatrix4fv(h_trail_ModelMatrix, 1, GL_FALSE, glm::value_ptr(ModelTrans.modelViewMatrix));
 			ModelTrans.pushMatrix();
 				terrain.draw(h_trail_vertPos, h_trail_vertNor, h_trail_aTexCoord, h_trail_ModelMatrix, &camera, wagon.getPosition(), &trailPid);
+            
+
             glUseProgram(trailPid);
+	matSetter.setMaterial(2); //is this old code that we should delete?
+	trailMatSetter.setMaterial(2);
             setProjView(&h_trail_ProjMatrix, &h_trail_ViewMatrix);
-				wagon.draw(h_trail_vertPos, h_trail_vertNor, h_trail_aTexCoord, h_trail_ModelMatrix, &ModelTrans);
+				wagon.draw(h_trail_vertPos, h_trail_vertNor, 
+                    h_trail_aTexCoord, h_trail_ModelMatrix, 
+                    &ModelTrans);
+	            wagon.drawMercs(h_ModelMatrix, h_vertPos, h_vertNor, 
+                    h_aTexCoord,  h_boneFlag, h_boneIds, h_boneWeights,
+                    h_boneTransforms, dtDraw);
 			ModelTrans.popMatrix();
 		ModelTrans.popMatrix();
 		
@@ -534,7 +543,6 @@ void drawGL()
 		glUniform1i(trailTerrainToggleID, 0);
       //Draw the skybox
       skybox.draw(&camera, wagon.getPosition());
-
       glUniform1i(trailTerrainToggleID, 0);
 	}
 	glUseProgram(trailPid);
@@ -673,7 +681,7 @@ bool hasCollided(glm::vec3 incr)
   	row = (camPos.x - minX)/gridSize;
  	col = (camPos.z - minZ)/gridSize;
 	vector<Obj3d> currentCellObjs = grid[row][col];
-	printf("Checking %d collisions!!\n", currentCellObjs.size());
+//	printf("Checking %d collisions!!\n", currentCellObjs.size());
 
  	// for(int i = 0; i < currentCellObjs.size(); i++)
  	// {

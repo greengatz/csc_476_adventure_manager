@@ -32,6 +32,11 @@ int BaseCost[] = {25, 25, 25, 25, 25, 25};
 int BaseHungerRate[] = {5, 5, 5, 5, 5, 5};
 int BaseBeerRate[] = {5, 5, 5, 5, 5, 5};
 
+// Dae location
+string fileLoc[] = {"assets/characters/noAnim.dae", 
+        "assets/characters/noAnim.dae", "assets/characters/noAnim.dae", 
+        "assets/characters/noAnim.dae", "assets/characters/noAnim.dae", 
+        "assets/characters/noAnim.dae", "assets/characters/noAnim.dae"};
 
 string randFirstName() {
 	return First[rand() % firstCount];
@@ -93,6 +98,7 @@ Mercenary::Mercenary() :
     cost -= beerRate - BaseBeerRate[job];
     currDamage = maxDamage;
     currHealth = maxHealth;
+    dae = NULL;
 }
 
 void Mercenary::draw(GLint h_uModelMatrix, int meshIndex)
@@ -138,3 +144,6 @@ void Mercenary::wave() {
     }
 }
 
+void Mercenary::initDae() {
+    dae = new CharDae(fileLoc[job]);
+}

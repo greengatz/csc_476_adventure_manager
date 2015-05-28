@@ -6,15 +6,13 @@ enum daeTypes {
 
 enum animations {
     walk,
-    punch
+    punch,
+    idle,
+    animCount
 };
 
-int startWalk[] = {1};
-int endWalk[] = {30};
-int punchStart[] = {31};
-int punchEnd[] = {70};
-int startAnim[][punch + 1] = {{1, 31}};
-int endAnim[][punch + 1] = {{30, 70}};
+int startAnim[][animCount] = {{1, 31, 71}};
+int endAnim[][animCount] = {{30, 70, 100}};
 
 int framesPerSec = 24;
 
@@ -24,7 +22,6 @@ CharDae::CharDae(const string source) {
     importer = new Assimp::Importer();
     scene = importer->ReadFile(source, aiProcess_GenNormals);
 
-    animChoice = -1;
     if(!scene) {
         cout << "couldn't read dae\n";
         cout << "reason: " << importer->GetErrorString() << "\n";
@@ -35,19 +32,23 @@ CharDae::CharDae(const string source) {
     // TODO remove this magic
     meshInd = 0;
     daeType = 0;
+    animChoice = -1;
 
-    cout << "root " << scene->mRootNode << "\n";
+    scale = glm::vec3(1.0f, 1.0f, 1.0f);
+    rotate = 45.0f;
+
+    //cout << "root " << scene->mRootNode << "\n";
     root = scene->mRootNode;
     meshes = scene->mMeshes;
     cout << "scene " << scene << "\n";
-    cout << "meshes " << meshes << "\n";
+   /* cout << "meshes " << meshes << "\n";
     cout << "facees in mesh 1 " << meshes[meshInd]->mNumFaces << "\n";
     cout << "number of bones " << meshes[meshInd]->mNumBones << "\n";
     cout << "number of animations " << scene->mNumAnimations << "\n";
     cout << "duration of 1 " << scene->mAnimations[0]->mDuration << "\n";
     cout << "tps " << scene->mAnimations[0]->mTicksPerSecond << "\n";
     cout << "number of frames in 1 " << scene->mAnimations[0]->mChannels[0]->mNumRotationKeys << "\n";
-
+*/
     // 26.56
     position[0] = 26.56f; // magic to put in view
     position[1] = 0.0f;
@@ -55,7 +56,7 @@ CharDae::CharDae(const string source) {
 
     numInd = meshes[meshInd]->mNumVertices;
     // TODO iterate through every mesh
-    recursivePrint(scene->mRootNode, 0, meshes);
+    // recursivePrint(scene->mRootNode, 0, meshes);
 
     // positions
     positions = (float*) malloc(numInd * 3 * sizeof(float));
@@ -126,22 +127,12 @@ CharDae::CharDae(const string source) {
     glBindBuffer(GL_ARRAY_BUFFER, boneWeightBuf);
     glBufferData(GL_ARRAY_BUFFER, numInd * 4 * sizeof(float), boneWeight, GL_STATIC_DRAW);
 
-    // TODO make the model buffer
+    // make the model buffer
     // will need to update that buffers data pretty frequently...
-    // GL_UNIFORM_BUFFER
-    //glGenBuffers(1, &boneTransforms);
     boneCount = meshes[meshInd]->mNumBones;
     floatModel = (float*) calloc(sizeof(float) * 16, boneCount);
     cout << "floatModel at " << floatModel << "\n";
     cout << "boneCount " << boneCount << "\n";
-
-    /*for(i = 0; i < numInd; i++) {
-        cout << "vertex " << i << " has " << numBones[i] << " bones: ";
-        for(j = 0; j < numBones[i]; j++) {
-            cout << " bone " << boneWeight[i*5 + j];
-        }
-        cout << "\n";
-    }*/
 
     cout << "finished loading " << source << "\n\n";
 }
@@ -168,41 +159,11 @@ void CharDae::recursivePrint(const aiNode* node, int level, aiMesh** meshes) {
 
 // go through hierarchy of nodes in scene
 void CharDae::recursiveDraw(aiNode* node) {
+    // TODO remove this
 }
 
 void CharDae::updateBones(float time) {
-    int bones = meshes[meshInd]->mNumBones;
-    int i, j, k;
-    const aiAnimation* anim = scene->mAnimations[0];
-
     recursiveUpdate(scene->mRootNode, time);
-    
-
-    boneModels.clear();
-    for (i = 0; i < bones; i++) {
-        //cout << "bone " << i << ", " << meshes[meshInd]->mBones[i]->mName.data << "\n";
-   //     aiMatrix4x4 boneModel = meshes[meshInd]->mBones[i]->mOffsetMatrix;
-     //   boneModels.push_back(mat4(1.0));
-        for(j = 0; j < 4; j++) {
-            for(k = 0; k < 4; k++) {
-      //          cout << boneModel[j][k] << " ";
-                //floatModel[(i * 16) + (j * 4) + k] = boneModel[j][k];
-               // floatModel[(i * 16) + (j * 4) + k] = boneModels[i][j][k];
-                //cout << floatModel[i * 16 + j * 4 + k] << " ";
-/*
-                if(j == 3) {
-                    if(k == 0) {
-                        floatModel[(i * 16) + (j * 4) + k] += i;
-                    } else if (k == 1) {
-                        floatModel[(i * 16) + (j * 4) + k] += 0;
-                    } else if (k == 2) {
-                    }
-                }*/
-            }
-            //cout << "\n";
-        }
-        //cout << "\n";
-    }
 }
 
 void CharDae::recursiveUpdate(const aiNode* toUpdate, float time) {
@@ -256,31 +217,20 @@ void CharDae::recursiveUpdate(const aiNode* toUpdate, float time) {
     us = parent * us;
     
 
-    //cout << "bone " << toUpdate->mName.data << "\n";
-    //cout << "id " << updateId << "\n";
-
     if(updateId != -1) {
         us = us * meshes[meshInd]->mBones[updateId]->mOffsetMatrix;
         us = us.Transpose();
 
         for(i = 0; i < 4; i++) {
             for(j = 0; j < 4; j++) {
-//                cout << us[i][j] << " ";
                 floatModel[(updateId * 16) + (i * 4) + j] = us[i][j];
-                //floatModel[(updateId * 16) + (i * 4) + j] = 0;
             } 
-//            cout << "\n";
         }
-//        cout << "\n";
     }
 
     for(i = 0; i < toUpdate->mNumChildren; i++) {
         recursiveUpdate(toUpdate->mChildren[i], time);
     }
-
-    // get our parents transform
-    // multiply that by our transform
-    // set our bones transform to that and the bones transform
 }
 
 int CharDae::findBone(const aiNode* toFind) {
@@ -368,6 +318,8 @@ void CharDae::startAnimation(string animation) {
         animChoice = walk;
     } else if(strcmp(animation.c_str(), "punch") == 0) {
         animChoice = punch;
+    } else if(strcmp(animation.c_str(), "idle") == 0) {
+        animChoice = idle;
     }
 
     if(animChoice != -1) {
@@ -391,10 +343,12 @@ void CharDae::drawChar(GLint h_ModelMatrix, GLint h_vertPos,
     }
 
     // prepare to start an animation
-    // TODO
     lastTime = time;
     if (time > endTime) {
         animChoice = -1;
+    }
+    if (!isAnimating()) {
+        animStart = lastTime;
     }
 
     // indices
@@ -423,8 +377,7 @@ void CharDae::drawChar(GLint h_ModelMatrix, GLint h_vertPos,
    
     // model transform
     glm::mat4 translate = glm::translate(glm::mat4(1.0f), position);
-    glm::mat4 result = translate * glm::scale(mat4(1.0f), glm::vec3(8.0f, 8.0f, 8.0f));
-    //glm::mat4 result = translate * glm::scale(mat4(1.0f), glm::vec3(0.2f, 0.2f, 0.2f));
+    glm::mat4 result = translate * glm::rotate(glm::mat4(1.0f), rotate, glm::vec3(0, 1, 0)) * glm::scale(mat4(1.0f), glm::vec3(8.0f, 8.0f, 8.0f)) * glm::scale(mat4(1.0f), scale);
     glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(result));
 
     // enable bones
@@ -442,20 +395,7 @@ void CharDae::drawChar(GLint h_ModelMatrix, GLint h_vertPos,
 
     // bone models
     updateBones(time);
-    //GLSL::enable
 
-    // bind buffer
-    // buffer data
-    // push buffer
-
-    // TODO
-    // scene -> animation -> node animation
-    // bone transforms
-    // we will pass several bones
-    // each bone will have an ID and a Weight
-    // these will be new buffers
-
-    // TODO may need to transpose this, ai matrices are row major
     glUniformMatrix4fv(h_boneTransforms, boneCount, (GLboolean) false, floatModel);
 
     // actual draw call

@@ -141,7 +141,10 @@ void Tavern::addTavernCharacter(int index, glm::vec3 scale, glm::vec3 trans, glm
     bodyParts.push_back(torso);
     //bodyParts.push_back(arm);
     
-	tavernCharacters.push_back(*(new Mercenary(bodyParts)));
+    Mercenary* merc = new Mercenary(bodyParts);
+    merc->dae = NULL;
+
+	tavernCharacters.push_back(*merc);
 }
 
 void Tavern::loadBufferData(TextureLoader* texLoader)
@@ -609,7 +612,7 @@ void Tavern::drawTavern(GLint h_ModelMatrix, GLint h_vertPos,
 	
 	for (int iter = 0; iter < tavernCharacters.size(); iter++) {
         for(int meshIter = 0; meshIter < tavernCharacters[iter].meshes.size(); meshIter++) {
-        	if ((*fCuller).checkCull(tavernCharacters[iter].meshes[meshIter])) {
+        	/*if ((*fCuller).checkCull(tavernCharacters[iter].meshes[meshIter])) {
 			    enableBuff(h_vertPos, h_vertNor, 
                     (*tavernCharacters[iter].meshes[meshIter].cont).posBuf, 
                     (*tavernCharacters[iter].meshes[meshIter].cont).norBuf, 
@@ -621,13 +624,34 @@ void Tavern::drawTavern(GLint h_ModelMatrix, GLint h_vertPos,
 			    }
 			    tavernCharacters[iter].draw(h_ModelMatrix, meshIter);
 			    disableBuff(h_vertPos, h_vertNor, h_aTexCoord);
-			}
+			}*/
         }
 	}
 
     // TODO remove this
-    sam.drawChar(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord, h_boneFlag, h_boneIds, h_boneWeights, h_boneTransforms, ltime);
+	for (int iter = 0; iter < tavernCharacters.size(); iter++) {
+        static int animSelect = 0;
+        animSelect++;
+        if(animSelect > 30) {
+            animSelect = 0;
+        }
+
+        if (tavernCharacters[iter].dae == NULL) {
+            tavernCharacters[iter].initDae();
+        }
+        if(!tavernCharacters[iter].dae->isAnimating()) {
+            tavernCharacters[iter].dae->startAnimation("idle");
+            if(animSelect == 0) {
+                tavernCharacters[iter].dae->startAnimation("punch");
+            }
+        }
+        tavernCharacters[iter].dae->position = tavernCharacters[iter].meshes[0].pos;
+        tavernCharacters[iter].dae->position.y -= 1;
+        tavernCharacters[iter].dae->scale = glm::vec3(0.8, 0.8, 0.8);
+        tavernCharacters[iter].dae->drawChar(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord, h_boneFlag, h_boneIds, h_boneWeights, h_boneTransforms, ltime);
+    }
     
+    /*sam.drawChar(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord, h_boneFlag, h_boneIds, h_boneWeights, h_boneTransforms, ltime);
     static int switcher = 0;
 
     if(!sam.isAnimating()) {
@@ -639,7 +663,7 @@ void Tavern::drawTavern(GLint h_ModelMatrix, GLint h_vertPos,
             switcher = 0;
             sam.startAnimation("punch");
         }
-    }
+    }*/
 }
 
 void Tavern::applyTurkeySpin(double ltime)

@@ -161,6 +161,7 @@ void buyMercenary(void* mgr, bool* gamePaused){
   // *gamePaused = false;
   Manager* manager = (Manager*)mgr;
   manager->buyMercenaryTrail(manager->medGoldCost);
+  manager->mercs[manager->mercs.size()].initDae();
   *gamePaused = false;
 }
 
@@ -223,10 +224,32 @@ void fleeAmbush(void* mgr, bool* gamePaused ){
 }
 
 void Wagon::updateWagon(float globalTime) {
+  for(int i = 0; i < manager->mercs.size(); i++) {
+    if(manager->mercs[i].dae == NULL) {
+        manager->mercs[i].initDae();
+    }
+    manager->mercs[i].dae->position = position;
+    // the wagon has this transform from the stack
+    manager->mercs[i].dae->position.x -= 99.5 + (float) i / 3;
+    manager->mercs[i].dae->position.z += 0.4 - (i % 2) * 0.8;
+    manager->mercs[i].dae->position.y = 0;
+    manager->mercs[i].dae->scale = glm::vec3(0.05, 0.05, 0.05);
+    manager->mercs[i].dae->rotate = rotate;
+  }
+
   if (wagonStart && !terrain->atEnd(position)) {
     int event = terrain->checkEvents(position);
 
+
     if(!manager->partyDead()){
+
+      if(event == 0) {
+        for(int i = 0; i < manager->mercs.size(); i++) {
+          if(!manager->mercs[i].dae->isAnimating()) {
+            manager->mercs[i].dae->startAnimation("run");
+          }
+        }
+      }
 
       if(event == MERCHANTEVENT){
         soundSys->playVoice(VILLAGER_GREETING);
@@ -263,6 +286,9 @@ void Wagon::updateWagon(float globalTime) {
 
         //Set the data
         menu->setData("Merchant", about, options);
+        for(int i = 0; i < manager->mercs.size(); i++) {
+          manager->mercs[i].dae->startAnimation("punch");
+        }
 
       }
       if(event == SICKNESS){
@@ -308,6 +334,9 @@ void Wagon::updateWagon(float globalTime) {
         }
         //Set the data
         menu->setData("Sickness", about, options);
+        for(int i = 0; i < manager->mercs.size(); i++) {
+          manager->mercs[i].dae->startAnimation("punch");
+        }
       }
       if(event == WANDERER){
         vector<string> about;
@@ -344,6 +373,9 @@ void Wagon::updateWagon(float globalTime) {
 
         //Set the data
         menu->setData("Wanderer", about, options);
+        for(int i = 0; i < manager->mercs.size(); i++) {
+          manager->mercs[i].dae->startAnimation("punch");
+        }
       }
       if(event == AMBUSH){
         soundSys->playVoice(BANDIT_GREETING);
@@ -362,6 +394,9 @@ void Wagon::updateWagon(float globalTime) {
 
         //Set the data
         menu->setData("Ambush", about, options);
+        for(int i = 0; i < manager->mercs.size(); i++) {
+          manager->mercs[i].dae->startAnimation("punch");
+        }
       }
       
       deltaTime = glfwGetTime() - startTime;
@@ -423,7 +458,8 @@ void Wagon::setRotation(float aRotation)
 }
 
 
-void Wagon::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMatrix, RenderingHelper *modelTrans)
+void Wagon::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, 
+        GLint h_ModelMatrix, RenderingHelper *modelTrans)
 {
    //Position Wagon along the trail
    modelTrans->pushMatrix();
@@ -431,7 +467,7 @@ void Wagon::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMatri
       modelTrans->rotate(rotate, glm::vec3(0, 1, 0));
       modelTrans->scale(scale.x, scale.y, scale.z);
       glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(modelTrans->modelViewMatrix));
-   modelTrans->popMatrix();
+    modelTrans->popMatrix();
 
   //set up the texture unit
     glEnable(GL_TEXTURE_2D);
@@ -464,4 +500,18 @@ void Wagon::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMatri
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
    glBindBuffer(GL_ARRAY_BUFFER, 0);
    glDisable(GL_TEXTURE_2D);
+
+
+    // draw people
+}
+
+void Wagon::drawMercs(GLint h_ModelMatrix, GLint h_vertPos, 
+        GLint h_vertNor, GLint h_aTexCoord, GLint h_boneFlag, 
+        GLint h_boneIds, GLint h_boneWeights, GLint h_boneTransforms, 
+        float time) {
+    for (int i = 0; i < manager->mercs.size(); i++) {
+        manager->mercs[i].dae->drawChar(h_ModelMatrix, h_vertPos, 
+                h_vertNor, h_aTexCoord, h_boneFlag, h_boneIds, 
+                h_boneWeights, h_boneTransforms, time);
+    }
 }
