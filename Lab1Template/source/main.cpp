@@ -591,16 +591,17 @@ void drawGL()
 	sprintf(info,"x %d", manager.getMercs());
 	printText2D(info, 620, 566, 18);
 	
+	if(menu.inMenu)
+	{
+		//glUseProgram(pid);
+		menu.drawMenu();
+		//glUseProgram(pid);
+	}
+	
 	if(hud.on && !camera.isShadowMapView() && !camera.isFreeRoam())
 	{
 		//glUseProgram(pid);
 		//glUniform1i(h_flag, 1);
-		if(menu.inMenu)
-		{
-			//glUseProgram(pid);
-			menu.drawMenu();
-			//glUseProgram(pid);
-		}
 		// }
 		// if(manager.getInMenu()){
 		// 	printf("Menu is up!");
@@ -908,6 +909,14 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	if (key == GLFW_KEY_I && action == GLFW_PRESS)
 	{
 		audio.playVoice(BANDIT_GREETING);
+	}
+	if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS)
+	{
+		hud.changeSideHudPage(1);
+	}
+	if (key == GLFW_KEY_LEFT && action == GLFW_PRESS)
+	{
+		hud.changeSideHudPage(-1);
 	}
 
 	//DO NOT DELETE THE BELOW CODE THAT IS COMMENTED!!!!!!!!!!, OKAY I PROMISE I WONT -> LOL
