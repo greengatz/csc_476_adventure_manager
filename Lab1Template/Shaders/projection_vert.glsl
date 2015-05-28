@@ -15,10 +15,17 @@ uniform int leafToggle;
 
 varying vec4 point;
 varying vec2 vTexCoord;
+varying float fogDist;
 
 void shadowVertex()
 {
 	point = uProjMatrixShadow * vertPos;
+}
+
+void addFog()
+{
+	vec4 pos = uViewMatrix * uModelMatrix * vertPos;
+	fogDist = abs(pos.z / pos.w);
 }
 
 void main()
@@ -28,6 +35,8 @@ void main()
    gl_FrontColor = vec4(0.1, 0.1, 0.1, 1.0);
 
    shadowVertex();
+
+   addFog();
 
    if (leafToggle == 1)
    {
