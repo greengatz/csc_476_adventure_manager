@@ -38,6 +38,10 @@ private:
    GLint h_ProjMatrixShadMat;
    GLint h_ViewMatrixShadow;
    GLint h_ModelMatrixShadow;
+   GLint leafToggleIDShadow;
+   GLint h_uTexUnitShadow;
+   GLint h_aTexCoordShadow;
+   GLint h_lightPos;
 
    //Handles to the shader data
    GLint h_uTexUnit;
