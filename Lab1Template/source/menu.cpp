@@ -1,6 +1,6 @@
 #include "menu.h"
 
-int MENU_ID = 4004;
+int MENU_ID = 4005;
 
 void Menu::initMenu(Camera * cameraA, TextureLoader *texLoader, int widthA, int heightA, Manager *mgr, bool* gameP)
 {
@@ -29,7 +29,7 @@ void Menu::initMenu(Camera * cameraA, TextureLoader *texLoader, int widthA, int 
 	GrndTexBuffObj = 0;
 	GIndxBuffObj = 0;
 	initText2D( "Holstein.DDS" );
-	texLoader->LoadTexture((char *)"assets/menuBack.bmp", MENU_ID);
+	texLoader->LoadTexture((char *)"assets/newMenu.bmp", MENU_ID);
 
 	//End points of Menu
 	GLfloat vert[] = {

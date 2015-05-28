@@ -579,6 +579,19 @@ void drawGL()
 	
 	//**************Draw HUD START*********************
 
+		hud.drawHud(&camera, g_width, g_height);
+	char info[64];
+			sprintf(info,"x %d", manager.getGold());
+			printText2D(info, 50, 566, 18);
+
+			sprintf(info,"x %d", manager.getFood());
+			printText2D(info, 220, 566, 18);
+
+			sprintf(info,"x %d", manager.getBeer());
+			printText2D(info, 430, 566, 18);
+
+			sprintf(info,"x %d", manager.getMercs());
+			printText2D(info, 620, 566, 18);
 	if(hud.on && !camera.isShadowMapView() && !camera.isFreeRoam())
 	{
 		//glUseProgram(pid);
@@ -597,27 +610,12 @@ void drawGL()
 		// 	glUseProgram(pid);
 		// }
 		// hud.drawHud(h_ModelMatrix, h_vertPos, g_width, g_height, h_aTexCoord);
-		hud.drawHud(&camera, g_width, g_height);
 		hud.drawSideHud(&camera, g_width, g_height);
 		//glUniform1i(h_flag, 0);
 
-		if(!hud.homeScreenOn)
+		if(hud.homeScreenOn)
 		{
-			char info[64];
-			sprintf(info,"x %d", manager.getGold());
-			printText2D(info, 50, 566, 18);
-
-			sprintf(info,"x %d", manager.getFood());
-			printText2D(info, 220, 566, 18);
-
-			sprintf(info,"x %d", manager.getBeer());
-			printText2D(info, 430, 566, 18);
-
-			sprintf(info,"x %d", manager.getMercs());
-			printText2D(info, 620, 566, 18);
-		}
-		else
-		{
+			
 			printText2D("Press Enter to Continue", 75, 75, 24);
 		}
 	}
