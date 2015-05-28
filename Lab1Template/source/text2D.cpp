@@ -108,6 +108,7 @@ void printText2D(const char * text, int x, int y, int size){
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glDisable(GL_DEPTH_TEST);
 
 	// Draw call
 	glDrawArrays(GL_TRIANGLES, 0, vertices.size() );
@@ -116,7 +117,7 @@ void printText2D(const char * text, int x, int y, int size){
 
 	glDisableVertexAttribArray(vertexPosition_screenspaceID);
 	glDisableVertexAttribArray(vertexUVID);
-
+	glEnable(GL_DEPTH_TEST);
 }
 
 void cleanupText2D(){
