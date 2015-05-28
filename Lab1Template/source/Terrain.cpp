@@ -139,10 +139,12 @@ void Terrain::placeEvents(){
 }
 
 void Terrain::createEvents(){
+    int divisions = 10;
+    int divisionOffset = 5;
     int minMerch = 1, maxMerch = 2,      //Min max chance of Merchant event
         minWand = 1, maxWand = 2,        //Min max chance of Random Wanderer event
-        minAmbush = 1, maxAmbush = 3,    //Min max chance of Ambush event
-        minSick = 2, maxSick = 5;        //Min max chance of Sickness event 
+        minAmbush = 2, maxAmbush = 3,    //Min max chance of Ambush event
+        minSick = 1, maxSick = 3;        //Min max chance of Sickness event 
     int startingOffset = 3;      //No events from starting 3 spaces
     int endingOffset = 5;      //No events from ending 5 spaces
 
@@ -151,54 +153,111 @@ void Terrain::createEvents(){
     }
     srand(time(NULL));
 
-    //Place Merchant
-    int merchCount = (rand() % (maxMerch - minMerch)) + minMerch;
-    for(int i = 0; i <= merchCount; i++){
-        int random = ((rand() % (MAP_X - startingOffset - endingOffset)) +  startingOffset);
-        if(eventsMap[random] == 0 && eventsMap[random + 1] == 0 && eventsMap[random - 1] == 0)
-            eventsMap[random] = MERCHANTEVENT; 
-        else
-            merchCount++;
-    }
+    int ambushSpot = -1, sickSpot = -1, merchSpot = -1, wandSpot = -1;
 
-    //Place Wanderer
-    int wandCount = (rand() % (maxWand - minWand)) + minWand;
-    for(int i = 0; i <= wandCount; i++){
-        int random = ((rand() % (MAP_X - startingOffset - endingOffset)) +  startingOffset);
-        if(eventsMap[random] == 0 && eventsMap[random + 1] == 0 && eventsMap[random - 1] == 0)
-            eventsMap[random] = WANDERER; 
-        else
-            wandCount++;
-    }
-
-    //Place Ambush
-    int ambushCount = (rand() % (maxAmbush - minAmbush)) + minAmbush;
-    for(int i = 0; i <= ambushCount; i++){
-        int random = ((rand() % (MAP_X - startingOffset - endingOffset)) +  startingOffset);
-        if(eventsMap[random] == 0 && eventsMap[random + 1] == 0 && eventsMap[random - 1] == 0){
-            eventsMap[random] = AMBUSH; 
-            // printf("Ambush on trail at : %f", (float)random); 
+    for(int i = 0; i < 4; i++){
+      //1st set: Ambush, Sickness
+      bool sickChance = (rand() % 2) == 1 ? true: false;   
+      while(ambushSpot == -1 || sickSpot == -1 || merchSpot == -1 || wandSpot == -1){
+        int pos = (rand() % divisions) + divisionOffset;
+        if(ambushSpot == -1){
+          if(eventsMap[pos] == 0 && eventsMap[pos - 1] == 0 && eventsMap[pos + 1] == 0){
+            ambushSpot = pos;
+          eventsMap[ambushSpot] = AMBUSH;
+          }
+        }else if(merchSpot == -1){
+          if(eventsMap[pos] == 0 && eventsMap[pos - 1] == 0 && eventsMap[pos + 1] == 0){
+            merchSpot = pos;
+            eventsMap[merchSpot] = MERCHANTEVENT;
+          }
+        }else if(wandSpot == -1){
+          if(eventsMap[pos] == 0 && eventsMap[pos - 1] == 0 && eventsMap[pos + 1] == 0){
+            wandSpot = pos;
+            eventsMap[wandSpot] = WANDERER;
+          }
+        }else if(sickSpot == -1){
+          if(eventsMap[pos] == 0){
+            sickSpot = pos;
+            if(sickChance){
+              eventsMap[sickSpot] = SICKNESS;
+              sickChance = (rand() % 3) > 0 ? true: false;
+            }
+          }
         }
-        else
-            ambushCount++;
-    }
+      }
+      printf("Iteration #%d, AmbushSpot:%d, MerchantSpot:%d, SickSpot:%d, WandSpot:%d\n", i, ambushSpot, merchSpot, sickSpot, wandSpot);
 
-    //Place Sickness
-    int sickCount = (rand() % (maxSick - minSick)) + minSick;
-    for(int i = 0; i <= sickCount ; i++){
-        int random = ((rand() % (MAP_X - startingOffset)) +  startingOffset);
-        if(eventsMap[random] == 0 && eventsMap[random + 1] == 0 && eventsMap[random - 1] == 0)
-            eventsMap[random] = SICKNESS; 
-        else
-            sickCount++;
+      ambushSpot = -1;
+      merchSpot = -1;
+      wandSpot = -1;
+      sickSpot = -1;
+      
+      divisionOffset += 10;
     }
-    printf("MerchCount:%d, Wanderer:%d, Ambush:%d, Sickness:%d\n", merchCount, wandCount, ambushCount, sickCount);
-    for(int i = 0; i <= MAP_Z ; i++){
-        printf("[%d]", eventsMap[i]);
-    }
-
     placeEvents();
 }
+
+// void Terrain::createEvents(){
+//     int minMerch = 1, maxMerch = 2,      //Min max chance of Merchant event
+//         minWand = 1, maxWand = 2,        //Min max chance of Random Wanderer event
+//         minAmbush = 1, maxAmbush = 3,    //Min max chance of Ambush event
+//         minSick = 2, maxSick = 5;        //Min max chance of Sickness event 
+//     int startingOffset = 3;      //No events from starting 3 spaces
+//     int endingOffset = 5;      //No events from ending 5 spaces
+
+//     for(int i = 0; i < MAP_X; i++){
+//         eventsMap[i] = 0;
+//     }
+//     srand(time(NULL));
+
+//     //Place Merchant
+//     int merchCount = (rand() % (maxMerch - minMerch)) + minMerch;
+//     for(int i = 0; i <= merchCount; i++){
+//         int random = ((rand() % (MAP_X - startingOffset - endingOffset)) +  startingOffset);
+//         if(eventsMap[random] == 0 && eventsMap[random + 1] == 0 && eventsMap[random - 1] == 0)
+//             eventsMap[random] = MERCHANTEVENT; 
+//         else
+//             merchCount++;
+//     }
+
+//     //Place Wanderer
+//     int wandCount = (rand() % (maxWand - minWand)) + minWand;
+//     for(int i = 0; i <= wandCount; i++){
+//         int random = ((rand() % (MAP_X - startingOffset - endingOffset)) +  startingOffset);
+//         if(eventsMap[random] == 0 && eventsMap[random + 1] == 0 && eventsMap[random - 1] == 0)
+//             eventsMap[random] = WANDERER; 
+//         else
+//             wandCount++;
+//     }
+
+//     //Place Ambush
+//     int ambushCount = (rand() % (maxAmbush - minAmbush)) + minAmbush;
+//     for(int i = 0; i <= ambushCount; i++){
+//         int random = ((rand() % (MAP_X - startingOffset - endingOffset)) +  startingOffset);
+//         if(eventsMap[random] == 0 && eventsMap[random + 1] == 0 && eventsMap[random - 1] == 0){
+//             eventsMap[random] = AMBUSH; 
+//             // printf("Ambush on trail at : %f", (float)random); 
+//         }
+//         else
+//             ambushCount++;
+//     }
+
+//     //Place Sickness
+//     int sickCount = (rand() % (maxSick - minSick)) + minSick;
+//     for(int i = 0; i <= sickCount ; i++){
+//         int random = ((rand() % (MAP_X - startingOffset)) +  startingOffset);
+//         if(eventsMap[random] == 0 && eventsMap[random + 1] == 0 && eventsMap[random - 1] == 0)
+//             eventsMap[random] = SICKNESS; 
+//         else
+//             sickCount++;
+//     }
+//     printf("MerchCount:%d, Wanderer:%d, Ambush:%d, Sickness:%d\n", merchCount, wandCount, ambushCount, sickCount);
+//     for(int i = 0; i <= MAP_Z ; i++){
+//         printf("[%d]", eventsMap[i]);
+//     }
+
+//     placeEvents();
+// }
 
 // i fixed one of 3 problem spots
 void Terrain::createTrail(){
