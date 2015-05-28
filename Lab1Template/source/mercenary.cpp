@@ -16,7 +16,7 @@ string First[] = {"Zdislav", "Richard", "Bryn", "Omari", "Sizzle",
 int firstCount = 9;
 
 string Last[] = {"Bobby", "Andrzejewski", "Zdrojewski", "Copperhordes", "Hugehair"
-                "Bourchier", "Cardonell", "de La Chapagne", "Dreux"};
+                "Bourchier", "Cardonell", "del Chapagne", "Dreux"};
 int lastCount = 9;
 
 string Title[] = {"Driver", "Bear-Hugger", "God", "Lord-Commander", "Pestilent", 

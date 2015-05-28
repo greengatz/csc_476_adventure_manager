@@ -16,6 +16,8 @@
 #include "RenderingHelper.h"
 #include "MatrixStack.h"
 #include "shader.hpp"
+#include "text2D.hpp"
+#include "mercenary.h"
 
 using namespace std;
 using namespace glm;
@@ -69,6 +71,7 @@ class HUD
 		int g_GiboLen;
 		RenderingHelper ModelTrans;
 		float offset = 0;
+		int stringOffset = 0;
 };
 
 #endif

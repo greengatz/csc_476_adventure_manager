@@ -37,6 +37,7 @@ void HUD::initHUD(TextureLoader *texLoader)
 {
 	ModelTrans.useModelViewMatrix();
 	ModelTrans.loadIdentity();
+	initText2D( "Holstein.DDS" );
 
 	  // Initialize Shader
 	pid = LoadShaders( "Shaders/HUD_vert.glsl", 
@@ -257,9 +258,13 @@ void HUD::drawSideHud(Camera * camera, int width, int height)
 
   glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(_guiMVP));
 
-
+  string data;
+  Mercenary tempMerc;
 for(int i = 0; i < man -> mercs.size(); ++i)
 {
+	glUseProgram(pid);
+	tempMerc = man -> mercs[i];
+
 	mat4 trans = glm::translate(glm::mat4(1.0f), vec3(0.0f, offset, 0.0f));
 	_guiMVP = trans * _guiMVP;
 	glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(_guiMVP));
@@ -276,8 +281,22 @@ for(int i = 0; i < man -> mercs.size(); ++i)
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0); // draw first object
 	disableBuff();
 	offset = -0.4;
+
+	data = tempMerc.firstName; //+ " " + man -> mercs[i].lastName;
+	printText2D(data.c_str(), 680, stringOffset, 8);
+	data = "the " + tempMerc.title;
+	printText2D(data.c_str(), 665, stringOffset - 15, 8);
+
+	data = to_string(static_cast<long long int>(tempMerc.currHealth)) + "/" + to_string(static_cast<long long int>(tempMerc.maxHealth));
+	printText2D(data.c_str(), 685, stringOffset - 40, 10);
+
+	data = to_string(static_cast<long long int>(tempMerc.currDamage));
+	printText2D(data.c_str(), 685, stringOffset - 70, 10);
+
+	stringOffset -= 120;
 }
 offset = 0;
+stringOffset = 495;
 glEnable(GL_DEPTH_TEST); // Enable the Depth-testing
 proj.popMatrix();
 
