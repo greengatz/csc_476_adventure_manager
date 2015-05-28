@@ -15,6 +15,9 @@
 #include "manager.h"
 #include "TextureLoader.h"
 #include "text2D.hpp"
+#include "shader.hpp"
+#include "MatrixStack.h"
+#include "RenderingHelper.h"
 
 using namespace std;
 using namespace glm;
@@ -30,9 +33,9 @@ class Menu
 {
 	public:
 		void drawMenu();
-		void initMenu(TextureLoader *texLoader, GLint h_ModelMatrix, GLint h_vertPos, int width, int height, GLint h_aTexCoord, Manager *mgr, bool* gameP);
-		void enableBuff(GLint h_vertPos, GLint h_aTexCoord);
-		void disableBuff(GLint h_vertPos, GLint h_aTexCoord);
+		void initMenu(Camera * camera, TextureLoader *texLoader, int width, int height, Manager *mgr, bool* gameP);
+		void enableBuff();
+		void disableBuff();
 		void setData(char* title, vector<string> about, vector<option> options);
 		void selectOption(int num);
 		GLuint posBufObjHUD;
@@ -46,15 +49,25 @@ class Menu
 		vector<string> about;
 		vector<option> options;
 		int g_GiboLen;
-		GLint h_ModelMatrix;
-		GLint h_vertPos;
 		int width;
 		int height;
-		GLint h_aTexCoord;
 		int offset = -40;
 		int aboutOffset = -20;
 		Manager *manager;
 		bool* gamePaused;
+		Camera * camera;
+
+		GLuint pid;
+		GLint h_vertPos;
+		GLint h_vertNor;
+		GLint h_aTexCoord;
+		//Handles to the shader data
+		GLint h_uTexUnit;
+		GLint h_ProjMatrix;
+		GLint h_ViewMatrix;
+		GLint h_ModelMatrix;
+
+		RenderingHelper ModelTrans;
 };
 
 #endif

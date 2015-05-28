@@ -170,19 +170,6 @@ int minX = 5;
 int minZ = -40;
 int gridSize = 7;
 
-/**
- * For now, this just initializes the Shape object.
- * Later, we'll updated to initialize all objects moving.
- * (This is very specific right now to one object).....
- */
-void initShape(char * filename)
-{
-	t = 0.0f;
-	h = 0.001f;
-
-	//Initialize shapes here
-}
-
 void initModels()
 {
 	//Initialize meshes
@@ -237,7 +224,7 @@ void initGL()
 }
 
 /**
- * Initialize the shaders passed to the function
+ * Initialize the shaders passed to the function TODO--> There is already a class that does this.....
  */
 bool installTavShader(const string &vShaderName, const string &fShaderName)
 {		
@@ -600,15 +587,29 @@ void drawGL()
 	
 	//**************Draw HUD START*********************
 
+	hud.drawHud(&camera, g_width, g_height);
+	char info[64];
+	sprintf(info,"x %d", manager.getGold());
+	printText2D(info, 50, 566, 18);
+
+	sprintf(info,"x %d", manager.getFood());
+	printText2D(info, 220, 566, 18);
+
+	sprintf(info,"x %d", manager.getBeer());
+	printText2D(info, 430, 566, 18);
+
+	sprintf(info,"x %d", manager.getMercs());
+	printText2D(info, 620, 566, 18);
+	
 	if(hud.on && !camera.isShadowMapView() && !camera.isFreeRoam())
 	{
-		glUseProgram(pid);
-		glUniform1i(h_flag, 1);
+		//glUseProgram(pid);
+		//glUniform1i(h_flag, 1);
 		if(menu.inMenu)
 		{
-			glUseProgram(pid);
+			//glUseProgram(pid);
 			menu.drawMenu();
-			glUseProgram(pid);
+			//glUseProgram(pid);
 		}
 		// }
 		// if(manager.getInMenu()){
@@ -617,26 +618,13 @@ void drawGL()
 		// 	manager.drawMenuManager();
 		// 	glUseProgram(pid);
 		// }
-		hud.drawHud(h_ModelMatrix, h_vertPos, g_width, g_height, h_aTexCoord);
-		glUniform1i(h_flag, 0);
+		// hud.drawHud(h_ModelMatrix, h_vertPos, g_width, g_height, h_aTexCoord);
+		hud.drawSideHud(&camera, g_width, g_height);
+		//glUniform1i(h_flag, 0);
 
-		if(!hud.homeScreenOn)
+		if(hud.homeScreenOn)
 		{
-			char info[64];
-			sprintf(info,"x %d", manager.getGold());
-			printText2D(info, 50, 566, 18);
-
-			sprintf(info,"x %d", manager.getFood());
-			printText2D(info, 220, 566, 18);
-
-			sprintf(info,"x %d", manager.getBeer());
-			printText2D(info, 430, 566, 18);
-
-			sprintf(info,"x %d", manager.getMercs());
-			printText2D(info, 620, 566, 18);
-		}
-		else
-		{
+			
 			printText2D("Press Enter to Continue", 75, 75, 24);
 		}
 	}
@@ -894,8 +882,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		hud.on = !hud.on;
 	}
 
-	if (key == GLFW_KEY_5 && action == GLFW_PRESS)
-    {
+	//if (key == GLFW_KEY_5 && action == GLFW_PRESS)
+    //{
     	//Create about vector and add an element
 	 //  	vector<string> about;
 		// about.push_back("about test");
@@ -913,7 +901,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
   //       	wagon.setTimeStamp(glfwGetTime());
   //       }
         
-    }
+    //}
 	if (key == GLFW_KEY_N && action == GLFW_PRESS)
 	{
 		// fire.toggle();
@@ -932,7 +920,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		audio.playVoice(BANDIT_GREETING);
 	}
 
-	//DO NOT DELETE THE BELOW CODE THAT IS COMMENTED!!!!!!!!!!, OKAY I PROMISE I WONT
+	//DO NOT DELETE THE BELOW CODE THAT IS COMMENTED!!!!!!!!!!, OKAY I PROMISE I WONT -> LOL
 
 	/*if (key == GLFW_KEY_M && action == GLFW_PRESS)
 	{
@@ -968,10 +956,6 @@ void window_size_callback(GLFWwindow* window, int w, int h){
 void updateModels()
 {
 	wagon.updateWagon(dtDraw);
-}
-
-void checkCollisions(){
-	//Check collisions here.
 }
 
 int main(int argc, char **argv)
@@ -1032,10 +1016,8 @@ int main(int argc, char **argv)
 	installTrailShader("Shaders/trail_vert.glsl", "Shaders/trail_frag.glsl");
 	fCuller.init();
 	// terrEv.init(&matSetter, &fCuller, &meshes);
-	std::string str = "assets/bunny.obj";
-	// initShape(&str[0u]); //initShape(argv[0]);
 
-	menu.initMenu(&texLoader, h_ModelMatrix, h_vertPos, g_width, g_height, h_aTexCoord, &manager, &gamePaused);
+	menu.initMenu(&camera, &texLoader, g_width, g_height, &manager, &gamePaused);
   	
   	initModels();
   	tavern.loadTavernMeshes(&texLoader);
@@ -1047,9 +1029,9 @@ int main(int argc, char **argv)
   	// terrEv.addMerchantStand(vec3(loc.x - 89.5, loc.y, loc.z), glm::rotate(glm::mat4(1.0f), (const float)180, glm::vec3(0, 1.0f, 0)));
   	// terrEv.addEndCity(vec3(loc.x - 82.5, loc.y, loc.z));
 
-  	//Create about vector and add an element
-
+   //HUD information
   	hud.initHUD(&texLoader);
+  	hud.initSideHud(&texLoader);
   	hud.initHomeScreen(&texLoader);
   	initText2D( "Holstein.DDS" );
   	dtDraw = 0;
@@ -1122,10 +1104,7 @@ int main(int argc, char **argv)
 		// Update every 60Hz
 		if(dtDraw >= (1.0 / 60.0) ) {
 			checkUserInput();
-			if (camera.isTavernView() && !camera.isFreeRoam())
-			{
-				checkCollisions();
-			}
+
 			updateModels();
 			timeOldDraw += (1.0 / 60.0);
 			//Draw an image

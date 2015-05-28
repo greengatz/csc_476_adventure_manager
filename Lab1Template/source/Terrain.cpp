@@ -551,8 +551,7 @@ void Terrain::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMat
    GLSL::disableVertexAttribArray(h_aTexCoord);
    glBindBuffer(GL_ARRAY_BUFFER, 0); 
    glDisable(GL_TEXTURE_2D);
-
-   terrainEvents.drawTerrainEvents(h_ModelMatrix, h_pos, h_nor, h_aTexCoord, 0.0);
+   
    for (int index = 0; index < MAP_X - 1; index++)
    {
       for(int index2 = 0; index2 < MAP_Z - 3; index2++)
@@ -575,6 +574,8 @@ void Terrain::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMat
          }
       }
    }
+
+   terrainEvents.drawTerrainEvents(h_ModelMatrix, h_pos, h_nor, h_aTexCoord, 0.0);
 }
 
 Spline* Terrain::getSpline()

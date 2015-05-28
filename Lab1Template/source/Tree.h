@@ -35,6 +35,7 @@ private:
    GLint h_vertPosShadow;
    GLint h_vertNorShadow;
    GLint h_ProjMatrixShadow;
+   GLint h_ProjMatrixShadMat;
    GLint h_ViewMatrixShadow;
    GLint h_ModelMatrixShadow;
 

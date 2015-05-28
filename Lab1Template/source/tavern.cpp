@@ -261,9 +261,9 @@ void Tavern::createTable1(glm::vec3 initLoc, float ang)
 void Tavern::createPillar(glm::vec3 initLoc, bool north)
 {
 	// addTavernItem(CUBE, glm::vec3(0.2, 10.0, 0.2), initLoc, glm::mat4(1.0f));
-	float ang = 90;
+	float ang = 90.0f;
 	glm::mat4 rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 0, 1.0f));
-	addTavernItem(PLANK, 1, glm::vec3(12, 15, 2.5), glm::vec3(initLoc.x, initLoc.y + 5.0, initLoc.z), rot);
+	addTavernItem(PLANK, 1, glm::vec3(12, 15, 2.5), glm::vec3(initLoc.x, initLoc.y + 5.0f, initLoc.z), rot);
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_PLANK_ID);
 	// ang = 45;
 	// rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(1.0f, 0, 0));
@@ -394,10 +394,12 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_ROOF_ID);
 
 	//pillars
-	// createPillar(glm::vec3(18.5, 1, -27.2), true);
-	// createPillar(glm::vec3(27.6, 1, -27.2), true);
-	// createPillar(glm::vec3(18.5, 1, -19.8), false);
-	// createPillar(glm::vec3(27.6, 1, -19.8), false);
+	 createPillar(glm::vec3(18.5, 1, -27.2), true);
+	 createPillar(glm::vec3(27.6, 1, -27.2), true);
+	 createPillar(glm::vec3(18.5, 1, -19.8), false);
+	 createPillar(glm::vec3(27.6, 1, -19.8), false);
+
+	//createPillar(glm::vec3(15.5, .99, -16), false);
 
 	addTavernItem(CRATE, 2, glm::vec3(0.5, 1, 2), glm::vec3(21.9, 0.025, -13.5), glm::mat4(1.0f));
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_BRANCHES_ID);

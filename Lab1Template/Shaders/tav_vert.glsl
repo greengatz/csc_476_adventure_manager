@@ -33,27 +33,27 @@ void main()
     //gl_Position = uProjMatrix * uViewMatrix * uModelMatrix * vertPos;
     gl_Position = uProjMatrix * pos;
    
-	if(flag == 1)
-	{
-		gl_Position = uModelMatrix * vertPos;
-		vTexCoord = aTexCoord;
-	}
+	// if(flag == 1)
+	// {
+	// 	gl_Position = uModelMatrix * vertPos;
+	// 	vTexCoord = aTexCoord;
+	// }
 
 	if (terrainToggle == 1)
 	{
 		vTexCoord = aTexCoord;
 	}
-
+    //This should probably go in a different shader. Too many statements.
     if (boneToggle == 1)
     {
-        mat4 boneTrans = bones[boneIds[0]] * boneWeights[0];
-        boneTrans += bones[boneIds[1]] * boneWeights[1];
-        boneTrans += bones[boneIds[2]] * boneWeights[2];
-        boneTrans += bones[boneIds[3]] * boneWeights[3];
+        mat4 boneTrans = bones[int(boneIds[0])] * boneWeights[0];
+        boneTrans += bones[int(boneIds[1])] * boneWeights[1];
+        boneTrans += bones[int(boneIds[2])] * boneWeights[2];
+        boneTrans += bones[int(boneIds[3])] * boneWeights[3];
 
         gl_Position = uProjMatrix * uViewMatrix * uModelMatrix * boneTrans * vertPos;
         pos = uViewMatrix * boneTrans * uModelMatrix * vertPos;
-        //normal = boneTrans * vec4(1.0, 1.0, 1.0, 0.0);
+        ////normal = boneTrans * vec4(1.0, 1.0, 1.0, 0.0);
         normal = (boneTrans * vec4(normal, 1.0)).xyz;
     }
 }

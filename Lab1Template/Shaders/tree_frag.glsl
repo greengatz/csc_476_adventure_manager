@@ -43,6 +43,4 @@ void main()
 
    vec4 targetCol = texColor * vec4(color.x, color.y, color.z, 1.0);
    gl_FragColor = mix(targetCol, fogColor, fogFactor);
-
-   // gl_FragColor = texColor * vec4(color.x, color.y, color.z, 1.0);
 }

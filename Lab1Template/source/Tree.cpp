@@ -52,6 +52,7 @@ Tree::Tree() :
    h_ViewMatrixShadow = 0;
    h_ModelMatrixShadow = 0;
    h_ProjMatrixShadow = 0;
+   h_ProjMatrixShadMat = 0;
    //planeNormal = gml::vec4(0.0f, 1.0f, 0.0f, 0.0f); We don't need this. We are going to cheat.
    lightPos = glm::vec3(0.0f, 0.0f, 0.0f);
 
@@ -92,12 +93,13 @@ void Tree::init(TextureLoader* texLoader, glm::vec3 lightPosition)
   h_s = GLSL::getUniformLocation(pid, "s");
 
   pidShadow = LoadShaders("Shaders/projection_vert.glsl", "Shaders/projection_frag.glsl");
-  h_vertPosShadow = GLSL::getAttribLocation(pid, "vertPos");
-  h_vertNorShadow = GLSL::getAttribLocation(pid, "vertNor");
+  h_vertPosShadow = GLSL::getAttribLocation(pidShadow, "vertPos");
+  h_vertNorShadow = GLSL::getAttribLocation(pidShadow, "vertNor");
 
-  h_ViewMatrixShadow = GLSL::getUniformLocation(pid, "uViewMatrix");
-  h_ModelMatrixShadow = GLSL::getUniformLocation(pid, "uModelMatrix");
-  h_ProjMatrixShadow = GLSL::getUniformLocation(pid, "uProjMatrix");
+  h_ViewMatrixShadow = GLSL::getUniformLocation(pidShadow, "uViewMatrix");
+  h_ModelMatrixShadow = GLSL::getUniformLocation(pidShadow, "uModelMatrix");
+  h_ProjMatrixShadow = GLSL::getUniformLocation(pidShadow, "uProjMatrix");
+  h_ProjMatrixShadMat = GLSL::getUniformLocation(pidShadow, "uProjMatrixShadow");
 
   // Load geometry
   // Some obj files contain material information.
@@ -299,30 +301,38 @@ void Tree::draw(glm::vec3 treePosition, Camera *camera, glm::vec3 wagonPos)
    //Using another shader program
    glUseProgram(pidShadow);
    glDisable(GL_DEPTH_TEST);
+   glEnable(GL_BLEND);
+   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
    //Set projection matrix
-   MatrixStack viewShadow;
-   //glUniformMatrix4fv( h_ProjMatrixShadow, 1, GL_FALSE, glm::value_ptr( projShadow.topMatrix()));
+   MatrixStack projShadow, viewShadow;
+   glUniformMatrix4fv( h_ProjMatrixShadow, 1, GL_FALSE, glm::value_ptr( projShadow.topMatrix()));
+   projShadow.pushMatrix();
    camera->applyViewMatrix(&viewShadow, wagonPos);
    glUniformMatrix4fv(h_ViewMatrixShadow, 1, GL_FALSE, glm::value_ptr(viewShadow.topMatrix()));
 
-   //Position Wagon along the trail
    ModelTrans.pushMatrix();
       ModelTrans.translate(treePosition + position);
       ModelTrans.scale(scale, scale, scale);
       glUniformMatrix4fv(h_ModelMatrixShadow, 1, GL_FALSE, glm::value_ptr(ModelTrans.modelViewMatrix));
    ModelTrans.popMatrix();
 
+   /*float projArray[16] = {
+      lightPos.y, 0.0, 0.0, 0.0,
+      -lightPos.x, 0.0, -lightPos.z, -1.0,
+      0.0, 0.0, lightPos.y, 0.0,
+      0.0, 0.0, 0.0, lightPos.y
+   };*/
    float projArray[16] = {
-      lightPos.y/lightPos.y, 0.0, 0.0, 0.0,
-      -lightPos.x/lightPos.y, 0.0, -lightPos.z/lightPos.y, -1.0f/lightPos.y,
-      0.0, 0.0, lightPos.y/lightPos.y, 0.0,
-      0.0, 0.0, 0.0, lightPos.y/lightPos.y
+      100.0, 0.0, 0.0, 0.0,
+      -20.0, 0.0, -20.0, -1.0,
+      0.0, 0.0, 100.0, 0.0,
+      0.0, 0.0, 0.0, 100.0
    };
 
    glm::mat4 shadowProjection = glm::make_mat4(projArray);
-   //glm::mat4 shadowProjectionT = glm::transpose(shadowProjection);
-   glUniformMatrix4fv(h_ProjMatrixShadow, 1, GL_FALSE, glm::value_ptr(shadowProjection));
+   glm::mat4 shadowProjectionT = glm::transpose(shadowProjection);
+   glUniformMatrix4fv(h_ProjMatrixShadMat, 1, GL_FALSE, glm::value_ptr(shadowProjection));
 
    //Enable and bind position array for drawing
    GLSL::enableVertexAttribArray(h_vertPosShadow);
@@ -338,7 +348,7 @@ void Tree::draw(glm::vec3 treePosition, Camera *camera, glm::vec3 wagonPos)
    int nIndices = (int)shapes[0].mesh.indices.size();
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indBufObjTree);
 
-   glDrawElements(GL_TRIANGLES, nIndices, GL_UNSIGNED_INT, 0);
+   //glDrawElements(GL_TRIANGLES, nIndices, GL_UNSIGNED_INT, 0);
 
    GLSL::disableVertexAttribArray(h_vertPosShadow);
    GLSL::disableVertexAttribArray(h_vertNorShadow);
@@ -351,6 +361,7 @@ void Tree::draw(glm::vec3 treePosition, Camera *camera, glm::vec3 wagonPos)
    //===================================== Second Render Pass =========================//
 
    glUseProgram(pid);
+   glEnable(GL_DEPTH_TEST);
 
    //Set projection matrix
    MatrixStack proj, view;
