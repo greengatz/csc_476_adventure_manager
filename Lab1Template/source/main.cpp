@@ -579,19 +579,20 @@ void drawGL()
 	
 	//**************Draw HUD START*********************
 
-		hud.drawHud(&camera, g_width, g_height);
+	hud.drawHud(&camera, g_width, g_height);
 	char info[64];
-			sprintf(info,"x %d", manager.getGold());
-			printText2D(info, 50, 566, 18);
+	sprintf(info,"x %d", manager.getGold());
+	printText2D(info, 50, 566, 18);
 
-			sprintf(info,"x %d", manager.getFood());
-			printText2D(info, 220, 566, 18);
+	sprintf(info,"x %d", manager.getFood());
+	printText2D(info, 220, 566, 18);
 
-			sprintf(info,"x %d", manager.getBeer());
-			printText2D(info, 430, 566, 18);
+	sprintf(info,"x %d", manager.getBeer());
+	printText2D(info, 430, 566, 18);
 
-			sprintf(info,"x %d", manager.getMercs());
-			printText2D(info, 620, 566, 18);
+	sprintf(info,"x %d", manager.getMercs());
+	printText2D(info, 620, 566, 18);
+	
 	if(hud.on && !camera.isShadowMapView() && !camera.isFreeRoam())
 	{
 		//glUseProgram(pid);
