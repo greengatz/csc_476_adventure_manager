@@ -3,6 +3,10 @@ int HUD_ID = 4000;
 int SIDEHUD_ID = 4004;
 int HOME_ID = 4001;
 int DEAD_ID = 4002;
+int COIN_ID = 4006;
+int TURKEY_ID = 4007;
+int BEER_ID = 4008;
+int MERK_ID = 4009;
 
 
 HUD::HUD(Manager *newMan)
@@ -25,23 +29,23 @@ HUD::HUD(Manager *newMan)
 
 void HUD::initHUD(TextureLoader *texLoader)
 {
-  ModelTrans.useModelViewMatrix();
-  ModelTrans.loadIdentity();
+	ModelTrans.useModelViewMatrix();
+	ModelTrans.loadIdentity();
 
-  // Initialize Shader
-  pid = LoadShaders( "Shaders/HUD_vert.glsl", 
-      "Shaders/HUD_frag.glsl" );
+	  // Initialize Shader
+	pid = LoadShaders( "Shaders/HUD_vert.glsl", 
+	    "Shaders/HUD_frag.glsl" );
 
-  h_vertPos = GLSL::getAttribLocation(pid, "vertPos");
-  h_vertNor = GLSL::getAttribLocation(pid, "vertNor");
-  h_aTexCoord = GLSL::getAttribLocation(pid, "aTexCoord");
-  h_ProjMatrix = GLSL::getUniformLocation(pid, "uProjMatrix");
-  h_ViewMatrix = GLSL::getUniformLocation(pid, "uViewMatrix");
-  h_ModelMatrix = GLSL::getUniformLocation(pid, "uModelMatrix");
-  h_uTexUnit = GLSL::getUniformLocation(pid, "uTexUnit");
+	h_vertPos = GLSL::getAttribLocation(pid, "vertPos");
+	h_vertNor = GLSL::getAttribLocation(pid, "vertNor");
+	h_aTexCoord = GLSL::getAttribLocation(pid, "aTexCoord");
+	h_ProjMatrix = GLSL::getUniformLocation(pid, "uProjMatrix");
+	h_ViewMatrix = GLSL::getUniformLocation(pid, "uViewMatrix");
+	h_ModelMatrix = GLSL::getUniformLocation(pid, "uModelMatrix");
+	h_uTexUnit = GLSL::getUniformLocation(pid, "uTexUnit");
 
-	texLoader->LoadTexture((char *)"assets/hud.bmp", HUD_ID);
-  texLoader->LoadTexture((char *)"assets/deadScreen.bmp", DEAD_ID);
+	texLoader->LoadTexture((char *)"assets/newHud.bmp", HUD_ID);
+	texLoader->LoadTexture((char *)"assets/deadScreen.bmp", DEAD_ID);
 
 	GLfloat vert[] = {
 		0, 0, 1.0f,
@@ -86,7 +90,7 @@ void HUD::initHUD(TextureLoader *texLoader)
 
 void HUD::initSideHud(TextureLoader *texLoader)
 {
-  texLoader->LoadTexture((char *)"assets/hud.bmp", SIDEHUD_ID);
+  texLoader->LoadTexture((char *)"assets/sideHUD.bmp", SIDEHUD_ID);
 
 
   GLfloat homeVerts[] = {
