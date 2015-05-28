@@ -215,8 +215,8 @@ void Camera::update(double xpos, double ypos, glm::vec3 wagonPos)
    	//Check vertical angle bounds of camera
    	if (verticalAngle > (55.0 * (3.14f)/180.0))
     		verticalAngle = (55.0 * (3.14f)/180.0);
-  		else if (verticalAngle < -(10.0 * (3.14f)/180.0))
-    		verticalAngle = -(10.0 * (3.14f)/180.0);
+  		else if (verticalAngle < (15.0 * (3.14f)/180.0))
+    		verticalAngle = (15.0 * (3.14f)/180.0);
 
     	//Update look at point for the wagon eye
   		theWagonEye.x = wagonZoom * cos(verticalAngle) * sin(horizontalAngle);
