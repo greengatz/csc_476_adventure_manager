@@ -3,10 +3,13 @@ int HUD_ID = 4000;
 int SIDEHUD_ID = 4004;
 int HOME_ID = 4001;
 int DEAD_ID = 4002;
-int COIN_ID = 4006;
-int TURKEY_ID = 4007;
-int BEER_ID = 4008;
-int MERK_ID = 4009;
+int MERCFACE_ID = 4003;
+int DEADFACE_ID = 4006;
+int SICKFACE_ID = 4010;
+int HAPPYFACE_ID = 4011;
+int SADFACE_ID = 4012;
+int HEALTH_ID = 4013;
+int DAMAGE_ID = 4014;
 
 
 HUD::HUD(Manager *newMan)
@@ -17,14 +20,17 @@ HUD::HUD(Manager *newMan)
 	GrndTexBuffObj = 0;
 	GIndxBuffObj = 0;
 	posBufObjMenu = 0;
-  posBufObjSideHUD = 0;
+	posBufObjSideHUD = 0;
+	posBufObjFace = 0;
+	posBufObjHeart = 0;
+	posBufObjDam = 0;
 	indxBuffObjMenu = 0;
-  indxBuffObjSideHUD = 0;
+	indxBuffObjSideHUD = 0;
 	textBuffMenu = 0;
-  textBuffSideHud = 0;
+	textBuffSideHud = 0;
 	on = true;
 	homeScreenOn = true;
-  deadScreenOn = false;
+	deadScreenOn = false;
 }
 
 void HUD::initHUD(TextureLoader *texLoader)
@@ -46,6 +52,13 @@ void HUD::initHUD(TextureLoader *texLoader)
 
 	texLoader->LoadTexture((char *)"assets/newHud.bmp", HUD_ID);
 	texLoader->LoadTexture((char *)"assets/deadScreen.bmp", DEAD_ID);
+	texLoader->LoadTexture((char *)"assets/faceHUD.bmp", SICKFACE_ID);
+	texLoader->LoadTexture((char *)"assets/faceHUD.bmp", HAPPYFACE_ID);
+	texLoader->LoadTexture((char *)"assets/faceHUD.bmp", SADFACE_ID);
+	texLoader->LoadTexture((char *)"assets/health2HUD.bmp", HEALTH_ID);
+	texLoader->LoadTexture((char *)"assets/swordsHUD.bmp", DAMAGE_ID);
+	texLoader->LoadTexture((char *)"assets/faceHUD.bmp", MERCFACE_ID);
+	texLoader->LoadTexture((char *)"assets/deadFaceHUD.bmp", DEADFACE_ID);
 
 	GLfloat vert[] = {
 		0, 0, 1.0f,
@@ -90,7 +103,7 @@ void HUD::initHUD(TextureLoader *texLoader)
 
 void HUD::initSideHud(TextureLoader *texLoader)
 {
-  texLoader->LoadTexture((char *)"assets/sideHUD.bmp", SIDEHUD_ID);
+  texLoader->LoadTexture((char *)"assets/sideHUD2.bmp", SIDEHUD_ID);
 
 
   GLfloat homeVerts[] = {
@@ -100,9 +113,43 @@ void HUD::initSideHud(TextureLoader *texLoader)
     1024.0f, 78.0f, 1.0f 
   };
 
-    glGenBuffers(1, &posBufObjSideHUD);
-    glBindBuffer(GL_ARRAY_BUFFER, posBufObjSideHUD);
+  glGenBuffers(1, &posBufObjSideHUD);
+  glBindBuffer(GL_ARRAY_BUFFER, posBufObjSideHUD);
   glBufferData(GL_ARRAY_BUFFER, sizeof(homeVerts), homeVerts, GL_STATIC_DRAW);
+
+  GLfloat faceVerts[] = {
+  	840.0f, 113.0f, 1.0f,
+    840.0f, 145.0f, 1.0f,
+    872.0f, 145.0f, 1.0f,
+    872.0f, 113.0f, 1.0f
+  };
+
+  glGenBuffers(1, &posBufObjFace);
+  glBindBuffer(GL_ARRAY_BUFFER, posBufObjFace);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(faceVerts), faceVerts, GL_STATIC_DRAW);
+
+  GLfloat heartVerts[] = {
+  	840.0f, 167.0f, 1.0f,
+    840.0f, 199.0f, 1.0f,
+    872.0f, 199.0f, 1.0f,
+    872.0f, 167.0f, 1.0f
+  };
+
+  glGenBuffers(1, &posBufObjHeart);
+  glBindBuffer(GL_ARRAY_BUFFER, posBufObjHeart);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(heartVerts), heartVerts, GL_STATIC_DRAW);
+
+  GLfloat damVerts[] = {
+  	840.0f, 207.0f, 1.0f,
+    840.0f, 239.0f, 1.0f,
+    872.0f, 239.0f, 1.0f,
+    872.0f, 207.0f, 1.0f
+  };
+
+  glGenBuffers(1, &posBufObjDam);
+  glBindBuffer(GL_ARRAY_BUFFER, posBufObjDam);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(damVerts), damVerts, GL_STATIC_DRAW);
+
 
   static GLfloat GrndTex[] = {
       0, 1, // back
@@ -205,10 +252,36 @@ void HUD::drawSideHud(Camera * camera, int width, int height)
   glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(_guiMVP));
   
   glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0); // draw first object
-  
-  glEnable(GL_DEPTH_TEST); // Enable the Depth-testing
   disableBuff();
-  proj.popMatrix();
+
+
+  glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(_guiMVP));
+
+
+for(int i = 0; i < man -> mercs.size(); ++i)
+{
+	mat4 trans = glm::translate(glm::mat4(1.0f), vec3(0.0f, offset, 0.0f));
+	_guiMVP = trans * _guiMVP;
+	glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(_guiMVP));
+
+	enableBuff(posBufObjFace, MERCFACE_ID);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0); // draw first object
+	disableBuff();
+
+	enableBuff(posBufObjHeart, HEALTH_ID);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0); // draw first object
+	disableBuff();
+
+	enableBuff(posBufObjDam, DAMAGE_ID);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0); // draw first object
+	disableBuff();
+	offset = -0.4;
+}
+offset = 0;
+glEnable(GL_DEPTH_TEST); // Enable the Depth-testing
+proj.popMatrix();
+
+	//132 offset I think?
 }
 
 void HUD::enableBuff(GLuint posBufObjA, int ID) {

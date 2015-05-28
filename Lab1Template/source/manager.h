@@ -62,7 +62,7 @@ class Manager
 		bool partyDead();
 		void drawMenuManager();
 		bool getInMenu();
-
+		vector<Mercenary> mercs;
 
 	private:
 		vec3 position;
@@ -70,7 +70,6 @@ class Manager
 		int gold;
 		int food;
 		int beer;
-		vector<Mercenary> mercs;
 		Menu *menu;
 		bool *gamePaused;
 };

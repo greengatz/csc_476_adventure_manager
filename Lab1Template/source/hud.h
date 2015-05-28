@@ -47,6 +47,10 @@ class HUD
 		GLuint textBuffMenu;
 		GLuint textBuffSideHud;
 
+		GLuint posBufObjFace;
+		GLuint posBufObjHeart;
+		GLuint posBufObjDam;
+
 		bool on;
 		bool homeScreenOn;
 		bool deadScreenOn;
@@ -64,6 +68,7 @@ class HUD
 		Manager *man;
 		int g_GiboLen;
 		RenderingHelper ModelTrans;
+		float offset = 0;
 };
 
 #endif
