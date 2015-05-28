@@ -911,6 +911,14 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	{
 		audio.playVoice(BANDIT_GREETING);
 	}
+	if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS)
+	{
+		hud.changeSideHudPage(1);
+	}
+	if (key == GLFW_KEY_LEFT && action == GLFW_PRESS)
+	{
+		hud.changeSideHudPage(-1);
+	}
 
 	//DO NOT DELETE THE BELOW CODE THAT IS COMMENTED!!!!!!!!!!, OKAY I PROMISE I WONT -> LOL
 

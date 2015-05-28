@@ -204,6 +204,28 @@ void HUD::initHomeScreen(TextureLoader *texLoader)
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(idx), idx, GL_STATIC_DRAW);
 }
 
+void HUD::changeSideHudPage(int page)
+{
+	if(page == 1)
+	{
+		if(man -> mercs.size() > currentPage * 4)
+		{
+			mercOffset += 4;
+			printf("Changed page next\n");
+			++currentPage;
+		}
+	}
+	else
+	{
+		if(man -> mercs.size() > 4 && currentPage > 1)// && man ->mercs.size() < currentPage * 4)
+		{
+			mercOffset -= 4;
+			printf("Changed page back\n");
+			--currentPage;
+		}
+	}
+}
+
 void HUD::drawHud(Camera * camera, int width, int height)
 {
   glUseProgram(pid);
@@ -260,10 +282,13 @@ void HUD::drawSideHud(Camera * camera, int width, int height)
 
   string data;
   Mercenary tempMerc;
-for(int i = 0; i < man -> mercs.size(); ++i)
+  int remain = man -> mercs.size() % 4;
+
+//for(mercOffset; mercOffset < man -> mercs.size(); ++mercOffset)
+for(mercOffset; mercOffset < (currentPage * 4) && mercOffset < man -> mercs.size(); ++mercOffset)
 {
 	glUseProgram(pid);
-	tempMerc = man -> mercs[i];
+	tempMerc = man -> mercs[mercOffset];
 
 	mat4 trans = glm::translate(glm::mat4(1.0f), vec3(0.0f, offset, 0.0f));
 	_guiMVP = trans * _guiMVP;
@@ -295,6 +320,7 @@ for(int i = 0; i < man -> mercs.size(); ++i)
 
 	stringOffset -= 120;
 }
+mercOffset = -4 + currentPage * 4;
 offset = 0;
 stringOffset = 495;
 glEnable(GL_DEPTH_TEST); // Enable the Depth-testing
