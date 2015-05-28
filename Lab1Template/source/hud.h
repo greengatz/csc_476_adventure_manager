@@ -16,6 +16,8 @@
 #include "RenderingHelper.h"
 #include "MatrixStack.h"
 #include "shader.hpp"
+#include "text2D.hpp"
+#include "mercenary.h"
 
 using namespace std;
 using namespace glm;
@@ -29,6 +31,7 @@ class HUD
 		void drawSideHud(Camera * camera, int width, int height);
 		void initHUD(TextureLoader *texLoader);
 		void initHomeScreen(TextureLoader *texLoader);
+		void changeSideHudPage(int page);
 		void initSideHud(TextureLoader *texLoader);
 		void enableBuff(GLuint posBufObjA, int ID);
 		void disableBuff();//GLint h_vertPos, GLint h_aTexCoord);
@@ -47,6 +50,10 @@ class HUD
 		GLuint textBuffMenu;
 		GLuint textBuffSideHud;
 
+		GLuint posBufObjFace;
+		GLuint posBufObjHeart;
+		GLuint posBufObjDam;
+
 		bool on;
 		bool homeScreenOn;
 		bool deadScreenOn;
@@ -64,6 +71,10 @@ class HUD
 		Manager *man;
 		int g_GiboLen;
 		RenderingHelper ModelTrans;
+		float offset = 0;
+		int stringOffset = 0;
+		int mercOffset = 0;
+		int currentPage = 1;
 };
 
 #endif

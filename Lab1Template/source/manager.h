@@ -64,7 +64,6 @@ class Manager
 		bool getInMenu();
 		vector<Mercenary> mercs;
 
-
 	private:
 		vec3 position;
 		string name;

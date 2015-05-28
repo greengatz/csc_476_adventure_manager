@@ -135,7 +135,10 @@ void Particle::drawTorch(glm::vec3 loc, GLint h_color, GLint h_ModelViewMat, int
 		//set handles for the particle
 		glUniform4f(h_color, col.x, col.y, col.z, col.w);
 
-		glm::vec3 curPos = glm::vec3(loc.x + (pos.x / 1.85), loc.y + (pos.y / 1.25) - 0.2, loc.z + (pos.z / 1.85));
+		glm::vec3 curPos = glm::vec3(loc.x + (pos.x / 1.85), loc.y + (pos.y / 1.25), loc.z + (pos.z / 1.85));
+		if (smoke) {
+			curPos.y -= 0.1;
+		}
 		glm::mat4 trans = glm::translate(glm::mat4(1.0f), curPos);
 
 		//billboard the particle

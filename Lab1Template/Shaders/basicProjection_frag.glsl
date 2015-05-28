@@ -1,14 +1,8 @@
 #version 120
 
-//Texture
-uniform sampler2D uTexUnit;
-
 uniform vec4 uLight;
-uniform int leafToggle;
 
 varying vec4 point;
-varying vec2 vTexCoord;
-
 varying float fogDist;
 
 void shadowFragment(void)
@@ -34,15 +28,6 @@ void main()
 
    vec4 targetColor = vec4(0.0, 0.0, 0.0, 1.0);
    gl_FragColor = mix(targetColor, fogColor, fogFactor);
-
-   if (leafToggle == 1)
-   {
-   	vec4 texColor = texture2D(uTexUnit, vTexCoord);
-   	if (texColor.y > 0.7)
-   	{
-      	discard;
-   	}
-   }
 
    shadowFragment();
 }

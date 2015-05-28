@@ -386,7 +386,7 @@ bool installTrailShader(const string &vShaderName, const string &fShaderName)
 }
 
 //TODO: RIGHT NOW THIS ONLY CREATES LIGHT MAP FOR WAGON. MUST EXPAND TO EVERYTHING.
-void ShadowMapPass()
+/*void ShadowMapPass()
 {
 	m_pShadowMapTech->enableProgram();
 
@@ -408,7 +408,7 @@ void ShadowMapPass()
 	camera.finishShadowMapPass();
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glUseProgram(0);
-}
+}*/
 
 void setProjView(GLint *projMat, GLint *viewMat)
 {
@@ -424,6 +424,7 @@ void setProjView(GLint *projMat, GLint *viewMat)
 	fCuller.setProjMat(proj.topMatrix(), view.topMatrix());
 }
 
+//NOTE: Please do not delete any of the shadow pass comments. :)
 void drawGL()
 {
 	// Clear buffers
@@ -482,13 +483,13 @@ void drawGL()
 	matSetter.setMaterial(2); //is this old code that we should delete?
 	trailMatSetter.setMaterial(2);
 
-	m_shadowMapFBO.bindForWriting();
+	//m_shadowMapFBO.bindForWriting();
 
 	//========================== DRAW OUTSIDE SCENE ====================
 	if (!camera.isTavernView() || camera.isFreeRoam())
 	{
 		//Prepass to get light map. 1st render
-		ShadowMapPass();
+		//ShadowMapPass();
 
 		//2nd Render
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -498,8 +499,8 @@ void drawGL()
 		glUniform3fv(h_trail_lightPos1, 1, glm::value_ptr(glm::vec3(23.05f, 4.0f, -23.5f)));
 		glUniform3fv(h_trail_lightPos2, 1, glm::value_ptr(glm::vec3(-125.0f, 4.0f, 25.0f)));
 		glUniform1f(h_trail_option, optionS);
-      m_pShadowMapTech->setTextureUnit(0);
-		m_shadowMapFBO.bindForReading(GL_TEXTURE0);
+      //m_pShadowMapTech->setTextureUnit(0);
+		//m_shadowMapFBO.bindForReading(GL_TEXTURE0);
 
 		glUniform1i(trailTerrainToggleID, 1);
 		glUniform1i(h_trail_uTexUnit, 0);
@@ -509,24 +510,17 @@ void drawGL()
 			glUniformMatrix4fv(h_trail_ModelMatrix, 1, GL_FALSE, glm::value_ptr(ModelTrans.modelViewMatrix));
 			ModelTrans.pushMatrix();
 				terrain.draw(h_trail_vertPos, h_trail_vertNor, h_trail_aTexCoord, h_trail_ModelMatrix, &camera, wagon.getPosition(), &trailPid);
-            
-
-            glUseProgram(trailPid);
-	matSetter.setMaterial(2); //is this old code that we should delete?
-	trailMatSetter.setMaterial(2);
-            setProjView(&h_trail_ProjMatrix, &h_trail_ViewMatrix);
-				wagon.draw(h_trail_vertPos, h_trail_vertNor, 
-                    h_trail_aTexCoord, h_trail_ModelMatrix, 
-                    &ModelTrans);
-	            wagon.drawMercs(h_ModelMatrix, h_vertPos, h_vertNor, 
-                    h_aTexCoord,  h_boneFlag, h_boneIds, h_boneWeights,
-                    h_boneTransforms, dtDraw);
+				wagon.draw(&ModelTrans, &camera, wagon.getPosition());
 			ModelTrans.popMatrix();
 		ModelTrans.popMatrix();
+	            // HERER TODO
+                wagon.drawMercs(h_ModelMatrix, h_vertPos, h_vertNor, 
+                    h_aTexCoord,  h_boneFlag, h_boneIds, h_boneWeights,
+                    h_boneTransforms, dtDraw);
 		
 		ModelTrans.loadIdentity();
-		ModelTrans.pushMatrix();
-		ModelTrans.popMatrix();
+		glUseProgram(trailPid);
+      setProjView(&h_trail_ProjMatrix, &h_trail_ViewMatrix);
 		glUniform1i(trailTerrainToggleID, 0);
       //Draw the skybox
       skybox.draw(&camera, wagon.getPosition());
@@ -534,7 +528,7 @@ void drawGL()
 	}
 	glUseProgram(trailPid);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	m_shadowMapFBO.bindForReading(GL_TEXTURE0);
+	//m_shadowMapFBO.bindForReading(GL_TEXTURE0);
 
 	//========================= END OUTSIDE SCENE =======================
 
@@ -601,16 +595,17 @@ void drawGL()
 	sprintf(info,"x %d", manager.getMercs());
 	printText2D(info, 620, 566, 18);
 	
+	if(menu.inMenu)
+	{
+		//glUseProgram(pid);
+		menu.drawMenu();
+		//glUseProgram(pid);
+	}
+	
 	if(hud.on && !camera.isShadowMapView() && !camera.isFreeRoam())
 	{
 		//glUseProgram(pid);
 		//glUniform1i(h_flag, 1);
-		if(menu.inMenu)
-		{
-			//glUseProgram(pid);
-			menu.drawMenu();
-			//glUseProgram(pid);
-		}
 		// }
 		// if(manager.getInMenu()){
 		// 	printf("Menu is up!");
@@ -918,6 +913,14 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	if (key == GLFW_KEY_I && action == GLFW_PRESS)
 	{
 		audio.playVoice(BANDIT_GREETING);
+	}
+	if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS)
+	{
+		hud.changeSideHudPage(1);
+	}
+	if (key == GLFW_KEY_LEFT && action == GLFW_PRESS)
+	{
+		hud.changeSideHudPage(-1);
 	}
 
 	//DO NOT DELETE THE BELOW CODE THAT IS COMMENTED!!!!!!!!!!, OKAY I PROMISE I WONT -> LOL
