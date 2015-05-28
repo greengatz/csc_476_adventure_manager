@@ -424,6 +424,7 @@ void setProjView(GLint *projMat, GLint *viewMat)
 	fCuller.setProjMat(proj.topMatrix(), view.topMatrix());
 }
 
+//NOTE: Please do not delete any of the shadow pass comments. :)
 void drawGL()
 {
 	// Clear buffers
