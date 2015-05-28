@@ -49,6 +49,9 @@ CharDae::CharDae(const string source) {
     cout << "tps " << scene->mAnimations[0]->mTicksPerSecond << "\n";
     cout << "number of frames in 1 " << scene->mAnimations[0]->mChannels[0]->mNumRotationKeys << "\n";
 */
+
+    cout << "has stuff " << meshes[meshInd]->HasTextureCoords(0) << "\n";
+    cout << "has stuff " << meshes[meshInd]->mNumUVComponents[0] << "\n";
     // 26.56
     position[0] = 26.56f; // magic to put in view
     position[1] = 0.0f;
@@ -89,12 +92,12 @@ CharDae::CharDae(const string source) {
 
 
     // texture
-    texture = (float*) malloc(numInd * 3 * sizeof(float));
-    memcpy(positions, meshes[meshInd]->mTextureCoords, numInd * 3 * sizeof(float));
+    texture = (float*) malloc(numInd * 2 * sizeof(float));
+    memcpy(positions, meshes[meshInd]->mTextureCoords, numInd * 2 * sizeof(float));
 
     glGenBuffers(1, &texBuf);
     glBindBuffer(GL_ARRAY_BUFFER, texBuf);
-    glBufferData(GL_ARRAY_BUFFER, numInd * 3 * sizeof(float), texture, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, numInd * 2 * sizeof(float), texture, GL_STATIC_DRAW);
 
 
     // numBones, boneId, boneWeight
@@ -366,14 +369,20 @@ void CharDae::drawChar(GLint h_ModelMatrix, GLint h_vertPos,
 
     // texture TODO
     // gl buff, coords, id
+    //glEnable(GL_TEXTURE_2D);
+    //GLSL::enableVertexAttribArray(h_aTexCoord);
+    //glVertexAttribPointer(h_aTexCoord, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    
     glEnable(GL_TEXTURE_2D);
     glActiveTexture(GL_TEXTURE0);
     int texNum = 5800;
     glBindTexture(GL_TEXTURE_2D, texNum); // what is this?
+    glBindBuffer(GL_ARRAY_BUFFER, texBuf); // this?
 
     GLSL::enableVertexAttribArray(h_aTexCoord);
-    glBindBuffer(GL_ARRAY_BUFFER, texBuf);
     glVertexAttribPointer(h_aTexCoord, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    //glBindTexture(GL_TEXTURE_2D, texNum); // what is this?
+    //glBindBuffer(GL_ARRAY_BUFFER, texBuf); // this?
    
     // model transform
     glm::mat4 translate = glm::translate(glm::mat4(1.0f), position);
