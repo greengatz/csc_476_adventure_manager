@@ -52,13 +52,42 @@ Wagon::Wagon() :
   nextPoint(0.0f, 0.0f, 0.0f),
   orientation(1.0f, 0.0f, 0.0f)
 {
+   pid = 0;
+   h_vertPos = 0;
+   h_vertNor = 0;
+   h_aTexCoord = 0;
+
+   //Handles to the shader data
+   h_uTexUnit = 0;
+   h_ProjMatrix = 0;
+   h_ViewMatrix = 0;
+   h_ModelMatrix = 0;
+
+   //Material Color
+   h_ka = 0;
+   h_kd = 0;
+   h_ks = 0;
+   h_s = 0;
+   lightPosID = 0;
+
+   //Shadow data
+   pidShadow = 0;
+   h_vertPosShadow = 0;
+   h_vertNorShadow = 0;
+
+   h_ViewMatrixShadow = 0;
+   h_ModelMatrixShadow = 0;
+   h_ProjMatrixShadow = 0;
+   h_ProjMatrixShadMat = 0;
+   lightPosIDShadow = 0;
 }
 
 Wagon::~Wagon()
 {
 }
 
-void Wagon::init(TextureLoader* texLoader, Terrain* aTerrain, Menu* aMenu, bool* gP, Manager* mgr, ProjectMeshes* newData, SoundPlayer* audio)
+void Wagon::init(TextureLoader* texLoader, Terrain* aTerrain, Menu* aMenu, 
+    bool* gP, Manager* mgr, ProjectMeshes* newData, SoundPlayer* audio)
 {
   float minX, minY, minZ;
   float maxX, maxY, maxZ;
@@ -73,7 +102,35 @@ void Wagon::init(TextureLoader* texLoader, Terrain* aTerrain, Menu* aMenu, bool*
    resetWagon();
    soundSys = audio;
 
-   // Load geometry
+   // Initialize Shader
+  pid = LoadShaders( "Shaders/outsideLightTexture_vert.glsl", "Shaders/outsideLightTexture_frag.glsl");
+
+  h_vertPos = GLSL::getAttribLocation(pid, "vertPos");
+  h_vertNor = GLSL::getAttribLocation(pid, "vertNor");
+  h_aTexCoord = GLSL::getAttribLocation(pid, "aTexCoord");
+  h_ProjMatrix = GLSL::getUniformLocation(pid, "uProjMatrix");
+  h_ViewMatrix = GLSL::getUniformLocation(pid, "uViewMatrix");
+  h_ModelMatrix = GLSL::getUniformLocation(pid, "uModelMatrix");
+  h_uTexUnit = GLSL::getUniformLocation(pid, "uTexUnit");
+  lightPosID = GLSL::getUniformLocation(pid, "lightPos");
+  h_ka = GLSL::getUniformLocation(pid, "ka");
+  h_kd = GLSL::getUniformLocation(pid, "kd");
+  h_ks = GLSL::getUniformLocation(pid, "ks");
+  h_s = GLSL::getUniformLocation(pid, "s");
+
+  mat.init(&pid, &h_ka, &h_kd, &h_ks, &h_s);
+
+  pidShadow = LoadShaders("Shaders/basicProjection_vert.glsl", "Shaders/basicProjection_frag.glsl");
+  h_vertPosShadow = GLSL::getAttribLocation(pidShadow, "vertPos");
+  h_vertNorShadow = GLSL::getAttribLocation(pidShadow, "vertNor");
+
+  h_ViewMatrixShadow = GLSL::getUniformLocation(pidShadow, "uViewMatrix");
+  h_ModelMatrixShadow = GLSL::getUniformLocation(pidShadow, "uModelMatrix");
+  h_ProjMatrixShadow = GLSL::getUniformLocation(pidShadow, "uProjMatrix");
+  h_ProjMatrixShadMat = GLSL::getUniformLocation(pidShadow, "uProjMatrixShadow");
+  lightPosIDShadow = GLSL::getUniformLocation(pidShadow, "uLight");
+
+  // Load geometry
   // Some obj files contain material information.
   // We'll ignore them for this assignment.
   std::vector<tinyobj::material_t> objMaterials;
@@ -422,46 +479,126 @@ void Wagon::setRotation(float aRotation)
    rotate = aRotation;
 }
 
-
-void Wagon::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMatrix, RenderingHelper *modelTrans)
+void Wagon::draw(RenderingHelper* modelTrans, Camera* camera, glm::vec3 wagonPos)
 {
+   //Using another shader program
+   glUseProgram(pidShadow);
+   glDisable(GL_DEPTH_TEST);
+   glEnable(GL_BLEND);
+   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
    //Position Wagon along the trail
    modelTrans->pushMatrix();
       modelTrans->translate(position);
       modelTrans->rotate(rotate, glm::vec3(0, 1, 0));
       modelTrans->scale(scale.x, scale.y, scale.z);
-      glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(modelTrans->modelViewMatrix));
-   modelTrans->popMatrix();
+      glUniformMatrix4fv(h_ModelMatrixShadow, 1, GL_FALSE, glm::value_ptr(modelTrans->modelViewMatrix));
 
-  //set up the texture unit
-    glEnable(GL_TEXTURE_2D);
-    glActiveTexture(GL_TEXTURE0);
+   //Set projection matrix
+   MatrixStack projShadow, viewShadow;
+   projShadow.pushMatrix();
+   camera->applyProjectionMatrix(&projShadow);
+   glUniformMatrix4fv( h_ProjMatrixShadow, 1, GL_FALSE, glm::value_ptr( projShadow.topMatrix()));
+   projShadow.pushMatrix();
+   camera->applyViewMatrix(&viewShadow, wagonPos);
+   glUniformMatrix4fv(h_ViewMatrixShadow, 1, GL_FALSE, glm::value_ptr(viewShadow.topMatrix()));
 
-    glBindTexture(GL_TEXTURE_2D, WAGON_TEX_ID);
+   //Must use a light local to model space. not world space.
+   //Eventually have a light that translates from local to world
+   float lx = -15.0;
+   float ly = 50.0;
+   float lz = 15.0;
+   float projArray[16] = {
+      ly, 0.0, 0.0, 0.0,
+      -lx, 0.0, -lz, -1.0,
+      0.0, 0.0, ly, 0.0,
+      0.0, 0.0, 0.0, ly
+   };
 
-	// Enable and bind normal array for drawing
-   GLSL::enableVertexAttribArray(h_nor);
-   glBindBuffer(GL_ARRAY_BUFFER, norBufID);
-   glVertexAttribPointer(h_nor, 3, GL_FLOAT, GL_FALSE, 0, 0);
+   glUniform4f(lightPosIDShadow, lx, ly, lz, 100.0);
 
-   GLSL::enableVertexAttribArray(h_pos);
+   glm::mat4 shadowProjection = glm::make_mat4(projArray);
+   glm::mat4 shadowProjectionT = glm::transpose(shadowProjection);
+   glUniformMatrix4fv(h_ProjMatrixShadMat, 1, GL_FALSE, glm::value_ptr(shadowProjection));
+
+   //Enable and bind position array for drawing
+   GLSL::enableVertexAttribArray(h_vertPosShadow);
    glBindBuffer(GL_ARRAY_BUFFER, posBufID);
-   glVertexAttribPointer(h_pos, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-   GLSL::enableVertexAttribArray(h_aTexCoord);
-   glBindBuffer(GL_ARRAY_BUFFER, texBufID);
-   glVertexAttribPointer(h_aTexCoord, 2, GL_FLOAT, GL_FALSE, 0, 0);
-
+   glVertexAttribPointer(h_vertPosShadow, 3, GL_FLOAT, GL_FALSE, 0, 0);
+   
+   // Enable and bind normal array for drawing
+   GLSL::enableVertexAttribArray(h_vertNorShadow);
+   glBindBuffer(GL_ARRAY_BUFFER, norBufID);
+   glVertexAttribPointer(h_vertNorShadow, 3, GL_FLOAT, GL_FALSE, 0, 0);
+   
    // Bind index array for drawing
    int nIndices = (int)shapes[0].mesh.indices.size();
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indBufID);
 
    glDrawElements(GL_TRIANGLES, nIndices, GL_UNSIGNED_INT, 0);
 
-   GLSL::disableVertexAttribArray(h_pos);
-   GLSL::disableVertexAttribArray(h_nor);
+   GLSL::disableVertexAttribArray(h_vertPosShadow);
+   GLSL::disableVertexAttribArray(h_vertNorShadow);
+   glBindBuffer(GL_ARRAY_BUFFER, 0);
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+   glUseProgram(0);
+
+   //============================ Second Render Pass ======================
+
+   glUseProgram(pid);
+   glEnable(GL_DEPTH_TEST);
+
+   glEnable(GL_BLEND);
+   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+   //Set projection matrix
+   MatrixStack proj, view;
+   proj.pushMatrix();
+   camera->applyProjectionMatrix(&proj);
+   glUniformMatrix4fv( h_ProjMatrix, 1, GL_FALSE, glm::value_ptr( proj.topMatrix()));
+   proj.pushMatrix();
+   camera->applyViewMatrix(&view, wagonPos);
+   glUniformMatrix4fv(h_ViewMatrix, 1, GL_FALSE, glm::value_ptr(view.topMatrix()));
+
+ 
+   glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(modelTrans->modelViewMatrix));
+   modelTrans->popMatrix();
+
+   glUniform4f(lightPosID, lx - 100.0, ly, lz + 25.0, 75.0);
+
+   //set up the texture unit
+   glEnable(GL_TEXTURE_2D);
+   glActiveTexture(GL_TEXTURE0);
+
+   glBindTexture(GL_TEXTURE_2D, WAGON_TEX_ID);
+
+	 // Enable and bind normal array for drawing
+   GLSL::enableVertexAttribArray(h_vertNor);
+   glBindBuffer(GL_ARRAY_BUFFER, norBufID);
+   glVertexAttribPointer(h_vertNor, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+   GLSL::enableVertexAttribArray(h_vertPos);
+   glBindBuffer(GL_ARRAY_BUFFER, posBufID);
+   glVertexAttribPointer(h_vertPos, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+   GLSL::enableVertexAttribArray(h_aTexCoord);
+   glBindBuffer(GL_ARRAY_BUFFER, texBufID);
+   glVertexAttribPointer(h_aTexCoord, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
+   // Bind index array for drawing
+   nIndices = (int)shapes[0].mesh.indices.size();
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indBufID);
+
+   mat.setMaterial(4); //low spec wood
+   glDrawElements(GL_TRIANGLES, nIndices, GL_UNSIGNED_INT, 0);
+
+   GLSL::disableVertexAttribArray(h_vertPos);
+   GLSL::disableVertexAttribArray(h_vertNor);
    GLSL::disableVertexAttribArray(h_aTexCoord);
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
    glBindBuffer(GL_ARRAY_BUFFER, 0);
    glDisable(GL_TEXTURE_2D);
+
+   glUseProgram(0);
 }
