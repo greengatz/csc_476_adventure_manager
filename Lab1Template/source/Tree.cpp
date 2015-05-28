@@ -53,6 +53,10 @@ Tree::Tree() :
    h_ModelMatrixShadow = 0;
    h_ProjMatrixShadow = 0;
    h_ProjMatrixShadMat = 0;
+   leafToggleIDShadow = 0;
+   h_uTexUnitShadow = 0;
+   h_aTexCoordShadow = 0;
+   h_lightPos = 0;
    //planeNormal = gml::vec4(0.0f, 1.0f, 0.0f, 0.0f); We don't need this. We are going to cheat.
    lightPos = glm::vec3(0.0f, 0.0f, 0.0f);
 
@@ -100,6 +104,11 @@ void Tree::init(TextureLoader* texLoader, glm::vec3 lightPosition)
   h_ModelMatrixShadow = GLSL::getUniformLocation(pidShadow, "uModelMatrix");
   h_ProjMatrixShadow = GLSL::getUniformLocation(pidShadow, "uProjMatrix");
   h_ProjMatrixShadMat = GLSL::getUniformLocation(pidShadow, "uProjMatrixShadow");
+
+  h_lightPos = GLSL::getUniformLocation(pidShadow, "uLight");
+  leafToggleIDShadow = GLSL::getUniformLocation(pidShadow, "leafToggle");
+  h_uTexUnitShadow = GLSL::getUniformLocation(pidShadow, "uTexUnit");
+  h_aTexCoordShadow = GLSL::getAttribLocation(pidShadow, "aTexCoord");
 
   // Load geometry
   // Some obj files contain material information.
@@ -306,6 +315,8 @@ void Tree::draw(glm::vec3 treePosition, Camera *camera, glm::vec3 wagonPos)
 
    //Set projection matrix
    MatrixStack projShadow, viewShadow;
+   projShadow.pushMatrix();
+   camera->applyProjectionMatrix(&projShadow);
    glUniformMatrix4fv( h_ProjMatrixShadow, 1, GL_FALSE, glm::value_ptr( projShadow.topMatrix()));
    projShadow.pushMatrix();
    camera->applyViewMatrix(&viewShadow, wagonPos);
@@ -317,18 +328,19 @@ void Tree::draw(glm::vec3 treePosition, Camera *camera, glm::vec3 wagonPos)
       glUniformMatrix4fv(h_ModelMatrixShadow, 1, GL_FALSE, glm::value_ptr(ModelTrans.modelViewMatrix));
    ModelTrans.popMatrix();
 
-   /*float projArray[16] = {
-      lightPos.y, 0.0, 0.0, 0.0,
-      -lightPos.x, 0.0, -lightPos.z, -1.0,
-      0.0, 0.0, lightPos.y, 0.0,
-      0.0, 0.0, 0.0, lightPos.y
-   };*/
+   //Must use a light local to model space. not world space.
+   //Eventually have a light that translates from local to world
+   float lx = 15.0;
+   float ly = 50.0;
+   float lz = 15.0;
    float projArray[16] = {
-      100.0, 0.0, 0.0, 0.0,
-      -20.0, 0.0, -20.0, -1.0,
-      0.0, 0.0, 100.0, 0.0,
-      0.0, 0.0, 0.0, 100.0
+      ly, 0.0, 0.0, 0.0,
+      -lx, 0.0, -lz, -1.0,
+      0.0, 0.0, ly, 0.0,
+      0.0, 0.0, 0.0, ly
    };
+
+   glUniform4f(h_lightPos, lx, ly, lz, 75.0);
 
    glm::mat4 shadowProjection = glm::make_mat4(projArray);
    glm::mat4 shadowProjectionT = glm::transpose(shadowProjection);
@@ -348,12 +360,51 @@ void Tree::draw(glm::vec3 treePosition, Camera *camera, glm::vec3 wagonPos)
    int nIndices = (int)shapes[0].mesh.indices.size();
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indBufObjTree);
 
-   //glDrawElements(GL_TRIANGLES, nIndices, GL_UNSIGNED_INT, 0);
+   glDrawElements(GL_TRIANGLES, nIndices, GL_UNSIGNED_INT, 0);
 
    GLSL::disableVertexAttribArray(h_vertPosShadow);
    GLSL::disableVertexAttribArray(h_vertNorShadow);
    glBindBuffer(GL_ARRAY_BUFFER, 0);
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+   //=================== Do leaves now ======================
+
+   glUniform1i(leafToggleIDShadow, 1);
+
+   //set up the texture unit
+   glEnable(GL_TEXTURE_2D);
+   glActiveTexture(GL_TEXTURE0);
+   glUniform1i(h_uTexUnitShadow, 0);
+
+   //set up the texture unit for bark
+   glBindTexture(GL_TEXTURE_2D, TREE_LEAFS_TEX);
+   GLSL::enableVertexAttribArray(h_aTexCoordShadow);
+   glBindBuffer(GL_ARRAY_BUFFER, leafTexBuffObj);
+   glVertexAttribPointer(h_aTexCoordShadow, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
+   //Enable and bind position array for drawing
+   GLSL::enableVertexAttribArray(h_vertPosShadow);
+   glBindBuffer(GL_ARRAY_BUFFER, posBufObjLeaf);
+   glVertexAttribPointer(h_vertPosShadow, 3, GL_FLOAT, GL_FALSE, 0, 0);
+   
+   // Enable and bind normal array for drawing
+   GLSL::enableVertexAttribArray(h_vertNorShadow);
+   glBindBuffer(GL_ARRAY_BUFFER, norBufObjLeaf);
+   glVertexAttribPointer(h_vertNorShadow, 3, GL_FLOAT, GL_FALSE, 0, 0);
+   
+   // Bind index array for drawing
+   nIndices = (int)shapes[1].mesh.indices.size();
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indBufObjLeaf);
+
+   glDrawElements(GL_TRIANGLES, nIndices, GL_UNSIGNED_INT, 0);
+
+   GLSL::disableVertexAttribArray(h_vertPosShadow);
+   GLSL::disableVertexAttribArray(h_vertNorShadow);
+   GLSL::disableVertexAttribArray(h_aTexCoordShadow);
+   glBindBuffer(GL_ARRAY_BUFFER, 0);
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+   glUniform1i(leafToggleIDShadow, 0);
 
    glEnable(GL_DEPTH_TEST);
    glUseProgram(0);
