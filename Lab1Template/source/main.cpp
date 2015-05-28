@@ -593,16 +593,17 @@ void drawGL()
 	sprintf(info,"x %d", manager.getMercs());
 	printText2D(info, 620, 566, 18);
 	
+	if(menu.inMenu)
+	{
+		//glUseProgram(pid);
+		menu.drawMenu();
+		//glUseProgram(pid);
+	}
+	
 	if(hud.on && !camera.isShadowMapView() && !camera.isFreeRoam())
 	{
 		//glUseProgram(pid);
 		//glUniform1i(h_flag, 1);
-		if(menu.inMenu)
-		{
-			//glUseProgram(pid);
-			menu.drawMenu();
-			//glUseProgram(pid);
-		}
 		// }
 		// if(manager.getInMenu()){
 		// 	printf("Menu is up!");
