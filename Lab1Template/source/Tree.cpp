@@ -324,10 +324,10 @@ void Tree::draw(glm::vec3 treePosition, Camera *camera, glm::vec3 wagonPos)
       0.0, 0.0, 0.0, lightPos.y
    };*/
    float projArray[16] = {
-      20.0, 0.0, 0.0, 0.0,
+      100.0, 0.0, 0.0, 0.0,
       -20.0, 0.0, -20.0, -1.0,
-      0.0, 0.0, 20.0, 0.0,
-      0.0, 0.0, 0.0, 20.0
+      0.0, 0.0, 100.0, 0.0,
+      0.0, 0.0, 0.0, 100.0
    };
 
    glm::mat4 shadowProjection = glm::make_mat4(projArray);
@@ -361,7 +361,7 @@ void Tree::draw(glm::vec3 treePosition, Camera *camera, glm::vec3 wagonPos)
    //===================================== Second Render Pass =========================//
 
    glUseProgram(pid);
-   //glEnable(GL_DEPTH_TEST);
+   glEnable(GL_DEPTH_TEST);
 
    //Set projection matrix
    MatrixStack proj, view;
