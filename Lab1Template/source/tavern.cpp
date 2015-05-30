@@ -169,12 +169,12 @@ void Tavern::loadBufferData(TextureLoader* texLoader)
 	texLoader->LoadTexture((char *)"assets/tavern/plankTex.bmp", TAV_PLANK_ID);
 	texLoader->LoadTexture((char *)"assets/tavern/rockTex.bmp", TAV_ROCK_ID);
 	texLoader->LoadTexture((char *)"assets/tavern/dirtTex.bmp", TAV_DIRT_ID);
-	texLoader->LoadTexture((char *)"assets/tavern/minotaurTex.bmp", MINOTAUR_EMBLEM_ID);
-	texLoader->LoadTexture((char *)"assets/tavern/centaurTex.bmp", CENTAUR_EMBLEM_ID);
-	texLoader->LoadTexture((char *)"assets/tavern/dragonTex.bmp", DRAGON_EMBLEM_ID);
-	texLoader->LoadTexture((char *)"assets/tavern/pegasusTex.bmp", PEGASUS_EMBLEM_ID);
-	texLoader->LoadTexture((char *)"assets/tavern/phoenixTex.bmp", PHOENIX_EMBLEM_ID);
-	texLoader->LoadTexture((char *)"assets/tavern/hydraTex.bmp", HYDRA_EMBLEM_ID);
+	texLoader->LoadTexture((char *)"assets/tavern/minotaurTex2.bmp", MINOTAUR_EMBLEM_ID);
+	texLoader->LoadTexture((char *)"assets/tavern/centaurTex2.bmp", CENTAUR_EMBLEM_ID);
+	texLoader->LoadTexture((char *)"assets/tavern/dragonTex2.bmp", DRAGON_EMBLEM_ID);
+	texLoader->LoadTexture((char *)"assets/tavern/pegasusTex2.bmp", PEGASUS_EMBLEM_ID);
+	texLoader->LoadTexture((char *)"assets/tavern/phoenixTex2.bmp", PHOENIX_EMBLEM_ID);
+	texLoader->LoadTexture((char *)"assets/tavern/hydraTex2.bmp", HYDRA_EMBLEM_ID);
 }
 
 void Tavern::createTable1(glm::vec3 initLoc, float ang)
