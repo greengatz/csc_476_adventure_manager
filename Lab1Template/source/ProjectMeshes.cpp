@@ -10,7 +10,7 @@
  * NOTE: If the obj does not have normals already in it, tell Daniel to add it or add normals to the file
  */
 
-const int NUM_TAV = 19;
+const int NUM_TAV = 17;
 const string tavFiles[] = {"assets/tavern/cube.obj",
                        	   "assets/tavern/door.obj",
                            "assets/tavern/bookshelf.obj",
@@ -21,15 +21,15 @@ const string tavFiles[] = {"assets/tavern/cube.obj",
                        	   "assets/tavern/torch.obj",
                            "assets/tavern/stick.obj",
                            "assets/tavern/pole.obj",
-                           "assets/tavern/fireplace.obj",
-                           "assets/tavern/tableware.obj", //incorporate later?
+                           "assets/tavern/firepitlowpoly.obj",
+                           // "assets/tavern/tableware.obj", //incorporate later?
                            "assets/tavern/turkey.obj",
                			   "assets/tavern/rock.obj",
-               			   "assets/tavern/balustrade.obj",
                			   "assets/tavern/roof.obj",
                			   "assets/tavern/plank.obj",
                       	   "assets/tavern/landlord.obj",
                    		   "assets/tavern/lumberjack.obj",
+               			   // "assets/tavern/balustrade.obj",
 };
 
 const int NUM_TERR = 5;

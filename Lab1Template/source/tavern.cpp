@@ -1,62 +1,10 @@
 #include "tavern.h"
 #include <time.h>
 
-// #define CUBE 0
-// #define DOOR 1
-// #define BOOKSHELF 2
-// #define STOOL 3
-// #define CHAIR 4
-// #define RECT_TABLE 5
-// #define CIR_TABLE 6
-// #define MUG 7
-// #define BOTTLE 8
-// #define TORCH 9
-// #define BARREL 10
-// #define STICK 11
-// #define POLE 12
-// #define FIREPLACE 13
-// #define TABLEWARE 14
-// #define TURKEY 15
-// #define LANDLORD 16
-// #define LUMBERJACK 17
-// #define SAMURAI 18 // being given a box for an arm right now
-// #define ROCK 19
-// #define CRATE 20
-// #define BALUSTRADE 21
-// #define ROOF 22
-// #define PLANK 23
-
-// #define NUMFILES 24
-
-// const string tavObjFiles[] = {"assets/tavern/cube.obj",
-//                        	      "assets/tavern/door.obj",
-//                               "assets/tavern/bookshelf.obj",
-//                               "assets/tavern/stool.obj",
-//                               "assets/tavern/chair.obj",
-//                               "assets/tavern/table.obj",
-//                               "assets/tavern/diningtable.obj",
-//                        	      "assets/tavern/mug.obj",
-//                        	      "assets/tavern/bottle.obj",
-//                        	      "assets/tavern/torch.obj",
-//                               "assets/tavern/barrel.obj",   ///this is the barrel
-//                               "assets/tavern/stick.obj",
-//                               "assets/tavern/pole.obj",
-//                               "assets/tavern/fireplace.obj",
-//                               "assets/tavern/tableware.obj",
-//                               "assets/tavern/turkey.obj",
-//                       	      "assets/tavern/landlord.obj",
-//                    		      "assets/tavern/lumberjack.obj",
-//                			      "assets/tavern/samurai.obj",
-//                			      "assets/tavern/rock.obj",
-//                			      "assets/tavern/box.obj",
-//                			      "assets/tavern/balustrade.obj", //currently a cube until can find a good balustrade.obj
-//                			      "assets/tavern/roof.obj",
-//                			      "assets/tavern/plank.obj"
-//                			};
 
 int TAV_CRATE_ID = 5000;
 int TAV_LANDLORD_ID = 5500;
-int TAV_LOG_ID = 5600;
+int FIREPIT_BAKED = 5600;
 int TAV_LUMBERJACK_ID = 5700;
 int TAV_SAMURAI_ID = 5800;
 int TAV_SHELF_ID = 5900;
@@ -105,14 +53,6 @@ float Tavern::getRandFloat(float limit)
 	return static_cast <float> (rand()) / static_cast <float> (RAND_MAX / limit);
 }
 
-// void Tavern::addTavernMesh(const string filename, bool noNorms)
-// {
-// 	Obj3dContainer temp;
-// 	temp.loadIntoTinyOBJ(filename);
-// 	temp.initBuffers(noNorms);
-// 	tavernMeshes.push_back(temp);
-// }
-
 //index is the index of buffer info in tavernMeshes, vectMesh is the vector which stores the mesh for the obj3d
 void Tavern::addTavernItem(int index, int vectMesh, glm::vec3 scale, glm::vec3 trans, glm::mat4 rot)
 {
@@ -149,18 +89,11 @@ void Tavern::addTavernCharacter(int index, glm::vec3 scale, glm::vec3 trans, glm
 
 void Tavern::loadBufferData(TextureLoader* texLoader)
 {
-	// for (int iter = 0; iter < NUMFILES; iter++) {
-	// 	// printf("iter is %d\n", iter);
-	// 	if (iter == BARREL)
-	// 		addTavernMesh(tavObjFiles[iter], true);
-	// 	else
-	// 		addTavernMesh(tavObjFiles[iter], false);
-	// }
 
 	//load textures
 	texLoader->LoadTexture((char *)"assets/tavern/crateTex.bmp", TAV_CRATE_ID);
 	texLoader->LoadTexture((char *)"assets/tavern/landlordTex.bmp", TAV_LANDLORD_ID);
-	texLoader->LoadTexture((char *)"assets/tavern/firePitTex.bmp", TAV_LOG_ID);
+	texLoader->LoadTexture((char *)"assets/tavern/FirepitBaked.bmp", FIREPIT_BAKED);
 	texLoader->LoadTexture((char *)"assets/tavern/lumberjackTex.bmp", TAV_LUMBERJACK_ID);
 	texLoader->LoadTexture((char *)"assets/tavern/samuraiTex.bmp", TAV_SAMURAI_ID);
 	texLoader->LoadTexture((char *)"assets/tavern/bookshelfTex.bmp", TAV_SHELF_ID);
@@ -171,12 +104,12 @@ void Tavern::loadBufferData(TextureLoader* texLoader)
 	texLoader->LoadTexture((char *)"assets/tavern/plankTex.bmp", TAV_PLANK_ID);
 	texLoader->LoadTexture((char *)"assets/tavern/rockTex.bmp", TAV_ROCK_ID);
 	texLoader->LoadTexture((char *)"assets/tavern/dirtTex.bmp", TAV_DIRT_ID);
-	texLoader->LoadTexture((char *)"assets/tavern/minotaurTex.bmp", MINOTAUR_EMBLEM_ID);
-	texLoader->LoadTexture((char *)"assets/tavern/centaurTex.bmp", CENTAUR_EMBLEM_ID);
-	texLoader->LoadTexture((char *)"assets/tavern/dragonTex.bmp", DRAGON_EMBLEM_ID);
-	texLoader->LoadTexture((char *)"assets/tavern/pegasusTex.bmp", PEGASUS_EMBLEM_ID);
-	texLoader->LoadTexture((char *)"assets/tavern/phoenixTex.bmp", PHOENIX_EMBLEM_ID);
-	texLoader->LoadTexture((char *)"assets/tavern/hydraTex.bmp", HYDRA_EMBLEM_ID);
+	texLoader->LoadTexture((char *)"assets/tavern/minotaurTex2.bmp", MINOTAUR_EMBLEM_ID);
+	texLoader->LoadTexture((char *)"assets/tavern/centaurTex2.bmp", CENTAUR_EMBLEM_ID);
+	texLoader->LoadTexture((char *)"assets/tavern/dragonTex2.bmp", DRAGON_EMBLEM_ID);
+	texLoader->LoadTexture((char *)"assets/tavern/pegasusTex2.bmp", PEGASUS_EMBLEM_ID);
+	texLoader->LoadTexture((char *)"assets/tavern/phoenixTex2.bmp", PHOENIX_EMBLEM_ID);
+	texLoader->LoadTexture((char *)"assets/tavern/hydraTex2.bmp", HYDRA_EMBLEM_ID);
 }
 
 void Tavern::createTable1(glm::vec3 initLoc, float ang)
@@ -293,49 +226,8 @@ void Tavern::createFirePlace(glm::vec3 init)
 {
 	float ang;
 	glm::mat4 rot;
-	addTavernItem(POLE, 1, glm::vec3(1.5, 1.2, 1.4), init, glm::mat4(1.0f));
 	addTavernItem(FIREPLACE, 1, glm::vec3(0.5, 0.5, 0.5), glm::vec3(init.x, 0.35, init.z), glm::mat4(1.0f));
-	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_LOG_ID);
-	// addTavernItem(FIREPLACE, 1, glm::vec3(0.6, 0.6, 0.6), glm::vec3(init.x, -0.05, init.z - 0.3), glm::mat4(1.0f));
-	// tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_LOG_ID);
-	// addTavernItem(FIREPLACE, 1, glm::vec3(0.6, 0.6, 0.6), glm::vec3(init.x, 0.1, init.z), glm::mat4(1.0f));
-	// tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_LOG_ID);
-	addTavernItem(STICK, 1, glm::vec3(1.0, 1.5, 1.0), glm::vec3(init.x - 1.3, 0.5, init.z - 0.075), glm::mat4(1.0f));
-	tavernItems[tavernItems.size() - 1].materialNdx = 7;
-	addTavernItem(STICK, 1, glm::vec3(1.0, 1.5, 1.0), glm::vec3(init.x + 1.3, 0.5, init.z - 0.075), glm::mat4(1.0f));
-	tavernItems[tavernItems.size() - 1].materialNdx = 7;
-
-	//rock circle
-	ang = 90;
-	rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(1.0f, 0, 0));
-	addTavernItem(ROCK, 1, glm::vec3(0.35, 0.35, 0.35), glm::vec3(init.x - 1.0, -0.05, init.z + 0.5), rot);
-	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_ROCK_ID);
-	addTavernItem(ROCK, 1, glm::vec3(0.35, 0.35, 0.35), glm::vec3(init.x - 1.0, -0.05, init.z), rot);
-	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_ROCK_ID);
-	addTavernItem(ROCK, 1, glm::vec3(0.35, 0.35, 0.35), glm::vec3(init.x - 1.0, -0.05, init.z - 0.5), rot);
-	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_ROCK_ID);
-	addTavernItem(ROCK, 1, glm::vec3(0.35, 0.35, 0.35), glm::vec3(init.x + 1.0, -0.05, init.z + 0.5), rot);
-	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_ROCK_ID);
-	addTavernItem(ROCK, 1, glm::vec3(0.35, 0.35, 0.35), glm::vec3(init.x + 1.0, -0.05, init.z), rot);
-	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_ROCK_ID);
-	addTavernItem(ROCK, 1, glm::vec3(0.35, 0.35, 0.35), glm::vec3(init.x + 1.0, -0.05, init.z - 0.5), rot);
-	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_ROCK_ID);
-	rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 0, 1.0f));
-	addTavernItem(ROCK, 1, glm::vec3(0.35, 0.35, 0.35), glm::vec3(init.x - 0.5, -0.05, init.z + 0.7), rot);
-	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_ROCK_ID);
-	addTavernItem(ROCK, 1, glm::vec3(0.35, 0.35, 0.35), glm::vec3(init.x, -0.05, init.z + 0.7), rot);
-	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_ROCK_ID);
-	addTavernItem(ROCK, 1, glm::vec3(0.35, 0.35, 0.35), glm::vec3(init.x + 0.5, -0.05, init.z + 0.7), rot);
-	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_ROCK_ID);
-	addTavernItem(ROCK, 1, glm::vec3(0.35, 0.35, 0.35), glm::vec3(init.x - 0.5, -0.05, init.z - 0.9), rot);
-	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_ROCK_ID);
-	addTavernItem(ROCK, 1, glm::vec3(0.35, 0.35, 0.35), glm::vec3(init.x, -0.05, init.z - 0.9), rot);
-	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_ROCK_ID);
-	addTavernItem(ROCK, 1, glm::vec3(0.35, 0.35, 0.35), glm::vec3(init.x + 0.5, -0.05, init.z - 0.9), rot);
-	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_ROCK_ID);
-
-	addTavernItem(CRATE, 2, glm::vec3(0.95, 0.95, 0.95), glm::vec3(init.x, -0.87, init.z - 0.1), glm::mat4(1.0f));
-	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_DIRT_ID);
+	tavernItems[tavernItems.size() - 1].loadTextureCoor(FIREPIT_BAKED);
 
 	rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 1.0f, 0));
 	addTavernItem(TURKEY, 1, glm::vec3(.45, .45, .45), glm::vec3(init.x, 1.5, init.z), rot);
@@ -412,16 +304,17 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 	addTavernItem(DOOR, 1, glm::vec3(1.5, 1.5, 1.5), glm::vec3(7.5, 1.35, -23), glm::mat4(1.0f));
 	tavernItems[tavernItems.size() - 1].materialNdx = 5;
 
-	addTavernItem(BALUSTRADE, 1, glm::vec3(4.5, 7.0, 4.0), glm::vec3(23.0, 8.0, -27.2), glm::mat4(1.0f));
-	tavernItems[tavernItems.size() - 1].materialNdx = 6;
-	addTavernItem(BALUSTRADE, 1, glm::vec3(4.5, 7.0, 4.0), glm::vec3(23.0, 8.0, -19.8), glm::mat4(1.0f));
-	tavernItems[tavernItems.size() - 1].materialNdx = 6;
-	ang = 90;
-	rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 1.0f, 0));
-	addTavernItem(BALUSTRADE, 1, glm::vec3(4.5, 7.0, 4.0), glm::vec3(17.9, 8.0, -23.5), rot);
-	tavernItems[tavernItems.size() - 1].materialNdx = 6;
-	addTavernItem(BALUSTRADE, 1, glm::vec3(4.5, 7.0, 4.0), glm::vec3(28.2, 8.0, -23.5), rot);
-	tavernItems[tavernItems.size() - 1].materialNdx = 6;
+	//removed 
+	// addTavernItem(BALUSTRADE, 1, glm::vec3(4.5, 7.0, 4.0), glm::vec3(23.0, 8.0, -27.2), glm::mat4(1.0f));
+	// tavernItems[tavernItems.size() - 1].materialNdx = 6;
+	// addTavernItem(BALUSTRADE, 1, glm::vec3(4.5, 7.0, 4.0), glm::vec3(23.0, 8.0, -19.8), glm::mat4(1.0f));
+	// tavernItems[tavernItems.size() - 1].materialNdx = 6;
+	// ang = 90;
+	// rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 1.0f, 0));
+	// addTavernItem(BALUSTRADE, 1, glm::vec3(4.5, 7.0, 4.0), glm::vec3(17.9, 8.0, -23.5), rot);
+	// tavernItems[tavernItems.size() - 1].materialNdx = 6;
+	// addTavernItem(BALUSTRADE, 1, glm::vec3(4.5, 7.0, 4.0), glm::vec3(28.2, 8.0, -23.5), rot);
+	// tavernItems[tavernItems.size() - 1].materialNdx = 6;
 	// addTavernItem(BALUSTRADE, glm::vec3(4.5, 7.0, 4.0), glm::vec3(18.5, 8.0, -19.8), rot);
 
 	//bar stools
@@ -492,8 +385,8 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 	tavernItems[tavernItems.size() - 1].materialNdx = 11;
 	addTavernItem(BARREL, 2, glm::vec3(1.0, 1.0, 1.0), glm::vec3(8.5, 0.68, -16), rot);
 	tavernItems[tavernItems.size() - 1].materialNdx = 11;
-	addTavernItem(CRATE, 2, glm::vec3(0.95, 0.95, 0.95), glm::vec3(8.55, 1.0, -17.75), glm::mat4(1.0f));
-	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_CRATE_ID);
+	// addTavernItem(CRATE, 2, glm::vec3(0.95, 0.95, 0.95), glm::vec3(8.55, 1.0, -17.75), glm::mat4(1.0f));
+	// tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_CRATE_ID);
 
 	//adding bookshelves
 	ang = 180;

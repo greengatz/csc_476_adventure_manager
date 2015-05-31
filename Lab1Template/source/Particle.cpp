@@ -31,16 +31,10 @@ void Particle::rebirth(float curTime)
 		pos.y = randFloat(-0.15f, 0.15f);
 		pos.z = randFloat(-0.2f, 0.2f);
 		vel.x = randFloat(-0.001f, 0.001f);
-		// vel.y = randFloat(0.0f, 0.005f);
 		vel.z = randFloat(-0.001f, 0.001f);
-		// vel.x = randFloat(-0.01f, 0.01f);
-		// vel.y = randFloat(0.0f, 0.015f);
 		vel.y = randFloat(0.03f, 0.0175f);
-		// vel.z = randFloat(-0.01f, 0.01f);
-		// lifespan = randFloat(0.08f, 0.125f);
 		lifespan = randFloat(0.01f, 0.04f);
 		endLife = curTime + lifespan;
-		// scale = randFloat(0.075f, 0.1f);
 		scale = randFloat(0.175f, 0.4f);
 		col = glm::vec4(1.0f, randFloat(0.92f, 1.0f), 0, randFloat(0.8f, 1.0f));
 		origTrans = col.w;
@@ -54,7 +48,6 @@ void Particle::rebirth(float curTime)
 		vel.z = randFloat(-0.001f, 0.0005f);
 		lifespan = randFloat(0.08f, 0.125f);
 		endLife = curTime + lifespan;
-		// scale = randFloat(0.05f, 0.075f);
 		scale = randFloat(0.2f, 0.3f);
 		float greyScale = randFloat(0.5686f, 0.8039f);
 		col = glm::vec4(greyScale, greyScale, greyScale, 0.9);
@@ -158,6 +151,7 @@ void Particle::drawTorch(glm::vec3 loc, GLint h_color, GLint h_ModelViewMat, int
 
 		// printf("pos: %f %f %f, life: %f, col: %f %f %f %f\n", loc.x + pos.x, loc.y + pos.y, loc.z + pos.z, lifespan, curCol.r, curCol.g, curCol.b, curCol.w);
 
+		//dont draw if is too transparent
 		if (col.w > 0.15) {
 			glDrawElements(GL_TRIANGLE_STRIP, indSize, GL_UNSIGNED_INT, 0);
 		}

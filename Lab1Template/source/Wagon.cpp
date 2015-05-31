@@ -183,7 +183,7 @@ void Wagon::resetWagon()
     neg = 1.0;
     wagonStart = false;
     orientation = glm::vec3(1.0f, 0.0f, 0.0f);
-    position = terrain->getStartPosition() + glm::vec3(0.6, 0.05, -0.5);
+    position = terrain->getStartPosition() + glm::vec3(0.6, 0.00, -0.5);
     // cout << "wagon is starting at " << position.x << ", " << position.z << "\n";
     nextPoint = terrain->nextCriticalPoint(position);
     direction = glm::normalize(nextPoint - position);
