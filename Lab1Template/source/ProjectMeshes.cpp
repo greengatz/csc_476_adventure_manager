@@ -21,7 +21,7 @@ const string tavFiles[] = {"assets/tavern/cube.obj",
                        	   "assets/tavern/torch.obj",
                            "assets/tavern/stick.obj",
                            "assets/tavern/pole.obj",
-                           "assets/tavern/fireplace.obj",
+                           "assets/tavern/firepitlowpoly.obj",
                            "assets/tavern/tableware.obj", //incorporate later?
                            "assets/tavern/turkey.obj",
                			   "assets/tavern/rock.obj",
