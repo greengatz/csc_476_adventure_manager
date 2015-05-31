@@ -395,7 +395,7 @@ void CharDae::drawChar(GLint h_ModelMatrix, GLint h_vertPos,
     // bone id
     GLSL::enableVertexAttribArray(h_boneIds);
     glBindBuffer(GL_ARRAY_BUFFER, boneIdBuf);
-    glVertexAttribPointer(h_boneIds, 4, GL_FLOAT, GL_FALSE, 0, 0);
+    glVertexAttribPointer(h_boneIds, 4, GL_INT, GL_FALSE, 0, 0);
     
     // bone weight
     GLSL::enableVertexAttribArray(h_boneWeights);

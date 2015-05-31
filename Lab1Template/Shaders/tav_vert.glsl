@@ -16,7 +16,7 @@ uniform int flag;
 // bone adjustments
 const int MAX_BONES = 100;
 uniform int boneToggle;
-attribute ivec4 boneIds;
+attribute vec4 boneIds;
 attribute vec4 boneWeights;
 uniform mat4 bones[MAX_BONES];
 
