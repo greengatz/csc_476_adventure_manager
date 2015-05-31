@@ -1,58 +1,6 @@
 #include "tavern.h"
 #include <time.h>
 
-// #define CUBE 0
-// #define DOOR 1
-// #define BOOKSHELF 2
-// #define STOOL 3
-// #define CHAIR 4
-// #define RECT_TABLE 5
-// #define CIR_TABLE 6
-// #define MUG 7
-// #define BOTTLE 8
-// #define TORCH 9
-// #define BARREL 10
-// #define STICK 11
-// #define POLE 12
-// #define FIREPLACE 13
-// #define TABLEWARE 14
-// #define TURKEY 15
-// #define LANDLORD 16
-// #define LUMBERJACK 17
-// #define SAMURAI 18 // being given a box for an arm right now
-// #define ROCK 19
-// #define CRATE 20
-// #define BALUSTRADE 21
-// #define ROOF 22
-// #define PLANK 23
-
-// #define NUMFILES 24
-
-// const string tavObjFiles[] = {"assets/tavern/cube.obj",
-//                        	      "assets/tavern/door.obj",
-//                               "assets/tavern/bookshelf.obj",
-//                               "assets/tavern/stool.obj",
-//                               "assets/tavern/chair.obj",
-//                               "assets/tavern/table.obj",
-//                               "assets/tavern/diningtable.obj",
-//                        	      "assets/tavern/mug.obj",
-//                        	      "assets/tavern/bottle.obj",
-//                        	      "assets/tavern/torch.obj",
-//                               "assets/tavern/barrel.obj",   ///this is the barrel
-//                               "assets/tavern/stick.obj",
-//                               "assets/tavern/pole.obj",
-//                               "assets/tavern/fireplace.obj",
-//                               "assets/tavern/tableware.obj",
-//                               "assets/tavern/turkey.obj",
-//                       	      "assets/tavern/landlord.obj",
-//                    		      "assets/tavern/lumberjack.obj",
-//                			      "assets/tavern/samurai.obj",
-//                			      "assets/tavern/rock.obj",
-//                			      "assets/tavern/box.obj",
-//                			      "assets/tavern/balustrade.obj", //currently a cube until can find a good balustrade.obj
-//                			      "assets/tavern/roof.obj",
-//                			      "assets/tavern/plank.obj"
-//                			};
 
 int TAV_CRATE_ID = 5000;
 int TAV_LANDLORD_ID = 5500;
@@ -106,14 +54,6 @@ float Tavern::getRandFloat(float limit)
 	return static_cast <float> (rand()) / static_cast <float> (RAND_MAX / limit);
 }
 
-// void Tavern::addTavernMesh(const string filename, bool noNorms)
-// {
-// 	Obj3dContainer temp;
-// 	temp.loadIntoTinyOBJ(filename);
-// 	temp.initBuffers(noNorms);
-// 	tavernMeshes.push_back(temp);
-// }
-
 //index is the index of buffer info in tavernMeshes, vectMesh is the vector which stores the mesh for the obj3d
 void Tavern::addTavernItem(int index, int vectMesh, glm::vec3 scale, glm::vec3 trans, glm::mat4 rot)
 {
@@ -147,13 +87,6 @@ void Tavern::addTavernCharacter(int index, glm::vec3 scale, glm::vec3 trans, glm
 
 void Tavern::loadBufferData(TextureLoader* texLoader)
 {
-	// for (int iter = 0; iter < NUMFILES; iter++) {
-	// 	// printf("iter is %d\n", iter);
-	// 	if (iter == BARREL)
-	// 		addTavernMesh(tavObjFiles[iter], true);
-	// 	else
-	// 		addTavernMesh(tavObjFiles[iter], false);
-	// }
 
 	//load textures
 	texLoader->LoadTexture((char *)"assets/tavern/crateTex.bmp", TAV_CRATE_ID);

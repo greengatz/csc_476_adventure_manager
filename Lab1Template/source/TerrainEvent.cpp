@@ -1,35 +1,6 @@
 #include "TerrainEvent.h"
 #include <time.h>
 
-// #define SAMURAI 0
-// #define SPEARMAN 1
-// #define KNIGHT2 2
-// #define WARRIOR 3
-// #define STALL 4
-// #define MERCHANT 5
-// #define BOX 6
-// #define START_CITY 7
-// #define END_CITY 8
-// #define ROPE 9
-// #define BARREL 10
-// #define BOTTLE 11
-
-// #define NUM_TERR_EV_FILES 12
-
-// const string terrEvFiles[] = {"assets/events/samurai.obj",
-// 							  "assets/events/spearman.obj",
-// 							  "assets/events/knight2 split.obj",
-// 							  "assets/events/warrior split.obj",
-// 							  "assets/events/stall.obj",
-// 							  "assets/events/merchant.obj",
-// 							  "assets/events/box.obj",
-// 							  "assets/events/startCity.obj",
-// 							  "assets/events/endCity.obj",
-// 							  "assets/events/rope.obj",
-// 							  "assets/events/barrel.obj",
-// 							  "assets/events/bottle.obj"
-// 							 };
-
 
 //rotations are such that they look right if one is staring directly at the front of the wagon
 
@@ -111,14 +82,6 @@ void TerrainEvent::reset()
 	eventCharacters.clear();
 }
 
-// void TerrainEvent::addEventMesh(const string filename, bool noNorms)
-// {
-// 	Obj3dContainer temp;
-// 	temp.loadIntoTinyOBJ(filename);
-// 	temp.initBuffers(noNorms);
-// 	meshes.push_back(temp);
-// }
-
 //index is the index of buffer info in tavernMeshes, vectMesh is the vector which stores the mesh for the obj3d
 void TerrainEvent::addEventItem(int index, int vectMesh, glm::vec3 scale, glm::vec3 trans, glm::mat4 rot)
 {
@@ -153,15 +116,6 @@ void TerrainEvent::addEventCharacter(int index, glm::vec3 scale, glm::vec3 trans
 void TerrainEvent::loadTerrEvMeshes(TextureLoader* texLoader)
 {
 	srand(time(NULL));
-	// float ang;
-	// glm::mat4 rot;
-
-	// for (int iter = 0; iter < NUM_TERR_EV_FILES; iter++) {
-	// 	if (iter == SPEARMAN || iter == BARREL)
-	// 		addEventMesh(terrEvFiles[iter], true);
-	// 	else
-	// 		addEventMesh(terrEvFiles[iter], false);
-	// }
 
 	//load textures
 	texLoader->LoadTexture((char *)"assets/events/stone.bmp", TERR_EV_STONE_ID);
