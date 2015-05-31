@@ -50,15 +50,13 @@ CharDae::CharDae(const string source) {
     cout << "number of frames in 1 " << scene->mAnimations[0]->mChannels[0]->mNumRotationKeys << "\n";
 */
 
-    cout << "has stuff " << meshes[meshInd]->HasTextureCoords(0) << "\n";
-    cout << "has stuff " << meshes[meshInd]->mNumUVComponents[0] << "\n";
-    // 26.56
+    //cout << "has tex? " << meshes[meshInd]->HasTextureCoords(0) << "\n";
+    //cout << "num comps: " << meshes[meshInd]->mNumUVComponents[0] << "\n";
     position[0] = 26.56f; // magic to put in view
     position[1] = 0.0f;
     position[2] = -30.77f;
 
     numInd = meshes[meshInd]->mNumVertices;
-    // TODO iterate through every mesh
     // recursivePrint(scene->mRootNode, 0, meshes);
 
     // positions
@@ -160,11 +158,6 @@ void CharDae::recursivePrint(const aiNode* node, int level, aiMesh** meshes) {
     }
 }
 
-// go through hierarchy of nodes in scene
-void CharDae::recursiveDraw(aiNode* node) {
-    // TODO remove this
-}
-
 void CharDae::updateBones(float time) {
     recursiveUpdate(scene->mRootNode, time);
 }
@@ -176,8 +169,12 @@ void CharDae::recursiveUpdate(const aiNode* toUpdate, float time) {
     const aiAnimation* anim = scene->mAnimations[0];
     const aiNodeAnim* nodeAnim = findNodeAnim(anim, toUpdate);
     float timeOffset = 0;
+
     if(isAnimating()) {
         timeOffset = ((float) startAnim[daeType][animChoice]) / ((float) framesPerSec);
+    } else if (lastAnim != -1) {
+        // based on last animations end frame
+        timeOffset = ((float) endAnim[daeType][lastAnim]) / ((float) framesPerSec);
     }
 
     us = toUpdate->mTransformation;
@@ -305,7 +302,7 @@ aiVector3D CharDae::intTrans(float time, const aiNodeAnim* nodeAnim) {
     float factor = (time - nodeAnim->mPositionKeys[key].mTime) / dt;
 
     aiVector3D ret;
-    ret += startPos * factor;
+    ret += startPos * factor; // TODO test this out
     ret += endPos * (1.0f - factor);
    // aiVector3D::Interpolate(ret, startPos, endPos, factor);
 
@@ -330,6 +327,7 @@ void CharDae::startAnimation(string animation) {
         // frames / fps
         endTime = (((float) numFrames) / ((float) framesPerSec)) + animStart;
     }
+    lastAnim = animChoice;
 }
 
 bool CharDae::isAnimating() {
@@ -368,21 +366,16 @@ void CharDae::drawChar(GLint h_ModelMatrix, GLint h_vertPos,
     glVertexAttribPointer(h_vertNor, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
     // texture TODO
-    // gl buff, coords, id
-    //glEnable(GL_TEXTURE_2D);
-    //GLSL::enableVertexAttribArray(h_aTexCoord);
-    //glVertexAttribPointer(h_aTexCoord, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    int texNum = 5800;
     
     glEnable(GL_TEXTURE_2D);
     glActiveTexture(GL_TEXTURE0);
-    int texNum = 5800;
     glBindTexture(GL_TEXTURE_2D, texNum); // what is this?
-    glBindBuffer(GL_ARRAY_BUFFER, texBuf); // this?
 
     GLSL::enableVertexAttribArray(h_aTexCoord);
+    glBindBuffer(GL_ARRAY_BUFFER, texBuf);
     glVertexAttribPointer(h_aTexCoord, 2, GL_FLOAT, GL_FALSE, 0, 0);
-    //glBindTexture(GL_TEXTURE_2D, texNum); // what is this?
-    //glBindBuffer(GL_ARRAY_BUFFER, texBuf); // this?
+    
    
     // model transform
     glm::mat4 translate = glm::translate(glm::mat4(1.0f), position);
@@ -413,7 +406,11 @@ void CharDae::drawChar(GLint h_ModelMatrix, GLint h_vertPos,
     GLSL::disableVertexAttribArray(h_vertPos); // position
     GLSL::disableVertexAttribArray(h_vertNor); // normals
     GLSL::disableVertexAttribArray(h_aTexCoord); // texture
-    GLSL::disableVertexAttribArray(h_boneIds); // texture
-    GLSL::disableVertexAttribArray(h_boneWeights); // texture
+    GLSL::disableVertexAttribArray(h_boneIds); // bone ids
+    GLSL::disableVertexAttribArray(h_boneWeights); // bone weights
+    
     glUniform1i(h_boneFlag, 0);
+    glDisable(GL_TEXTURE_2D);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }

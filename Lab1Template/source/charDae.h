@@ -29,6 +29,7 @@ class CharDae
         bool isAnimating();
         
         int animChoice;
+        int lastAnim;
         vec3 position;
         vec3 scale;
         float rotate;
@@ -72,7 +73,6 @@ class CharDae
         GLuint boneTransforms;
 
 
-        void recursiveDraw(aiNode* toDraw);
         void recursivePrint(const aiNode* toPrint, int level, aiMesh** meshes);
         void recursiveUpdate(const aiNode* toUpdate, float time);
 
