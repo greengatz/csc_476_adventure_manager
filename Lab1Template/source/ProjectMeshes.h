@@ -37,8 +37,6 @@ using namespace std;
 #define ROCK 12
 #define ROOF 13
 #define PLANK 14
-#define LANDLORD 15
-#define LUMBERJACK 16
 // #define BALUSTRADE 14
 
 //terrain meshes
@@ -56,6 +54,9 @@ using namespace std;
 //ppl meshes
 #define SAMURAI 0
 #define SPEARMAN 1
+#define LANDLORD 2
+#define LUMBERJACK 3
+#define MONK 4
 
 class ProjectMeshes
 {
