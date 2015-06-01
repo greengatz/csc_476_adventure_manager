@@ -1040,7 +1040,7 @@ int main(int argc, char **argv)
 	for(int k = 6; k < objs.size(); k++)
     {
     	vec3 curPos = objs[k].getCurSpot();
-    	printf("curPos x: %lf, curPos z: %lf\n", curPos.x, curPos.z);
+    	//printf("curPos x: %lf, curPos z: %lf\n", curPos.x, curPos.z);
     	float curBox[6] = {
      	objs[k].bound.minX * objs[k].scale.x + curPos.x, 
      	objs[k].bound.maxX * objs[k].scale.x + curPos.x,
@@ -1054,19 +1054,19 @@ int main(int argc, char **argv)
     // exptZ = (objs[k].bound.maxZ - objs[k].bound.minZ);
     // loopj = std::max((int)exptZ, 1);
 
-    	printf("maxX: %lf, minX: %lf\n", curBox[1], curBox[0]);
+    	//printf("maxX: %lf, minX: %lf\n", curBox[1], curBox[0]);
 
     	exptX = (curBox[1] - curBox[0])/gridSize;
     	loopi = std::max((int)exptX + 1, 1);
     	exptZ = (curBox[5] - curBox[4])/gridSize;
     	loopj = std::max((int)exptZ + 1, 1);
 
-    	printf("exptX: %d, exptZ: %d\n", exptX, exptZ);
+    	//printf("exptX: %d, exptZ: %d\n", exptX, exptZ);
 
     	col = (curBox[0] - minX)/gridSize;
    		row = (curBox[4] - minZ)/gridSize;
 
-    	printf("col: %d, row: %d\n", col, row);
+    	//printf("col: %d, row: %d\n", col, row);
 
     	// printf("loopi = %d, loopj = %d\n", loopi, loopj);
 
@@ -1075,7 +1075,7 @@ int main(int argc, char **argv)
       		for(int j = row; j < loopj + row; j++)
       		{
        		  grid[i][j].push_back(objs[k]);
-      		  printf("gridsize at %d, %d: %d\n", i, j, grid[i][j].size());
+      		  //printf("gridsize at %d, %d: %d\n", i, j, grid[i][j].size());
      		 }
     	}
   	}
