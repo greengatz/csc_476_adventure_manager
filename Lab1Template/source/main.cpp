@@ -594,29 +594,15 @@ void drawGL()
 	
 	if(menu.inMenu)
 	{
-		//glUseProgram(pid);
 		menu.drawMenu();
-		//glUseProgram(pid);
 	}
 	
 	if(hud.on && !camera.isShadowMapView() && !camera.isFreeRoam())
 	{
-		//glUseProgram(pid);
-		//glUniform1i(h_flag, 1);
-		// }
-		// if(manager.getInMenu()){
-		// 	printf("Menu is up!");
-		// 	glUseProgram(pid);
-		// 	manager.drawMenuManager();
-		// 	glUseProgram(pid);
-		// }
-		// hud.drawHud(h_ModelMatrix, h_vertPos, g_width, g_height, h_aTexCoord);
 		hud.drawSideHud(&camera, g_width, g_height);
-		//glUniform1i(h_flag, 0);
 
 		if(hud.homeScreenOn)
 		{
-			
 			printText2D("Press Enter to Continue", 75, 75, 24);
 		}
 	}
@@ -661,7 +647,7 @@ bool hasCollided(glm::vec3 incr)
   	row = (camPos.x - minX)/gridSize;
  	col = (camPos.z - minZ)/gridSize;
 	vector<Obj3d> currentCellObjs = grid[row][col];
-	printf("Checking %d collisions!!\n", currentCellObjs.size());
+	//printf("Checking %d collisions!!\n", currentCellObjs.size());
 
  	// for(int i = 0; i < currentCellObjs.size(); i++)
  	// {
