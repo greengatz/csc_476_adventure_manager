@@ -74,6 +74,7 @@ Wagon wagon;
 int NUMOBJ = 5;
 Camera camera;
 bool gamePaused = false;
+float fastForward = 1.0f;
 bool cull = false;
 glm::vec2 mouse;
 int shapeCount = 1;
@@ -175,27 +176,30 @@ void initModels()
 	//Initialize meshes
 	meshes.loadMeshes();
 
+	//Initialize the fade in/out system
+	fadeSystem.init();
+
+
 	//Initialize Tavern object
 	tavern.init(&matSetter, &fCuller, &meshes);
 
-	//Initialize Manager object
-	manager.init(&menu, &gamePaused);
 
 	//Initialize Terrain object
 	terrain.init(&texLoader, &trailMatSetter, &fCuller, &meshes, outsideLightPos);
 	tavTerr.init(&texLoader);
 
+	//Initialize Manager object
+	manager.init(&menu, &gamePaused, &fadeSystem, &audio);
+
 	//Initalize Wagon
-	wagon.init(&texLoader, &terrain, &menu, &gamePaused, &manager, &meshes, &audio);
+	wagon.init(&texLoader, &terrain, &menu, &gamePaused, &fastForward, &manager, &meshes, &audio);
 
 	//Initialize skybox
 	skybox.init(&texLoader);
 
-	//Initialize the fade in/out system
-	fadeSystem.init();
-
 	//Initialize the fire particle system
 	fire.init(&texLoader);
+	
 
 	//Initalize some shadow information
 	m_shadowMapFBO.init(g_width, g_height);
@@ -563,16 +567,28 @@ void drawGL()
 		fadeSystem.updateFade();
 		if (fadeSystem.readyToChangeScene())
 		{
-			camera.toggleGameViews();
-			if (!camera.isTavernView())
-			{
-				wagon.startWagon();
-			}
-			else
-			{
+
+
+			if(!fadeSystem.dontToggleView){
+				camera.toggleGameViews();
+			}else{
+				gamePaused = false;
 				terrain.createTrail();
-   			wagon.resetWagon();
+   				wagon.resetWagon();
+				fadeSystem.dontToggleView = false;
 			}
+			
+
+			printf("isTavernView%d, dontToggleView%d\n",!camera.isTavernView(),!fadeSystem.dontToggleView);
+			if (!camera.isTavernView()){
+				wagon.startWagon();
+			}else{
+				terrain.createTrail();
+   				wagon.resetWagon();
+			}
+
+
+			
 		}
 	}
 	
@@ -766,16 +782,30 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		manager.reportStats();
 	}
 	
+
+	if (key == GLFW_KEY_O && action == GLFW_PRESS)
+	{
+		if(fastForward >= 2.9f)
+			fastForward = 1.0f;
+		else
+			fastForward = 3.0f;
+
+		printf("%f\n", fastForward);
+	}
+
+
 	//Buy food
 	if (key == GLFW_KEY_F && action == GLFW_PRESS && camera.isTavernView())
 	{
-		manager.buyFood(5);
+		if(manager.inTavern)
+			manager.buyFood(5);
 	}
 
 	//Buy beer
 	if (key == GLFW_KEY_B && action == GLFW_PRESS && camera.isTavernView())
 	{
-		manager.buyBeer(2);
+		if(manager.inTavern)
+			manager.buyBeer(2);
 	}
 	
 	if (key >= GLFW_KEY_1 && key <= GLFW_KEY_5 && action == GLFW_PRESS)
@@ -818,11 +848,12 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	//Leave Tavern
 	if (key == GLFW_KEY_X && action == GLFW_PRESS)
 	{
-      manager.inTavern = manager.inTavern ? false : true;
-		//camera.toggleGameViews();
-		audio.playBackgroundMusic(manager.inTavern);
-
-		fadeSystem.startFade(g_width, g_height);
+		if(manager.mercs.size() >= 1){
+	      	manager.inTavern = manager.inTavern ? false : true;
+			//camera.toggleGameViews();
+			audio.playBackgroundMusic(manager.inTavern);
+			fadeSystem.startFade(g_width, g_height);
+		}
 	}
 
    	//Toggle between lines and filled polygons

@@ -24,7 +24,7 @@ public:
 	Wagon();
 	virtual ~Wagon();
 
-	void init(TextureLoader* texLoader, Terrain* aTerrain, Menu* aMenu, bool* gP, Manager* mgr, ProjectMeshes *newData, SoundPlayer* audio);
+	void init(TextureLoader* texLoader, Terrain* aTerrain, Menu* aMenu, bool* gP, float* fF, Manager* mgr, ProjectMeshes *newData, SoundPlayer* audio);
 	void draw(RenderingHelper* modelTrans, Camera* camera, glm::vec3 wagonPos);
 	void setPosition(float x, float y, float z);
 	glm::vec3 getPosition();
@@ -38,25 +38,25 @@ public:
 
 private:
 	GLuint pid;
-   GLint h_vertPos;
-   GLint h_vertNor;
-   GLint h_aTexCoord;
+	GLint h_vertPos;
+	GLint h_vertNor;
+	GLint h_aTexCoord;
 
-   //Handles to the shader data
-   GLint h_uTexUnit;
-   GLint h_ProjMatrix;
-   GLint h_ViewMatrix;
-   GLint h_ModelMatrix;
+	//Handles to the shader data
+	GLint h_uTexUnit;
+	GLint h_ProjMatrix;
+	GLint h_ViewMatrix;
+	GLint h_ModelMatrix;
 
-   //Material Color
-   GLint h_ka;
-   GLint h_kd;
-   GLint h_ks;
-   GLint h_s;
-   GLint lightPosID;
+	//Material Color
+	GLint h_ka;
+	GLint h_kd;
+	GLint h_ks;
+	GLint h_s;
+	GLint lightPosID;
 
-   //Shadow data
-   GLuint pidShadow;
+	//Shadow data
+	GLuint pidShadow;
   	GLint h_vertPosShadow;
   	GLint h_vertNorShadow;
 
@@ -79,6 +79,7 @@ private:
 	Menu* menu;
 	Manager* manager;
 	ProjectMeshes *meshData;
+	float* fastForward;
 	bool* gamePaused;
 	float deltaTime;
 	bool wagonStart;

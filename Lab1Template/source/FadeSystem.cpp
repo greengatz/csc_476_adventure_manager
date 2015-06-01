@@ -17,7 +17,7 @@ FadeSystem::FadeSystem() :
    posBufObjOverlay(0),
    indBufObjOverlay(0),
    g_GiboLen(0),
-
+   dontToggleView(false),
    //attributes
    fadeStartTime(0),
    fadeDuration(2),

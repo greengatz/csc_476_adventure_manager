@@ -32,14 +32,14 @@ using namespace std;
 #define STICK 8
 #define POLE 9
 #define FIREPLACE 10
-#define TABLEWARE 11
-#define TURKEY 12
-#define ROCK 13
-#define BALUSTRADE 14
-#define ROOF 15
-#define PLANK 16
-#define LANDLORD 17
-#define LUMBERJACK 18
+// #define TABLEWARE 11
+#define TURKEY 11
+#define ROCK 12
+#define ROOF 13
+#define PLANK 14
+#define LANDLORD 15
+#define LUMBERJACK 16
+// #define BALUSTRADE 14
 
 //terrain meshes
 #define START_CITY 0

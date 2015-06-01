@@ -2,6 +2,8 @@
 #include "menu.h"
 
 void (*fpContinue)(void *, bool *) = NULL;
+void (*fpReturnTavern)(void *, bool *) = NULL;
+void (*fpRestartTrail)(void *, bool *) = NULL;
 
 
 Manager::Manager(string newName)
@@ -17,9 +19,11 @@ Manager::Manager(string newName)
 //	reportStats();
 }
 
-void Manager::init(Menu *m, bool *gp){
+void Manager::init(Menu *m, bool *gp, FadeSystem *fS, SoundPlayer *aud){
 	menu = m;
 	gamePaused = gp;
+	fadeSystem = fS;
+	audio = aud;
 }
 
 string Manager::getManagerName(){
@@ -70,10 +74,56 @@ int Manager::getRandomAliveMercIndex(){
     return -1;
 }
 
+void Manager::restartFromTrail(){
+	int i = 0;
+	for(i = 0; i < mercs.size(); i++){
+		mercs[i].currHealth = mercs[i].maxHealth;
+		mercs[i].dead = false;
+	}
+	gold = 30;
+	beer = 4;
+	food = 4;
+	
+}
+
+void Manager::restartFromTavern(){
+	int i = 0;
+	for(i = 0; i < mercs.size(); i++){
+		if(mercs[i].dead){
+			mercs.erase(mercs.begin() + i);
+		}else{
+			mercs[i].dead = false;
+			mercs[i].currHealth = mercs[i].maxHealth;
+		}
+	}
+	gold = 100;
+	beer = 0;
+	food = 0;
+}
 
 void continueGame(void* mgr, bool* gamePaused){
   // *gamePaused = false;
   *gamePaused = false;
+}
+
+void restartTrail(void* mgr, bool* gamePaused){
+  // *gamePaused = false;
+	Manager *manager = (Manager *)mgr;
+	manager->inTavern = false;
+	manager->getFade()->dontToggleView = true;
+	manager->getFade()->startFade(1024, 768);
+	manager->getAudio()->playBackgroundMusic(manager->inTavern);
+	manager->restartFromTrail();
+}
+
+void returnTavern(void* mgr, bool* gamePaused){
+  // *gamePaused = false;
+	Manager *manager = (Manager *)mgr;
+	manager->inTavern = true;
+	manager->getAudio()->playBackgroundMusic(manager->inTavern);
+	manager->getFade()->startFade(1024, 768);
+	*gamePaused = false;
+	manager->restartFromTavern();
 }
 
 void Manager::fleeingFromAmbush(){
@@ -192,9 +242,10 @@ void Manager::fightingFromAmbush(int numBandits, int banditDamage){
 	if(Manager::getRandomAliveMercIndex() < 0){
 		string aboutString = "The bandits crushed your whole team";
 			about.push_back(aboutString);
-	    fpContinue = continueGame;
-	    option resumeOpt = {"Restart from trail", fpContinue, false};
-	    option resume2Opt = {"Restart from tavern", fpContinue, false};
+	    fpReturnTavern = returnTavern;
+	    fpRestartTrail = restartTrail;
+	    option resumeOpt = {"Restart from trail", fpRestartTrail, true};
+	    option resume2Opt = {"Restart from tavern", fpReturnTavern, true};
 	    vector<option> options;
 	    options.push_back(resumeOpt);
 	    options.push_back(resume2Opt);
@@ -204,7 +255,7 @@ void Manager::fightingFromAmbush(int numBandits, int banditDamage){
 		gold += goldGain;
 		food += foodGain;
 		beer += beerGain;
-		string aboutString = "You conquered bandit scumbags!";
+		string aboutString = "You conquered those bandit scumbags!";
 		about.push_back(aboutString);
 		aboutString = "You gained " + to_string(goldGain) + "gold, " + to_string(beerGain) + "beer, " + to_string(foodGain) + "meat!";
 		about.push_back(aboutString);
@@ -262,9 +313,10 @@ void Manager::fightingFromMerchant(int numGaurds, int gaurdDamage){
 	if(Manager::getRandomAliveMercIndex() < 0){
 		string aboutString = "The merchant demolished your team!";
 		about.push_back(aboutString);
-	    fpContinue = continueGame;
-	    option resumeOpt = {"Restart from trail", fpContinue, false};
-	    option resume2Opt = {"Restart from tavern", fpContinue, false};
+	    fpReturnTavern = returnTavern;
+	    fpRestartTrail = restartTrail;
+	    option resumeOpt = {"Restart from trail", fpRestartTrail, true};
+	    option resume2Opt = {"Restart from tavern", fpReturnTavern, true};
 	    vector<option> options;
 	    options.push_back(resumeOpt);
 	    options.push_back(resume2Opt);
@@ -387,6 +439,16 @@ int Manager::getBeer()
 int Manager::getMercs()
 {
 	return mercs.size();
+}
+
+SoundPlayer* Manager::getAudio()
+{
+	return audio;
+}
+
+FadeSystem* Manager::getFade()
+{
+	return fadeSystem;
 }
 
 void Manager::setGold(int newGold)

@@ -32,8 +32,6 @@ void (*fpHurt)(void *, bool *) = NULL;
 void (*fpRob)(void *, bool *) = NULL;
 void (*fpFight)(void *, bool *) = NULL;
 void (*fpFlee)(void *, bool *) = NULL;
-void (*fpReturnTavern)(void *, bool *) = NULL;
-void (*fpRestartTrail)(void *, bool *) = NULL;
 
 Wagon::Wagon() :
 	position(0.6f, 0.0f, -0.5f),
@@ -87,13 +85,14 @@ Wagon::~Wagon()
 }
 
 void Wagon::init(TextureLoader* texLoader, Terrain* aTerrain, Menu* aMenu, 
-    bool* gP, Manager* mgr, ProjectMeshes* newData, SoundPlayer* audio)
+    bool* gP, float* fF, Manager* mgr, ProjectMeshes* newData, SoundPlayer* audio)
 {
   float minX, minY, minZ;
   float maxX, maxY, maxZ;
 
    manager = mgr;
    gamePaused = gP;
+   fastForward = fF;
    terrain = aTerrain;
    menu = aMenu;
    meshData = newData;
@@ -260,17 +259,6 @@ void fightAmbush(void* mgr, bool* gamePaused){
   manager->fightingFromAmbush(3, 6);
 }
 
-void restartTrail(void* mgr, bool* gamePaused){
-  // *gamePaused = false;
-  Manager* manager = (Manager*)mgr;
-  // manager->healMercenary()
-}
-
-void returnTavern(void* mgr, bool* gamePaused){
-  // *gamePaused = false;
-  Manager* manager = (Manager*)mgr;
-  // manager->healMercenary()
-}
 
 void fleeAmbush(void* mgr, bool* gamePaused ){
   // *gamePaused = false;
@@ -433,8 +421,9 @@ void Wagon::updateWagon(float globalTime) {
       if(*gamePaused == true){
         startTime = glfwGetTime() - deltaTime ;
       }else{
-        position += direction * deltaTime * velocity;
+        position += (*fastForward) * direction * deltaTime * velocity;
       }
+
 
       position.z = terrain->getSpline()->getY(position.x);
       rotate = 90.0f + -1.0 * atan(terrain->getSpline()->getDY(position.x)) * (180.0 / 3.14);
