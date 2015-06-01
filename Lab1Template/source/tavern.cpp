@@ -289,14 +289,13 @@ void Tavern::createPillar(glm::vec3 initLoc, bool north)
 
 void Tavern::createFirePlace(glm::vec3 init)
 {
-	float ang;
-	glm::mat4 rot;
-	addTavernItem(FIREPLACE, 1, glm::vec3(0.5, 0.5, 0.5), glm::vec3(init.x, 0.35, init.z), glm::mat4(1.0f));
+	glm::mat4 rot = glm::rotate(glm::mat4(1.0f), 90.0f, glm::vec3(0.0, 1.0f, 0.0));
+	addTavernItem(FIREPLACE, 1, glm::vec3(1.2, 1.2, 1.2), glm::vec3(init.x, 0.85f, init.z), rot);
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(FIREPIT_BAKED);
 
-	rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 1.0f, 0));
-	addTavernItem(TURKEY, 1, glm::vec3(.45, .45, .45), glm::vec3(init.x, 1.5, init.z), rot);
-	TURKEY_NUM = tavernItems.size() -1;
+	rot = glm::rotate(glm::mat4(1.0f), 1.0f, glm::vec3(0, 1.0f, 0));
+	addTavernItem(TURKEY, 1, glm::vec3(.45, .45, .45), glm::vec3(init.x, 1.65f, init.z), rot);
+	TURKEY_NUM = tavernItems.size() - 1;
 }
 
 void Tavern::newEmblem()
