@@ -341,9 +341,9 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 	tavernItems[tavernItems.size() - 1].materialNdx = 8;
 	ang = 180;
 	rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 1.0f, 0));
-	addTavernItem(LANDLORD, 1, glm::vec3(1, 1, 1), glm::vec3(15, 1.13, -13), rot);
+	addTavernItem(LANDLORD, 3, glm::vec3(1, 1, 1), glm::vec3(15, 1.13, -13), rot);
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_LANDLORD_ID);
-	addTavernItem(LUMBERJACK, 1, glm::vec3(1, 1, 1), glm::vec3(15.5, .99, -16), glm::mat4(1.0f));
+	addTavernItem(LUMBERJACK, 3, glm::vec3(1, 1, 1), glm::vec3(15.5, .99, -16), glm::mat4(1.0f));
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_LUMBERJACK_ID);
 
 	//fireplace and roasting

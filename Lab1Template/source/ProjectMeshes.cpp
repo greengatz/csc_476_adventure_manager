@@ -10,7 +10,7 @@
  * NOTE: If the obj does not have normals already in it, tell Daniel to add it or add normals to the file
  */
 
-const int NUM_TAV = 17;
+const int NUM_TAV = 15;
 const string tavFiles[] = {"assets/tavern/cube.obj",
                        	   "assets/tavern/door.obj",
                            "assets/tavern/bookshelf.obj",
@@ -22,13 +22,10 @@ const string tavFiles[] = {"assets/tavern/cube.obj",
                            "assets/tavern/stick.obj",
                            "assets/tavern/pole.obj",
                            "assets/tavern/firepitlowpoly.obj",
-                           // "assets/tavern/tableware.obj", //incorporate later?
                            "assets/tavern/turkey.obj",
                			   "assets/tavern/rock.obj",
                			   "assets/tavern/roof.obj",
                			   "assets/tavern/plank.obj",
-                      	   "assets/tavern/landlord.obj",
-                   		   "assets/tavern/lumberjack.obj",
                			   // "assets/tavern/balustrade.obj",
 };
 
@@ -46,9 +43,12 @@ const string otherFiles[] = {"assets/tavern/box.obj",
                              "assets/tavern/bottle.obj",
 };
 
-const int NUM_PPL = 2;
+const int NUM_PPL = 5;
 const string pplFiles[] = {"assets/events/samurai.obj",
 						   "assets/events/spearman.obj",
+                      	   "assets/tavern/landlord.obj",
+                   		   "assets/tavern/lumberjack.obj",
+                   		   "assets/events/monk.obj",
 };
 
 ProjectMeshes::ProjectMeshes()
@@ -66,21 +66,23 @@ void ProjectMeshes::addMesh(const string filename, vector<Obj3dContainer> *targe
 
 void ProjectMeshes::loadMeshes()
 {
+	cout << "Beginning mesh initialization:\n";
+
 	//loads meshes only used in the tavern
 	loadOnlyTavern();
-	cout << "Successully loaded tavern meshes\n";
+	cout << "        Successully loaded tavern meshes\n";
 
 	//loads meshes only used in the trail 
 	loadOnlyTrail();
-	cout << "Successully loaded terrain meshes\n";
+	cout << "        Successully loaded terrain meshes\n";
 	
 	//loads everything else	
 	loadOther();
-	cout << "Successully loaded other meshes\n";
+	cout << "        Successully loaded other meshes\n";
 
 	//loads character meshes
 	loadPpl(); 
-	cout << "Successully loaded people meshes\n";
+	cout << "        Successully loaded people meshes\n";
 }
 
 void ProjectMeshes::loadOnlyTavern()
@@ -88,7 +90,7 @@ void ProjectMeshes::loadOnlyTavern()
 	float progress = (float)NUM_TAV / 2.0;
 	for (int iter  = 0; iter < NUM_TAV; iter++) {
 		if (iter > progress) {
-			printf("Tavern meshes at %.2f%%\n", progress / NUM_TAV * 100);
+			printf("        Tavern meshes at %.2f%%\n", progress / NUM_TAV * 100);
 			progress += progress / 2.0;
 		}
 		addMesh(tavFiles[iter], &tavMeshes, false);
@@ -115,7 +117,7 @@ void ProjectMeshes::loadOther()
 void ProjectMeshes::loadPpl()
 {
 	for (int iter  = 0; iter < NUM_PPL; iter++) {
-		if (iter == SPEARMAN)
+		if (iter == SPEARMAN || iter == MONK)
 			addMesh(pplFiles[iter], &pplMeshes, true);
 		else 
 			addMesh(pplFiles[iter], &pplMeshes, false);
