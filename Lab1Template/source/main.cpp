@@ -671,8 +671,7 @@ bool hasCollided(glm::vec3 incr)
 		if(it1->bound.checkCollision(curCam, it1->scale, pos1))
 		{
 			validMove = true;
-			printf("Hit object at %lf, %lf\n!!", camPos.x, camPos.z);
-
+			//printf("Hit object at %lf, %lf\n!!", camPos.x, camPos.z);
 		}
 	}
 
