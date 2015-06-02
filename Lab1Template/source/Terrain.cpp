@@ -43,6 +43,7 @@ int TERRAIN_TEX_RFARTRAIL_ID = 1200;
 Terrain::Terrain() :
 	x(0.0f, 0.0f, 0.0f),
 	scale(5.0f),
+  oldSpot(1),
 	posBufID(0),
 	norBufID(0),
 	texBufID(0),
@@ -88,7 +89,11 @@ bool Terrain::atEnd(glm::vec3 aPos)
 
 int Terrain::checkEvents(glm::vec3 aPos){
     int event = 0;
+
     int spot = floor(aPos.x);
+    if(spot < oldSpot){
+      event = -1; 
+    }
     if(spot > MAP_Z - 10){
       terrainEvents.lowerBridge();
     }
@@ -109,6 +114,11 @@ int Terrain::checkEvents(glm::vec3 aPos){
         printf("%s\n", "One of you troops just caught the plague!");
         event = SICKNESS;
     }
+    if(eventsMap[spot] == BEGGAR){
+        printf("%s\n", "You came across a beggar");
+        event = BEGGAR;
+    }
+    oldSpot = spot;
     eventsMap[spot] = 0;
     return event;
 }
@@ -133,7 +143,13 @@ void Terrain::placeEvents(){
       temp.x -= 100;
       temp.z += 0.5;
       terrainEvents.addRandomDuder(temp, glm::mat4(1.0f));
-      printf("Placing merchant at %f, %f\n", temp.x, temp.z);
+      printf("Placing wanderer at %f, %f\n", temp.x, temp.z);
+    }
+    if(eventsMap[i] == BEGGAR){
+      temp.x -= 100;
+      temp.z -= 0.5;
+      terrainEvents.addRandomDuder(temp, glm::mat4(1.0f));
+      printf("Placing beggar at %f, %f\n", temp.x, temp.z);
     }
   }
 }
@@ -153,7 +169,7 @@ void Terrain::createEvents(){
     }
     srand(time(NULL));
 
-    int ambushSpot = -1, sickSpot = -1, merchSpot = -1, wandSpot = -1;
+    int ambushSpot = -1, sickSpot = -1, merchSpot = -1, wandSpot = -1, beggarSpot = -1;
 
     for(int i = 0; i < 4; i++){
       //1st set: Ambush, Sickness
@@ -163,7 +179,7 @@ void Terrain::createEvents(){
         if(ambushSpot == -1){
           if(eventsMap[pos] == 0 && eventsMap[pos - 1] == 0 && eventsMap[pos + 1] == 0){
             ambushSpot = pos;
-          eventsMap[ambushSpot] = AMBUSH;
+            eventsMap[ambushSpot] = AMBUSH;
           }
         }else if(merchSpot == -1){
           if(eventsMap[pos] == 0 && eventsMap[pos - 1] == 0 && eventsMap[pos + 1] == 0){
@@ -174,6 +190,11 @@ void Terrain::createEvents(){
           if(eventsMap[pos] == 0 && eventsMap[pos - 1] == 0 && eventsMap[pos + 1] == 0){
             wandSpot = pos;
             eventsMap[wandSpot] = WANDERER;
+          }
+        }else if(beggarSpot == -1 && i == 0){
+          if(eventsMap[pos] == 0){
+            beggarSpot = pos;
+            eventsMap[beggarSpot] = BEGGAR;
           }
         }else if(sickSpot == -1){
           if(eventsMap[pos] == 0){

@@ -1,4 +1,5 @@
 #include "mercenary.h"
+#include <cmath>
 
 #define HEALTH_VARIANCE 10
 #define DAMAGE_VARIANCE 3
@@ -29,9 +30,8 @@ int BaseHealth[] = {35, 50, 25, 28, 20, 20};
 int BaseDamage[] = {10, 3, 6, 10, 15, 10};
 int BaseCost[] = {25, 25, 25, 25, 25, 25};
 
-int BaseHungerRate[] = {5, 5, 5, 5, 5, 5};
-int BaseBeerRate[] = {5, 5, 5, 5, 5, 5};
-
+int BaseHungerRate[] = {15, 15, 15, 15, 15, 15};
+int BaseBeerRate[] = {15, 15, 15, 15, 15, 15};
 
 string randFirstName() {
 	return First[rand() % firstCount];
@@ -51,13 +51,12 @@ Mercenary::Mercenary(vector<Obj3d> m) :
     firstName(randFirstName()),
     lastName(randLastName()),
     title(randTitle()),
-    
     job(rand() % classes::size),
     dead(false),
     maxHealth(BaseHealth[job] + rand() % HEALTH_VARIANCE),
     maxDamage(BaseDamage[job] + rand() % DAMAGE_VARIANCE),
-    hungerRate(BaseHungerRate[job] + rand() % HUNGER_VARIANCE),
-    beerRate(BaseBeerRate[job] + rand() % BEER_VARIANCE),
+    maxHunger(BaseHungerRate[job] + rand() % HUNGER_VARIANCE),
+    maxHappiness(BaseBeerRate[job] + rand() % BEER_VARIANCE),
 
     cost(BaseCost[job]),
 
@@ -65,10 +64,12 @@ Mercenary::Mercenary(vector<Obj3d> m) :
 {
     cost += maxHealth - BaseHealth[job];
     cost += maxDamage - BaseDamage[job];
-    cost -= hungerRate - BaseHungerRate[job];
-    cost -= beerRate - BaseBeerRate[job];
+    cost -= maxHunger - BaseHungerRate[job];
+    cost -= maxHunger - BaseBeerRate[job];
     currDamage = maxDamage;
     currHealth = maxHealth;
+    currHunger = maxHunger;
+    currHappiness = maxHappiness;
 }
 
 Mercenary::Mercenary() :
@@ -80,8 +81,8 @@ Mercenary::Mercenary() :
     dead(false),
     maxHealth(BaseHealth[job] + rand() % HEALTH_VARIANCE),
     maxDamage(BaseDamage[job] + rand() % DAMAGE_VARIANCE),
-    hungerRate(BaseHungerRate[job] + rand() % HUNGER_VARIANCE),
-    beerRate(BaseBeerRate[job] + rand() % BEER_VARIANCE),
+    maxHunger(BaseHungerRate[job] + rand() % HUNGER_VARIANCE),
+    maxHappiness(BaseBeerRate[job] + rand() % BEER_VARIANCE),
 
     cost(BaseCost[job]),
 
@@ -89,10 +90,12 @@ Mercenary::Mercenary() :
 {
     cost += maxHealth - BaseHealth[job];
     cost += maxDamage - BaseDamage[job];
-    cost -= hungerRate - BaseHungerRate[job];
-    cost -= beerRate - BaseBeerRate[job];
+    cost -= maxHunger - BaseHungerRate[job];
+    cost -= maxHunger - BaseBeerRate[job];
     currDamage = maxDamage;
     currHealth = maxHealth;
+    currHunger = maxHunger;
+    currHappiness = maxHappiness;
 }
 
 void Mercenary::draw(GLint h_uModelMatrix, int meshIndex)
@@ -122,12 +125,13 @@ void Mercenary::draw(GLint h_uModelMatrix, int meshIndex)
 void Mercenary::printDetails()
 {
 	cout << firstName + " " + lastName + ", the " + title + "\n";
-	cout << "   class: " + JobNames[job] + "\n";
-	cout << "   health: " + to_string(static_cast<long long int>(currHealth)) + "/" + to_string(static_cast<long long int>(maxHealth)) + "\n";
-	cout << "   damage: " +  to_string(static_cast<long long int>(currDamage)) + "\n";
-	cout << "   hunger rate: " +  to_string(static_cast<long long int>(hungerRate)) + "\n";
-	cout << "   beer rate: " + to_string(static_cast<long long int>(beerRate)) + "\n";
-	cout << "   cost: " +  to_string(static_cast<long long int>(cost)) + "\n";
+	cout << "   Class: " + JobNames[job] + "\n";
+	cout << "   Health: " + to_string(static_cast<long long int>(currHealth)) + "/" + to_string(static_cast<long long int>(maxHealth)) + "\n";
+	cout << "   Damage: " +  to_string(static_cast<long long int>(currDamage)) + "\n";
+	cout << "   Hunger: " +  to_string(static_cast<long long int>(currHunger)) + "\n";
+    cout << "   Happiness: " + to_string(static_cast<long long int>(currHappiness)) + "\n";
+    cout << "   CalcDamage: " + to_string(static_cast<long long int>(Mercenary::calcDamage())) + "\n";
+	cout << "   Cost: " +  to_string(static_cast<long long int>(cost)) + "\n";
 }
 
 void Mercenary::wave() {
@@ -137,4 +141,11 @@ void Mercenary::wave() {
         isWaving = true;*/
     }
 }
+
+int Mercenary::calcDamage(){
+    return floor((currDamage + currHunger + currHappiness) / 3.0);
+}
+
+
+
 

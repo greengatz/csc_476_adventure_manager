@@ -33,6 +33,8 @@ class Manager
 		int medBeerCost;
 		int medGoldCost;
 		bool inTavern;
+		bool blacklisted;
+		bool fortune;
 		Manager(string name);
 		void init(Menu *m, bool *gp, FadeSystem *fS, SoundPlayer *aud);
 		void buyMercenary(int key, Tavern* tavern);
@@ -65,6 +67,9 @@ class Manager
 		void restartFromTrail();
 		void restartFromTavern();
 		bool getInMenu();
+		void tickHungerHealth();
+		void beerMerc(int index);
+		void feedMerc(int index);
 		SoundPlayer* getAudio();
 		FadeSystem* getFade();
 		vector<Mercenary> mercs;

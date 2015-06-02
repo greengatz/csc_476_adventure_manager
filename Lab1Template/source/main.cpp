@@ -575,6 +575,8 @@ void drawGL()
 				gamePaused = false;
 				terrain.createTrail();
    				wagon.resetWagon();
+   				manager.blacklisted = false;
+   				manager.fortune = false;
 				fadeSystem.dontToggleView = false;
 			}
 			
@@ -583,6 +585,8 @@ void drawGL()
 			if (!camera.isTavernView()){
 				wagon.startWagon();
 			}else{
+   				manager.blacklisted = false;
+   				manager.fortune = false;
 				terrain.createTrail();
    				wagon.resetWagon();
 			}
@@ -795,17 +799,23 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 
 	//Buy food
-	if (key == GLFW_KEY_F && action == GLFW_PRESS && camera.isTavernView())
+	if (key == GLFW_KEY_F && action == GLFW_PRESS)
 	{
-		if(manager.inTavern)
+		if(camera.isTavernView())
 			manager.buyFood(5);
+		else{
+			manager.feedMerc(0);
+		}
+
 	}
 
 	//Buy beer
-	if (key == GLFW_KEY_B && action == GLFW_PRESS && camera.isTavernView())
+	if (key == GLFW_KEY_B && action == GLFW_PRESS)
 	{
-		if(manager.inTavern)
+		if(camera.isTavernView())
 			manager.buyBeer(2);
+		else
+			manager.beerMerc(0);
 	}
 	
 	if (key >= GLFW_KEY_1 && key <= GLFW_KEY_5 && action == GLFW_PRESS)

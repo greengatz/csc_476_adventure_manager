@@ -44,17 +44,18 @@ class Mercenary
 		int currDamage;
 
 		int maxHunger;
-		int currentHunger;
+		int currHunger;
 		int hungerRate;
 
 		int maxHappiness;
-		int currentHappiness;
+		int currHappiness;
 		int beerRate;
         bool dead;
 
         // method prototypes
 		Mercenary(vector<Obj3d> mesh);
 		Mercenary();
+		int calcDamage();
 		void draw(GLint h_uModelMatrix, int meshIndex);
 		void update();
         void printDetails();

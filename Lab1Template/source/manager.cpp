@@ -8,6 +8,8 @@ void (*fpRestartTrail)(void *, bool *) = NULL;
 
 Manager::Manager(string newName)
 {
+	blacklisted = false;
+	fortune = false;
 	inTavern = true;
 	name = newName;
 	gold = 100.00;
@@ -219,7 +221,7 @@ void Manager::fightingFromAmbush(int numBandits, int banditDamage){
 	}
 	incomingDamage *= 2;
 	for(index = 0; index < mercs.size(); index++){
-		defendingDamage += mercs[index].currDamage;
+		defendingDamage += mercs[index].calcDamage();
 	}
 
 	incomingDamage -= defendingDamage;
@@ -275,6 +277,7 @@ void Manager::fightingFromMerchant(int numGaurds, int gaurdDamage){
 	
 	srand(time(NULL));
 	int index = 0;
+	blacklisted = true;
 	int goldGain = (rand() % 40 ) + 20;
 	int foodGain = (rand() % 5 ) + 1;
 	int beerGain = (rand() % 5 ) + 1;
@@ -290,7 +293,7 @@ void Manager::fightingFromMerchant(int numGaurds, int gaurdDamage){
 	}
 	incomingDamage *= 2;
 	for(index = 0; index < mercs.size(); index++){
-		defendingDamage += mercs[index].currDamage;
+		defendingDamage += mercs[index].calcDamage();
 	}
 
 	incomingDamage -= defendingDamage;
@@ -341,6 +344,15 @@ void Manager::fightingFromMerchant(int numGaurds, int gaurdDamage){
 		
 	Manager::reportStats();
 		
+}
+
+void Manager::tickHungerHealth(){
+	int i;
+	for(i = 0; i < mercs.size(); i++){
+		mercs[i].currHunger = (mercs[i].currHunger - 1 > 0) ? mercs[i].currHunger - 1 : 0;
+		mercs[i].currHappiness = (mercs[i].currHappiness - 1 > 0) ? mercs[i].currHappiness - 1 : 0;
+	}
+	Manager::reportStats();
 }
 
 void Manager::reportStats()
@@ -472,6 +484,28 @@ void Manager::setBeer(int newBeer)
 	}
 }
 
+void Manager::feedMerc(int index)
+{
+	if(food > 0){
+		food--;
+		if(index < mercs.size()){
+			Mercenary m = mercs[index];
+			m.currHunger = (((m.maxHunger / 2) + m.currHunger) >= m.maxHunger) ? m.maxHunger : m.currHunger + (m.maxHunger / 2);
+		}
+	}
+}
+
+void Manager::beerMerc(int index)
+{
+	if(beer > 0){
+		beer--;
+		if(index < mercs.size()){
+			Mercenary m = mercs[index];
+			m.currHappiness = (((m.maxHappiness / 2) + m.currHappiness) >= m.maxHappiness) ? m.maxHappiness : m.currHappiness + (m.maxHappiness / 2);
+		}
+	}
+}
+
 void Manager::lowerDamage(int index)
 {
 	mercs[index].currDamage -= floor((float)(mercs[index].currDamage / 2.0));
@@ -481,7 +515,7 @@ int Manager::reportTotalDamage() {
    int damage = 0, i;
    for (i = 0; i < mercs.size(); i++)
 	{
-	    damage += mercs[i].currDamage;
+	    damage += mercs[i].calcDamage();
     }
     return damage;
 }
