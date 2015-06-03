@@ -257,6 +257,7 @@ void fightAmbush(void* mgr, bool* gamePaused){
   // *gamePaused = false;
   Manager* manager = (Manager*)mgr;
   manager->fightingFromAmbush(3, 6);
+
 }
 
 

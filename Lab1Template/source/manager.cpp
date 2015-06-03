@@ -104,7 +104,6 @@ void Manager::restartFromTavern(){
 }
 
 void continueGame(void* mgr, bool* gamePaused){
-  // *gamePaused = false;
   *gamePaused = false;
 }
 
@@ -421,9 +420,22 @@ void Manager::buyMercenary(int mercenaryID, Tavern* tav)
 
 void Manager::buyMercenaryTrail(int cost)
 {
-	if(gold >= cost){
-		mercs.push_back(*(new Mercenary()));
-		gold -= mercs.back().cost;
+	if(rand() % 10 == 1){
+		gold -= cost;
+		vector<string> about;
+		string aboutString = "He ran away with your gold!";
+			about.push_back(aboutString);
+	    fpContinue = continueGame;
+	    option resumeOpt = {"Onward", fpContinue, true};
+	    vector<option> options;
+	    options.push_back(resumeOpt);
+	    //Set the data
+	    menu->setData("Oops", about, options);
+	}else{
+		if(gold >= cost){
+			mercs.push_back(*(new Mercenary()));
+			gold -= mercs.back().cost;
+		}
 	}
 
 	reportStats();
