@@ -18,7 +18,14 @@
 
 #pragma once
 
-#include <GL/glew.h>
+//#include <GL/glew.h>
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp" //perspective, trans etc
+#include "glm/gtc/type_ptr.hpp" //value_ptr
+#include "GLSL.h"
+
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
 #include "Bitmap.h"
 
 namespace tdogl {

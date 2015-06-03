@@ -52,6 +52,10 @@ void HUD::initHUD(TextureLoader *texLoader)
 	h_uTexUnit = GLSL::getUniformLocation(pid, "uTexUnit");
 
 	texLoader->LoadTexture((char *)"assets/newHud.bmp", HUD_ID);
+
+  tdogl::Bitmap bmp = tdogl::Bitmap::bitmapFromFile("assets/newHud.bmp");
+  tex = new tdogl::Texture(bmp, GL_LINEAR, GL_REPEAT);
+
 	texLoader->LoadTexture((char *)"assets/deadScreen.bmp", DEAD_ID);
 	texLoader->LoadTexture((char *)"assets/faceHUD.bmp", SICKFACE_ID);
 	texLoader->LoadTexture((char *)"assets/faceHUD.bmp", HAPPYFACE_ID);
@@ -235,7 +239,8 @@ void HUD::drawHud(Camera * camera, int width, int height)
   glUniformMatrix4fv( h_ProjMatrix, 1, GL_FALSE, glm::value_ptr( proj.topMatrix()));
   proj.pushMatrix();
 	// enableBuff(h_vertPos, h_aTexCoord);
-  enableBuff(posBufObjHUD, HUD_ID);
+  // enableBuff(posBufObjHUD, HUD_ID);
+  enableBuff(posBufObjHUD, tex->object());
 
 	mat4 Ortho = glm::ortho(0.0f, (float)width, (float)height, 0.0f);
  

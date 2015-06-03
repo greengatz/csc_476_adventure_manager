@@ -35,6 +35,9 @@ set(HEADERS
    Particle.h
    ShadowMapFBO.h
    ShadowMapTechnique.h
+   Texture.h
+   stb_image.h
+   Bitmap.h
 )
 
 # List all .c / .cpp files here
@@ -74,4 +77,7 @@ set(SOURCES
    Particle.cpp
    ShadowMapFBO.cpp
    ShadowMapTechnique.cpp
+   Bitmap.cpp
+   Texture.cpp
+   stb_image.c
 )
