@@ -4,14 +4,20 @@
 
 //rotations are such that they look right if one is staring directly at the front of the wagon
 
-//samurai, spearman
+//samurai, spearman, beggar(lumberjack), monk
 const vec3 charScales[] = {vec3(0.09, 0.09, 0.09),
 		                   vec3(0.125, 0.125, 0.125),
+		                   vec3(0.095, 0.095, 0.095),
+		                   vec3(0.095, 0.095, 0.095),
 };
-const mat4 charRotates[] = {glm::rotate(mat4(1.0f), (const float)180, glm::vec3(0, 1.0f, 0)),
+const mat4 charRotates[] = {glm::rotate(mat4(1.0f), (const float)180, glm::vec3(0, 1.0f, 0)), //all the same....
+						    glm::rotate(mat4(1.0f), (const float)180, glm::vec3(0, 1.0f, 0)),
+						    glm::rotate(mat4(1.0f), (const float)180, glm::vec3(0, 1.0f, 0)),
 						    glm::rotate(mat4(1.0f), (const float)180, glm::vec3(0, 1.0f, 0)),
 };
-const float charYTrans[] = {0.085,
+const float charYTrans[] = {0.085, //all the same...
+                            0.085,
+                            0.085,
                             0.085,
 };
 
@@ -38,6 +44,7 @@ int TERR_EV_SPEARMAN_ID = 7400;
 int TERR_EV_SAMURAI_ID = 7500;
 int TERR_EV_CRATE_ID = 7700;
 int TERR_EV_ROOF_ID = 7800;
+int TERR_EV_BEGGAR_ID = 7900;
 
 int BRIDGE_NUM, ROPE_NUM;
 
@@ -125,6 +132,7 @@ void TerrainEvent::loadTerrEvMeshes(TextureLoader* texLoader)
 	texLoader->LoadTexture((char *)"assets/events/samuraiTex.bmp", TERR_EV_SAMURAI_ID); //yeah i know... its bad
 	texLoader->LoadTexture((char *)"assets/events/crateTex.bmp", TERR_EV_CRATE_ID);
 	texLoader->LoadTexture((char *)"assets/events/roof.bmp", TERR_EV_ROOF_ID);
+	texLoader->LoadTexture((char *)"assets/tavern/lumberjackTex.bmp", TERR_EV_BEGGAR_ID); //this is equally as bad... oops
 }
 
 void TerrainEvent::addAmbush(vec3 loc, mat4 rot)
@@ -210,6 +218,20 @@ void TerrainEvent::addRandomDuder(vec3 loc, mat4 rot)
 	mat4 newRot = rot * charRotates[randDude];
 	addEventItem(randDude, 3, charScales[randDude], trans, newRot);
 	eventItems[eventItems.size() - 1].loadTextureCoor(findTex(randDude));
+}
+
+
+void TerrainEvent::addCultist(vec3 loc, mat4 rot)
+{
+	mat4 newRot = rot * charRotates[3];
+	addEventItem(MONK, 3, charScales[3], glm::vec3(loc.x, charYTrans[3], loc.z), newRot);
+}
+
+void TerrainEvent::addBeggar(vec3 loc, mat4 rot)
+{
+	mat4 newRot = rot * charRotates[2];
+	addEventItem(LUMBERJACK, 3, charScales[2], glm::vec3(loc.x, charYTrans[2], loc.z), newRot);
+	eventItems[eventItems.size() - 1].loadTextureCoor(TERR_EV_BEGGAR_ID);
 }
 
 void TerrainEvent::addStartCity(vec3 loc)

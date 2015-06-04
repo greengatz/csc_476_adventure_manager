@@ -1,7 +1,6 @@
 #include "tavern.h"
 #include <time.h>
 
-
 int TAV_CRATE_ID = 5000;
 int TAV_LANDLORD_ID = 5500;
 int FIREPIT_BAKED = 5600;
@@ -127,111 +126,51 @@ void Tavern::createTable1(glm::vec3 initLoc, float ang)
 	glm::mat4 rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 1.0f, 0));
 	addTavernItem(RECT_TABLE, 1, glm::vec3(1.6, 1.6, 1.6), glm::vec3(initLoc.x, initLoc.y + 0.5, initLoc.z), rot);
 	tavernItems[tavernItems.size() - 1].materialNdx = 6;
-	// int numChairs = getRandInt(2);
+
 	int numChairs = 2;
 	glm::mat4 addedRot = glm::rotate(glm::mat4(1.0f), ang + 180, glm::vec3(0, 1.0f, 0));
 
-	// if (numChairs == 2) { //4 chairs at table
-		int start = (ang == 0) ? 0 : 8;
-		for (int iter = start; iter < 4 + start; iter += 2) {
-			addTavernItem(CHAIR, 1, glm::vec3(0.75, 0.75, 0.75), glm::vec3(initLoc.x + multInd[iter + 0], initLoc.y + 0.5, initLoc.z + multInd[iter + 1]), rot);
-			tavernItems[tavernItems.size() - 1].materialNdx = 11;
-			addTavernItem(CHAIR, 1, glm::vec3(0.75, 0.75, 0.75), glm::vec3(initLoc.x + multInd[iter + 4], initLoc.y + 0.5, initLoc.z + multInd[iter + 5]), addedRot);
-			tavernItems[tavernItems.size() - 1].materialNdx = 11;
-		}
-	// }
-	// else //3 chairs
-	// {
-	// 	int start = (ang == 0) ? 0 : 8;
-
-	// 	float space = getRandFloat(2) - 1.0;
-	// 	int rotEdit = getRandInt(90) - 45;
-
-	// 	if (ang == 0) {
-	// 		glm::mat4 changedRot = glm::rotate(glm::mat4(1.0f), rotEdit + ang, glm::vec3(0, 1.0f, 0));
-	// 		addTavernItem(CHAIR, 1, glm::vec3(0.75, 0.75, 0.75), glm::vec3(initLoc.x + space, initLoc.y + 0.5, initLoc.z + multInd[start + 1]), changedRot);
-	// 		tavernItems[tavernItems.size() - 1].materialNdx = 11;
-	// 		addTavernItem(CHAIR, 1, glm::vec3(0.75, 0.75, 0.75), glm::vec3(initLoc.x + multInd[start + 4], initLoc.y + 0.5, initLoc.z + multInd[start + 5]), addedRot);
-	// 		tavernItems[tavernItems.size() - 1].materialNdx = 11;
-	// 		addTavernItem(CHAIR, 1, glm::vec3(0.75, 0.75, 0.75), glm::vec3(initLoc.x + multInd[start + 6], initLoc.y + 0.5, initLoc.z + multInd[start + 7]), addedRot);
-	// 		tavernItems[tavernItems.size() - 1].materialNdx = 11;
-	// 	}
-	// 	else {
-	// 		rotEdit -= 90;
-	// 		glm::mat4 changedRot = glm::rotate(glm::mat4(1.0f), (float)rotEdit, glm::vec3(0, 1.0f, 0));
-	// 		addTavernItem(CHAIR, 1, glm::vec3(0.75, 0.75, 0.75), glm::vec3(initLoc.x + multInd[start], initLoc.y + 0.5, initLoc.z + multInd[start + 1]), rot);
-	// 		tavernItems[tavernItems.size() - 1].materialNdx = 11;
-	// 		addTavernItem(CHAIR, 1, glm::vec3(0.75, 0.75, 0.75), glm::vec3(initLoc.x + multInd[start + 2], initLoc.y + 0.5, initLoc.z + multInd[start + 3]), rot);
-	// 		tavernItems[tavernItems.size() - 1].materialNdx = 11;
-	// 		addTavernItem(CHAIR, 1, glm::vec3(0.75, 0.75, 0.75), glm::vec3(initLoc.x + multInd[start + 6], initLoc.y + 0.5, initLoc.z + space), changedRot);
-	// 		tavernItems[tavernItems.size() - 1].materialNdx = 11;
-	// 	}
-	// }
-
-	//stuff on the table
-	//********* Cups on table stuff here **********
-	//********* Taken out to remove randomness ****
-	// if (getRandInt(3) > 1) {
-	// 	float x = getRandFloat(1) - 0.5;
-	// 	float z = getRandFloat(1) - 0.5;
-	// 	float allDir = getRandFloat(360);
-	// 	glm::mat4 newRot = glm::rotate(glm::mat4(1.0f), allDir, glm::vec3(0, 1.0f, 0));
-	// 	addTavernItem(MUG, 1, glm::vec3(0.075, 0.075, 0.075), glm::vec3(initLoc.x + x, initLoc.y + 1.02, initLoc.z + z), newRot);
-	// 	tavernItems[tavernItems.size() - 1].materialNdx = 7;
-	// 	addTavernItem(BOTTLE, 2, glm::vec3(.15, .15, .15), glm::vec3(initLoc.x + x + .25, initLoc.y + 1.12, initLoc.z + z), newRot);
-	// 	tavernItems[tavernItems.size() - 1].materialNdx = 8;
-
-	// }
-
-	// if(getRandInt(2) > 1)
-	// {
-	// 	float x = getRandFloat(.5) - 0.25;
-	// 	float z = getRandFloat(.5) - 0.25;
-	// 	addTavernItem(TABLEWARE, glm::vec3(.5, .5, .5), glm::vec3(initLoc.x + x + .5, initLoc.y + 1.1, initLoc.z + z + .5), rot);
-	// }
+	int start = (ang == 0) ? 0 : 8;
+	for (int iter = start; iter < 4 + start; iter += 2) {
+		addTavernItem(CHAIR, 1, glm::vec3(0.75, 0.75, 0.75), glm::vec3(initLoc.x + multInd[iter + 0], initLoc.y + 0.5, initLoc.z + multInd[iter + 1]), rot);
+		tavernItems[tavernItems.size() - 1].materialNdx = 11;
+		addTavernItem(CHAIR, 1, glm::vec3(0.75, 0.75, 0.75), glm::vec3(initLoc.x + multInd[iter + 4], initLoc.y + 0.5, initLoc.z + multInd[iter + 5]), addedRot);
+		tavernItems[tavernItems.size() - 1].materialNdx = 11;
+	}
 }
 
 void Tavern::createPillar(glm::vec3 initLoc, bool north)
 {
-	// addTavernItem(CUBE, glm::vec3(0.2, 10.0, 0.2), initLoc, glm::mat4(1.0f));
 	float ang = 90.0f;
 	glm::mat4 rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 0, 1.0f));
 	addTavernItem(PLANK, 1, glm::vec3(12, 15, 2.5), glm::vec3(initLoc.x, initLoc.y + 5.0f, initLoc.z), rot);
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_PLANK_ID);
-	// ang = 45;
-	// rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(1.0f, 0, 0));
-	// addTavernItem(TORCH, 1, glm::vec3(0.4, 0.4, 0.4), glm::vec3(initLoc.x, initLoc.y + 1.6, initLoc.z + 0.2), rot);
-	// tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_TORCH_ID);
-	// rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 0, 1.0f));
-	// addTavernItem(TORCH, 1, glm::vec3(0.4, 0.4, 0.4), glm::vec3(initLoc.x - 0.2, initLoc.y + 1.6, initLoc.z), rot);
-	// tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_TORCH_ID);
 	
-	if (north) {
+	if (north) 
+	{
 		ang = -45;
 		rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(1.0f, 0, 0));
 		addTavernItem(TORCH, 1, glm::vec3(0.4, 0.4, 0.4), glm::vec3(initLoc.x, initLoc.y + 1.6, initLoc.z - 0.2), rot);
 		
 	}
-	else {
+	else 
+	{
 		ang = 45;
 		rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(1.0f, 0, 0));
 		addTavernItem(TORCH, 1, glm::vec3(0.4, 0.4, 0.4), glm::vec3(initLoc.x, initLoc.y + 1.6, initLoc.z + 0.2), rot);
 	}
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_TORCH_ID);
-	// rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 0, 1.0f));
-		// addTavernItem(TORCH, 1, glm::vec3(0.4, 0.4, 0.4), glm::vec3(initLoc.x + 0.2, initLoc.y + 1.6, initLoc.z), rot);
 }
 
 void Tavern::createFirePlace(glm::vec3 init)
 {
-	float ang;
-	glm::mat4 rot;
-	addTavernItem(FIREPLACE, 1, glm::vec3(0.5, 0.5, 0.5), glm::vec3(init.x, 0.35, init.z), glm::mat4(1.0f));
+	glm::mat4 rot = glm::rotate(glm::mat4(1.0f), 90.0f, glm::vec3(0.0, 1.0f, 0.0));
+	addTavernItem(FIREPLACE, 1, glm::vec3(1.2, 1.2, 1.2), glm::vec3(init.x, 0.85f, init.z), rot);
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(FIREPIT_BAKED);
 
-	rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 1.0f, 0));
-	addTavernItem(TURKEY, 1, glm::vec3(.45, .45, .45), glm::vec3(init.x, 1.5, init.z), rot);
-	TURKEY_NUM = tavernItems.size() -1;
+	rot = glm::rotate(glm::mat4(1.0f), 1.0f, glm::vec3(0, 1.0f, 0));
+	addTavernItem(TURKEY, 1, glm::vec3(.45, .45, .45), glm::vec3(init.x, 1.65f, init.z), rot);
+	TURKEY_NUM = tavernItems.size() - 1;
 }
 
 void Tavern::newEmblem()
@@ -286,12 +225,10 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_ROOF_ID);
 
 	//pillars
-	 createPillar(glm::vec3(18.5, 1, -27.2), true);
-	 createPillar(glm::vec3(27.6, 1, -27.2), true);
-	 createPillar(glm::vec3(18.5, 1, -19.8), false);
-	 createPillar(glm::vec3(27.6, 1, -19.8), false);
-
-	//createPillar(glm::vec3(15.5, .99, -16), false);
+	createPillar(glm::vec3(18.5, 1, -27.2), true);
+	createPillar(glm::vec3(27.6, 1, -27.2), true);
+	createPillar(glm::vec3(18.5, 1, -19.8), false);
+	createPillar(glm::vec3(27.6, 1, -19.8), false);
 
 	addTavernItem(CRATE, 2, glm::vec3(0.5, 1, 2), glm::vec3(21.9, 0.025, -13.5), glm::mat4(1.0f));
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_BRANCHES_ID);
@@ -303,19 +240,6 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 	//door
 	addTavernItem(DOOR, 1, glm::vec3(1.5, 1.5, 1.5), glm::vec3(7.5, 1.35, -23), glm::mat4(1.0f));
 	tavernItems[tavernItems.size() - 1].materialNdx = 5;
-
-	//removed 
-	// addTavernItem(BALUSTRADE, 1, glm::vec3(4.5, 7.0, 4.0), glm::vec3(23.0, 8.0, -27.2), glm::mat4(1.0f));
-	// tavernItems[tavernItems.size() - 1].materialNdx = 6;
-	// addTavernItem(BALUSTRADE, 1, glm::vec3(4.5, 7.0, 4.0), glm::vec3(23.0, 8.0, -19.8), glm::mat4(1.0f));
-	// tavernItems[tavernItems.size() - 1].materialNdx = 6;
-	// ang = 90;
-	// rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 1.0f, 0));
-	// addTavernItem(BALUSTRADE, 1, glm::vec3(4.5, 7.0, 4.0), glm::vec3(17.9, 8.0, -23.5), rot);
-	// tavernItems[tavernItems.size() - 1].materialNdx = 6;
-	// addTavernItem(BALUSTRADE, 1, glm::vec3(4.5, 7.0, 4.0), glm::vec3(28.2, 8.0, -23.5), rot);
-	// tavernItems[tavernItems.size() - 1].materialNdx = 6;
-	// addTavernItem(BALUSTRADE, glm::vec3(4.5, 7.0, 4.0), glm::vec3(18.5, 8.0, -19.8), rot);
 
 	//bar stools
 	addTavernItem(STOOL, 1, glm::vec3(0.35, 0.32, 0.35), glm::vec3(11, .35, -16), glm::mat4(1.0f));
@@ -336,6 +260,7 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 	tavernItems[tavernItems.size() - 1].materialNdx = 10;
 	addTavernItem(STOOL, 1, glm::vec3(0.35, 0.32, 0.35), glm::vec3(18.9, .35, -16), glm::mat4(1.0f));
 	tavernItems[tavernItems.size() - 1].materialNdx = 10;
+
 	//side bar
 	addTavernItem(STOOL, 1, glm::vec3(0.35, 0.32, 0.35), glm::vec3(23, .35, -15.4), glm::mat4(1.0f));
 	tavernItems[tavernItems.size() - 1].materialNdx = 10;
@@ -372,6 +297,7 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 	//vertical barrel
 	addTavernItem(BARREL, 2, glm::vec3(0.65, 0.85, 0.65), glm::vec3(10.0, 1.0, -13.0), glm::mat4(1.0f));
 	tavernItems[tavernItems.size() - 1].materialNdx = 11;
+
 	//horizontal barrel
 	ang = 90;
 	rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 0, 1.0f));
@@ -385,8 +311,6 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 	tavernItems[tavernItems.size() - 1].materialNdx = 11;
 	addTavernItem(BARREL, 2, glm::vec3(1.0, 1.0, 1.0), glm::vec3(8.5, 0.68, -16), rot);
 	tavernItems[tavernItems.size() - 1].materialNdx = 11;
-	// addTavernItem(CRATE, 2, glm::vec3(0.95, 0.95, 0.95), glm::vec3(8.55, 1.0, -17.75), glm::mat4(1.0f));
-	// tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_CRATE_ID);
 
 	//adding bookshelves
 	ang = 180;
@@ -419,9 +343,9 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 	tavernItems[tavernItems.size() - 1].materialNdx = 8;
 	ang = 180;
 	rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 1.0f, 0));
-	addTavernItem(LANDLORD, 1, glm::vec3(1, 1, 1), glm::vec3(15, 1.13, -13), rot);
+	addTavernItem(LANDLORD, 3, glm::vec3(1, 1, 1), glm::vec3(15, 1.13, -13), rot);
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_LANDLORD_ID);
-	addTavernItem(LUMBERJACK, 1, glm::vec3(1, 1, 1), glm::vec3(15.5, .99, -16), glm::mat4(1.0f));
+	addTavernItem(LUMBERJACK, 3, glm::vec3(1, 1, 1), glm::vec3(15.5, .99, -16), glm::mat4(1.0f));
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_LUMBERJACK_ID);
 
 	//fireplace and roasting
@@ -484,7 +408,8 @@ void Tavern::drawTavern(GLint h_ModelMatrix, GLint h_vertPos,
                 GLint h_boneWeights, GLint h_boneTransforms)
 {
 	applyTurkeySpin(ltime);
-	for (int iter = 0; iter < tavernItems.size(); iter++) {
+	for (int iter = 0; iter < tavernItems.size(); iter++) 
+	{
 		//set a material
 		if (tavernItems[iter].materialNdx != -1) {
 			(*matSetter).setMaterial(tavernItems[iter].materialNdx);

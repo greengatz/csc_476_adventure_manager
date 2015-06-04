@@ -74,6 +74,7 @@ Wagon wagon;
 int NUMOBJ = 5;
 Camera camera;
 bool gamePaused = false;
+float fastForward = 1.0f;
 bool cull = false;
 glm::vec2 mouse;
 int shapeCount = 1;
@@ -175,27 +176,30 @@ void initModels()
 	//Initialize meshes
 	meshes.loadMeshes();
 
+	//Initialize the fade in/out system
+	fadeSystem.init();
+
+
 	//Initialize Tavern object
 	tavern.init(&matSetter, &fCuller, &meshes);
 
-	//Initialize Manager object
-	manager.init(&menu, &gamePaused);
 
 	//Initialize Terrain object
 	terrain.init(&texLoader, &trailMatSetter, &fCuller, &meshes, outsideLightPos);
 	tavTerr.init(&texLoader);
 
+	//Initialize Manager object
+	manager.init(&menu, &gamePaused, &fadeSystem, &audio);
+
 	//Initalize Wagon
-	wagon.init(&texLoader, &terrain, &menu, &gamePaused, &manager, &meshes, &audio);
+	wagon.init(&texLoader, &terrain, &menu, &gamePaused, &fastForward, &manager, &meshes, &audio);
 
 	//Initialize skybox
 	skybox.init(&texLoader);
 
-	//Initialize the fade in/out system
-	fadeSystem.init();
-
 	//Initialize the fire particle system
 	fire.init(&texLoader);
+	
 
 	//Initalize some shadow information
 	m_shadowMapFBO.init(g_width, g_height);
@@ -566,16 +570,32 @@ void drawGL()
 		fadeSystem.updateFade();
 		if (fadeSystem.readyToChangeScene())
 		{
-			camera.toggleGameViews();
-			if (!camera.isTavernView())
-			{
-				wagon.startWagon();
-			}
-			else
-			{
+
+
+			if(!fadeSystem.dontToggleView){
+				camera.toggleGameViews();
+			}else{
+				gamePaused = false;
 				terrain.createTrail();
-   			wagon.resetWagon();
+   				wagon.resetWagon();
+   				manager.blacklisted = false;
+   				manager.fortune = false;
+				fadeSystem.dontToggleView = false;
 			}
+			
+
+			printf("isTavernView%d, dontToggleView%d\n",!camera.isTavernView(),!fadeSystem.dontToggleView);
+			if (!camera.isTavernView()){
+				wagon.startWagon();
+			}else{
+   				manager.blacklisted = false;
+   				manager.fortune = false;
+				terrain.createTrail();
+   				wagon.resetWagon();
+			}
+
+
+			
 		}
 	}
 	
@@ -597,29 +617,15 @@ void drawGL()
 	
 	if(menu.inMenu)
 	{
-		//glUseProgram(pid);
 		menu.drawMenu();
-		//glUseProgram(pid);
 	}
 	
 	if(hud.on && !camera.isShadowMapView() && !camera.isFreeRoam())
 	{
-		//glUseProgram(pid);
-		//glUniform1i(h_flag, 1);
-		// }
-		// if(manager.getInMenu()){
-		// 	printf("Menu is up!");
-		// 	glUseProgram(pid);
-		// 	manager.drawMenuManager();
-		// 	glUseProgram(pid);
-		// }
-		// hud.drawHud(h_ModelMatrix, h_vertPos, g_width, g_height, h_aTexCoord);
 		hud.drawSideHud(&camera, g_width, g_height);
-		//glUniform1i(h_flag, 0);
 
 		if(hud.homeScreenOn)
 		{
-			
 			printText2D("Press Enter to Continue", 75, 75, 24);
 		}
 	}
@@ -664,7 +670,6 @@ bool hasCollided(glm::vec3 incr)
   	row = (camPos.x - minX)/gridSize;
  	col = (camPos.z - minZ)/gridSize;
 	vector<Obj3d> currentCellObjs = grid[row][col];
-//	printf("Checking %d collisions!!\n", currentCellObjs.size());
 
  	// for(int i = 0; i < currentCellObjs.size(); i++)
  	// {
@@ -688,8 +693,7 @@ bool hasCollided(glm::vec3 incr)
 		if(it1->bound.checkCollision(curCam, it1->scale, pos1))
 		{
 			validMove = true;
-			printf("Hit object at %lf, %lf\n!!", camPos.x, camPos.z);
-
+			//printf("Hit object at %lf, %lf\n!!", camPos.x, camPos.z);
 		}
 	}
 
@@ -769,16 +773,36 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		manager.reportStats();
 	}
 	
-	//Buy food
-	if (key == GLFW_KEY_F && action == GLFW_PRESS && camera.isTavernView())
+
+	if (key == GLFW_KEY_O && action == GLFW_PRESS)
 	{
-		manager.buyFood(5);
+		if(fastForward >= 2.9f)
+			fastForward = 1.0f;
+		else
+			fastForward = 3.0f;
+
+		printf("%f\n", fastForward);
+	}
+
+
+	//Buy food
+	if (key == GLFW_KEY_F && action == GLFW_PRESS)
+	{
+		if(camera.isTavernView())
+			manager.buyFood(5);
+		else{
+			manager.feedMerc(0);
+		}
+
 	}
 
 	//Buy beer
-	if (key == GLFW_KEY_B && action == GLFW_PRESS && camera.isTavernView())
+	if (key == GLFW_KEY_B && action == GLFW_PRESS)
 	{
-		manager.buyBeer(2);
+		if(camera.isTavernView())
+			manager.buyBeer(2);
+		else
+			manager.beerMerc(0);
 	}
 	
 	if (key >= GLFW_KEY_1 && key <= GLFW_KEY_5 && action == GLFW_PRESS)
@@ -821,11 +845,12 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	//Leave Tavern
 	if (key == GLFW_KEY_X && action == GLFW_PRESS)
 	{
-      manager.inTavern = manager.inTavern ? false : true;
-		//camera.toggleGameViews();
-		audio.playBackgroundMusic(manager.inTavern);
-
-		fadeSystem.startFade(g_width, g_height);
+		if(manager.mercs.size() >= 1){
+	      	manager.inTavern = manager.inTavern ? false : true;
+			//camera.toggleGameViews();
+			audio.playBackgroundMusic(manager.inTavern);
+			fadeSystem.startFade(g_width, g_height);
+		}
 	}
 
    	//Toggle between lines and filled polygons
@@ -1057,7 +1082,7 @@ int main(int argc, char **argv)
 	for(int k = 6; k < objs.size(); k++)
     {
     	vec3 curPos = objs[k].getCurSpot();
-    	printf("curPos x: %lf, curPos z: %lf\n", curPos.x, curPos.z);
+    	//printf("curPos x: %lf, curPos z: %lf\n", curPos.x, curPos.z);
     	float curBox[6] = {
      	objs[k].bound.minX * objs[k].scale.x + curPos.x, 
      	objs[k].bound.maxX * objs[k].scale.x + curPos.x,
@@ -1071,19 +1096,19 @@ int main(int argc, char **argv)
     // exptZ = (objs[k].bound.maxZ - objs[k].bound.minZ);
     // loopj = std::max((int)exptZ, 1);
 
-    	printf("maxX: %lf, minX: %lf\n", curBox[1], curBox[0]);
+    	//printf("maxX: %lf, minX: %lf\n", curBox[1], curBox[0]);
 
     	exptX = (curBox[1] - curBox[0])/gridSize;
     	loopi = std::max((int)exptX + 1, 1);
     	exptZ = (curBox[5] - curBox[4])/gridSize;
     	loopj = std::max((int)exptZ + 1, 1);
 
-    	printf("exptX: %d, exptZ: %d\n", exptX, exptZ);
+    	//printf("exptX: %d, exptZ: %d\n", exptX, exptZ);
 
     	col = (curBox[0] - minX)/gridSize;
    		row = (curBox[4] - minZ)/gridSize;
 
-    	printf("col: %d, row: %d\n", col, row);
+    	//printf("col: %d, row: %d\n", col, row);
 
     	// printf("loopi = %d, loopj = %d\n", loopi, loopj);
 
@@ -1092,7 +1117,7 @@ int main(int argc, char **argv)
       		for(int j = row; j < loopj + row; j++)
       		{
        		  grid[i][j].push_back(objs[k]);
-      		  printf("gridsize at %d, %d: %d\n", i, j, grid[i][j].size());
+      		  //printf("gridsize at %d, %d: %d\n", i, j, grid[i][j].size());
      		 }
     	}
   	}

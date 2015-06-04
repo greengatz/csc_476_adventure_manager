@@ -36,6 +36,8 @@ class TerrainEvent
 		void addRandomDuder(vec3 loc, mat4 rot);
 		void addStartCity(vec3 loc);
         void addEndCity(vec3 loc);
+        void addCultist(vec3 loc, mat4 rot);
+        void addBeggar(vec3 loc, mat4 rot);
 		void drawTerrainEvents(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor, GLint h_aTexCoord, double ltime);
 		void lowerBridge();
 		void reset(); //resets the class erasing all events

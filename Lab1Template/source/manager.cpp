@@ -2,10 +2,14 @@
 #include "menu.h"
 
 void (*fpContinue)(void *, bool *) = NULL;
+void (*fpReturnTavern)(void *, bool *) = NULL;
+void (*fpRestartTrail)(void *, bool *) = NULL;
 
 
 Manager::Manager(string newName)
 {
+	blacklisted = false;
+	fortune = false;
 	inTavern = true;
 	name = newName;
 	gold = 100.00;
@@ -17,9 +21,11 @@ Manager::Manager(string newName)
 //	reportStats();
 }
 
-void Manager::init(Menu *m, bool *gp){
+void Manager::init(Menu *m, bool *gp, FadeSystem *fS, SoundPlayer *aud){
 	menu = m;
 	gamePaused = gp;
+	fadeSystem = fS;
+	audio = aud;
 }
 
 string Manager::getManagerName(){
@@ -70,10 +76,55 @@ int Manager::getRandomAliveMercIndex(){
     return -1;
 }
 
+void Manager::restartFromTrail(){
+	int i = 0;
+	for(i = 0; i < mercs.size(); i++){
+		mercs[i].currHealth = mercs[i].maxHealth;
+		mercs[i].dead = false;
+	}
+	gold = 30;
+	beer = 4;
+	food = 4;
+	
+}
+
+void Manager::restartFromTavern(){
+	int i = 0;
+	for(i = 0; i < mercs.size(); i++){
+		if(mercs[i].dead){
+			mercs.erase(mercs.begin() + i);
+		}else{
+			mercs[i].dead = false;
+			mercs[i].currHealth = mercs[i].maxHealth;
+		}
+	}
+	gold = 100;
+	beer = 0;
+	food = 0;
+}
 
 void continueGame(void* mgr, bool* gamePaused){
-  // *gamePaused = false;
   *gamePaused = false;
+}
+
+void restartTrail(void* mgr, bool* gamePaused){
+  // *gamePaused = false;
+	Manager *manager = (Manager *)mgr;
+	manager->inTavern = false;
+	manager->getFade()->dontToggleView = true;
+	manager->getFade()->startFade(1024, 768);
+	manager->getAudio()->playBackgroundMusic(manager->inTavern);
+	manager->restartFromTrail();
+}
+
+void returnTavern(void* mgr, bool* gamePaused){
+  // *gamePaused = false;
+	Manager *manager = (Manager *)mgr;
+	manager->inTavern = true;
+	manager->getAudio()->playBackgroundMusic(manager->inTavern);
+	manager->getFade()->startFade(1024, 768);
+	*gamePaused = false;
+	manager->restartFromTavern();
 }
 
 void Manager::fleeingFromAmbush(){
@@ -169,7 +220,7 @@ void Manager::fightingFromAmbush(int numBandits, int banditDamage){
 	}
 	incomingDamage *= 2;
 	for(index = 0; index < mercs.size(); index++){
-		defendingDamage += mercs[index].currDamage;
+		defendingDamage += mercs[index].calcDamage();
 	}
 
 	incomingDamage -= defendingDamage;
@@ -192,9 +243,10 @@ void Manager::fightingFromAmbush(int numBandits, int banditDamage){
 	if(Manager::getRandomAliveMercIndex() < 0){
 		string aboutString = "The bandits crushed your whole team";
 			about.push_back(aboutString);
-	    fpContinue = continueGame;
-	    option resumeOpt = {"Restart from trail", fpContinue, false};
-	    option resume2Opt = {"Restart from tavern", fpContinue, false};
+	    fpReturnTavern = returnTavern;
+	    fpRestartTrail = restartTrail;
+	    option resumeOpt = {"Restart from trail", fpRestartTrail, true};
+	    option resume2Opt = {"Restart from tavern", fpReturnTavern, true};
 	    vector<option> options;
 	    options.push_back(resumeOpt);
 	    options.push_back(resume2Opt);
@@ -204,7 +256,7 @@ void Manager::fightingFromAmbush(int numBandits, int banditDamage){
 		gold += goldGain;
 		food += foodGain;
 		beer += beerGain;
-		string aboutString = "You conquered bandit scumbags!";
+		string aboutString = "You conquered those bandit scumbags!";
 		about.push_back(aboutString);
 		aboutString = "You gained " + to_string(goldGain) + "gold, " + to_string(beerGain) + "beer, " + to_string(foodGain) + "meat!";
 		about.push_back(aboutString);
@@ -224,6 +276,7 @@ void Manager::fightingFromMerchant(int numGaurds, int gaurdDamage){
 	
 	srand(time(NULL));
 	int index = 0;
+	blacklisted = true;
 	int goldGain = (rand() % 40 ) + 20;
 	int foodGain = (rand() % 5 ) + 1;
 	int beerGain = (rand() % 5 ) + 1;
@@ -239,7 +292,7 @@ void Manager::fightingFromMerchant(int numGaurds, int gaurdDamage){
 	}
 	incomingDamage *= 2;
 	for(index = 0; index < mercs.size(); index++){
-		defendingDamage += mercs[index].currDamage;
+		defendingDamage += mercs[index].calcDamage();
 	}
 
 	incomingDamage -= defendingDamage;
@@ -262,9 +315,10 @@ void Manager::fightingFromMerchant(int numGaurds, int gaurdDamage){
 	if(Manager::getRandomAliveMercIndex() < 0){
 		string aboutString = "The merchant demolished your team!";
 		about.push_back(aboutString);
-	    fpContinue = continueGame;
-	    option resumeOpt = {"Restart from trail", fpContinue, false};
-	    option resume2Opt = {"Restart from tavern", fpContinue, false};
+	    fpReturnTavern = returnTavern;
+	    fpRestartTrail = restartTrail;
+	    option resumeOpt = {"Restart from trail", fpRestartTrail, true};
+	    option resume2Opt = {"Restart from tavern", fpReturnTavern, true};
 	    vector<option> options;
 	    options.push_back(resumeOpt);
 	    options.push_back(resume2Opt);
@@ -289,6 +343,15 @@ void Manager::fightingFromMerchant(int numGaurds, int gaurdDamage){
 		
 	Manager::reportStats();
 		
+}
+
+void Manager::tickHungerHealth(){
+	int i;
+	for(i = 0; i < mercs.size(); i++){
+		mercs[i].currHunger = (mercs[i].currHunger - 1 > 0) ? mercs[i].currHunger - 1 : 0;
+		mercs[i].currHappiness = (mercs[i].currHappiness - 1 > 0) ? mercs[i].currHappiness - 1 : 0;
+	}
+	Manager::reportStats();
 }
 
 void Manager::reportStats()
@@ -357,9 +420,22 @@ void Manager::buyMercenary(int mercenaryID, Tavern* tav)
 
 void Manager::buyMercenaryTrail(int cost)
 {
-	if(gold >= cost){
-		mercs.push_back(*(new Mercenary()));
-		gold -= mercs.back().cost;
+	if(rand() % 10 == 1){
+		gold -= cost;
+		vector<string> about;
+		string aboutString = "He ran away with your gold!";
+			about.push_back(aboutString);
+	    fpContinue = continueGame;
+	    option resumeOpt = {"Onward", fpContinue, true};
+	    vector<option> options;
+	    options.push_back(resumeOpt);
+	    //Set the data
+	    menu->setData("Oops", about, options);
+	}else{
+		if(gold >= cost){
+			mercs.push_back(*(new Mercenary()));
+			gold -= mercs.back().cost;
+		}
 	}
 
 	reportStats();
@@ -389,6 +465,16 @@ int Manager::getMercs()
 	return mercs.size();
 }
 
+SoundPlayer* Manager::getAudio()
+{
+	return audio;
+}
+
+FadeSystem* Manager::getFade()
+{
+	return fadeSystem;
+}
+
 void Manager::setGold(int newGold)
 {
 	if(newGold > 0){
@@ -410,6 +496,28 @@ void Manager::setBeer(int newBeer)
 	}
 }
 
+void Manager::feedMerc(int index)
+{
+	if(food > 0){
+		food--;
+		if(index < mercs.size()){
+			Mercenary m = mercs[index];
+			m.currHunger = (((m.maxHunger / 2) + m.currHunger) >= m.maxHunger) ? m.maxHunger : m.currHunger + (m.maxHunger / 2);
+		}
+	}
+}
+
+void Manager::beerMerc(int index)
+{
+	if(beer > 0){
+		beer--;
+		if(index < mercs.size()){
+			Mercenary m = mercs[index];
+			m.currHappiness = (((m.maxHappiness / 2) + m.currHappiness) >= m.maxHappiness) ? m.maxHappiness : m.currHappiness + (m.maxHappiness / 2);
+		}
+	}
+}
+
 void Manager::lowerDamage(int index)
 {
 	mercs[index].currDamage -= floor((float)(mercs[index].currDamage / 2.0));
@@ -419,7 +527,7 @@ int Manager::reportTotalDamage() {
    int damage = 0, i;
    for (i = 0; i < mercs.size(); i++)
 	{
-	    damage += mercs[i].currDamage;
+	    damage += mercs[i].calcDamage();
     }
     return damage;
 }

@@ -16,6 +16,7 @@ class FadeSystem
 {
 public:
    FadeSystem();
+   bool dontToggleView;
    virtual ~FadeSystem();
    void init();
 

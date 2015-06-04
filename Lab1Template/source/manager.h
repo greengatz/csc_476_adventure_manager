@@ -17,6 +17,8 @@
 #include "obj3d.h"
 #include "mercenary.h"
 #include "tavern.h"
+#include "FadeSystem.h"
+#include "SoundPlayer.h"
 
 using namespace std;
 using namespace glm;
@@ -26,14 +28,15 @@ class Menu;
 class Manager
 {
 	public:
-		
 		int focusedMerc;
 		int medFoodCost;
 		int medBeerCost;
 		int medGoldCost;
 		bool inTavern;
+		bool blacklisted;
+		bool fortune;
 		Manager(string name);
-		void init(Menu *m, bool *gp);
+		void init(Menu *m, bool *gp, FadeSystem *fS, SoundPlayer *aud);
 		void buyMercenary(int key, Tavern* tavern);
 		void buyMercenaryTrail(int cost);
 		void reportStats();
@@ -61,7 +64,14 @@ class Manager
 		Mercenary getFocus();
 		bool partyDead();
 		void drawMenuManager();
+		void restartFromTrail();
+		void restartFromTavern();
 		bool getInMenu();
+		void tickHungerHealth();
+		void beerMerc(int index);
+		void feedMerc(int index);
+		SoundPlayer* getAudio();
+		FadeSystem* getFade();
 		vector<Mercenary> mercs;
 
 	private:
@@ -72,6 +82,9 @@ class Manager
 		int beer;
 		Menu *menu;
 		bool *gamePaused;
+		FadeSystem *fadeSystem;
+		SoundPlayer *audio;
+
 };
 
 #endif

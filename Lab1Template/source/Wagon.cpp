@@ -32,8 +32,7 @@ void (*fpHurt)(void *, bool *) = NULL;
 void (*fpRob)(void *, bool *) = NULL;
 void (*fpFight)(void *, bool *) = NULL;
 void (*fpFlee)(void *, bool *) = NULL;
-void (*fpReturnTavern)(void *, bool *) = NULL;
-void (*fpRestartTrail)(void *, bool *) = NULL;
+void (*fpDonate)(void *, bool *) = NULL;
 
 Wagon::Wagon() :
 	position(0.6f, 0.0f, -0.5f),
@@ -87,13 +86,14 @@ Wagon::~Wagon()
 }
 
 void Wagon::init(TextureLoader* texLoader, Terrain* aTerrain, Menu* aMenu, 
-    bool* gP, Manager* mgr, ProjectMeshes* newData, SoundPlayer* audio)
+    bool* gP, float* fF, Manager* mgr, ProjectMeshes* newData, SoundPlayer* audio)
 {
   float minX, minY, minZ;
   float maxX, maxY, maxZ;
 
    manager = mgr;
    gamePaused = gP;
+   fastForward = fF;
    terrain = aTerrain;
    menu = aMenu;
    meshData = newData;
@@ -252,32 +252,39 @@ void robMerch(void* mgr, bool* gamePaused){
   // *gamePaused = false;
   Manager* manager = (Manager*)mgr;
   manager->fightingFromMerchant(2, 15);
-
 }
 
 void fightAmbush(void* mgr, bool* gamePaused){
   // *gamePaused = false;
   Manager* manager = (Manager*)mgr;
   manager->fightingFromAmbush(3, 6);
+
 }
 
-void restartTrail(void* mgr, bool* gamePaused){
-  // *gamePaused = false;
-  Manager* manager = (Manager*)mgr;
-  // manager->healMercenary()
-}
-
-void returnTavern(void* mgr, bool* gamePaused){
-  // *gamePaused = false;
-  Manager* manager = (Manager*)mgr;
-  // manager->healMercenary()
-}
 
 void fleeAmbush(void* mgr, bool* gamePaused ){
   // *gamePaused = false;
   Manager* manager = (Manager*)mgr;
   // manager->healMercenary()
   manager->fleeingFromAmbush();
+}
+
+void donate(void* mgr, bool* gamePaused ){
+  // *gamePaused = false;
+  Manager* manager = (Manager*)mgr;
+  // manager->healMercenary()
+  manager->fortune = true;
+  if(manager->getGold() >= 20)
+    manager->setGold(manager->getGold() - 20);
+  else if(manager->getGold() >= 10)
+    manager->setGold(manager->getGold() - 10);
+  else if(manager->getFood() >= 3)
+    manager->setFood(manager->getFood() - 3);
+  else if(manager->getBeer() >= 3)
+    manager->setBeer(manager->getBeer() - 3);
+ 
+  *gamePaused = false;
+
 }
 
 void Wagon::updateWagon(float globalTime) {
@@ -306,8 +313,9 @@ void Wagon::updateWagon(float globalTime) {
             manager->mercs[i].dae->startAnimation("run");
           }
         }
+      } else if (event != 0){
+        manager->tickHungerHealth();
       }
-
       if(event == MERCHANTEVENT){
         soundSys->playVoice(VILLAGER_GREETING);
 
@@ -318,34 +326,56 @@ void Wagon::updateWagon(float globalTime) {
         manager->setMedBeerCost(beerCost);
         //Create about vector and add an element
         vector<string> about;
-
-        string aboutString = "Meat is  ";
-        aboutString += to_string(manager->medFoodCost);
-        aboutString += " gold and Beer is ";
-        aboutString += to_string(manager->medBeerCost);
-        aboutString += " gold!";
-        about.push_back(aboutString);
-        about.push_back("Merchant looks like a wimp though");
-        //Create an option and add it to a vector
-        fpFood = buyFood;
-        fpBeer = buyBeer;
-        fpResume = resumeGame;
-        fpRob = robMerch;
-        option foodOpt = {"Buy Meat", fpFood, false};
-        option beerOpt = {"Buy Beer", fpBeer, false};
-        option robOpt = {"Rob Merchant", fpRob, true};
-        option resumeOpt = {"Continue On", fpResume, true};
-        vector<option> options;
-        options.push_back(foodOpt);
-        options.push_back(beerOpt);
-        options.push_back(robOpt);
-        options.push_back(resumeOpt);
+        
+        if(manager->blacklisted){
+          string aboutString = "You are blacklisted from my";
+          about.push_back(aboutString);
+          about.push_back("shop for your crimes against merchants!");
+          //Create an option and add it to a vector
+          fpResume = resumeGame;
+          fpRob = robMerch;
+          option resumeOpt = {"Continue On", fpResume, true};
+          option robOpt = {"Rob Merchant", fpRob, true};
+          vector<option> options;
+          options.push_back(resumeOpt);
+          options.push_back(robOpt);
+          menu->setData("Merchant Slayer", about, options);
+        }else{
+          if(manager->fortune){
+            manager->setMedFoodCost(1);
+            manager->setMedBeerCost(1);
+          }
+          string aboutString = "Meat is  ";
+          aboutString += to_string(manager->medFoodCost);
+          aboutString += " gold and Beer is ";
+          aboutString += to_string(manager->medBeerCost);
+          aboutString += " gold!";
+          about.push_back(aboutString);
+          about.push_back("Merchant looks like a wimp though");
+          //Create an option and add it to a vector
+          fpFood = buyFood;
+          fpBeer = buyBeer;
+          fpResume = resumeGame;
+          fpRob = robMerch;
+          option foodOpt = {"Buy Meat", fpFood, false};
+          option beerOpt = {"Buy Beer", fpBeer, false};
+          option robOpt = {"Rob Merchant", fpRob, true};
+          option resumeOpt = {"Continue On", fpResume, true};
+          vector<option> options;
+          options.push_back(foodOpt);
+          options.push_back(beerOpt);
+          options.push_back(robOpt);
+          options.push_back(resumeOpt);
 
         //Set the data
-        menu->setData("Merchant", about, options);
-        for(int i = 0; i < manager->mercs.size(); i++) {
-          manager->mercs[i].dae->startAnimation("punch");
+          menu->setData("Merchant", about, options);
+          for(int i = 0; i < manager->mercs.size(); i++) {
+            manager->mercs[i].dae->startAnimation("punch");
+          }
+          //Set the data
+          menu->setData("Merchant", about, options);
         }
+        
 
       }
       if(event == SICKNESS){
@@ -415,7 +445,6 @@ void Wagon::updateWagon(float globalTime) {
         }else if(manager->getGold() < cost){
           about.push_back("but you're a little short on gold!");
         }else{
-
           string aboutString = "buy this mercenary for ";
           aboutString += to_string(cost);
           aboutString += " gold?";
@@ -455,6 +484,33 @@ void Wagon::updateWagon(float globalTime) {
           manager->mercs[i].dae->startAnimation("punch");
         }
       }
+      if(event == BEGGAR){
+        soundSys->playVoice(BANDIT_GREETING);
+        *gamePaused = true;
+        //Create about vector and add an element
+        vector<string> about;
+        if(manager->getGold() >= 20)
+          about.push_back("Donate 20 gold to poor beggar?");
+        else if(manager->getGold() >= 10)
+          about.push_back("Donate 10 gold to poor beggar?");
+        else if(manager->getFood() >= 3)
+          about.push_back("Donate 3 meat to poor beggar?");
+        else if(manager->getBeer() >= 3)
+          about.push_back("Donate 3 beer to poor beggar?"); 
+        
+
+          about.push_back("The townspeople will notice your kindness");  
+        //Create an option and add it to a vector
+        fpDonate = donate;
+        fpResume = resumeGame;
+        option donateOpt = {"Help beggar out", fpDonate, true};
+        option resumeOpt = {"Don't donate", fpResume, true};
+        vector<option> options;
+        options.push_back(donateOpt);
+        options.push_back(resumeOpt);
+        //Set the data
+        menu->setData("Beggar", about, options);
+      }
       
       deltaTime = glfwGetTime() - startTime;
 
@@ -468,7 +524,7 @@ void Wagon::updateWagon(float globalTime) {
       if(*gamePaused == true){
         startTime = glfwGetTime() - deltaTime ;
       }else{
-        position += direction * deltaTime * velocity;
+        position += (*fastForward) * direction * deltaTime * velocity;
       }
 
       position.z = terrain->getSpline()->getY(position.x);

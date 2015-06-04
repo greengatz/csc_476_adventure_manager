@@ -22,6 +22,7 @@
 #define WANDERER 2
 #define AMBUSH 3
 #define SICKNESS 4
+#define BEGGAR 5
 
 class Terrain
 {
@@ -66,7 +67,7 @@ private:
     Spline* path;
     Tree tree;
     int startingSpot;
-
+    int oldSpot;
 
 };
 
