@@ -134,11 +134,14 @@ void Menu::drawMenu()
 	}
 	else if(menuType == 2)
 	{
-		
+		printText2D(data[0].c_str(), 210, 345, 16);
+		printText2D(data[1].c_str(), 210, 325, 16);
+		// printText2D(data[2].c_str(), 210, 204, 15);
 	}
 	else if(menuType == 3)
 	{
-		
+		printText2D(data[0].c_str(), 205, 345, 16);
+		printText2D(data[1].c_str(), 420, 322, 16);
 	}
 	else if(menuType == 4)
 	{
