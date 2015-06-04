@@ -7,7 +7,7 @@ const glm::vec3 fireLoc[] = {glm::vec3(23.05, 0.4, -23.5), //center fireplace
 							 glm::vec3(27.6, 2.9, -27.7),
 							 glm::vec3(18.5, 2.9, -19.3),
 							 glm::vec3(27.6, 2.9, -19.3),
-							 glm::vec3(23.05, 0.5, -23.5) //center orb
+							 glm::vec3(23.35, 0.5, -23.5) //center orb
 };
 
 int FIRE_PARTICLE_1_ID = 8000;
@@ -220,8 +220,8 @@ void FireSystem::draw(Camera *cam, glm::mat4 viewMat)
 		// curTorch = (curTorch ==  1) ? 3 : 1; //switch which torches are drawn on
 	}
 
-	enableTex(CENTER_ORB_ID);
-	drawOrb(camPos);
+	// enableTex(CENTER_ORB_ID);
+	// drawOrb(camPos);
 
 	//disable buffers
 	GLSL::disableVertexAttribArray(h_vertTexCoor);

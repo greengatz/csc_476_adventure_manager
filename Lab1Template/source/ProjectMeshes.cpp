@@ -23,7 +23,7 @@ const string tavFiles[] = {"assets/tavern/cube.obj",
                            "assets/tavern/pole.obj",
                            "assets/tavern/firepitlowpoly.obj",
                            "assets/tavern/turkey.obj",
-               			   "assets/tavern/rock.obj",
+               			   "assets/tavern/rock.obj", //pretty sure we can get rid fo this now
                			   "assets/tavern/roof.obj",
                			   "assets/tavern/plank.obj",
                			   // "assets/tavern/balustrade.obj",
