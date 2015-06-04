@@ -338,7 +338,7 @@ bool CharDae::isAnimating() {
 void CharDae::drawChar(GLint h_ModelMatrix, GLint h_vertPos, 
             GLint h_vertNor, GLint h_aTexCoord, GLint h_boneFlag, 
             GLint h_boneIds, GLint h_boneWeights, 
-            GLint h_boneTransforms, float time) {
+            GLint h_boneTransforms, float time, GLint h_texFlag) {
     if(root == NULL) {
         return;
     }
@@ -366,16 +366,16 @@ void CharDae::drawChar(GLint h_ModelMatrix, GLint h_vertPos,
     glVertexAttribPointer(h_vertNor, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
     // texture TODO
-    int texNum = 7500;
-   /* 
-    glEnable(GL_TEXTURE_2D);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texNum); // what is this?
+    //glUniform1i(h_texFlag, 1);
 
-    GLSL::enableVertexAttribArray(h_aTexCoord);
-    glBindBuffer(GL_ARRAY_BUFFER, texBuf);
-    glVertexAttribPointer(h_aTexCoord, 2, GL_FLOAT, GL_FALSE, 0, 0);
-    */
+   // int texNum = 5800;
+   // glEnable(GL_TEXTURE_2D);
+   // glActiveTexture(GL_TEXTURE0);
+   // glBindTexture(GL_TEXTURE_2D, texNum); // what is this?
+
+   // GLSL::enableVertexAttribArray(h_aTexCoord);
+  //  glBindBuffer(GL_ARRAY_BUFFER, texBuf);
+  //  glVertexAttribPointer(h_aTexCoord, 2, GL_FLOAT, GL_FALSE, 0, 0);
    
     // model transform
     glm::mat4 translate = glm::translate(glm::mat4(1.0f), position);

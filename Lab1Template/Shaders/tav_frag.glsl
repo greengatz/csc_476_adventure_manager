@@ -37,11 +37,16 @@ void main()
 	if (terrainToggle == 1)
 	{
 		vec4 texColor1 = texture2D(uTexUnit, vTexCoord);
+        color.r = min(color.r, 0.5);
+        color.g = min(color.g, 0.5);
+        color.b = min(color.b, 0.5);
 		gl_FragColor = texColor1 * 2.0 * vec4(color.r, color.g, color.b, 1.0);
+		//gl_FragColor = texColor1;
 	}
 	else // this is the worst if statement
 	{
         // we will never enter this. the toggle is never untoggled
 		gl_FragColor = vec4(color.r, color.g, color.b, 1.0);
+		gl_FragColor = vec4(1, 1, 1, 1.0);
 	}
 }

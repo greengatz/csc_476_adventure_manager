@@ -29,12 +29,14 @@ void main()
 {
     vec4 norm = (uViewMatrix * uModelMatrix) * vec4(vertNor, 0.0);
     normal = norm.xyz;
-    pos = uViewMatrix * uModelMatrix * vertPos;
-    //gl_Position = uProjMatrix * uViewMatrix * uModelMatrix * vertPos;
-    gl_Position = uProjMatrix * pos;
    
-	if (terrainToggle == 1)
-	{
-		vTexCoord = aTexCoord;
-	}
+	vTexCoord = aTexCoord;
+    mat4 boneTrans = bones[int(boneIds[0])] * boneWeights[0];
+    boneTrans += bones[int(boneIds[1])] * boneWeights[1];
+    boneTrans += bones[int(boneIds[2])] * boneWeights[2];
+    boneTrans += bones[int(boneIds[3])] * boneWeights[3];
+
+    gl_Position = uProjMatrix * uViewMatrix * uModelMatrix * boneTrans * vertPos;
+    pos = uViewMatrix * uModelMatrix * boneTrans * vertPos;
+    normal = (boneTrans * vec4(normal, 1.0)).xyz;
 }

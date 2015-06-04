@@ -447,7 +447,13 @@ void Tavern::drawTavern(GLint h_ModelMatrix, GLint h_vertPos,
 			}
         }
 	}*/
+}
 
+void Tavern::drawTavernMercs(GLint h_ModelMatrix, GLint h_vertPos, 
+                GLint h_vertNor, GLint h_aTexCoord, double ltime,
+                GLint h_boneFlag, GLint h_boneIds,
+                GLint h_boneWeights, GLint h_boneTransforms, GLint h_texFlag)
+{
     // draw tavern mercs
 	for (int iter = 0; iter < tavernCharacters.size(); iter++) {
         static int animSelect = 0;
@@ -465,7 +471,9 @@ void Tavern::drawTavern(GLint h_ModelMatrix, GLint h_vertPos,
         tavernCharacters[iter].dae->position = tavernCharacters[iter].meshes[0].pos;
         tavernCharacters[iter].dae->position.y -= 1;
         tavernCharacters[iter].dae->scale = glm::vec3(0.8, 0.8, 0.8);
-        tavernCharacters[iter].dae->drawChar(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord, h_boneFlag, h_boneIds, h_boneWeights, h_boneTransforms, ltime);
+        enableTextureBuffer(h_aTexCoord, tavernCharacters[iter].dae->texBuf, TAV_SAMURAI_ID);
+        tavernCharacters[iter].dae->drawChar(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord, 
+                h_boneFlag, h_boneIds, h_boneWeights, h_boneTransforms, ltime, h_texFlag);
     }
 }
 
