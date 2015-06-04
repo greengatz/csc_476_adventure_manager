@@ -99,12 +99,12 @@ private:
 
 	Materials mat;
 
-	tdogl::pngTexture* merchantSlayerMenu;
-	tdogl::pngTexture* merchantMenu;
-	tdogl::pngTexture* sicknessMenu;
-	tdogl::pngTexture* buyMercMenu;
-	tdogl::pngTexture* banditsMenu;
-	tdogl::pngTexture* beggarMenu;
+	tdogl::pngTexture* merchantSlayerMenu; //0
+	tdogl::pngTexture* merchantMenu; //1
+	tdogl::pngTexture* sicknessMenu; //2
+	tdogl::pngTexture* buyMercMenu; //3
+	tdogl::pngTexture* banditsMenu; //4
+	tdogl::pngTexture* beggarMenu; //5
 
 };
 

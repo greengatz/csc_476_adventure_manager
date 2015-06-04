@@ -69,7 +69,7 @@ void Menu::initMenu(Camera * cameraA, TextureLoader *texLoader, int widthA, int 
 }
 
 
-void Menu::setData(char* titleA, vector<string> aboutA, vector<option> optionsA, tdogl::pngTexture** taet)
+void Menu::setData(char* titleA, vector<string> aboutA, vector<option> optionsA, tdogl::pngTexture** taet, int type, vector<string> newData)
 {
 
 	inMenu = true;
@@ -77,6 +77,8 @@ void Menu::setData(char* titleA, vector<string> aboutA, vector<option> optionsA,
 	about = aboutA;
 	options = optionsA;
 	myTexture = *taet;
+	menuType = type;
+	data = newData;
 	printf("menu true\n");
 }
 
@@ -120,6 +122,44 @@ void Menu::drawMenu()
 	glEnable(GL_DEPTH_TEST); // Enable the Depth-testing
 	//Disable Buffers
 	disableBuff();
+
+	if(menuType == 0)
+	{
+
+	}
+	else if(menuType == 1)
+	{
+		printText2D(data[0].c_str(), 280, 304, 15);
+		printText2D(data[1].c_str(), 280, 325, 15);
+	}
+	else if(menuType == 2)
+	{
+		
+	}
+	else if(menuType == 3)
+	{
+		
+	}
+	else if(menuType == 4)
+	{
+		
+	}
+	else if(menuType == 5)
+	{
+		
+	}
+	else if(menuType == 6)
+	{
+		
+	}
+	else if(menuType == 7)
+	{
+		
+	}
+	else if(menuType == 8)
+	{
+		
+	}
 
 	//sprintf(info,"x %d", manager.getMercs());
 	//printText2D(title, 350, 470, 28);
@@ -165,3 +205,22 @@ void Menu::disableBuff() {
   glDisable(GL_TEXTURE_2D);
 }
 
+void print0()
+{
+	
+}
+
+void print1()
+{
+
+}
+
+void print3()
+{
+	
+}
+
+void print4()
+{
+
+}

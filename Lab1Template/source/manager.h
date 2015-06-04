@@ -88,12 +88,12 @@ class Manager
 		FadeSystem *fadeSystem;
 		SoundPlayer *audio;
 
-		tdogl::pngTexture* oopsRanMenu;
-		tdogl::pngTexture* noGoldWandererMenu;
-		tdogl::pngTexture* merchantRobbedMenu;
-		tdogl::pngTexture* fightWonMenu;
-		tdogl::pngTexture* diedMenu;
-		tdogl::pngTexture* cowardMenu;
+		tdogl::pngTexture* oopsRanMenu; //6
+		tdogl::pngTexture* noGoldWandererMenu; //7
+		tdogl::pngTexture* merchantRobbedMenu; //8
+		tdogl::pngTexture* fightWonMenu; //9
+		tdogl::pngTexture* diedMenu; //10
+		tdogl::pngTexture* cowardMenu; //11
 		
 		
 

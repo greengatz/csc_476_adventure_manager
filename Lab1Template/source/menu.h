@@ -39,7 +39,7 @@ class Menu
 		void initMenu(Camera * camera, TextureLoader *texLoader, int width, int height, Manager *mgr, bool* gameP);
 		void enableBuff();
 		void disableBuff();
-		void setData(char* title, vector<string> about, vector<option> options, tdogl::pngTexture** theText);
+		void setData(char* title, vector<string> about, vector<option> options, tdogl::pngTexture** theText, int menuType, vector<string> newData);
 		void selectOption(int num);
 		GLuint posBufObjHUD;
 		GLuint GrndTexBuffObj;
@@ -73,6 +73,8 @@ class Menu
 		RenderingHelper ModelTrans;
 
 		tdogl::pngTexture* myTexture;
+		int menuType;
+		vector<string> data;
 
 };
 
