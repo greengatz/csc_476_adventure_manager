@@ -1,5 +1,8 @@
 # stuff for git to ignore
 
+#fuck assimp
+dependencies/assimp-3.1.1
+
 # all the files associated with cmake
 CMakeFiles
 *.cmake
