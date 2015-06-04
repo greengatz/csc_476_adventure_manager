@@ -367,7 +367,7 @@ void CharDae::drawChar(GLint h_ModelMatrix, GLint h_vertPos,
 
     // texture TODO
     int texNum = 7500;
-    
+   /* 
     glEnable(GL_TEXTURE_2D);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texNum); // what is this?
@@ -375,7 +375,7 @@ void CharDae::drawChar(GLint h_ModelMatrix, GLint h_vertPos,
     GLSL::enableVertexAttribArray(h_aTexCoord);
     glBindBuffer(GL_ARRAY_BUFFER, texBuf);
     glVertexAttribPointer(h_aTexCoord, 2, GL_FLOAT, GL_FALSE, 0, 0);
-    
+    */
    
     // model transform
     glm::mat4 translate = glm::translate(glm::mat4(1.0f), position);
@@ -405,13 +405,13 @@ void CharDae::drawChar(GLint h_ModelMatrix, GLint h_vertPos,
 
     GLSL::disableVertexAttribArray(h_vertPos); // position
     GLSL::disableVertexAttribArray(h_vertNor); // normals
-    GLSL::disableVertexAttribArray(h_aTexCoord); // texture
+   // GLSL::disableVertexAttribArray(h_aTexCoord); // texture
     GLSL::disableVertexAttribArray(h_boneIds); // bone ids
     GLSL::disableVertexAttribArray(h_boneWeights); // bone weights
     
     glUniform1i(h_boneFlag, 0);
-    glDisable(GL_TEXTURE_2D);
+   // glDisable(GL_TEXTURE_2D);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    glBindTexture(GL_TEXTURE_2D, 0); // what is this?
+   // glBindTexture(GL_TEXTURE_2D, 0); // what is this?
 }
