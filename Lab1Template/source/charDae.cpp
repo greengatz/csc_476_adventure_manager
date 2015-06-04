@@ -90,8 +90,12 @@ CharDae::CharDae(const string source) {
 
 
     // texture
+    // 2 might be wrong
     texture = (float*) calloc(numInd, 2 * sizeof(float));
-    memcpy(texture, meshes[meshInd]->mTextureCoords, numInd * 2 * sizeof(float));
+    for(i = 0; i < meshes[meshInd]->mNumVertices; i++) {
+        texture[2*i] = meshes[meshInd]->mTextureCoords[0][i].x;
+        texture[2*i + 1] = meshes[meshInd]->mTextureCoords[0][i].y;
+    }
 
     glGenBuffers(1, &texBuf);
     glBindBuffer(GL_ARRAY_BUFFER, texBuf);
