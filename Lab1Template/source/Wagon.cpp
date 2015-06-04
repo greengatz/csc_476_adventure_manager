@@ -234,9 +234,13 @@ void buyBeer(void* mgr, bool* gamePaused){
 
 void buyMercenary(void* mgr, bool* gamePaused){
   // *gamePaused = false;
+  printf("Hi this is the start\n");
   Manager* manager = (Manager*)mgr;
+  printf("after some manager call\n");
   manager->buyMercenaryTrail(manager->medGoldCost);
-  manager->mercs[manager->mercs.size()].initDae();
+  printf("buying size: %d\n", manager->mercs.size());
+  manager->mercs[manager->mercs.size() - 1].initDae();
+  printf("all done\n");
   *gamePaused = false;
 }
 
