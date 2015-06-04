@@ -446,7 +446,7 @@ void Manager::buyBeer(int cost)
 
 void Manager::buyMercenary(int mercenaryID, Tavern* tav)
 {
-	if(tav->tavernCharacters.size() >= mercenaryID && tav->tavernCharacters[mercenaryID].cost <= gold)
+	if(tav->tavernCharacters.size() > mercenaryID && tav->tavernCharacters[mercenaryID].cost <= gold)
 	{
 		cout << "Buying " + tav->tavernCharacters[mercenaryID].firstName + "\n";
 		mercs.push_back(tav->tavernCharacters[mercenaryID]);
