@@ -302,8 +302,8 @@ aiVector3D CharDae::intTrans(float time, const aiNodeAnim* nodeAnim) {
     float factor = (time - nodeAnim->mPositionKeys[key].mTime) / dt;
 
     aiVector3D ret;
-    ret += startPos * factor; // TODO test this out
-    ret += endPos * (1.0f - factor);
+    ret += startPos * (1.0f - factor); // TODO test this out
+    ret += endPos * (factor);
    // aiVector3D::Interpolate(ret, startPos, endPos, factor);
 
     return ret;
@@ -366,7 +366,7 @@ void CharDae::drawChar(GLint h_ModelMatrix, GLint h_vertPos,
     glVertexAttribPointer(h_vertNor, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
     // texture TODO
-    int texNum = 5800;
+    int texNum = 7500;
     
     glEnable(GL_TEXTURE_2D);
     glActiveTexture(GL_TEXTURE0);
@@ -413,4 +413,5 @@ void CharDae::drawChar(GLint h_ModelMatrix, GLint h_vertPos,
     glDisable(GL_TEXTURE_2D);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glBindTexture(GL_TEXTURE_2D, 0); // what is this?
 }
