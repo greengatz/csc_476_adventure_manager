@@ -44,11 +44,17 @@ void Menu::initMenu(Camera * cameraA, TextureLoader *texLoader, int widthA, int 
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vert), vert, GL_STATIC_DRAW);
 
 	//Maps UVs
+	// static GLfloat GrndTex[] = {
+ //      0, 1, // back
+ //      0, 0,
+ //      1, 0,
+ //      1, 1 };
+
 	static GLfloat GrndTex[] = {
-      0, 1, // back
       0, 0,
-      1, 0,
-      1, 1 };
+      0, 1, // back
+      1, 1, 
+      1, 0};
 
     unsigned short idx[] = {0, 1, 2, 0, 2, 3};
 
@@ -63,13 +69,14 @@ void Menu::initMenu(Camera * cameraA, TextureLoader *texLoader, int widthA, int 
 }
 
 
-void Menu::setData(char* titleA, vector<string> aboutA, vector<option> optionsA)
+void Menu::setData(char* titleA, vector<string> aboutA, vector<option> optionsA, tdogl::pngTexture** taet)
 {
 
 	inMenu = true;
 	title = titleA;
 	about = aboutA;
 	options = optionsA;
+	myTexture = *taet;
 	printf("menu true\n");
 }
 
@@ -115,22 +122,22 @@ void Menu::drawMenu()
 	disableBuff();
 
 	//sprintf(info,"x %d", manager.getMercs());
-	printText2D(title, 350, 470, 28);
+	//printText2D(title, 350, 470, 28);
 	// printText2D(about, 160, 440, 14);
-	for(int i = 0; i < about.size(); i++)
-	{
-		printText2D(about[i].c_str(), 160, 440 + aboutOffset, 14);
-		aboutOffset -= 20;
-	}
-	aboutOffset = -20;
+	// for(int i = 0; i < about.size(); i++)
+	// {
+	// 	printText2D(about[i].c_str(), 160, 440 + aboutOffset, 14);
+	// 	aboutOffset -= 20;
+	// }
+	// aboutOffset = -20;
 
-	for(int i = 0; i < options.size(); i++)
-	{
-		printText2D(options[i].str.c_str(), 160, 400 + offset, 18);
-		offset-=40;
-	}
+	// for(int i = 0; i < options.size(); i++)
+	// {
+	// 	printText2D(options[i].str.c_str(), 160, 400 + offset, 18);
+	// 	offset-=40;
+	// }
 
-	offset = -40;
+	// offset = -40;
 }
 
 void Menu::enableBuff() {
@@ -141,7 +148,7 @@ void Menu::enableBuff() {
   glBindBuffer(GL_ARRAY_BUFFER, posBufObjHUD);
   glVertexAttribPointer(h_vertPos, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
-  glBindTexture(GL_TEXTURE_2D, MENU_ID);
+  glBindTexture(GL_TEXTURE_2D, myTexture->object());
 
   GLSL::enableVertexAttribArray(h_aTexCoord);
   glBindBuffer(GL_ARRAY_BUFFER, GrndTexBuffObj);

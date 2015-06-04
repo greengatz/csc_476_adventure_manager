@@ -19,6 +19,9 @@
 #include "tavern.h"
 #include "FadeSystem.h"
 #include "SoundPlayer.h"
+#include "pngTexture.h"
+#include "Bitmap.h"
+#include "stb_image.h"
 
 using namespace std;
 using namespace glm;
@@ -84,6 +87,15 @@ class Manager
 		bool *gamePaused;
 		FadeSystem *fadeSystem;
 		SoundPlayer *audio;
+
+		tdogl::pngTexture* oopsRanMenu;
+		tdogl::pngTexture* noGoldWandererMenu;
+		tdogl::pngTexture* merchantRobbedMenu;
+		tdogl::pngTexture* fightWonMenu;
+		tdogl::pngTexture* diedMenu;
+		tdogl::pngTexture* cowardMenu;
+		
+		
 
 };
 

@@ -169,6 +169,24 @@ void Wagon::init(TextureLoader* texLoader, Terrain* aTerrain, Menu* aMenu,
     //Load Texture
     texLoader->LoadTexture((char *)"assets/caravan/caravan_texture.bmp", WAGON_TEX_ID);
 
+  tdogl::Bitmap bmp = tdogl::Bitmap::bitmapFromFile("assets/merchantSlayerMenu.png");
+  merchantSlayerMenu = new tdogl::pngTexture(bmp, GL_LINEAR, GL_REPEAT);
+
+  bmp = tdogl::Bitmap::bitmapFromFile("assets/merchantMenu.png");
+  merchantMenu = new tdogl::pngTexture(bmp, GL_LINEAR, GL_REPEAT);
+
+  bmp = tdogl::Bitmap::bitmapFromFile("assets/sicknessMenu.png");
+  sicknessMenu = new tdogl::pngTexture(bmp, GL_LINEAR, GL_REPEAT);
+
+  bmp = tdogl::Bitmap::bitmapFromFile("assets/buyMercMenu.png");
+  buyMercMenu = new tdogl::pngTexture(bmp, GL_LINEAR, GL_REPEAT);
+
+  bmp = tdogl::Bitmap::bitmapFromFile("assets/banditsMenu.png");
+  banditsMenu = new tdogl::pngTexture(bmp, GL_LINEAR, GL_REPEAT);
+
+  bmp = tdogl::Bitmap::bitmapFromFile("assets/beggarMenu.png");
+  beggarMenu = new tdogl::pngTexture(bmp, GL_LINEAR, GL_REPEAT);
+
     //unbind the arrays
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -339,7 +357,7 @@ void Wagon::updateWagon(float globalTime) {
           vector<option> options;
           options.push_back(resumeOpt);
           options.push_back(robOpt);
-          menu->setData("Merchant Slayer", about, options);
+          menu->setData("Merchant Slayer", about, options, &merchantSlayerMenu);
         }else{
           if(manager->fortune){
             manager->setMedFoodCost(1);
@@ -368,12 +386,12 @@ void Wagon::updateWagon(float globalTime) {
           options.push_back(resumeOpt);
 
         //Set the data
-          menu->setData("Merchant", about, options);
+          menu->setData("Merchant", about, options, &merchantMenu);
           for(int i = 0; i < manager->mercs.size(); i++) {
             manager->mercs[i].dae->startAnimation("punch");
           }
           //Set the data
-          menu->setData("Merchant", about, options);
+          menu->setData("Merchant", about, options, &merchantMenu);
         }
         
 
@@ -420,7 +438,7 @@ void Wagon::updateWagon(float globalTime) {
           options.push_back(resumeOpt);
         }
         //Set the data
-        menu->setData("Sickness", about, options);
+        menu->setData("Sickness", about, options, &sicknessMenu);
         for(int i = 0; i < manager->mercs.size(); i++) {
           manager->mercs[i].dae->startAnimation("punch");
         }
@@ -458,7 +476,7 @@ void Wagon::updateWagon(float globalTime) {
         options.push_back(resumeOpt);
 
         //Set the data
-        menu->setData("Wanderer", about, options);
+        menu->setData("Wanderer", about, options, &buyMercMenu);
         for(int i = 0; i < manager->mercs.size(); i++) {
           manager->mercs[i].dae->startAnimation("punch");
         }
@@ -479,7 +497,7 @@ void Wagon::updateWagon(float globalTime) {
         options.push_back(fleeOpt);
 
         //Set the data
-        menu->setData("Ambush", about, options);
+        menu->setData("Ambush", about, options, &banditsMenu);
         for(int i = 0; i < manager->mercs.size(); i++) {
           manager->mercs[i].dae->startAnimation("punch");
         }
@@ -509,7 +527,7 @@ void Wagon::updateWagon(float globalTime) {
         options.push_back(donateOpt);
         options.push_back(resumeOpt);
         //Set the data
-        menu->setData("Beggar", about, options);
+        menu->setData("Beggar", about, options, &beggarMenu);
       }
       
       deltaTime = glfwGetTime() - startTime;

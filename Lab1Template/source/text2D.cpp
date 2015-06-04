@@ -113,11 +113,14 @@ void printText2D(const char * text, int x, int y, int size){
 	// Draw call
 	glDrawArrays(GL_TRIANGLES, 0, vertices.size() );
 
-	glDisable(GL_BLEND);
+	//glDisable(GL_BLEND);
 
 	glDisableVertexAttribArray(vertexPosition_screenspaceID);
 	glDisableVertexAttribArray(vertexUVID);
 	glEnable(GL_DEPTH_TEST);
+
+
+	glUseProgram(0);
 }
 
 void cleanupText2D(){

@@ -19,6 +19,7 @@ Manager::Manager(string newName)
 	medFoodCost = 5;
 	medBeerCost = 2;
 //	reportStats();
+
 }
 
 void Manager::init(Menu *m, bool *gp, FadeSystem *fS, SoundPlayer *aud){
@@ -26,6 +27,32 @@ void Manager::init(Menu *m, bool *gp, FadeSystem *fS, SoundPlayer *aud){
 	gamePaused = gp;
 	fadeSystem = fS;
 	audio = aud;
+
+	tdogl::Bitmap bmp = tdogl::Bitmap::bitmapFromFile("assets/oopsRanMenu.png");
+	oopsRanMenu = new tdogl::pngTexture(bmp, GL_LINEAR, GL_REPEAT);
+
+	bmp = tdogl::Bitmap::bitmapFromFile("assets/noGoldWandererMenu.png");
+	noGoldWandererMenu = new tdogl::pngTexture(bmp, GL_LINEAR, GL_REPEAT);
+
+	
+
+	bmp = tdogl::Bitmap::bitmapFromFile("assets/merchantRobbed.png");
+	merchantRobbedMenu = new tdogl::pngTexture(bmp, GL_LINEAR, GL_REPEAT);
+
+	
+
+	bmp = tdogl::Bitmap::bitmapFromFile("assets/fightWonMenu.png");
+	fightWonMenu = new tdogl::pngTexture(bmp, GL_LINEAR, GL_REPEAT);
+
+	bmp = tdogl::Bitmap::bitmapFromFile("assets/diedMenu.png");
+	diedMenu = new tdogl::pngTexture(bmp, GL_LINEAR, GL_REPEAT);
+
+	bmp = tdogl::Bitmap::bitmapFromFile("assets/cowardMenu.png");
+	cowardMenu = new tdogl::pngTexture(bmp, GL_LINEAR, GL_REPEAT);
+
+	
+
+	
 }
 
 string Manager::getManagerName(){
@@ -195,7 +222,7 @@ void Manager::fleeingFromAmbush(){
     vector<option> options;
     options.push_back(resumeOpt);
     //Set the data
-    menu->setData("Coward", about, options);
+    menu->setData("Coward", about, options, &cowardMenu);
     if(menu->inMenu){
     	printf("In mesnu is true!\n");
     }
@@ -251,7 +278,7 @@ void Manager::fightingFromAmbush(int numBandits, int banditDamage){
 	    options.push_back(resumeOpt);
 	    options.push_back(resume2Opt);
 	    //Set the data
-	    menu->setData("Close but no pipe", about, options);
+	    menu->setData("Close but no pipe", about, options, &diedMenu);
 	}else{
 		gold += goldGain;
 		food += foodGain;
@@ -265,7 +292,7 @@ void Manager::fightingFromAmbush(int numBandits, int banditDamage){
 	    vector<option> options;
 	    options.push_back(resumeOpt);
 	    //Set the data
-	    menu->setData("Great slayin' ", about, options);
+	    menu->setData("Great slayin' ", about, options, &fightWonMenu);
 	}
 		
 	Manager::reportStats();
@@ -323,7 +350,8 @@ void Manager::fightingFromMerchant(int numGaurds, int gaurdDamage){
 	    options.push_back(resumeOpt);
 	    options.push_back(resume2Opt);
 	    //Set the data
-	    menu->setData("Skilled merchant", about, options);
+	    //TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	    menu->setData("Skilled merchant", about, options, &diedMenu);
 	}else{
 		gold += goldGain;
 		food += foodGain;
@@ -338,7 +366,7 @@ void Manager::fightingFromMerchant(int numGaurds, int gaurdDamage){
 	    vector<option> options;
 	    options.push_back(resumeOpt);
 	    //Set the data
-	    menu->setData("Rad robbery", about, options);
+	    menu->setData("Rad robbery", about, options, &merchantRobbedMenu);
 	}
 		
 	Manager::reportStats();
@@ -430,7 +458,7 @@ void Manager::buyMercenaryTrail(int cost)
 	    vector<option> options;
 	    options.push_back(resumeOpt);
 	    //Set the data
-	    menu->setData("Oops", about, options);
+	    menu->setData("Oops", about, options, &oopsRanMenu);
 	}else{
 		if(gold >= cost){
 			mercs.push_back(*(new Mercenary()));

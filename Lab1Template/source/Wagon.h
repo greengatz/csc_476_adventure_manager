@@ -17,6 +17,9 @@
 #include "SoundPlayer.h"
 #include "Materials.h"
 #include "Wagon.h"
+#include "pngTexture.h"
+#include "Bitmap.h"
+#include "stb_image.h"
 
 class Wagon
 {
@@ -95,6 +98,14 @@ private:
 	glm::vec3 orientation;
 
 	Materials mat;
+
+	tdogl::pngTexture* merchantSlayerMenu;
+	tdogl::pngTexture* merchantMenu;
+	tdogl::pngTexture* sicknessMenu;
+	tdogl::pngTexture* buyMercMenu;
+	tdogl::pngTexture* banditsMenu;
+	tdogl::pngTexture* beggarMenu;
+
 };
 
 #endif
