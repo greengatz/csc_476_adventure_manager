@@ -27,7 +27,7 @@ set(HEADERS
    shader.hpp
    menu.h
    Skybox.h
-#   charDae.h    TODO uncomment
+   charDae.h
    Tree.h
    FadeSystem.h
    ProjectMeshes.h
@@ -35,6 +35,9 @@ set(HEADERS
    Particle.h
    ShadowMapFBO.h
    ShadowMapTechnique.h
+   pngTexture.h
+   stb_image.h
+   Bitmap.h
 )
 
 # List all .c / .cpp files here
@@ -66,7 +69,7 @@ set(SOURCES
    shader.cpp
    menu.cpp
    Skybox.cpp
-#   charDae.cpp    TODO uncomment
+   charDae.cpp
    Tree.cpp
    FadeSystem.cpp
    ProjectMeshes.cpp
@@ -74,4 +77,7 @@ set(SOURCES
    Particle.cpp
    ShadowMapFBO.cpp
    ShadowMapTechnique.cpp
+   Bitmap.cpp
+   pngTexture.cpp
+   stb_image.c
 )

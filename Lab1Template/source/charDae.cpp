@@ -1,12 +1,27 @@
 #include "charDae.h"
 
+enum daeTypes {
+    samurai
+};
+
+enum animations {
+    walk,
+    punch,
+    idle,
+    animCount
+};
+
+int startAnim[][animCount] = {{1, 31, 71}};
+int endAnim[][animCount] = {{30, 70, 100}};
+
+int framesPerSec = 24;
+
 CharDae::CharDae(const string source) {
     int i, j, k;
     cout << "\n\ntrying to load " << source << "\n";
     importer = new Assimp::Importer();
     scene = importer->ReadFile(source, aiProcess_GenNormals);
 
-    animChoice = -1;
     if(!scene) {
         cout << "couldn't read dae\n";
         cout << "reason: " << importer->GetErrorString() << "\n";
@@ -16,27 +31,33 @@ CharDae::CharDae(const string source) {
 
     // TODO remove this magic
     meshInd = 0;
+    daeType = 0;
+    animChoice = -1;
 
-    cout << "root " << scene->mRootNode << "\n";
+    scale = glm::vec3(1.0f, 1.0f, 1.0f);
+    rotate = 45.0f;
+
+    //cout << "root " << scene->mRootNode << "\n";
     root = scene->mRootNode;
     meshes = scene->mMeshes;
     cout << "scene " << scene << "\n";
-    cout << "meshes " << meshes << "\n";
+   /* cout << "meshes " << meshes << "\n";
     cout << "facees in mesh 1 " << meshes[meshInd]->mNumFaces << "\n";
     cout << "number of bones " << meshes[meshInd]->mNumBones << "\n";
     cout << "number of animations " << scene->mNumAnimations << "\n";
     cout << "duration of 1 " << scene->mAnimations[0]->mDuration << "\n";
     cout << "tps " << scene->mAnimations[0]->mTicksPerSecond << "\n";
     cout << "number of frames in 1 " << scene->mAnimations[0]->mChannels[0]->mNumRotationKeys << "\n";
+*/
 
-    // 26.56
+    //cout << "has tex? " << meshes[meshInd]->HasTextureCoords(0) << "\n";
+    //cout << "num comps: " << meshes[meshInd]->mNumUVComponents[0] << "\n";
     position[0] = 26.56f; // magic to put in view
     position[1] = 0.0f;
     position[2] = -30.77f;
 
     numInd = meshes[meshInd]->mNumVertices;
-    // TODO iterate through every mesh
-    recursivePrint(scene->mRootNode, 0, meshes);
+    // recursivePrint(scene->mRootNode, 0, meshes);
 
     // positions
     positions = (float*) malloc(numInd * 3 * sizeof(float));
@@ -69,29 +90,13 @@ CharDae::CharDae(const string source) {
 
 
     // texture
-    texture = (float*) malloc(numInd * 3 * sizeof(float));
-    memcpy(positions, meshes[meshInd]->mTextureCoords, numInd * 3 * sizeof(float));
+    texture = (float*) malloc(numInd * 2 * sizeof(float));
+    memcpy(positions, meshes[meshInd]->mTextureCoords, numInd * 2 * sizeof(float));
 
     glGenBuffers(1, &texBuf);
     glBindBuffer(GL_ARRAY_BUFFER, texBuf);
-    glBufferData(GL_ARRAY_BUFFER, numInd * 3 * sizeof(float), texture, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, numInd * 2 * sizeof(float), texture, GL_STATIC_DRAW);
 
-
-    // TODO bones
-    // boneNum = max number of bones for any vertex
-    // boneId -> boneNum ids for every vertex (which bones affect this vertex)
-    // weights -> boneNum weights for every vertex (how much those bones affect this vertex)
-    // bones -> a mat4 for every bone containing its current model transform
-    //       -> this will update with time
-
-    // aiMesh -> mBones and mNumBones
-    // aiBone -> mWeights and mNumWeights
-    // aiVertexWeight -> vertexId -> u int for which vertex
-    //                -> mWeight  -> how much this bone affects that vertex (float, 0.0 - 1.0)
-    
-    // keep a count for every vertex
-    // 220 of 7xxx indices are affected by 2 bones
-    // will 5 bones be enough for every vertex? this number can change, but we want it tight
 
     // numBones, boneId, boneWeight
     // boneCount
@@ -123,22 +128,12 @@ CharDae::CharDae(const string source) {
     glBindBuffer(GL_ARRAY_BUFFER, boneWeightBuf);
     glBufferData(GL_ARRAY_BUFFER, numInd * 4 * sizeof(float), boneWeight, GL_STATIC_DRAW);
 
-    // TODO make the model buffer
+    // make the model buffer
     // will need to update that buffers data pretty frequently...
-    // GL_UNIFORM_BUFFER
-    //glGenBuffers(1, &boneTransforms);
     boneCount = meshes[meshInd]->mNumBones;
     floatModel = (float*) calloc(sizeof(float) * 16, boneCount);
     cout << "floatModel at " << floatModel << "\n";
     cout << "boneCount " << boneCount << "\n";
-
-    /*for(i = 0; i < numInd; i++) {
-        cout << "vertex " << i << " has " << numBones[i] << " bones: ";
-        for(j = 0; j < numBones[i]; j++) {
-            cout << " bone " << boneWeight[i*5 + j];
-        }
-        cout << "\n";
-    }*/
 
     cout << "finished loading " << source << "\n\n";
 }
@@ -163,43 +158,8 @@ void CharDae::recursivePrint(const aiNode* node, int level, aiMesh** meshes) {
     }
 }
 
-// go through hierarchy of nodes in scene
-void CharDae::recursiveDraw(aiNode* node) {
-}
-
 void CharDae::updateBones(float time) {
-    int bones = meshes[meshInd]->mNumBones;
-    int i, j, k;
-    const aiAnimation* anim = scene->mAnimations[0];
-
     recursiveUpdate(scene->mRootNode, time);
-    
-
-    boneModels.clear();
-    for (i = 0; i < bones; i++) {
-        //cout << "bone " << i << ", " << meshes[meshInd]->mBones[i]->mName.data << "\n";
-   //     aiMatrix4x4 boneModel = meshes[meshInd]->mBones[i]->mOffsetMatrix;
-     //   boneModels.push_back(mat4(1.0));
-        for(j = 0; j < 4; j++) {
-            for(k = 0; k < 4; k++) {
-      //          cout << boneModel[j][k] << " ";
-                //floatModel[(i * 16) + (j * 4) + k] = boneModel[j][k];
-               // floatModel[(i * 16) + (j * 4) + k] = boneModels[i][j][k];
-                //cout << floatModel[i * 16 + j * 4 + k] << " ";
-/*
-                if(j == 3) {
-                    if(k == 0) {
-                        floatModel[(i * 16) + (j * 4) + k] += i;
-                    } else if (k == 1) {
-                        floatModel[(i * 16) + (j * 4) + k] += 0;
-                    } else if (k == 2) {
-                    }
-                }*/
-            }
-            //cout << "\n";
-        }
-        //cout << "\n";
-    }
 }
 
 void CharDae::recursiveUpdate(const aiNode* toUpdate, float time) {
@@ -208,14 +168,22 @@ void CharDae::recursiveUpdate(const aiNode* toUpdate, float time) {
     int updateId = findBone(toUpdate);
     const aiAnimation* anim = scene->mAnimations[0];
     const aiNodeAnim* nodeAnim = findNodeAnim(anim, toUpdate);
+    float timeOffset = 0;
+
+    if(isAnimating()) {
+        timeOffset = ((float) startAnim[daeType][animChoice]) / ((float) framesPerSec);
+    } else if (lastAnim != -1) {
+        // based on last animations end frame
+        timeOffset = ((float) endAnim[daeType][lastAnim]) / ((float) framesPerSec);
+    }
 
     us = toUpdate->mTransformation;
     if(nodeAnim != NULL) {
         // interpolate from where we are in the animation
         aiMatrix4x4t<float> sMat, pMat, rMat;
-        aiVector3D scale = intScale(time - animStart, nodeAnim);
-        aiVector3D pos = intTrans(time - animStart, nodeAnim);
-        aiQuaternion rot = intRot(time - animStart, nodeAnim);
+        aiVector3D scale = intScale(time - animStart + timeOffset, nodeAnim);
+        aiVector3D pos = intTrans(time - animStart + timeOffset, nodeAnim);
+        aiQuaternion rot = intRot(time - animStart + timeOffset, nodeAnim);
 
         sMat = aiMatrix4x4t<float>::Scaling(scale, sMat);
         pMat = aiMatrix4x4t<float>::Translation(pos, pMat);
@@ -231,9 +199,9 @@ void CharDae::recursiveUpdate(const aiNode* toUpdate, float time) {
         if(pAnim != NULL) {
             // use int parent
             aiMatrix4x4t<float> sMatP, pMatP, rMatP;
-            aiVector3D scaleP = intScale(time - animStart, pAnim);
-            aiVector3D posP = intTrans(time - animStart, pAnim);
-            aiQuaternion rotP = intRot(time - animStart, pAnim);
+            aiVector3D scaleP = intScale(time - animStart + timeOffset, pAnim);
+            aiVector3D posP = intTrans(time - animStart + timeOffset, pAnim);
+            aiQuaternion rotP = intRot(time - animStart + timeOffset, pAnim);
 
             sMatP = aiMatrix4x4t<float>::Scaling(scaleP, sMatP);
             pMatP = aiMatrix4x4t<float>::Translation(posP, pMatP);
@@ -249,31 +217,20 @@ void CharDae::recursiveUpdate(const aiNode* toUpdate, float time) {
     us = parent * us;
     
 
-    //cout << "bone " << toUpdate->mName.data << "\n";
-    //cout << "id " << updateId << "\n";
-
     if(updateId != -1) {
         us = us * meshes[meshInd]->mBones[updateId]->mOffsetMatrix;
         us = us.Transpose();
 
         for(i = 0; i < 4; i++) {
             for(j = 0; j < 4; j++) {
-//                cout << us[i][j] << " ";
                 floatModel[(updateId * 16) + (i * 4) + j] = us[i][j];
-                //floatModel[(updateId * 16) + (i * 4) + j] = 0;
             } 
-//            cout << "\n";
         }
-//        cout << "\n";
     }
 
     for(i = 0; i < toUpdate->mNumChildren; i++) {
         recursiveUpdate(toUpdate->mChildren[i], time);
     }
-
-    // get our parents transform
-    // multiply that by our transform
-    // set our bones transform to that and the bones transform
 }
 
 int CharDae::findBone(const aiNode* toFind) {
@@ -345,8 +302,8 @@ aiVector3D CharDae::intTrans(float time, const aiNodeAnim* nodeAnim) {
     float factor = (time - nodeAnim->mPositionKeys[key].mTime) / dt;
 
     aiVector3D ret;
-    ret += startPos * factor;
-    ret += endPos * (1.0f - factor);
+    ret += startPos * (1.0f - factor); // TODO test this out
+    ret += endPos * (factor);
    // aiVector3D::Interpolate(ret, startPos, endPos, factor);
 
     return ret;
@@ -354,8 +311,27 @@ aiVector3D CharDae::intTrans(float time, const aiNodeAnim* nodeAnim) {
 
 
 void CharDae::startAnimation(string animation) {
-    // TODO find the animation
-    animChoice = 0;
+    animStart = lastTime;
+
+    animChoice = -1;
+    if(strcmp(animation.c_str(), "run") == 0) {
+        animChoice = walk;
+    } else if(strcmp(animation.c_str(), "punch") == 0) {
+        animChoice = punch;
+    } else if(strcmp(animation.c_str(), "idle") == 0) {
+        animChoice = idle;
+    }
+
+    if(animChoice != -1) {
+        int numFrames = endAnim[daeType][animChoice] - startAnim[daeType][animChoice];
+        // frames / fps
+        endTime = (((float) numFrames) / ((float) framesPerSec)) + animStart;
+    }
+    lastAnim = animChoice;
+}
+
+bool CharDae::isAnimating() {
+    return animChoice != -1;
 }
 
 
@@ -368,15 +344,12 @@ void CharDae::drawChar(GLint h_ModelMatrix, GLint h_vertPos,
     }
 
     // prepare to start an animation
-    // TODO
-    if(animChoice == -1) {
-        animStart = time;
-    } else {
-        // check if animation is finished
-        if (time - animStart > scene->mAnimations[animChoice]->mDuration) {
-            animChoice = -1;
-            animStart = time;
-        }
+    lastTime = time;
+    if (time > endTime) {
+        animChoice = -1;
+    }
+    if (!isAnimating()) {
+        animStart = lastTime;
     }
 
     // indices
@@ -393,20 +366,20 @@ void CharDae::drawChar(GLint h_ModelMatrix, GLint h_vertPos,
     glVertexAttribPointer(h_vertNor, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
     // texture TODO
-    // gl buff, coords, id
+    int texNum = 7500;
+    
     glEnable(GL_TEXTURE_2D);
     glActiveTexture(GL_TEXTURE0);
-    int texNum = 5800;
     glBindTexture(GL_TEXTURE_2D, texNum); // what is this?
 
     GLSL::enableVertexAttribArray(h_aTexCoord);
     glBindBuffer(GL_ARRAY_BUFFER, texBuf);
     glVertexAttribPointer(h_aTexCoord, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    
    
     // model transform
     glm::mat4 translate = glm::translate(glm::mat4(1.0f), position);
-    glm::mat4 result = translate * glm::scale(mat4(1.0f), glm::vec3(8.0f, 8.0f, 8.0f));
-    //glm::mat4 result = translate * glm::scale(mat4(1.0f), glm::vec3(0.2f, 0.2f, 0.2f));
+    glm::mat4 result = translate * glm::rotate(glm::mat4(1.0f), rotate, glm::vec3(0, 1, 0)) * glm::scale(mat4(1.0f), glm::vec3(8.0f, 8.0f, 8.0f)) * glm::scale(mat4(1.0f), scale);
     glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(result));
 
     // enable bones
@@ -415,7 +388,7 @@ void CharDae::drawChar(GLint h_ModelMatrix, GLint h_vertPos,
     // bone id
     GLSL::enableVertexAttribArray(h_boneIds);
     glBindBuffer(GL_ARRAY_BUFFER, boneIdBuf);
-    glVertexAttribPointer(h_boneIds, 4, GL_FLOAT, GL_FALSE, 0, 0);
+    glVertexAttribPointer(h_boneIds, 4, GL_INT, GL_FALSE, 0, 0);
     
     // bone weight
     GLSL::enableVertexAttribArray(h_boneWeights);
@@ -424,20 +397,7 @@ void CharDae::drawChar(GLint h_ModelMatrix, GLint h_vertPos,
 
     // bone models
     updateBones(time);
-    //GLSL::enable
 
-    // bind buffer
-    // buffer data
-    // push buffer
-
-    // TODO
-    // scene -> animation -> node animation
-    // bone transforms
-    // we will pass several bones
-    // each bone will have an ID and a Weight
-    // these will be new buffers
-
-    // TODO may need to transpose this, ai matrices are row major
     glUniformMatrix4fv(h_boneTransforms, boneCount, (GLboolean) false, floatModel);
 
     // actual draw call
@@ -446,7 +406,12 @@ void CharDae::drawChar(GLint h_ModelMatrix, GLint h_vertPos,
     GLSL::disableVertexAttribArray(h_vertPos); // position
     GLSL::disableVertexAttribArray(h_vertNor); // normals
     GLSL::disableVertexAttribArray(h_aTexCoord); // texture
-    GLSL::disableVertexAttribArray(h_boneIds); // texture
-    GLSL::disableVertexAttribArray(h_boneWeights); // texture
+    GLSL::disableVertexAttribArray(h_boneIds); // bone ids
+    GLSL::disableVertexAttribArray(h_boneWeights); // bone weights
+    
     glUniform1i(h_boneFlag, 0);
+    glDisable(GL_TEXTURE_2D);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glBindTexture(GL_TEXTURE_2D, 0); // what is this?
 }

@@ -218,6 +218,7 @@ void buyMercenary(void* mgr, bool* gamePaused){
   // *gamePaused = false;
   Manager* manager = (Manager*)mgr;
   manager->buyMercenaryTrail(manager->medGoldCost);
+  manager->mercs[manager->mercs.size()].initDae();
   *gamePaused = false;
 }
 
@@ -287,11 +288,32 @@ void donate(void* mgr, bool* gamePaused ){
 }
 
 void Wagon::updateWagon(float globalTime) {
+  for(int i = 0; i < manager->mercs.size(); i++) {
+    if(manager->mercs[i].dae == NULL) {
+        manager->mercs[i].initDae();
+    }
+    manager->mercs[i].dae->position = position;
+    // the wagon has this transform from the stack
+    manager->mercs[i].dae->position.x -= 99.5 + (float) i / 3;
+    manager->mercs[i].dae->position.z += 0.4 - (i % 2) * 0.8;
+    manager->mercs[i].dae->position.y = 0;
+    manager->mercs[i].dae->scale = glm::vec3(0.05, 0.05, 0.05);
+    manager->mercs[i].dae->rotate = rotate;
+  }
+
   if (wagonStart && !terrain->atEnd(position)) {
     int event = terrain->checkEvents(position);
 
+
     if(!manager->partyDead()){
-      if(event != 0){
+
+      if(event == 0) {
+        for(int i = 0; i < manager->mercs.size(); i++) {
+          if(!manager->mercs[i].dae->isAnimating()) {
+            manager->mercs[i].dae->startAnimation("run");
+          }
+        }
+      } else if (event != 0){
         manager->tickHungerHealth();
       }
       if(event == MERCHANTEVENT){
@@ -345,6 +367,11 @@ void Wagon::updateWagon(float globalTime) {
           options.push_back(robOpt);
           options.push_back(resumeOpt);
 
+        //Set the data
+          menu->setData("Merchant", about, options);
+          for(int i = 0; i < manager->mercs.size(); i++) {
+            manager->mercs[i].dae->startAnimation("punch");
+          }
           //Set the data
           menu->setData("Merchant", about, options);
         }
@@ -394,6 +421,9 @@ void Wagon::updateWagon(float globalTime) {
         }
         //Set the data
         menu->setData("Sickness", about, options);
+        for(int i = 0; i < manager->mercs.size(); i++) {
+          manager->mercs[i].dae->startAnimation("punch");
+        }
       }
       if(event == WANDERER){
         vector<string> about;
@@ -429,6 +459,9 @@ void Wagon::updateWagon(float globalTime) {
 
         //Set the data
         menu->setData("Wanderer", about, options);
+        for(int i = 0; i < manager->mercs.size(); i++) {
+          manager->mercs[i].dae->startAnimation("punch");
+        }
       }
       if(event == AMBUSH){
         soundSys->playVoice(BANDIT_GREETING);
@@ -447,6 +480,9 @@ void Wagon::updateWagon(float globalTime) {
 
         //Set the data
         menu->setData("Ambush", about, options);
+        for(int i = 0; i < manager->mercs.size(); i++) {
+          manager->mercs[i].dae->startAnimation("punch");
+        }
       }
       if(event == BEGGAR){
         soundSys->playVoice(BANDIT_GREETING);
@@ -656,4 +692,15 @@ void Wagon::draw(RenderingHelper* modelTrans, Camera* camera, glm::vec3 wagonPos
    glDisable(GL_TEXTURE_2D);
 
    glUseProgram(0);
+}
+
+void Wagon::drawMercs(GLint h_ModelMatrix, GLint h_vertPos, 
+        GLint h_vertNor, GLint h_aTexCoord, GLint h_boneFlag, 
+        GLint h_boneIds, GLint h_boneWeights, GLint h_boneTransforms, 
+        float time) {
+    for (int i = 0; i < manager->mercs.size(); i++) {
+        manager->mercs[i].dae->drawChar(h_ModelMatrix, h_vertPos, 
+                h_vertNor, h_aTexCoord, h_boneFlag, h_boneIds, 
+                h_boneWeights, h_boneTransforms, time);
+    }
 }

@@ -517,6 +517,10 @@ void drawGL()
 				wagon.draw(&ModelTrans, &camera, wagon.getPosition());
 			ModelTrans.popMatrix();
 		ModelTrans.popMatrix();
+	            // HERER TODO
+                wagon.drawMercs(h_ModelMatrix, h_vertPos, h_vertNor, 
+                    h_aTexCoord,  h_boneFlag, h_boneIds, h_boneWeights,
+                    h_boneTransforms, dtDraw);
 		
 		ModelTrans.loadIdentity();
 		glUseProgram(trailPid);
@@ -524,7 +528,6 @@ void drawGL()
 		glUniform1i(trailTerrainToggleID, 0);
       //Draw the skybox
       skybox.draw(&camera, wagon.getPosition());
-
       glUniform1i(trailTerrainToggleID, 0);
 	}
 	glUseProgram(trailPid);
@@ -667,7 +670,6 @@ bool hasCollided(glm::vec3 incr)
   	row = (camPos.x - minX)/gridSize;
  	col = (camPos.z - minZ)/gridSize;
 	vector<Obj3d> currentCellObjs = grid[row][col];
-	//printf("Checking %d collisions!!\n", currentCellObjs.size());
 
  	// for(int i = 0; i < currentCellObjs.size(); i++)
  	// {

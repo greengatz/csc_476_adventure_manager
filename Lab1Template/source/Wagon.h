@@ -24,6 +24,11 @@ public:
 	Wagon();
 	virtual ~Wagon();
 
+//	void init(TextureLoader* texLoader, Terrain* aTerrain, Menu* aMenu, bool* gP, Manager* mgr, ProjectMeshes *newData, SoundPlayer* audio);
+	void drawMercs(GLint h_ModelMatrix, GLint h_vertPos, 
+            GLint h_vertNor, GLint h_aTexCoord, GLint h_boneFlag,
+            GLint h_boneIds, GLint h_boneWeights,
+            GLint h_boneTransforms, float time);
 	void init(TextureLoader* texLoader, Terrain* aTerrain, Menu* aMenu, bool* gP, float* fF, Manager* mgr, ProjectMeshes *newData, SoundPlayer* audio);
 	void draw(RenderingHelper* modelTrans, Camera* camera, glm::vec3 wagonPos);
 	void setPosition(float x, float y, float z);

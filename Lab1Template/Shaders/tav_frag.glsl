@@ -39,8 +39,9 @@ void main()
 		vec4 texColor1 = texture2D(uTexUnit, vTexCoord);
 		gl_FragColor = texColor1 * 2.0 * vec4(color.r, color.g, color.b, 1.0);
 	}
-	else
+	else // this is the worst if statement
 	{
+        // we will never enter this. the toggle is never untoggled
 		gl_FragColor = vec4(color.r, color.g, color.b, 1.0);
 	}
 }

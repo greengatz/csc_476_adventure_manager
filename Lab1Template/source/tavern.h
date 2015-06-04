@@ -19,7 +19,7 @@
 #include "TextureLoader.h"
 #include "Materials.h"
 #include "FrustumCull.h"
-//#include "charDae.h" TODO uncomment
+#include "charDae.h"
 #include "ProjectMeshes.h"
 
 using namespace std;
@@ -71,8 +71,7 @@ class Tavern
 		void disableBuff(GLint h_vertPos, GLint h_vertNor, GLint h_aTexCoord);
 		void applyTurkeySpin(double ltime);
 
-    // TODO
-        //CharDae sam;
+        CharDae sam;
 };
 
 #endif

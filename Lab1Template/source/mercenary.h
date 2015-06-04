@@ -7,6 +7,7 @@
 #include "glm/gtc/matrix_transform.hpp" //perspective, trans etc
 #include "glm/gtc/type_ptr.hpp" //value_ptr
 #include "obj3d.h"
+#include "charDae.h"
 #include <time.h>
 
 using namespace std;
@@ -28,6 +29,8 @@ class Mercenary
 	public:
 		vector<Obj3d> meshes;
 		// TODO load these from our classes
+
+        CharDae* dae;
 
 		string firstName;
 		string lastName;
@@ -60,6 +63,7 @@ class Mercenary
 		void update();
         void printDetails();
         void wave();
+        void initDae();
 
     private:
         clock_t animationStart;

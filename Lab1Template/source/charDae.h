@@ -26,7 +26,13 @@ class CharDae
                 GLint h_boneIds, GLint h_boneWeights,
                 GLint h_boneTransforms, float time);
         void startAnimation(string animation);
+        bool isAnimating();
+        
         int animChoice;
+        int lastAnim;
+        vec3 position;
+        vec3 scale;
+        float rotate;
 
     private:
         const aiScene* scene;
@@ -51,8 +57,11 @@ class CharDae
         vector<mat4> boneModels;
         float* floatModel;
         
+        float lastTime;
         float animStart;
-       
+        float endTime;
+
+        int daeType;       
         int meshInd; 
 
         GLuint posBuf;
@@ -63,9 +72,7 @@ class CharDae
         GLuint boneWeightBuf;
         GLuint boneTransforms;
 
-        vec3 position;
 
-        void recursiveDraw(aiNode* toDraw);
         void recursivePrint(const aiNode* toPrint, int level, aiMesh** meshes);
         void recursiveUpdate(const aiNode* toUpdate, float time);
 
