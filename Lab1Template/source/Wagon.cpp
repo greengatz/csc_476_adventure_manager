@@ -250,7 +250,7 @@ void hurtMercenary(void* mgr, bool* gamePaused){
 void robMerch(void* mgr, bool* gamePaused){
   // *gamePaused = false;
   Manager* manager = (Manager*)mgr;
-  manager->fightingFromMerchant(2, 15);
+  manager->fightingFromMerchant(2, 18);
 }
 
 void fightAmbush(void* mgr, bool* gamePaused){
@@ -320,8 +320,8 @@ void Wagon::updateWagon(float globalTime) {
           menu->setData("Merchant Slayer", about, options);
         }else{
           if(manager->fortune){
-            manager->setMedFoodCost(1);
-            manager->setMedBeerCost(1);
+            manager->setMedFoodCost(2);
+            manager->setMedBeerCost(2);
           }
           string aboutString = "Meat is  ";
           aboutString += to_string(manager->medFoodCost);
