@@ -18,7 +18,7 @@
 #include "shader.hpp"
 #include "text2D.hpp"
 #include "mercenary.h"
-#include "Texture.h"
+#include "pngTexture.h"
 #include "Bitmap.h"
 #include "stb_image.h"
 
@@ -78,7 +78,7 @@ class HUD
 		int stringOffset = 0;
 		int mercOffset = 0;
 		int currentPage = 1;
-		tdogl::Texture* tex;
+		tdogl::pngTexture* tex;
 };
 
 #endif

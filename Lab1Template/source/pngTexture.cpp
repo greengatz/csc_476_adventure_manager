@@ -1,5 +1,5 @@
 /*
- tdogl::Texture
+ tdogl::pngTexture
  
  Copyright 2012 Thomas Dalling - http://tomdalling.com/
  
@@ -16,7 +16,7 @@
  limitations under the License.
  */
 
-#include "Texture.h"
+#include "pngTexture.h"
 #include <stdexcept>
 
 using namespace tdogl;
@@ -32,7 +32,7 @@ static GLenum TextureFormatForBitmapFormat(Bitmap::Format format)
     }
 }
 
-Texture::Texture(const Bitmap& bitmap, GLint minMagFiler, GLint wrapMode) :
+pngTexture::pngTexture(const Bitmap& bitmap, GLint minMagFiler, GLint wrapMode) :
     _originalWidth((GLfloat)bitmap.width()),
     _originalHeight((GLfloat)bitmap.height())
 {
@@ -55,22 +55,22 @@ Texture::Texture(const Bitmap& bitmap, GLint minMagFiler, GLint wrapMode) :
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-Texture::~Texture()
+pngTexture::~pngTexture()
 {
     glDeleteTextures(1, &_object);
 }
 
-GLuint Texture::object() const
+GLuint pngTexture::object() const
 {
     return _object;
 }
 
-GLfloat Texture::originalWidth() const
+GLfloat pngTexture::originalWidth() const
 {
     return _originalWidth;
 }
 
-GLfloat Texture::originalHeight() const
+GLfloat pngTexture::originalHeight() const
 {
     return _originalHeight;
 }

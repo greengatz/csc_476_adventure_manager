@@ -1,5 +1,5 @@
 /*
- tdogl::Texture
+ tdogl::pngTexture
  
  Copyright 2012 Thomas Dalling - http://tomdalling.com/
  
@@ -33,7 +33,7 @@ namespace tdogl {
     /**
      Represents an OpenGL texture
      */
-    class Texture {
+    class pngTexture {
     public:
         /**
          Creates a texture from a bitmap.
@@ -46,14 +46,14 @@ namespace tdogl {
          @param minMagFiler  GL_NEAREST or GL_LINEAR
          @param wrapMode GL_REPEAT, GL_MIRRORED_REPEAT, GL_CLAMP_TO_EDGE, or GL_CLAMP_TO_BORDER
          */
-        Texture(const Bitmap& bitmap,
+        pngTexture(const Bitmap& bitmap,
                 GLint minMagFiler = GL_LINEAR,
                 GLint wrapMode = GL_CLAMP_TO_EDGE);
         
         /**
          Deletes the texture object with glDeleteTextures
          */
-        ~Texture();
+        ~pngTexture();
         
         /**
          @result The texure object, as created by glGenTextures
@@ -76,8 +76,8 @@ namespace tdogl {
         GLfloat _originalHeight;
         
         //copying disabled
-        Texture(const Texture&);
-        const Texture& operator=(const Texture&);
+        pngTexture(const pngTexture&);
+        const pngTexture& operator=(const pngTexture&);
     };
     
 }

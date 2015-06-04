@@ -35,7 +35,7 @@ set(HEADERS
    Particle.h
    ShadowMapFBO.h
    ShadowMapTechnique.h
-   Texture.h
+   pngTexture.h
    stb_image.h
    Bitmap.h
 )
@@ -78,6 +78,6 @@ set(SOURCES
    ShadowMapFBO.cpp
    ShadowMapTechnique.cpp
    Bitmap.cpp
-   Texture.cpp
+   pngTexture.cpp
    stb_image.c
 )

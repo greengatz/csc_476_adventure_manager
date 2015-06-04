@@ -54,7 +54,7 @@ void HUD::initHUD(TextureLoader *texLoader)
 	texLoader->LoadTexture((char *)"assets/newHud.bmp", HUD_ID);
 
   tdogl::Bitmap bmp = tdogl::Bitmap::bitmapFromFile("assets/newHud.bmp");
-  tex = new tdogl::Texture(bmp, GL_LINEAR, GL_REPEAT);
+  tex = new tdogl::pngTexture(bmp, GL_LINEAR, GL_REPEAT);
 
 	texLoader->LoadTexture((char *)"assets/deadScreen.bmp", DEAD_ID);
 	texLoader->LoadTexture((char *)"assets/faceHUD.bmp", SICKFACE_ID);
