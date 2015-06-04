@@ -10,9 +10,6 @@ uniform mat4 uModelMatrix;
 //Switch toggle for coloring
 uniform int terrainToggle;
 
-//GUI toggle
-uniform int flag;
-
 // bone adjustments
 const int MAX_BONES = 100;
 uniform int boneToggle;
@@ -30,7 +27,6 @@ void main()
     vec4 norm = (uViewMatrix * uModelMatrix) * vec4(vertNor, 0.0);
     normal = norm.xyz;
     pos = uViewMatrix * uModelMatrix * vertPos;
-    //gl_Position = uProjMatrix * uViewMatrix * uModelMatrix * vertPos;
     gl_Position = uProjMatrix * pos;
    
 	if (terrainToggle == 1)
