@@ -57,7 +57,7 @@ Mercenary::Mercenary(vector<Obj3d> m) :
     firstName(randFirstName()),
     lastName(randLastName()),
     title(randTitle()),
-    job(rand() % classes::size),
+    job(rand() % 7),
     dead(false),
     maxHealth(BaseHealth[job] + rand() % HEALTH_VARIANCE),
     maxDamage(BaseDamage[job] + rand() % DAMAGE_VARIANCE),
@@ -83,7 +83,7 @@ Mercenary::Mercenary() :
     lastName(randLastName()),
     title(randTitle()),
     
-    job(rand() % classes::size),
+    job(rand() % 7),
     dead(false),
     maxHealth(BaseHealth[job] + rand() % HEALTH_VARIANCE),
     maxDamage(BaseDamage[job] + rand() % DAMAGE_VARIANCE),
@@ -150,7 +150,8 @@ void Mercenary::wave() {
 }
 
 void Mercenary::initDae() {
-    dae = new CharDae(fileLoc[job]);
+    job = job < 0 ? -job : job;
+    dae = new CharDae(fileLoc[job % 7]);
 }
 
 int Mercenary::calcDamage(){

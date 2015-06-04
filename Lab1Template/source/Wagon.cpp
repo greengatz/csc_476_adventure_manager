@@ -699,8 +699,8 @@ void Wagon::drawMercs(GLint h_ModelMatrix, GLint h_vertPos,
         GLint h_boneIds, GLint h_boneWeights, GLint h_boneTransforms, 
         float time) {
     for (int i = 0; i < manager->mercs.size(); i++) {
-        manager->mercs[i].dae->drawChar(h_ModelMatrix, h_vertPos, 
-                h_vertNor, h_aTexCoord, h_boneFlag, h_boneIds, 
-                h_boneWeights, h_boneTransforms, time);
+       // manager->mercs[i].dae->drawChar(h_ModelMatrix, h_vertPos, 
+       //         h_vertNor, h_aTexCoord, h_boneFlag, h_boneIds, 
+       //         h_boneWeights, h_boneTransforms, time);
     }
 }
