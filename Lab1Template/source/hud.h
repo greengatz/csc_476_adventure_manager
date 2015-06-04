@@ -36,7 +36,7 @@ class HUD
 		void initHomeScreen(TextureLoader *texLoader);
 		void changeSideHudPage(int page);
 		void initSideHud(TextureLoader *texLoader);
-		void enableBuff(GLuint posBufObjA, int ID);
+		void enableBuff(GLuint posBufObjA, int ID, GLuint newGrdTxt);
 		void disableBuff();//GLint h_vertPos, GLint h_aTexCoord);
 		GLuint posBufObjHUD;
 		GLuint posBufObjSideHUD;
@@ -78,7 +78,11 @@ class HUD
 		int stringOffset = 0;
 		int mercOffset = 0;
 		int currentPage = 1;
-		tdogl::pngTexture* tex;
+		tdogl::pngTexture* topHud;
+		tdogl::pngTexture* sideHud;
+		tdogl::pngTexture* face;
+		tdogl::pngTexture* heart;
+		tdogl::pngTexture* swords;
 };
 
 #endif

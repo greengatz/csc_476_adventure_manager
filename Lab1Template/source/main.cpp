@@ -96,7 +96,7 @@ GLint h_kd, h_trail_kd;
 GLint h_ks, h_trail_ks; // we don't need these for bones
 GLint h_s, h_trail_s;
 GLint h_option, h_trail_option, h_bone_option;
-GLint h_flag, h_trail_flag, h_bone_flag;
+GLint h_trail_flag, h_bone_flag;
 
 // bone handles
 GLint h_boneFlag;
@@ -363,7 +363,6 @@ bool installTavShader(const string &vShaderName, const string &fShaderName)
 	h_ks = GLSL::getUniformLocation(pid, "ks");
 	h_s = GLSL::getUniformLocation(pid, "s");
 	h_option = GLSL::getUniformLocation(pid, "option");
-	h_flag = GLSL::getUniformLocation(pid, "flag");
 
 	/*Toggle for plane coloring*/
     terrainToggleID = GLSL::getUniformLocation(pid, "terrainToggle");
@@ -500,7 +499,6 @@ void drawGL()
 	//Probably replace this sometime with different shaders....
 	if (camera.isTavernView()) {
 		glUseProgram(pid);
-		glUniform1i(h_flag, 0);
 	}
 	else {
 		glUseProgram(trailPid);
@@ -563,6 +561,8 @@ void drawGL()
 	glUniform1f(h_bone_option, optionS);
 	
     fCuller.setProjMat(proj.topMatrix(), view.topMatrix());
+
+   glUseProgram(0);
 	
 	//matSetter.setMaterial(2); //is this old code that we should delete?
 	//trailMatSetter.setMaterial(2);

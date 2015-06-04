@@ -169,6 +169,24 @@ void Wagon::init(TextureLoader* texLoader, Terrain* aTerrain, Menu* aMenu,
     //Load Texture
     texLoader->LoadTexture((char *)"assets/caravan/caravan_texture.bmp", WAGON_TEX_ID);
 
+  tdogl::Bitmap bmp = tdogl::Bitmap::bitmapFromFile("assets/merchantSlayerMenu.png");
+  merchantSlayerMenu = new tdogl::pngTexture(bmp, GL_LINEAR, GL_REPEAT);
+
+  bmp = tdogl::Bitmap::bitmapFromFile("assets/merchantMenu.png");
+  merchantMenu = new tdogl::pngTexture(bmp, GL_LINEAR, GL_REPEAT);
+
+  bmp = tdogl::Bitmap::bitmapFromFile("assets/sicknessMenu.png");
+  sicknessMenu = new tdogl::pngTexture(bmp, GL_LINEAR, GL_REPEAT);
+
+  bmp = tdogl::Bitmap::bitmapFromFile("assets/buyMercMenu.png");
+  buyMercMenu = new tdogl::pngTexture(bmp, GL_LINEAR, GL_REPEAT);
+
+  bmp = tdogl::Bitmap::bitmapFromFile("assets/banditsMenu.png");
+  banditsMenu = new tdogl::pngTexture(bmp, GL_LINEAR, GL_REPEAT);
+
+  bmp = tdogl::Bitmap::bitmapFromFile("assets/beggarMenu.png");
+  beggarMenu = new tdogl::pngTexture(bmp, GL_LINEAR, GL_REPEAT);
+
     //unbind the arrays
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -339,15 +357,18 @@ void Wagon::updateWagon(float globalTime) {
           vector<option> options;
           options.push_back(resumeOpt);
           options.push_back(robOpt);
-          menu->setData("Merchant Slayer", about, options);
+          menu->setData("Merchant Slayer", about, options, &merchantSlayerMenu, 0, about);
         }else{
           if(manager->fortune){
             manager->setMedFoodCost(1);
             manager->setMedBeerCost(1);
           }
+          vector<string> newData;
+          newData.push_back(to_string(manager->medFoodCost));
           string aboutString = "Meat is  ";
           aboutString += to_string(manager->medFoodCost);
           aboutString += " gold and Beer is ";
+          newData.push_back(to_string(manager->medBeerCost));
           aboutString += to_string(manager->medBeerCost);
           aboutString += " gold!";
           about.push_back(aboutString);
@@ -368,17 +389,18 @@ void Wagon::updateWagon(float globalTime) {
           options.push_back(resumeOpt);
 
         //Set the data
-          menu->setData("Merchant", about, options);
+          menu->setData("Merchant", about, options, &merchantMenu, 1, newData);
           for(int i = 0; i < manager->mercs.size(); i++) {
             manager->mercs[i].dae->startAnimation("punch");
           }
           //Set the data
-          menu->setData("Merchant", about, options);
+          menu->setData("Merchant", about, options, &merchantMenu, 1, newData);
         }
         
 
       }
       if(event == SICKNESS){
+        vector<string> dataStuffs;
         soundSys->playVoice(ANGRY_YELL);
          *gamePaused = true;
         //Create about vector and add an element
@@ -394,14 +416,17 @@ void Wagon::updateWagon(float globalTime) {
         string sickness = Ailment[rand() % ailmentCount];
         string name = manager->getName(index);
         cout << name + " just got " + sickness << endl;
-
+        dataStuffs.push_back(name);
+        dataStuffs.push_back(sickness);
         about.push_back(name + " came down with " + sickness + ",");
         vector<option> options;
         if(manager->getBeer() >= manager->medBeerCost &&
           manager->getFood() >= manager->medFoodCost){
           string aboutString = "Use ";
+          dataStuffs.push_back(to_string(manager->medFoodCost));
           aboutString += to_string(manager->medFoodCost);
           aboutString += " meat and ";
+          dataStuffs.push_back(to_string(manager->medBeerCost));
           aboutString += to_string(manager->medBeerCost);
           aboutString += " beer?";
           about.push_back(aboutString);
@@ -420,7 +445,7 @@ void Wagon::updateWagon(float globalTime) {
           options.push_back(resumeOpt);
         }
         //Set the data
-        menu->setData("Sickness", about, options);
+        menu->setData("Sickness", about, options, &sicknessMenu, 2, dataStuffs);
         for(int i = 0; i < manager->mercs.size(); i++) {
           manager->mercs[i].dae->startAnimation("punch");
         }
@@ -435,9 +460,11 @@ void Wagon::updateWagon(float globalTime) {
         *gamePaused = true;
         //Create about vector and add an element
         vector<option> options;
+        vector<string> dataStuffs;
         // Obj3d temp(&((*meshData).terrMeshes[1]), scale, trans, rot);
         // Mercenary *newMerc = new Mercenary(meshData->);
         string name = manager->getName(index);
+        dataStuffs.push_back(name);
         about.push_back(name + " wants to join your party,");
 
         if(manager->getMercs() >= MAX_MERC){
@@ -446,6 +473,7 @@ void Wagon::updateWagon(float globalTime) {
           about.push_back("but you're a little short on gold!");
         }else{
           string aboutString = "buy this mercenary for ";
+          dataStuffs.push_back(to_string(cost));
           aboutString += to_string(cost);
           aboutString += " gold?";
           about.push_back(aboutString);
@@ -458,7 +486,7 @@ void Wagon::updateWagon(float globalTime) {
         options.push_back(resumeOpt);
 
         //Set the data
-        menu->setData("Wanderer", about, options);
+        menu->setData("Wanderer", about, options, &buyMercMenu, 3, dataStuffs);
         for(int i = 0; i < manager->mercs.size(); i++) {
           manager->mercs[i].dae->startAnimation("punch");
         }
@@ -479,7 +507,7 @@ void Wagon::updateWagon(float globalTime) {
         options.push_back(fleeOpt);
 
         //Set the data
-        menu->setData("Ambush", about, options);
+        menu->setData("Ambush", about, options, &banditsMenu, 4, about);
         for(int i = 0; i < manager->mercs.size(); i++) {
           manager->mercs[i].dae->startAnimation("punch");
         }
@@ -488,6 +516,7 @@ void Wagon::updateWagon(float globalTime) {
         soundSys->playVoice(BANDIT_GREETING);
         *gamePaused = true;
         //Create about vector and add an element
+        vector<string> dataStuffs;
         vector<string> about;
         if(manager->getGold() >= 20)
           about.push_back("Donate 20 gold to poor beggar?");
@@ -497,6 +526,7 @@ void Wagon::updateWagon(float globalTime) {
           about.push_back("Donate 3 meat to poor beggar?");
         else if(manager->getBeer() >= 3)
           about.push_back("Donate 3 beer to poor beggar?"); 
+        dataStuffs.push_back("10");
         
 
           about.push_back("The townspeople will notice your kindness");  
@@ -509,7 +539,7 @@ void Wagon::updateWagon(float globalTime) {
         options.push_back(donateOpt);
         options.push_back(resumeOpt);
         //Set the data
-        menu->setData("Beggar", about, options);
+        menu->setData("Beggar", about, options, &beggarMenu, 5, dataStuffs);
       }
       
       deltaTime = glfwGetTime() - startTime;
