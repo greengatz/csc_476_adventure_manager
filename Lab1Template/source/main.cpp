@@ -438,10 +438,12 @@ void drawGL()
 	if (camera.isTavernView()) {
 		glUseProgram(pid);
 		glUniform1i(h_flag, 0);
+		glUniform1i(h_boneFlag, 0);
 	}
 	else {
 		glUseProgram(trailPid);
 		glUniform1i(h_trail_flag, 0);
+		glUniform1i(h_boneFlag, 0);
 	}
 
 	//Update Camera
