@@ -561,6 +561,8 @@ void drawGL()
 	glUniform1f(h_bone_option, optionS);
 	
     fCuller.setProjMat(proj.topMatrix(), view.topMatrix());
+
+   glUseProgram(0);
 	
 	//matSetter.setMaterial(2); //is this old code that we should delete?
 	//trailMatSetter.setMaterial(2);
