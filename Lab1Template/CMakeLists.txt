@@ -32,12 +32,25 @@ endif(APPLE)
 # assimp
 message("-- Including assimp...")
 set (ASSIMP_DIR "${DEP_DIR}/assimp-3.1.1")
-list(APPEND INCLUDES
-    ${ASSIMP_DIR}/include/assimp
-)
-list(APPEND LIBS
-    ${ASSIMP_DIR}/lib/libassimp.so
-)
+if(APPLE)
+    message("--   Mac version of assimp")
+    list(APPEND INCLUDES
+        # brandon check these
+        ${ASSIMP_DIR}/include/assimp
+    )
+    list(APPEND LIBS
+        # this too
+        ${ASSIMP_DIR}/lib/libassimp.dylib
+    )
+elseif(UNIX)
+    message("--   Unix version of assimp")
+    list(APPEND INCLUDES
+        ${ASSIMP_DIR}/include/assimp
+    )
+    list(APPEND LIBS
+        ${ASSIMP_DIR}/lib/libassimp.so
+    )
+endif(APPLE)
 
 # GLFW
 set(GLFW_DIR "${DEP_DIR}/glfw")
