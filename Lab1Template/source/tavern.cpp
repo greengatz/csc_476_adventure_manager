@@ -186,16 +186,16 @@ void Tavern::createEmblems()
 {
 	int emblemTex = getRandInt(6) * 100 + 4300;
 	// int emblemTex = WOLF_EMBLEM_ID;
-	glm::vec3 scaler = glm::vec3(0.5, 0.5, 0.5);
+	glm::vec3 scaler = glm::vec3(0.75, 0.75, 0.75);
 	glm::mat4 rot = glm::rotate(glm::mat4(1.0f), (const float)90, glm::vec3(0, 1.0f, 0));
-	addTavernItem(CRATE, 2, scaler, glm::vec3(7.1, 3.5, -23.0), glm::mat4(1.0f));
+	addTavernItem(CRATE, 2, scaler, glm::vec3(7.1, 3.8, -23.0), glm::mat4(1.0f));
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(emblemTex);
-	addTavernItem(CRATE, 2, scaler, glm::vec3(38.9, 3.5, -23.5), glm::mat4(1.0f));
+	addTavernItem(CRATE, 2, scaler, glm::vec3(38.9, 3.8, -23.5), glm::mat4(1.0f));
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(emblemTex);
 
-	addTavernItem(CRATE, 2, scaler, glm::vec3(23.05, 3.5, -11.6), rot);
+	addTavernItem(CRATE, 2, scaler, glm::vec3(23.05, 3.8, -11.6), rot);
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(emblemTex);
-	addTavernItem(CRATE, 2, scaler, glm::vec3(23.05, 3.5, -35.4), rot);
+	addTavernItem(CRATE, 2, scaler, glm::vec3(23.05, 3.8, -35.4), rot);
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(emblemTex);
 	wallEmblem = tavernItems.size() - 1;
 }

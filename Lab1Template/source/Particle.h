@@ -17,8 +17,8 @@ public:
 	void init(int staggerTime, bool isSmoke);
 	void rebirth(float curTime);
 	void update(float ltime, float h);
-	void drawFirePlace(glm::vec3 loc, GLint h_color, GLint h_ModelViewMat, int indSize, glm::vec3 camPos);
-	void drawTorch(glm::vec3 loc, GLint h_color, GLint h_ModelViewMat, int indSize, glm::vec3 camPos);
+	void drawFirePlace(glm::vec3 loc, GLint h_color, GLint h_scale, GLint h_ModelViewMat, int indSize, glm::vec3 camPos);
+	void drawTorch(glm::vec3 loc, GLint h_color, GLint h_scale, GLint h_ModelViewMat, int indSize, glm::vec3 camPos);
 	bool isSmokey();
 private:
 	int stagger;

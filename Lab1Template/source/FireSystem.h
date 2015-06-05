@@ -33,6 +33,7 @@ private:
 	GLint h_vertTexCoor;
 	GLint h_tex;
 	GLint h_color;
+	GLint h_scale;
 	GLint h_ProjMat;
 	GLint h_ModelMat;
 	GLint h_ViewMat;
