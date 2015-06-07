@@ -7,7 +7,7 @@ const glm::vec3 fireLoc[] = {glm::vec3(23.05, 0.4, -23.5), //center fireplace
 							 glm::vec3(27.6, 2.9, -27.7),
 							 glm::vec3(18.5, 2.9, -19.3),
 							 glm::vec3(27.6, 2.9, -19.3),
-							 glm::vec3(23.05, 0.5, -23.5) //center orb
+							 glm::vec3(23.35, 0.5, -23.5) //center orb
 };
 
 int FIRE_PARTICLE_1_ID = 8000;
@@ -79,6 +79,7 @@ void FireSystem::init(TextureLoader *texLoader)
     h_vertTexCoor = GLSL::getAttribLocation(pid, "vertTexCoords");
     h_tex = GLSL::getUniformLocation(pid, "tex");
     h_color = GLSL::getUniformLocation(pid, "color");
+    h_scale = GLSL::getUniformLocation(pid, "scale");
     h_ProjMat = GLSL::getUniformLocation(pid, "P");
     h_ModelMat = GLSL::getUniformLocation(pid, "M");
     h_ViewMat = GLSL::getUniformLocation(pid, "V");
@@ -131,7 +132,8 @@ void FireSystem::enableTex(int targetTex)
 	glVertexAttribPointer(h_vertTexCoor, 2, GL_FLOAT, GL_FALSE, 0, 0);
 }
 
-void FireSystem::drawOrb(glm::vec3 camPos) //remove this, its unneeded
+//not currently used as the fire looks fine without it, also position is now wrong
+void FireSystem::drawOrb(glm::vec3 camPos)
 {
 	glUniform4f(h_color, 253.0 / 255.0, 253.0 / 255.0, 87.0 / 255.0, 0.95);
 
@@ -211,17 +213,17 @@ void FireSystem::draw(Camera *cam, glm::mat4 viewMat)
 
 		//center fireplace
 		firePlace[iter].update(ltime, timeIncr);
-		firePlace[iter].drawFirePlace(fireLoc[0], h_color, h_ModelMat, (int)indBuf.size(), camPos);
+		firePlace[iter].drawFirePlace(fireLoc[0], h_color, h_scale, h_ModelMat, (int)indBuf.size(), camPos);
 
 		//torches each torch has 1 /4 of the total particles
-		firePlace[iter].drawTorch(fireLoc[iter % 4 + 1], h_color, h_ModelMat, (int)indBuf.size(), camPos);
+		firePlace[iter].drawTorch(fireLoc[iter % 4 + 1], h_color, h_scale, h_ModelMat, (int)indBuf.size(), camPos);
 		// firePlace[iter].drawTorch(fireLoc[curTorch], h_color, h_ModelMat, (int)indBuf.size(), camPos);
 		// firePlace[iter].drawTorch(fireLoc[curTorch + 1], h_color, h_ModelMat, (int)indBuf.size(), camPos);
 		// curTorch = (curTorch ==  1) ? 3 : 1; //switch which torches are drawn on
 	}
 
-	enableTex(CENTER_ORB_ID);
-	drawOrb(camPos);
+	// enableTex(CENTER_ORB_ID);
+	// drawOrb(camPos);
 
 	//disable buffers
 	GLSL::disableVertexAttribArray(h_vertTexCoor);

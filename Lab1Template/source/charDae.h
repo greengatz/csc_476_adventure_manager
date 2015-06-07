@@ -24,7 +24,7 @@ class CharDae
         void drawChar(GLint h_ModelMatrix, GLint h_vertPos, 
                 GLint h_vertNor, GLint h_aTexCoord, GLint h_boneFlag,
                 GLint h_boneIds, GLint h_boneWeights,
-                GLint h_boneTransforms, float time);
+                GLint h_boneTransforms, float time, GLint h_texFlag);
         void startAnimation(string animation);
         bool isAnimating();
         
@@ -33,6 +33,7 @@ class CharDae
         vec3 position;
         vec3 scale;
         float rotate;
+        GLuint texBuf;
 
     private:
         const aiScene* scene;
@@ -67,7 +68,6 @@ class CharDae
         GLuint posBuf;
         GLuint norBuf;
         GLuint indBuf;
-        GLuint texBuf;
         GLuint boneIdBuf;
         GLuint boneWeightBuf;
         GLuint boneTransforms;

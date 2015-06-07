@@ -91,7 +91,7 @@ void Particle::update(float ltime, float timeIncr)
 	}
 }
 
-void Particle::drawFirePlace(glm::vec3 loc, GLint h_color, GLint h_ModelViewMat, int indSize, glm::vec3 camPos)
+void Particle::drawFirePlace(glm::vec3 loc, GLint h_color, GLint h_scale, GLint h_ModelViewMat, int indSize, glm::vec3 camPos)
 {
 	if (stagger <= 0) {
 		//set handles for the particle
@@ -115,6 +115,9 @@ void Particle::drawFirePlace(glm::vec3 loc, GLint h_color, GLint h_ModelViewMat,
 	    glm::mat4 result = trans * rot * glm::scale(glm::mat4(1.0f), glm::vec3(scale, scale, scale));
 		glUniformMatrix4fv(h_ModelViewMat, 1, GL_FALSE, glm::value_ptr(result));
 
+		// if (smoke)
+		glUniform1f(h_scale, scale - 0.3);
+
 		// printf("pos: %f %f %f, life: %f, col: %f %f %f %f\n", loc.x + pos.x, loc.y + pos.y, loc.z + pos.z, lifespan, curCol.r, curCol.g, curCol.b, curCol.w);
 		if (col.w > 0.1) {
 			glDrawElements(GL_TRIANGLE_STRIP, indSize, GL_UNSIGNED_INT, 0);
@@ -122,7 +125,7 @@ void Particle::drawFirePlace(glm::vec3 loc, GLint h_color, GLint h_ModelViewMat,
 	}
 }
 
-void Particle::drawTorch(glm::vec3 loc, GLint h_color, GLint h_ModelViewMat, int indSize, glm::vec3 camPos)
+void Particle::drawTorch(glm::vec3 loc, GLint h_color, GLint h_scale, GLint h_ModelViewMat, int indSize, glm::vec3 camPos)
 {
 	if (stagger <= 0) {
 		//set handles for the particle
@@ -149,6 +152,8 @@ void Particle::drawTorch(glm::vec3 loc, GLint h_color, GLint h_ModelViewMat, int
 	    glm::mat4 result = trans * rot * glm::scale(glm::mat4(1.0f), glm::vec3(scale, scale, scale));
 		glUniformMatrix4fv(h_ModelViewMat, 1, GL_FALSE, glm::value_ptr(result));
 
+		glUniform1f(h_scale, scale - 0.3);
+		
 		// printf("pos: %f %f %f, life: %f, col: %f %f %f %f\n", loc.x + pos.x, loc.y + pos.y, loc.z + pos.z, lifespan, curCol.r, curCol.g, curCol.b, curCol.w);
 
 		//dont draw if is too transparent

@@ -53,17 +53,34 @@ void HUD::initHUD(TextureLoader *texLoader)
 
 	texLoader->LoadTexture((char *)"assets/newHud.bmp", HUD_ID);
 
-  tdogl::Bitmap bmp = tdogl::Bitmap::bitmapFromFile("assets/newHud.bmp");
-  tex = new tdogl::pngTexture(bmp, GL_LINEAR, GL_REPEAT);
 
-	texLoader->LoadTexture((char *)"assets/deadScreen.bmp", DEAD_ID);
-	texLoader->LoadTexture((char *)"assets/faceHUD.bmp", SICKFACE_ID);
-	texLoader->LoadTexture((char *)"assets/faceHUD.bmp", HAPPYFACE_ID);
-	texLoader->LoadTexture((char *)"assets/faceHUD.bmp", SADFACE_ID);
-	texLoader->LoadTexture((char *)"assets/health2HUD.bmp", HEALTH_ID);
-	texLoader->LoadTexture((char *)"assets/swordsHUD.bmp", DAMAGE_ID);
-	texLoader->LoadTexture((char *)"assets/faceHUD.bmp", MERCFACE_ID);
-	texLoader->LoadTexture((char *)"assets/deadFaceHUD.bmp", DEADFACE_ID);
+
+  texLoader->LoadTexture((char *)"assets/deadScreen.bmp", DEAD_ID);
+  texLoader->LoadTexture((char *)"assets/faceHUD.bmp", SICKFACE_ID);
+  texLoader->LoadTexture((char *)"assets/faceHUD.bmp", HAPPYFACE_ID);
+  texLoader->LoadTexture((char *)"assets/faceHUD.bmp", SADFACE_ID);
+  texLoader->LoadTexture((char *)"assets/health2HUD.bmp", HEALTH_ID);
+  texLoader->LoadTexture((char *)"assets/swordsHUD.bmp", DAMAGE_ID);
+  texLoader->LoadTexture((char *)"assets/faceHUD.bmp", MERCFACE_ID);
+  texLoader->LoadTexture((char *)"assets/deadFaceHUD.bmp", DEADFACE_ID);
+
+  // sideHUD texture load
+  tdogl::Bitmap bmp = tdogl::Bitmap::bitmapFromFile("assets/sideHUD4.png");
+  sideHud = new tdogl::pngTexture(bmp, GL_LINEAR, GL_REPEAT);
+
+  // topHUD texture load
+  bmp = tdogl::Bitmap::bitmapFromFile("assets/newHud2.png");
+  topHud = new tdogl::pngTexture(bmp, GL_LINEAR, GL_REPEAT);
+  
+  // face texture load
+  bmp = tdogl::Bitmap::bitmapFromFile("assets/faceBlank.png");
+  face = new tdogl::pngTexture(bmp, GL_LINEAR, GL_REPEAT);
+  // heart texture load
+  bmp = tdogl::Bitmap::bitmapFromFile("assets/heart2Plane.png");
+  heart = new tdogl::pngTexture(bmp, GL_LINEAR, GL_REPEAT);
+  // swords texture load
+  bmp = tdogl::Bitmap::bitmapFromFile("assets/swordsBlank2.png");
+  swords = new tdogl::pngTexture(bmp, GL_LINEAR, GL_REPEAT);
 
 	GLfloat vert[] = {
 		0, 0, 1.0f,
@@ -88,11 +105,18 @@ void HUD::initHUD(TextureLoader *texLoader)
 	glBindBuffer(GL_ARRAY_BUFFER, colorBufObjHUD);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(colr), colr, GL_STATIC_DRAW);
 
-	static GLfloat GrndTex[] = {
-      0, 1, // back
+	// static GLfloat GrndTex[] = {
+ //      0, 1, // back
+ //      0, 0,
+ //      1, 0,
+ //      1, 1 };
+
+  static GLfloat GrndTex[] = {
       0, 0,
-      1, 0,
-      1, 1 };
+      0, 1, // back
+      1, 1, 
+      1, 0};
+
 
     unsigned short idx[] = {0, 1, 2, 0, 2, 3};
 
@@ -110,7 +134,6 @@ void HUD::initSideHud(TextureLoader *texLoader)
 {
   texLoader->LoadTexture((char *)"assets/sideHUD2.bmp", SIDEHUD_ID);
 
-
   GLfloat homeVerts[] = {
     800.0f, 78.0f, 1.0f,
     800.0f, 750.0f, 1.0f,
@@ -123,10 +146,10 @@ void HUD::initSideHud(TextureLoader *texLoader)
   glBufferData(GL_ARRAY_BUFFER, sizeof(homeVerts), homeVerts, GL_STATIC_DRAW);
 
   GLfloat faceVerts[] = {
-  	840.0f, 113.0f, 1.0f,
-    840.0f, 145.0f, 1.0f,
-    872.0f, 145.0f, 1.0f,
-    872.0f, 113.0f, 1.0f
+  	820.0f, 113.0f, 1.0f,
+    820.0f, 145.0f, 1.0f,
+    852.0f, 145.0f, 1.0f,
+    852.0f, 113.0f, 1.0f
   };
 
   glGenBuffers(1, &posBufObjFace);
@@ -134,10 +157,10 @@ void HUD::initSideHud(TextureLoader *texLoader)
   glBufferData(GL_ARRAY_BUFFER, sizeof(faceVerts), faceVerts, GL_STATIC_DRAW);
 
   GLfloat heartVerts[] = {
-  	840.0f, 167.0f, 1.0f,
-    840.0f, 199.0f, 1.0f,
-    872.0f, 199.0f, 1.0f,
-    872.0f, 167.0f, 1.0f
+  	820.0f, 167.0f, 1.0f,
+    820.0f, 199.0f, 1.0f,
+    852.0f, 199.0f, 1.0f,
+    852.0f, 167.0f, 1.0f
   };
 
   glGenBuffers(1, &posBufObjHeart);
@@ -145,10 +168,10 @@ void HUD::initSideHud(TextureLoader *texLoader)
   glBufferData(GL_ARRAY_BUFFER, sizeof(heartVerts), heartVerts, GL_STATIC_DRAW);
 
   GLfloat damVerts[] = {
-  	840.0f, 207.0f, 1.0f,
-    840.0f, 239.0f, 1.0f,
-    872.0f, 239.0f, 1.0f,
-    872.0f, 207.0f, 1.0f
+  	820.0f, 207.0f, 1.0f,
+    820.0f, 239.0f, 1.0f,
+    852.0f, 239.0f, 1.0f,
+    852.0f, 207.0f, 1.0f
   };
 
   glGenBuffers(1, &posBufObjDam);
@@ -240,7 +263,7 @@ void HUD::drawHud(Camera * camera, int width, int height)
   proj.pushMatrix();
 	// enableBuff(h_vertPos, h_aTexCoord);
   // enableBuff(posBufObjHUD, HUD_ID);
-  enableBuff(posBufObjHUD, tex->object());
+  enableBuff(posBufObjHUD, topHud->object(), GrndTexBuffObj);
 
 	mat4 Ortho = glm::ortho(0.0f, (float)width, (float)height, 0.0f);
  
@@ -256,6 +279,7 @@ void HUD::drawHud(Camera * camera, int width, int height)
 	glEnable(GL_DEPTH_TEST); // Enable the Depth-testing
 	disableBuff();
   proj.popMatrix();
+  glUseProgram(0);
 }
 
 void HUD::drawSideHud(Camera * camera, int width, int height)
@@ -268,7 +292,7 @@ void HUD::drawSideHud(Camera * camera, int width, int height)
   proj.pushMatrix();
   // enableBuff(h_vertPos, h_aTexCoord);
 
-  enableBuff(posBufObjSideHUD, SIDEHUD_ID);
+  enableBuff(posBufObjSideHUD, sideHud->object(), textBuffSideHud);
 
   mat4 Ortho = glm::ortho(0.0f, (float)width, (float)height, 0.0f);
  
@@ -299,29 +323,29 @@ for(mercOffset; mercOffset < (currentPage * 4) && mercOffset < man -> mercs.size
 	_guiMVP = trans * _guiMVP;
 	glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(_guiMVP));
 
-	enableBuff(posBufObjFace, MERCFACE_ID);
+	enableBuff(posBufObjFace, face->object(), textBuffSideHud);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0); // draw first object
 	disableBuff();
 
-	enableBuff(posBufObjHeart, HEALTH_ID);
+	enableBuff(posBufObjHeart, heart->object(), textBuffSideHud);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0); // draw first object
 	disableBuff();
 
-	enableBuff(posBufObjDam, DAMAGE_ID);
+	enableBuff(posBufObjDam, swords->object(), textBuffSideHud);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0); // draw first object
 	disableBuff();
 	offset = -0.4;
 
 	data = tempMerc.firstName; //+ " " + man -> mercs[i].lastName;
-	printText2D(data.c_str(), 680, stringOffset, 8);
-	data = "the " + tempMerc.title;
-	printText2D(data.c_str(), 665, stringOffset - 15, 8);
+	printText2D(data.c_str(), 675, stringOffset, 12);
+	// data = "the " + tempMerc.title;
+	// printText2D(data.c_str(), 665, stringOffset - 15, 8);
 
 	data = to_string(static_cast<long long int>(tempMerc.currHealth)) + "/" + to_string(static_cast<long long int>(tempMerc.maxHealth));
-	printText2D(data.c_str(), 685, stringOffset - 40, 10);
+	printText2D(data.c_str(), 685, stringOffset - 40, 12);
 
 	data = to_string(static_cast<long long int>(tempMerc.currDamage));
-	printText2D(data.c_str(), 685, stringOffset - 70, 10);
+	printText2D(data.c_str(), 685, stringOffset - 70, 12);
 
 	stringOffset -= 120;
 }
@@ -334,7 +358,7 @@ proj.popMatrix();
 	//132 offset I think?
 }
 
-void HUD::enableBuff(GLuint posBufObjA, int ID) {
+void HUD::enableBuff(GLuint posBufObjA, int ID, GLuint newGrdTxt) {
 	glEnable(GL_TEXTURE_2D);
   glActiveTexture(GL_TEXTURE0);
 

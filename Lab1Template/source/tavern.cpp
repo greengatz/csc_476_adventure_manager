@@ -186,16 +186,16 @@ void Tavern::createEmblems()
 {
 	int emblemTex = getRandInt(6) * 100 + 4300;
 	// int emblemTex = WOLF_EMBLEM_ID;
-	glm::vec3 scaler = glm::vec3(0.5, 0.5, 0.5);
+	glm::vec3 scaler = glm::vec3(0.75, 0.75, 0.75);
 	glm::mat4 rot = glm::rotate(glm::mat4(1.0f), (const float)90, glm::vec3(0, 1.0f, 0));
-	addTavernItem(CRATE, 2, scaler, glm::vec3(7.1, 3.5, -23.0), glm::mat4(1.0f));
+	addTavernItem(CRATE, 2, scaler, glm::vec3(7.1, 3.8, -23.0), glm::mat4(1.0f));
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(emblemTex);
-	addTavernItem(CRATE, 2, scaler, glm::vec3(38.9, 3.5, -23.5), glm::mat4(1.0f));
+	addTavernItem(CRATE, 2, scaler, glm::vec3(38.9, 3.8, -23.5), glm::mat4(1.0f));
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(emblemTex);
 
-	addTavernItem(CRATE, 2, scaler, glm::vec3(23.05, 3.5, -11.6), rot);
+	addTavernItem(CRATE, 2, scaler, glm::vec3(23.05, 3.8, -11.6), rot);
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(emblemTex);
-	addTavernItem(CRATE, 2, scaler, glm::vec3(23.05, 3.5, -35.4), rot);
+	addTavernItem(CRATE, 2, scaler, glm::vec3(23.05, 3.8, -35.4), rot);
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(emblemTex);
 	wallEmblem = tavernItems.size() - 1;
 }
@@ -447,9 +447,15 @@ void Tavern::drawTavern(GLint h_ModelMatrix, GLint h_vertPos,
 			}
         }
 	}*/
+}
 
-    // draw tavern mercs
-	for (int iter = 0; iter < tavernCharacters.size(); iter++) {
+void Tavern::drawTavernMercs(GLint h_ModelMatrix, GLint h_vertPos, 
+                GLint h_vertNor, GLint h_aTexCoord, double ltime,
+                GLint h_boneFlag, GLint h_boneIds,
+                GLint h_boneWeights, GLint h_boneTransforms, GLint h_texFlag)
+{
+	// printf("tried to load the texture %d\n", id);
+    for (int iter = 0; iter < tavernCharacters.size(); iter++) {
         static int animSelect = 0;
         animSelect++;
         if(animSelect > 30) {
@@ -465,7 +471,10 @@ void Tavern::drawTavern(GLint h_ModelMatrix, GLint h_vertPos,
         tavernCharacters[iter].dae->position = tavernCharacters[iter].meshes[0].pos;
         tavernCharacters[iter].dae->position.y -= 1;
         tavernCharacters[iter].dae->scale = glm::vec3(0.8, 0.8, 0.8);
-        tavernCharacters[iter].dae->drawChar(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord, h_boneFlag, h_boneIds, h_boneWeights, h_boneTransforms, ltime);
+        enableTextureBuffer(h_aTexCoord, tavernCharacters[iter].dae->texBuf, TAV_SAMURAI_ID);
+
+        tavernCharacters[iter].dae->drawChar(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord, 
+                h_boneFlag, h_boneIds, h_boneWeights, h_boneTransforms, ltime, h_texFlag);
     }
 }
 

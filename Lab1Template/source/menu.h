@@ -18,6 +18,9 @@
 #include "shader.hpp"
 #include "MatrixStack.h"
 #include "RenderingHelper.h"
+#include "pngTexture.h"
+#include "Bitmap.h"
+#include "stb_image.h"
 
 using namespace std;
 using namespace glm;
@@ -36,7 +39,7 @@ class Menu
 		void initMenu(Camera * camera, TextureLoader *texLoader, int width, int height, Manager *mgr, bool* gameP);
 		void enableBuff();
 		void disableBuff();
-		void setData(char* title, vector<string> about, vector<option> options);
+		void setData(char* title, vector<string> about, vector<option> options, tdogl::pngTexture** theText, int menuType, vector<string> newData);
 		void selectOption(int num);
 		GLuint posBufObjHUD;
 		GLuint GrndTexBuffObj;
@@ -68,6 +71,11 @@ class Menu
 		GLint h_ModelMatrix;
 
 		RenderingHelper ModelTrans;
+
+		tdogl::pngTexture* myTexture;
+		int menuType;
+		vector<string> data;
+
 };
 
 #endif

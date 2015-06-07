@@ -44,11 +44,17 @@ void Menu::initMenu(Camera * cameraA, TextureLoader *texLoader, int widthA, int 
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vert), vert, GL_STATIC_DRAW);
 
 	//Maps UVs
+	// static GLfloat GrndTex[] = {
+ //      0, 1, // back
+ //      0, 0,
+ //      1, 0,
+ //      1, 1 };
+
 	static GLfloat GrndTex[] = {
-      0, 1, // back
       0, 0,
-      1, 0,
-      1, 1 };
+      0, 1, // back
+      1, 1, 
+      1, 0};
 
     unsigned short idx[] = {0, 1, 2, 0, 2, 3};
 
@@ -63,13 +69,16 @@ void Menu::initMenu(Camera * cameraA, TextureLoader *texLoader, int widthA, int 
 }
 
 
-void Menu::setData(char* titleA, vector<string> aboutA, vector<option> optionsA)
+void Menu::setData(char* titleA, vector<string> aboutA, vector<option> optionsA, tdogl::pngTexture** taet, int type, vector<string> newData)
 {
 
 	inMenu = true;
 	title = titleA;
 	about = aboutA;
 	options = optionsA;
+	myTexture = *taet;
+	menuType = type;
+	data = newData;
 	printf("menu true\n");
 }
 
@@ -114,23 +123,64 @@ void Menu::drawMenu()
 	//Disable Buffers
 	disableBuff();
 
+	if(menuType == 0)
+	{
+
+	}
+	else if(menuType == 1)
+	{
+		printText2D(data[0].c_str(), 280, 304, 15);
+		printText2D(data[1].c_str(), 280, 325, 15);
+	}
+	else if(menuType == 2)
+	{
+		printText2D(data[0].c_str(), 210, 345, 16);
+		printText2D(data[1].c_str(), 210, 325, 16);
+		// printText2D(data[2].c_str(), 210, 204, 15);
+	}
+	else if(menuType == 3)
+	{
+		printText2D(data[0].c_str(), 205, 345, 16);
+		printText2D(data[1].c_str(), 420, 322, 16);
+	}
+	else if(menuType == 4)
+	{
+		
+	}
+	else if(menuType == 5)
+	{
+		
+	}
+	else if(menuType == 6)
+	{
+		
+	}
+	else if(menuType == 7)
+	{
+		
+	}
+	else if(menuType == 8)
+	{
+		
+	}
+
 	//sprintf(info,"x %d", manager.getMercs());
-	printText2D(title, 350, 470, 28);
+	//printText2D(title, 350, 470, 28);
 	// printText2D(about, 160, 440, 14);
-	for(int i = 0; i < about.size(); i++)
-	{
-		printText2D(about[i].c_str(), 160, 440 + aboutOffset, 14);
-		aboutOffset -= 20;
-	}
-	aboutOffset = -20;
+	// for(int i = 0; i < about.size(); i++)
+	// {
+	// 	printText2D(about[i].c_str(), 160, 440 + aboutOffset, 14);
+	// 	aboutOffset -= 20;
+	// }
+	// aboutOffset = -20;
 
-	for(int i = 0; i < options.size(); i++)
-	{
-		printText2D(options[i].str.c_str(), 160, 400 + offset, 18);
-		offset-=40;
-	}
+	// for(int i = 0; i < options.size(); i++)
+	// {
+	// 	printText2D(options[i].str.c_str(), 160, 400 + offset, 18);
+	// 	offset-=40;
+	// }
 
-	offset = -40;
+	// offset = -40;
 }
 
 void Menu::enableBuff() {
@@ -141,7 +191,7 @@ void Menu::enableBuff() {
   glBindBuffer(GL_ARRAY_BUFFER, posBufObjHUD);
   glVertexAttribPointer(h_vertPos, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
-  glBindTexture(GL_TEXTURE_2D, MENU_ID);
+  glBindTexture(GL_TEXTURE_2D, myTexture->object());
 
   GLSL::enableVertexAttribArray(h_aTexCoord);
   glBindBuffer(GL_ARRAY_BUFFER, GrndTexBuffObj);
@@ -158,3 +208,22 @@ void Menu::disableBuff() {
   glDisable(GL_TEXTURE_2D);
 }
 
+void print0()
+{
+	
+}
+
+void print1()
+{
+
+}
+
+void print3()
+{
+	
+}
+
+void print4()
+{
+
+}

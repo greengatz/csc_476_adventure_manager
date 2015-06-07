@@ -5,17 +5,16 @@ uniform mat4 M;
 uniform mat4 V;
 uniform float scale;
 varying vec2 fragTexCoords;
+// varying float edgeFade;
 
 void main()
 {
-	// Billboarding: set the upper 3x3 to be the identity matrix
-	// mat4 MV0 = MV;
-	// MV0[0] = vec4(1.0, 0.0, 0.0, 0.0);
-	// MV0[1] = vec4(0.0, 1.0, 0.0, 0.0);
-	// MV0[2] = vec4(0.0, 0.0, 1.0, 0.0);
-	// gl_Position = P * MV0 * vec4(scale * vertPosition.xy, 0.0, 1.0);
-
-	// vec3 pos = M * V * vertPosition;
 	gl_Position = P * V * M * vec4(vertPosition.x, vertPosition.y, vertPosition.z, 1.0);
 	fragTexCoords = vertTexCoords;
+
+	//calculates the distance to the edge to try to fade it
+	// vec2 center = vec2(scale / 2.0, scale / 2.0);
+	// float maxDist = distance(center, vec2(scale, scale));
+	// float distToPoint = distance(center, vertTexCoords);
+	// edgeFade = distToPoint / maxDist;
 }

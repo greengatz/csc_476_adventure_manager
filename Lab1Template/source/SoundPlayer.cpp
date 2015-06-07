@@ -2,8 +2,10 @@
 
 const char *files[] = {"assets/music/trailMusic1.mp3",
 					   "assets/music/trailMusic2.mp3",
+					   "assets/music/trailMusic3.mp3",
 					   "assets/music/tavernMusic1.mp3",
 					   "assets/music/tavernMusic2.mp3",
+					   "assets/music/tavernMusic3.mp3",
                        "assets/music/magicMissile.mp3",
                        "assets/music/explosion.mp3",
                        "assets/music/H01BanditB14.mp3",
@@ -63,9 +65,10 @@ SoundPlayer::~SoundPlayer()
 
 void SoundPlayer::playBackgroundMusic(bool tav)
 {
-	printf("called play background music and tav is %d\n", tav);
-	//gets a 0 or 1 if trail, 2 or 3 if tavern
-	curBkgSong = (tav) ? getRandInt(2) + 1 : getRandInt(2) - 1;
+	// printf("called play background music and tav is %d\n", tav);
+	//gets a 0-2 if trail, 3-5 if tavern
+	int songChoice = getRandInt(3);
+	curBkgSong = (tav) ? songChoice + 2 : songChoice - 1;
 	play(&music, curBkgSong);
 	FMOD_Channel_SetChannelGroup(music, musicGroup);
 	FMOD_ChannelGroup_SetVolume(musicGroup, sound_volume[curBkgSong]);
@@ -127,7 +130,9 @@ void SoundPlayer::checkTime()
 {
 	float curPoint = (float) difftime(time(0), startTime) - pausedTime;
 	if (!pauseSound && song_length[curBkgSong] < curPoint) {
-		curBkgSong += (curBkgSong % 2) ? 1 : -1;
+		int newSong = curBkgSong + 1;
+		curBkgSong = (curBkgSong == 2 || curBkgSong == 5) ? curBkgSong - 2 : newSong;
+		// curBkgSong += (curBkgSong % 2) ? 1 : -1;
 		play(&music, curBkgSong);
 		startTime = time(0);
 		pausedTime = 0;
