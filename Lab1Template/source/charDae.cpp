@@ -51,14 +51,15 @@ CharDae::CharDae(const string source, int inTexNum, float privScale, int daeToBe
     root = scene->mRootNode;
     meshes = scene->mMeshes;
     cout << "scene " << scene << "\n";
-   /* cout << "meshes " << meshes << "\n";
+    cout << "meshes " << meshes << "\n";
+    cout << "num meshes " << scene->mNumMeshes << "\n";
     cout << "facees in mesh 1 " << meshes[meshInd]->mNumFaces << "\n";
     cout << "number of bones " << meshes[meshInd]->mNumBones << "\n";
     cout << "number of animations " << scene->mNumAnimations << "\n";
     cout << "duration of 1 " << scene->mAnimations[0]->mDuration << "\n";
     cout << "tps " << scene->mAnimations[0]->mTicksPerSecond << "\n";
     cout << "number of frames in 1 " << scene->mAnimations[0]->mChannels[0]->mNumRotationKeys << "\n";
-*/
+
 
     //cout << "has tex? " << meshes[meshInd]->HasTextureCoords(0) << "\n";
     //cout << "num comps: " << meshes[meshInd]->mNumUVComponents[0] << "\n";
@@ -119,9 +120,11 @@ CharDae::CharDae(const string source, int inTexNum, float privScale, int daeToBe
     boneWeight = (float*) calloc(sizeof(float) * 4, numInd);
     aiVertexWeight boneVertex;
 
+    float totalWeights = 0;
     // for every bone
     for(i = 0; i < meshes[meshInd]->mNumBones; i++) {
         // mark which vertices this bone affects
+        totalWeights += meshes[meshInd]->mBones[i]->mNumWeights;
         for(j = 0; j < meshes[meshInd]->mBones[i]->mNumWeights; j++) {
             boneVertex = meshes[meshInd]->mBones[i]->mWeights[j];
 
@@ -131,6 +134,7 @@ CharDae::CharDae(const string source, int inTexNum, float privScale, int daeToBe
             numBones[boneVertex.mVertexId]++;
         }
     }
+    cout << "av num weights " << totalWeights / numInd << "\n";
 
     // fill the bone Id buffer
     glGenBuffers(1, &boneIdBuf);
