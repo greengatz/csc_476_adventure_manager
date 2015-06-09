@@ -684,6 +684,7 @@ void drawGL()
 				wagon.startWagon();
 			}else{
    				manager.blacklisted = false;
+   				manager.completedTrail();
    				manager.fortune = false;
 				terrain.createTrail();
    				wagon.resetWagon();

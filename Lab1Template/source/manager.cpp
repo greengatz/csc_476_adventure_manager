@@ -103,6 +103,29 @@ int Manager::getRandomAliveMercIndex(){
     return -1;
 }
 
+void Manager::completedTrail(){
+	int i = 0;
+	for(i = 0; i < mercs.size(); i++){
+		if(mercs[i].dead){
+			mercs.erase(mercs.begin() + i);
+		}else{
+			mercs[i].dead = false;
+			mercs[i].currHealth = mercs[i].maxHealth;
+		}
+	}
+	// vector<string> dataStuffs;
+ //    vector<string> about;
+ //    about.push_back("Congratulations on overcoming the trail!");  
+ //    about.push_back("As a reward, take 50gold, 5 beer, and 5 meat!");  
+ //    //Create an option and add it to a vector
+ //    fpResume = resumeGame;
+ //    option resumeOpt = {"Collect", fpResume, true};
+ //    vector<option> options;
+ //    options.push_back(resumeOpt);
+ //    //Set the data
+ //    menu->setData("Trail Conquerer", about, options, &beggarMenu, 5, dataStuffs);
+}
+
 void Manager::restartFromTrail(){
 	int i = 0;
 	for(i = 0; i < mercs.size(); i++){
@@ -114,6 +137,7 @@ void Manager::restartFromTrail(){
 	food = 4;
 	
 }
+
 
 void Manager::restartFromTavern(){
 	int i = 0;
@@ -361,12 +385,8 @@ void Manager::fightingFromMerchant(int numGaurds, int gaurdDamage){
 	    menu->setData("Skilled merchant", about, options, &diedMenu, 10, about);
 	}else{
 		gold += goldGain;
-		food += foodGain;
-		beer += beerGain;
 		dataStuffs.push_back(to_string(goldGain));
-		dataStuffs.push_back(to_string(foodGain));
-		dataStuffs.push_back(to_string(beerGain));
-		string aboutString = "You reaped " + to_string(goldGain) + "gold, " + to_string(beerGain) + "beer, " + to_string(foodGain) + "meat!";
+		string aboutString = "You reaped " + to_string(goldGain) + "gold";
 		about.push_back(aboutString);
 		about.push_back("Hopefully it was worth it");
 		about.push_back("and you can sleep at night!");

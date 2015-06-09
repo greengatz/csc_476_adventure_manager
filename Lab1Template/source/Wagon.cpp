@@ -473,12 +473,10 @@ void Wagon::updateWagon(float globalTime) {
 
         if(manager->getMercs() >= MAX_MERC){
           about.push_back("but your crew at max size!");
-          //Delete this!!!!!!!
-          dataStuffs.push_back(to_string(80));
+          dataStuffs.push_back(to_string(cost));
         }else if(manager->getGold() < cost){
           about.push_back("but you're a little short on gold!");
-          //Delete this!!!!!!!
-          dataStuffs.push_back(to_string(80));
+          dataStuffs.push_back(to_string(cost));
         }else{
           string aboutString = "buy this mercenary for ";
           dataStuffs.push_back(to_string(cost));
