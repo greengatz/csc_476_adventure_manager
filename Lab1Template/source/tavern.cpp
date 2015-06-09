@@ -169,7 +169,7 @@ void Tavern::createFirePlace(glm::vec3 init)
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(FIREPIT_BAKED);
 
 	rot = glm::rotate(glm::mat4(1.0f), 1.0f, glm::vec3(0, 1.0f, 0));
-	addTavernItem(TURKEY, 1, glm::vec3(.45, .45, .45), glm::vec3(init.x, 1.65f, init.z), rot);
+	addTavernItem(TURKEY, 1, glm::vec3(.35, .35, .35), glm::vec3(init.x, 1.65f, init.z), rot);
 	TURKEY_NUM = tavernItems.size() - 1;
 }
 
@@ -188,14 +188,14 @@ void Tavern::createEmblems()
 	// int emblemTex = WOLF_EMBLEM_ID;
 	glm::vec3 scaler = glm::vec3(0.75, 0.75, 0.75);
 	glm::mat4 rot = glm::rotate(glm::mat4(1.0f), (const float)90, glm::vec3(0, 1.0f, 0));
-	addTavernItem(CRATE, 2, scaler, glm::vec3(7.1, 3.8, -23.0), glm::mat4(1.0f));
+	addTavernItem(CRATE, 2, scaler, glm::vec3(6.85, 3.8, -23.0), glm::mat4(1.0f));
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(emblemTex);
-	addTavernItem(CRATE, 2, scaler, glm::vec3(38.9, 3.8, -23.5), glm::mat4(1.0f));
+	addTavernItem(CRATE, 2, scaler, glm::vec3(39.15, 3.8, -23.5), glm::mat4(1.0f));
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(emblemTex);
 
-	addTavernItem(CRATE, 2, scaler, glm::vec3(23.05, 3.8, -11.6), rot);
+	addTavernItem(CRATE, 2, scaler, glm::vec3(23.05, 3.8, -11.35), rot);
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(emblemTex);
-	addTavernItem(CRATE, 2, scaler, glm::vec3(23.05, 3.8, -35.4), rot);
+	addTavernItem(CRATE, 2, scaler, glm::vec3(23.05, 3.8, -35.65), rot);
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(emblemTex);
 	wallEmblem = tavernItems.size() - 1;
 }
@@ -483,7 +483,8 @@ void Tavern::applyTurkeySpin(double ltime)
 	float ang = 90;
 	//rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 1.0f, 0));
 	mat4 constRot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 1.0f, 0));
-	curTime += (float)ltime / 100.0;
+	// curTime += (float)ltime / 100.0;
+	curTime += 0.1;
 	mat4 newRot = glm::rotate(glm::mat4(1.0f), curTime, glm::vec3(0, 0, 1.0f));
 	tavernItems[TURKEY_NUM].rot = constRot * newRot;
 }
