@@ -273,7 +273,7 @@ void hurtMercenary(void* mgr, bool* gamePaused){
 void robMerch(void* mgr, bool* gamePaused){
   // *gamePaused = false;
   Manager* manager = (Manager*)mgr;
-  manager->fightingFromMerchant(2, 15);
+  manager->fightingFromMerchant(2, 18);
 }
 
 void fightAmbush(void* mgr, bool* gamePaused){
@@ -364,8 +364,8 @@ void Wagon::updateWagon(float globalTime) {
           menu->setData("Merchant Slayer", about, options, &merchantSlayerMenu, 0, about);
         }else{
           if(manager->fortune){
-            manager->setMedFoodCost(1);
-            manager->setMedBeerCost(1);
+            manager->setMedFoodCost(2);
+            manager->setMedBeerCost(2);
           }
           vector<string> newData;
           newData.push_back(to_string(manager->medFoodCost));
@@ -473,12 +473,10 @@ void Wagon::updateWagon(float globalTime) {
 
         if(manager->getMercs() >= MAX_MERC){
           about.push_back("but your crew at max size!");
-          //Delete this!!!!!!!
-          dataStuffs.push_back(to_string(80));
+          dataStuffs.push_back(to_string(cost));
         }else if(manager->getGold() < cost){
           about.push_back("but you're a little short on gold!");
-          //Delete this!!!!!!!
-          dataStuffs.push_back(to_string(80));
+          dataStuffs.push_back(to_string(cost));
         }else{
           string aboutString = "buy this mercenary for ";
           dataStuffs.push_back(to_string(cost));
