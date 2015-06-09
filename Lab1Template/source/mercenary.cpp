@@ -13,8 +13,9 @@ string JobNames[] = {"berzerker", "barbarian", "ranger", "cleric", "papiromancer
 
 // name generation tools
 string First[] = {"Zdislav", "Richard", "Bryn", "Omari", "Sizzle", 
-                "Victoria", "Victor", "Florence", "Napolean"};
-int firstCount = 9;
+                "Victoria", "Victor", "Florence", "Napolean", "Alicia",
+                "Lord Donald", "Ulrich", "Forthwind", "Tybalt", "Terrowin"};
+int firstCount = 15;
 
 string Last[] = {"Bobby", "Andrzejewski", "Zdrojewski", "Copperhordes", "Hugehair"
                 "Bourchier", "Cardonell", "del Chapagne", "Dreux"};
