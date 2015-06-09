@@ -804,6 +804,9 @@ void checkUserInput()
    float attemptZ = numeric_limits<int>::min();
    vec3 view = camera.getLookAtPoint() - camera.getTheEye();
    vec3 strafe = glm::cross(view, vec3(0.0, 1.0, 0.0));
+   if (!camera.isTavernView()) {
+      return;
+   }
    if (glfwGetKey(window, GLFW_KEY_A ) == GLFW_PRESS && !hasCollided(-strafe))
    {
       camera.updateStrafe(-strafe);
