@@ -70,6 +70,7 @@ class Manager
 		void restartFromTrail();
 		void restartFromTavern();
 		bool getInMenu();
+		void completedTrail();
 		void tickHungerHealth();
 		void beerMerc(int index);
 		void feedMerc(int index);
