@@ -184,11 +184,8 @@ void Manager::fleeingFromAmbush(){
 	bool found = false;
 	int index = 0;
 	int goldLoss = (rand() % 10 )+ 1, oldGold = gold;
-	
 	int foodLoss = (rand() % 2 ) + 1, oldMeat = food;
-	
 	int beerLoss = (rand() % 2 ) + 1, oldBeer = beer;
-	
 	int randDamage = (rand() % 20) + 10;
 	vector<string> dataStuffs;
  	vector<string> about;
@@ -258,7 +255,7 @@ void Manager::fightingFromAmbush(int numBandits, int banditDamage){
 	
 	srand(time(NULL));
 	int index = 0;
-	int goldGain = (rand() % 20 ) + 10;
+	int goldGain = (rand() % 5 ) + 10;
 	int foodGain = (rand() % 2 ) + 1;
 	int beerGain = (rand() % 2 ) + 1;
 
