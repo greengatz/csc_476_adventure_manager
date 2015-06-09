@@ -26,7 +26,7 @@ int HYDRA_EMBLEM_ID = 4900;
 int TURKEY_NUM;
 
 Tavern::Tavern() :
-    sam(CharDae("not_a_file"))
+    sam(CharDae("not_a_file", 0, 0.0f, 0))
 {
 	doorLoc = vec3(7.5, 1.35, -23);
 	beerLoc = vec3(35.0, 1.0, -35.0);
@@ -359,7 +359,7 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 	createEmblems();
 
     // try some assimp stuff
-    sam = CharDae("assets/characters/noAnim.dae");
+    sam = CharDae("assets/characters/noAnim.dae", 0, 0.0f, 0);
 }
 
 void Tavern::enableBuff(GLint h_vertPos, GLint h_vertNor, GLuint posBuf, GLuint norBuf, GLuint indBuf) {
@@ -470,8 +470,8 @@ void Tavern::drawTavernMercs(GLint h_ModelMatrix, GLint h_vertPos,
         }
         tavernCharacters[iter].dae->position = tavernCharacters[iter].meshes[0].pos;
         tavernCharacters[iter].dae->position.y -= 1;
-        tavernCharacters[iter].dae->scale = glm::vec3(0.8, 0.8, 0.8);
-        enableTextureBuffer(h_aTexCoord, tavernCharacters[iter].dae->texBuf, TAV_SAMURAI_ID);
+        tavernCharacters[iter].dae->scale = glm::vec3(1.0f, 1.0f, 1.0f);
+        //enableTextureBuffer(h_aTexCoord, tavernCharacters[iter].dae->texBuf, TAV_SAMURAI_ID);
 
         tavernCharacters[iter].dae->drawChar(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord, 
                 h_boneFlag, h_boneIds, h_boneWeights, h_boneTransforms, ltime, h_texFlag);

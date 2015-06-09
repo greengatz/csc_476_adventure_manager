@@ -14,7 +14,7 @@ string JobNames[] = {"berzerker", "barbarian", "ranger", "cleric", "papiromancer
 // name generation tools
 string First[] = {"Zdislav", "Richard", "Bryn", "Omari", "Sizzle", 
                 "Victoria", "Victor", "Florence", "Napolean", "Alicia",
-                "Lord Donald", "Ulrich", "Forthwind", "Tybalt", "Terrowin"};
+                "Lord Don", "Ulrich", "Forthwind", "Tybalt", "Terrowin"};
 int firstCount = 15;
 
 string Last[] = {"Bobby", "Andrzejewski", "Zdrojewski", "Copperhordes", "Hugehair"
@@ -39,6 +39,14 @@ string fileLoc[] = {"assets/characters/noAnim.dae",
         "assets/characters/noAnim.dae", "assets/characters/noAnim.dae", 
         "assets/characters/noAnim.dae", "assets/characters/noAnim.dae", 
         "assets/characters/noAnim.dae", "assets/characters/noAnim.dae"};
+int texBufInd[] = {5800, 
+        5800, 5800,
+        5800, 5800,
+        5800, 5800};
+int daeScale[] = {8, 
+        8, 8,
+        8, 8,
+        8, 8};
 
 string randFirstName() {
 	return First[rand() % firstCount];
@@ -133,7 +141,7 @@ void Mercenary::draw(GLint h_uModelMatrix, int meshIndex)
 void Mercenary::printDetails()
 {
 	cout << firstName + " " + lastName + ", the " + title + "\n";
-	cout << "   Class: " + JobNames[job] + "\n";
+	cout << "   Class: " + JobNames[job % 7] + "\n";
 	cout << "   Health: " + to_string(static_cast<long long int>(currHealth)) + "/" + to_string(static_cast<long long int>(maxHealth)) + "\n";
 	cout << "   Damage: " +  to_string(static_cast<long long int>(currDamage)) + "\n";
 	cout << "   Hunger: " +  to_string(static_cast<long long int>(currHunger)) + "\n";
@@ -152,7 +160,12 @@ void Mercenary::wave() {
 
 void Mercenary::initDae() {
     job = job < 0 ? -job : job;
-    dae = new CharDae(fileLoc[job % 7]);
+    // TODO give a scale as well
+    //dae = new CharDae("assets/characters/spearman.dae");
+    //cout << "seg fault... " << job % 7 << "\n"; 
+    //dae = new CharDae(fileLoc[job % 7], texBufInd[job % 7], daeScale[job % 7]);
+    dae = new CharDae("assets/characters/spearman.dae", 7400, 0.9, job % 7);
+    //cout << " no seg fault... " << job % 7 << "\n"; 
 }
 
 int Mercenary::calcDamage(){

@@ -20,7 +20,7 @@ using namespace glm;
 class CharDae
 {
     public:
-        CharDae(const string file);
+        CharDae(const string file, int inTexNum, float hiddenScale, int daeToBe);
         void drawChar(GLint h_ModelMatrix, GLint h_vertPos, 
                 GLint h_vertNor, GLint h_aTexCoord, GLint h_boneFlag,
                 GLint h_boneIds, GLint h_boneWeights,
@@ -42,6 +42,7 @@ class CharDae
 
         aiNode* root;
         aiMesh** meshes;
+        vec3 hiddenScale;
 
         unsigned int numInd;
         unsigned int* indices;
@@ -64,6 +65,7 @@ class CharDae
 
         int daeType;       
         int meshInd; 
+        int texInd;
 
         GLuint posBuf;
         GLuint norBuf;

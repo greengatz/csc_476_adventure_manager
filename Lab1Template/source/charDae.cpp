@@ -8,15 +8,22 @@ enum animations {
     walk,
     punch,
     idle,
+    die,
     animCount
 };
 
-int startAnim[][animCount] = {{1, 31, 71}};
-int endAnim[][animCount] = {{30, 70, 100}};
+int startAnim[][animCount] = {{1, 31, 71, 101}, 
+        {1, 85, 45, 125}, {1, 85, 45, 125},
+        {1, 85, 45, 125}, {1, 85, 45, 125},
+        {1, 85, 45, 125}, {1, 85, 45, 125}};
+int endAnim[][animCount] = {{30, 70, 100, 102}, 
+        {40, 120, 80, 190}, {40, 120, 80, 190},
+        {40, 120, 80, 190}, {40, 120, 80, 190},
+        {40, 120, 80, 190}, {40, 120, 80, 190}};
 
 int framesPerSec = 24;
 
-CharDae::CharDae(const string source) {
+CharDae::CharDae(const string source, int inTexNum, float privScale, int daeToBe) {
     int i, j, k;
     cout << "\n\ntrying to load " << source << "\n";
     importer = new Assimp::Importer();
@@ -29,11 +36,14 @@ CharDae::CharDae(const string source) {
         return;
     }
 
+    texInd = inTexNum;
+
     // TODO remove this magic
     meshInd = 0;
-    daeType = 0;
+    daeType = daeToBe;
     animChoice = -1;
 
+    hiddenScale = glm::vec3(privScale, privScale, privScale);
     scale = glm::vec3(1.0f, 1.0f, 1.0f);
     rotate = 45.0f;
 
@@ -370,20 +380,20 @@ void CharDae::drawChar(GLint h_ModelMatrix, GLint h_vertPos,
     glVertexAttribPointer(h_vertNor, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
     // texture TODO
-    //glUniform1i(h_texFlag, 1);
+    glUniform1i(h_texFlag, 1);
 
-    /*int texNum = 5800;
     glEnable(GL_TEXTURE_2D);
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texNum); // what is this?
+    glBindTexture(GL_TEXTURE_2D, texInd); // what is this?
 
     GLSL::enableVertexAttribArray(h_aTexCoord);
     glBindBuffer(GL_ARRAY_BUFFER, texBuf);
     glVertexAttribPointer(h_aTexCoord, 2, GL_FLOAT, GL_FALSE, 0, 0);
-   */
+   
     // model transform
     glm::mat4 translate = glm::translate(glm::mat4(1.0f), position);
-    glm::mat4 result = translate * glm::rotate(glm::mat4(1.0f), rotate, glm::vec3(0, 1, 0)) * glm::scale(mat4(1.0f), glm::vec3(8.0f, 8.0f, 8.0f)) * glm::scale(mat4(1.0f), scale);
+    glm::mat4 result = translate * glm::rotate(glm::mat4(1.0f), rotate, glm::vec3(0, 1, 0)) * 
+            glm::scale(mat4(1.0f), hiddenScale) * glm::scale(mat4(1.0f), scale);
     glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(result));
 
     // enable bones
