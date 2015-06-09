@@ -37,16 +37,16 @@ int BaseBeerRate[] = {15, 15, 15, 15, 15, 15};
 // Dae location
 string fileLoc[] = {"assets/characters/noAnim.dae", 
         "assets/characters/noAnim.dae", "assets/characters/noAnim.dae", 
-        "assets/characters/noAnim.dae", "assets/characters/noAnim.dae", 
-        "assets/characters/noAnim.dae", "assets/characters/noAnim.dae"};
+        "assets/characters/spearman.dae", "assets/characters/spearman.dae",
+        "assets/characters/spearman.dae", "assets/characters/spearman.dae"};
 int texBufInd[] = {5800, 
         5800, 5800,
-        5800, 5800,
-        5800, 5800};
-int daeScale[] = {8, 
-        8, 8,
-        8, 8,
-        8, 8};
+        7400, 7400,
+        7400, 7400};
+float daeScale[] = {6, 
+        6, 6,
+        0.9, 0.9,
+        0.9, 0.9};
 
 string randFirstName() {
 	return First[rand() % firstCount];
@@ -163,8 +163,8 @@ void Mercenary::initDae() {
     // TODO give a scale as well
     //dae = new CharDae("assets/characters/spearman.dae");
     //cout << "seg fault... " << job % 7 << "\n"; 
-    //dae = new CharDae(fileLoc[job % 7], texBufInd[job % 7], daeScale[job % 7]);
-    dae = new CharDae("assets/characters/spearman.dae", 7400, 0.9, job % 7);
+    dae = new CharDae(fileLoc[job % 7], texBufInd[job % 7], daeScale[job % 7], job % 7);
+    //dae = new CharDae("assets/characters/spearman.dae", 7400, 0.9, job % 7);
     //cout << " no seg fault... " << job % 7 << "\n"; 
 }
 
