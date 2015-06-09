@@ -114,6 +114,10 @@ glm::vec3 g(-10.0f, -5.0f, 0.0f);
 float timeOldDraw = 0.0f;
 float timeNew = 0.0f;
 float timeOldSpawn = 0.0f;
+bool hudHelper = true;
+float timeOldHUD = 0.0f;
+float timeNewHUD = 0.0f;;
+float dtHUD = 0.0f;
 
 typedef struct{
 	float x;
@@ -645,9 +649,9 @@ void drawGL()
                 h_boneWeights, h_boneTransforms, bone_terrainToggleID);
 		glUseProgram(0);
 
-
 		fire.draw(&camera, view.topMatrix()); //draw fire
 		glUniform1i(terrainToggleID, 0);
+
 	}
 
 	//****************The fade system******************
@@ -913,6 +917,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		}
 		else if(camera.isTavernView())
 		{
+			hud.on = true;
 			manager.buyMercenary(key - GLFW_KEY_1, &tavern);
 		}
 	}
@@ -1232,11 +1237,28 @@ int main(int argc, char **argv)
 		// Update every 60Hz
 		if(dtDraw >= (1.0 / 60.0) ) {
 			checkUserInput();
-
 			updateModels();
 			timeOldDraw += (1.0 / 60.0);
 			//Draw an image
 			drawGL();
+			if(camera.isTavernView()){
+				if(hud.on){
+					if(hudHelper)
+						timeNewHUD = timeOldHUD = glfwGetTime();
+					else
+						timeNewHUD = glfwGetTime();
+					hudHelper = false;
+					dtHUD = timeNewHUD - timeOldHUD;
+					if(dtHUD >= 4.0){
+						hud.on = false;
+						hudHelper = true;
+					}
+				}else{
+					hudHelper = true;
+					timeNewHUD = timeOldDraw;
+				}
+
+			}
 		}
 		// Swap buffers
 		glfwSwapBuffers(window);

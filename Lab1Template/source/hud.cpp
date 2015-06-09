@@ -28,7 +28,7 @@ HUD::HUD(Manager *newMan)
 	indxBuffObjSideHUD = 0;
 	textBuffMenu = 0;
 	textBuffSideHud = 0;
-	on = true;
+	on = false;
 	homeScreenOn = true;
 	deadScreenOn = false;
 }
@@ -52,8 +52,6 @@ void HUD::initHUD(TextureLoader *texLoader)
 	h_uTexUnit = GLSL::getUniformLocation(pid, "uTexUnit");
 
 	texLoader->LoadTexture((char *)"assets/newHud.bmp", HUD_ID);
-
-
 
   texLoader->LoadTexture((char *)"assets/deadScreen.bmp", DEAD_ID);
   texLoader->LoadTexture((char *)"assets/faceHUD.bmp", SICKFACE_ID);
