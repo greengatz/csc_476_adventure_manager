@@ -117,24 +117,28 @@ CharDae::CharDae(const string source, int inTexNum, float privScale, int daeToBe
     // boneCount
     numBones = (unsigned int*) calloc(sizeof(unsigned int), numInd);
     boneId = (unsigned int*) calloc(sizeof(unsigned int) * 4, numInd);
+    boneId2 = (unsigned int*) calloc(sizeof(unsigned int) * 4, numInd);
     boneWeight = (float*) calloc(sizeof(float) * 4, numInd);
+    boneWeight2 = (float*) calloc(sizeof(float) * 4, numInd);
     aiVertexWeight boneVertex;
 
-    float totalWeights = 0;
     // for every bone
     for(i = 0; i < meshes[meshInd]->mNumBones; i++) {
         // mark which vertices this bone affects
-        totalWeights += meshes[meshInd]->mBones[i]->mNumWeights;
         for(j = 0; j < meshes[meshInd]->mBones[i]->mNumWeights; j++) {
             boneVertex = meshes[meshInd]->mBones[i]->mWeights[j];
 
-            boneId[(boneVertex.mVertexId * 4) + numBones[boneVertex.mVertexId]] = i;
-            boneWeight[(boneVertex.mVertexId * 4) + numBones[boneVertex.mVertexId]] = boneVertex.mWeight;
+            if (numBones[boneVertex.mVertexId] < 4) {
+                boneId[(boneVertex.mVertexId * 4) + numBones[boneVertex.mVertexId]] = i;
+                boneWeight[(boneVertex.mVertexId * 4) + numBones[boneVertex.mVertexId]] = boneVertex.mWeight;
+            } else {
+                boneId2[(boneVertex.mVertexId * 4) + numBones[boneVertex.mVertexId] - 4] = i;
+                boneWeight2[(boneVertex.mVertexId * 4) + numBones[boneVertex.mVertexId] - 4] = boneVertex.mWeight;
+            }
 
             numBones[boneVertex.mVertexId]++;
         }
     }
-    cout << "av num weights " << totalWeights / numInd << "\n";
 
     // fill the bone Id buffer
     glGenBuffers(1, &boneIdBuf);
@@ -145,6 +149,16 @@ CharDae::CharDae(const string source, int inTexNum, float privScale, int daeToBe
     glGenBuffers(1, &boneWeightBuf);
     glBindBuffer(GL_ARRAY_BUFFER, boneWeightBuf);
     glBufferData(GL_ARRAY_BUFFER, numInd * 4 * sizeof(float), boneWeight, GL_STATIC_DRAW);
+    
+    // fill the bone Id buffer
+    glGenBuffers(1, &boneIdBuf2);
+    glBindBuffer(GL_ARRAY_BUFFER, boneIdBuf2);
+    glBufferData(GL_ARRAY_BUFFER, numInd * 4 * sizeof(unsigned int), boneId2, GL_STATIC_DRAW);
+    
+    // fill the bone Weights buffer
+    glGenBuffers(1, &boneWeightBuf2);
+    glBindBuffer(GL_ARRAY_BUFFER, boneWeightBuf2);
+    glBufferData(GL_ARRAY_BUFFER, numInd * 4 * sizeof(float), boneWeight2, GL_STATIC_DRAW);
 
     // make the model buffer
     // will need to update that buffers data pretty frequently...
@@ -273,7 +287,6 @@ const aiNodeAnim* CharDae::findNodeAnim(const aiAnimation* anim, const aiNode* t
 
 
 
-// TODO, actually interpolate
 aiQuaternion CharDae::intRot(float time, const aiNodeAnim* nodeAnim) {
     int i = 0; // int between i and i+1
     int key;
@@ -299,6 +312,7 @@ aiQuaternion CharDae::intRot(float time, const aiNodeAnim* nodeAnim) {
 
 // note: our animations don't change scale yet
 aiVector3D CharDae::intScale(float time, const aiNodeAnim* nodeAnim) {
+    // TODO, add this if animations want it
     return aiVector3D(1.0, 1.0, 1.0);
 }
 
@@ -356,7 +370,8 @@ bool CharDae::isAnimating() {
 void CharDae::drawChar(GLint h_ModelMatrix, GLint h_vertPos, 
             GLint h_vertNor, GLint h_aTexCoord, GLint h_boneFlag, 
             GLint h_boneIds, GLint h_boneWeights, 
-            GLint h_boneTransforms, float time, GLint h_texFlag) {
+            GLint h_boneTransforms, float time, GLint h_texFlag,
+            GLint h_boneIds2, GLint h_boneWeights2) {
     if(root == NULL) {
         return;
     }
@@ -408,11 +423,19 @@ void CharDae::drawChar(GLint h_ModelMatrix, GLint h_vertPos,
     glBindBuffer(GL_ARRAY_BUFFER, boneIdBuf);
     glVertexAttribPointer(h_boneIds, 4, GL_INT, GL_FALSE, 0, 0);
     
+    GLSL::enableVertexAttribArray(h_boneIds2);
+    glBindBuffer(GL_ARRAY_BUFFER, boneIdBuf2);
+    glVertexAttribPointer(h_boneIds2, 4, GL_INT, GL_FALSE, 0, 0);
+    
     // bone weight
     GLSL::enableVertexAttribArray(h_boneWeights);
     glBindBuffer(GL_ARRAY_BUFFER, boneWeightBuf);
     glVertexAttribPointer(h_boneWeights, 4, GL_FLOAT, GL_FALSE, 0, 0);
 
+    GLSL::enableVertexAttribArray(h_boneWeights2);
+    glBindBuffer(GL_ARRAY_BUFFER, boneWeightBuf2);
+    glVertexAttribPointer(h_boneWeights2, 4, GL_FLOAT, GL_FALSE, 0, 0);
+    
     // bone models
     updateBones(time);
 

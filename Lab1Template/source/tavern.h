@@ -49,7 +49,8 @@ class Tavern
 		void drawTavernMercs(GLint h_ModelMatrix, GLint h_vertPos, 
                     GLint h_vertNor, GLint h_aTexCoord, double ltime,
                     GLint h_boneFlag, GLint h_boneIds, 
-                    GLint h_boneWeights, GLint h_boneTransforms, GLint h_texFlag);
+                    GLint h_boneWeights, GLint h_boneTransforms, GLint h_texFlag,
+                    GLint h_boneIds2, GLint h_boneWeights2);
 
 	private:
 		float curTime;

@@ -17,7 +17,9 @@ uniform int flag;
 const int MAX_BONES = 100;
 uniform int boneToggle;
 attribute vec4 boneIds;
+attribute vec4 boneIds2;
 attribute vec4 boneWeights;
+attribute vec4 boneWeights2;
 uniform mat4 bones[MAX_BONES];
 
 varying vec3 color; // Pass to fragment shader
@@ -35,6 +37,11 @@ void main()
     boneTrans += bones[int(boneIds[1])] * boneWeights[1];
     boneTrans += bones[int(boneIds[2])] * boneWeights[2];
     boneTrans += bones[int(boneIds[3])] * boneWeights[3];
+    boneTrans += bones[int(boneIds2[0])] * boneWeights2[0];
+    boneTrans += bones[int(boneIds2[1])] * boneWeights2[1];
+    boneTrans += bones[int(boneIds2[2])] * boneWeights2[2];
+    boneTrans += bones[int(boneIds2[3])] * boneWeights2[3];
+
 
     gl_Position = uProjMatrix * uViewMatrix * uModelMatrix * boneTrans * vertPos;
     pos = uViewMatrix * uModelMatrix * boneTrans * vertPos;

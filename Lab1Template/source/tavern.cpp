@@ -452,7 +452,8 @@ void Tavern::drawTavern(GLint h_ModelMatrix, GLint h_vertPos,
 void Tavern::drawTavernMercs(GLint h_ModelMatrix, GLint h_vertPos, 
                 GLint h_vertNor, GLint h_aTexCoord, double ltime,
                 GLint h_boneFlag, GLint h_boneIds,
-                GLint h_boneWeights, GLint h_boneTransforms, GLint h_texFlag)
+                GLint h_boneWeights, GLint h_boneTransforms, GLint h_texFlag,
+                GLint h_boneIds2, GLint h_boneWeights2)
 {
 	// printf("tried to load the texture %d\n", id);
     for (int iter = 0; iter < tavernCharacters.size(); iter++) {
@@ -474,7 +475,8 @@ void Tavern::drawTavernMercs(GLint h_ModelMatrix, GLint h_vertPos,
         //enableTextureBuffer(h_aTexCoord, tavernCharacters[iter].dae->texBuf, TAV_SAMURAI_ID);
 
         tavernCharacters[iter].dae->drawChar(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord, 
-                h_boneFlag, h_boneIds, h_boneWeights, h_boneTransforms, ltime, h_texFlag);
+                h_boneFlag, h_boneIds, h_boneWeights, h_boneTransforms, ltime, h_texFlag,
+                h_boneIds2, h_boneWeights2);
     }
 }
 

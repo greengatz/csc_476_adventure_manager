@@ -102,6 +102,8 @@ GLint h_trail_flag, h_bone_flag;
 GLint h_boneFlag;
 GLint h_boneIds;
 GLint h_boneWeights;
+GLint h_boneIds2;
+GLint h_boneWeights2;
 GLint h_boneTransforms;
 
 bool keyToggles[256] = {false};
@@ -289,6 +291,8 @@ bool installBoneShader(const string &vShaderName, const string &fShaderName)
     h_boneFlag = GLSL::getUniformLocation(bonePid, "boneToggle");
     h_boneIds = GLSL::getAttribLocation(bonePid, "boneIds");
     h_boneWeights = GLSL::getAttribLocation(bonePid, "boneWeights");
+    h_boneIds2 = GLSL::getAttribLocation(bonePid, "boneIds2");
+    h_boneWeights2 = GLSL::getAttribLocation(bonePid, "boneWeights2");
     h_boneTransforms = GLSL::getUniformLocation(bonePid, "bones");
 
 	/*Toggle for plane coloring*/
@@ -642,7 +646,8 @@ void drawGL()
         // push a bunch of data
          tavern.drawTavernMercs(h_bone_ModelMatrix, h_bone_vertPos, h_bone_vertNor, 
                 h_bone_aTexCoord, dtDraw, h_boneFlag, h_boneIds, 
-                h_boneWeights, h_boneTransforms, bone_terrainToggleID);
+                h_boneWeights, h_boneTransforms, bone_terrainToggleID,
+                h_boneIds2, h_boneWeights2);
 		glUseProgram(0);
 
 

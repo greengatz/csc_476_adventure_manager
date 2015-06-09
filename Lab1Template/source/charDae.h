@@ -24,7 +24,8 @@ class CharDae
         void drawChar(GLint h_ModelMatrix, GLint h_vertPos, 
                 GLint h_vertNor, GLint h_aTexCoord, GLint h_boneFlag,
                 GLint h_boneIds, GLint h_boneWeights,
-                GLint h_boneTransforms, float time, GLint h_texFlag);
+                GLint h_boneTransforms, float time, GLint h_texFlag,
+                GLint h_boneIds2, GLint h_boneWeights2);
         void startAnimation(string animation);
         bool isAnimating();
         
@@ -55,6 +56,8 @@ class CharDae
         unsigned int* numBones; // number of bones affecting a given vertex
         unsigned int* boneId; // 4 per vertex
         float* boneWeight; // 4 per vertex
+        unsigned int* boneId2; // 4 per vertex
+        float* boneWeight2; // 4 per vertex
         //vector<Matrix4f>& boneModels;
         vector<mat4> boneModels;
         float* floatModel;
@@ -72,6 +75,8 @@ class CharDae
         GLuint indBuf;
         GLuint boneIdBuf;
         GLuint boneWeightBuf;
+        GLuint boneIdBuf2;
+        GLuint boneWeightBuf2;
         GLuint boneTransforms;
 
 
