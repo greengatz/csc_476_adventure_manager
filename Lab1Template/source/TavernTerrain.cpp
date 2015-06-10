@@ -130,9 +130,9 @@ void TavernTerrain::calcBuffers(int coor1, int coor2, GLuint *posBuf, GLuint *no
 
 void TavernTerrain::init(TextureLoader* texLoader)
 {
-  ground = glm::vec3(5.0f, 0.0f, -5.0f);
-  wall1 = glm::vec3(5.0f, 20.0f, -35.0f);
-  wall2 = glm::vec3(7.5f, 20.0f, -35.0f);
+  ground = glm::vec3(5.0f, 0.0f, -11.0f);
+  wall1 = glm::vec3(5.0f, 14.0f, -31.0f);
+  wall2 = glm::vec3(7.5f, 14.0f, -31.0f);
 	scale = 0.75f;
 
     // loop through all of the heightfield points, calculating
@@ -178,7 +178,7 @@ void TavernTerrain::init(TextureLoader* texLoader)
 
     //Load Texture
     texLoader->LoadTexture((char *)"assets/tavern/stoneFloorTex.bmp", TERRAIN_TEX_TAVERN_FLOOR_ID);
-    texLoader->LoadTexture((char *)"assets/tavern/tavernFloor.bmp", TERRAIN_TEX_TAVERN_WALL_ID);
+    texLoader->LoadTexture((char *)"assets/tavern/walls/stoneWall1.bmp", TERRAIN_TEX_TAVERN_WALL_ID);
 
   	//unbind the arrays
   	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -246,12 +246,13 @@ void TavernTerrain::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_Mo
   setUpStack(modelTrans, h_ModelMatrix, wall1);
   drawATex(h_pos, h_nor, h_aTexCoord, h_ModelMatrix, wallPosBufID, wallNorBufID, wallTexBufID, TERRAIN_TEX_TAVERN_WALL_ID);
 
+  //Wall with door
   setUpStack(modelTrans, h_ModelMatrix, glm::vec3(wall1.x, wall1.y, -12.0f));
   drawATex(h_pos, h_nor, h_aTexCoord, h_ModelMatrix, wallPosBufID, wallNorBufID, wallTexBufID, TERRAIN_TEX_TAVERN_WALL_ID);
 
   setUpStack(modelTrans, h_ModelMatrix, wall2);
   drawATex(h_pos, h_nor, h_aTexCoord, h_ModelMatrix, wall2PosBufID, wall2NorBufID, wall2TexBufID, TERRAIN_TEX_TAVERN_WALL_ID);
 
-  setUpStack(modelTrans, h_ModelMatrix, glm::vec3(38.5f, wall2.y, wall2.z));
+  setUpStack(modelTrans, h_ModelMatrix, glm::vec3(24.0f, wall2.y, wall2.z));
   drawATex(h_pos, h_nor, h_aTexCoord, h_ModelMatrix, wall2PosBufID, wall2NorBufID, wall2TexBufID, TERRAIN_TEX_TAVERN_WALL_ID);
 }
