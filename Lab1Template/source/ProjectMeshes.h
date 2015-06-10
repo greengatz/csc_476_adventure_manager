@@ -40,6 +40,7 @@ using namespace std;
 #define BARRELS 14
 #define MIRRORFRAME 15
 #define MIRROR 16
+#define STAIRS 17
 // #define BALUSTRADE 14
 
 //terrain meshes
