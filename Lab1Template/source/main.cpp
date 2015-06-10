@@ -762,7 +762,7 @@ bool hasCollided(glm::vec3 incr)
 	}
 
 	glm::vec3 camPos = camera.getPosition() + incr;
-	//printf("CamPosition: <%lf, %lf, %lf>\n", camPos.x, camPos.y, camPos.z);
+	printf("CamPosition: <%lf, %lf, %lf>\n", camPos.x, camPos.y, camPos.z);
 
 	float curCam[6] = {
     camera.bound.minX + camPos.x,
