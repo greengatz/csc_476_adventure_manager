@@ -111,6 +111,9 @@ void Manager::completedTrail(){
 		}else{
 			mercs[i].dead = false;
 			mercs[i].currHealth = mercs[i].maxHealth;
+			mercs[i].currHealth = mercs[i].maxHealth;
+			mercs[i].currHappiness = mercs[i].maxHappiness;
+			mercs[i].currHunger = mercs[i].maxHunger;
 		}
 	}
 	// vector<string> dataStuffs;
@@ -130,6 +133,8 @@ void Manager::restartFromTrail(){
 	int i = 0;
 	for(i = 0; i < mercs.size(); i++){
 		mercs[i].currHealth = mercs[i].maxHealth;
+		mercs[i].currHappiness = mercs[i].maxHappiness;
+		mercs[i].currHunger = mercs[i].maxHunger;
 		mercs[i].dead = false;
 	}
 	gold = 30;
@@ -147,6 +152,8 @@ void Manager::restartFromTavern(){
 		}else{
 			mercs[i].dead = false;
 			mercs[i].currHealth = mercs[i].maxHealth;
+			mercs[i].currHappiness = mercs[i].maxHappiness;
+			mercs[i].currHunger = mercs[i].maxHunger;
 		}
 	}
 	gold = 100;
@@ -215,8 +222,6 @@ void Manager::fleeingFromAmbush(){
 	about.push_back("They took " + to_string((goldLoss)) + ",");
 
 	if((oldBeer - beer < 1 && oldMeat - food < 1 && oldGold - gold < 5)){
-		
-		
 		int i = Manager::getRandomAliveMercIndex();
 		if(i >= 0){
 			mercs[i].currHealth -= randDamage;
@@ -476,20 +481,21 @@ void Manager::buyMercenary(int mercenaryID, Tavern* tav)
 void Manager::buyMercenaryTrail(int cost)
 {
 	if(rand() % 10 == 1){
-		gold -= cost;
-		vector<string> about;
-		string aboutString = "He ran away with your gold!";
+			gold -= cost;
+			vector<string> about;
+			string aboutString = "He ran away with your gold!";
 			about.push_back(aboutString);
-	    fpContinue = continueGame;
-	    option resumeOpt = {"Onward", fpContinue, true};
-	    vector<option> options;
-	    options.push_back(resumeOpt);
-	    //Set the data
-	    menu->setData("Oops", about, options, &oopsRanMenu, 6, about);
+		    fpContinue = continueGame;
+		    option resumeOpt = {"Onward", fpContinue, true};
+		    vector<option> options;
+		    options.push_back(resumeOpt);
+		    //Set the data
+		    menu->setData("Oops", about, options, &oopsRanMenu, 6, about);
+		
 	}else{
 		if(gold >= cost){
 			mercs.push_back(*(new Mercenary()));
-			gold -= mercs.back().cost;
+			gold -= cost;
 		}
 	}
 
@@ -551,24 +557,26 @@ void Manager::setBeer(int newBeer)
 	}
 }
 
-void Manager::feedMerc(int index)
-{
+void Manager::feedMerc()
+{	
+	int i;
 	if(food > 0){
 		food--;
-		if(index < mercs.size()){
-			Mercenary m = mercs[index];
-			m.currHunger = (((m.maxHunger / 2) + m.currHunger) >= m.maxHunger) ? m.maxHunger : m.currHunger + (m.maxHunger / 2);
+		for(i = 0; i < mercs.size(); i++){
+			Mercenary m = mercs[i];
+			m.currHunger = (((m.maxHunger / 4) + m.currHunger) >= m.maxHunger) ? m.maxHunger : floor(m.currHunger + (m.maxHunger / 4.0));
 		}
 	}
 }
 
-void Manager::beerMerc(int index)
+void Manager::beerMerc()
 {
+	int i;
 	if(beer > 0){
 		beer--;
-		if(index < mercs.size()){
-			Mercenary m = mercs[index];
-			m.currHappiness = (((m.maxHappiness / 2) + m.currHappiness) >= m.maxHappiness) ? m.maxHappiness : m.currHappiness + (m.maxHappiness / 2);
+		for(i = 0; i < mercs.size(); i++){
+			Mercenary m = mercs[i];
+			m.currHappiness = (((m.maxHappiness / 4) + m.currHappiness) >= m.maxHappiness) ? m.maxHappiness : floor(m.currHappiness + (m.maxHappiness / 4.0));
 		}
 	}
 }

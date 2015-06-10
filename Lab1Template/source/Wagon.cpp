@@ -448,9 +448,9 @@ void Wagon::updateWagon(float globalTime) {
       if(event == WANDERER){
         vector<string> about;
         srand(time(NULL));
-        int cost = (rand() % 20) + 25;
+        int cost = (rand() % 10) + 30;
         int index = manager->getRandomAliveMercIndex();
-        manager->setFocus(index);
+        // manager->setFocus(index);
         manager->setMedGoldCost(cost);
         *gamePaused = true;
         //Create about vector and add an element
@@ -458,7 +458,7 @@ void Wagon::updateWagon(float globalTime) {
         vector<string> dataStuffs;
         // Obj3d temp(&((*meshData).terrMeshes[1]), scale, trans, rot);
         // Mercenary *newMerc = new Mercenary(meshData->);
-        string name = manager->getName(index);
+        string name = "A lone wanderer";
         dataStuffs.push_back(name);
         about.push_back(name + " wants to join your party,");
 

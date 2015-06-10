@@ -885,7 +885,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		if(camera.isTavernView())
 			manager.buyFood(5);
 		else{
-			manager.feedMerc(0);
+			manager.feedMerc();
 		}
 
 	}
@@ -896,7 +896,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		if(camera.isTavernView())
 			manager.buyBeer(2);
 		else
-			manager.beerMerc(0);
+			manager.beerMerc();
 	}
 	
 	if (key >= GLFW_KEY_1 && key <= GLFW_KEY_5 && action == GLFW_PRESS)
@@ -1161,7 +1161,7 @@ int main(int argc, char **argv)
   	dtDraw = 0;
   	audio.playBackgroundMusic(true);
 
- //  	vector<string> about;
+ 	//vector<string> about;
 	// about.push_back("about test");
 
 	// //Create an option and add it to a vector
@@ -1222,9 +1222,7 @@ int main(int argc, char **argv)
    		timeNew = glfwGetTime();
 		audio.checkTime();
 		dtDraw = timeNew - timeOldDraw;
-		
 		t += h;
-	
 		// Update every 60Hz
 		if(dtDraw >= (1.0 / 60.0) ) {
 			checkUserInput();
@@ -1248,7 +1246,6 @@ int main(int argc, char **argv)
 					hudHelper = true;
 					timeNewHUD = timeOldDraw;
 				}
-
 			}
 		}
 		// Swap buffers
