@@ -175,9 +175,11 @@ void Tavern::createPillar(glm::vec3 initLoc, bool north)
 
 void Tavern::createFirePlace(glm::vec3 init)
 {
+	glEnable(GL_CULL_FACE);
 	glm::mat4 rot = glm::rotate(glm::mat4(1.0f), 90.0f, glm::vec3(0.0, 1.0f, 0.0));
 	addTavernItem(FIREPLACE, 1, glm::vec3(1.2, 1.2, 1.2), glm::vec3(init.x, 0.85f, init.z), rot);
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(FIREPIT_BAKED);
+	glDisable(GL_CULL_FACE);
 
 	rot = glm::rotate(glm::mat4(1.0f), 1.0f, glm::vec3(0, 1.0f, 0));
 	addTavernItem(TURKEY, 1, glm::vec3(.35, .35, .35), glm::vec3(init.x, 1.65f, init.z), rot);
