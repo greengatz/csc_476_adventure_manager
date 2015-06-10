@@ -45,10 +45,10 @@ const string otherFiles[] = {"assets/tavern/box.obj",
 };
 
 const int NUM_PPL = 5;
-const string pplFiles[] = {"assets/events/samurai.obj",
-						   "assets/events/spearman.obj",
+const string pplFiles[] = {"assets/characters/samuraistatic.obj",
+						   "assets/characters/spearmanstatic.obj",
                       	   "assets/tavern/landlord.obj",
-                   		   "assets/tavern/lumberjack.obj",
+                   		   "assets/characters/lumberjackstatic.obj",
                    		   "assets/events/monk.obj",
 };
 

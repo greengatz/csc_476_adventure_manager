@@ -16,7 +16,7 @@ const mat4 charRotates[] = {glm::rotate(mat4(1.0f), (const float)180, glm::vec3(
 						    glm::rotate(mat4(1.0f), (const float)180, glm::vec3(0, 1.0f, 0)),
 };
 const float charYTrans[] = {0.085, //all the same...
-                            0.085,
+                            0.125,
                             0.085,
                             0.085,
 };
