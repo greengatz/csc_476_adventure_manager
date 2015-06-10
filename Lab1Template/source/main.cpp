@@ -1183,6 +1183,9 @@ int main(int argc, char **argv)
   	hud.initSideHud(&texLoader);
   	hud.initHomeScreen(&texLoader);
   	initText2D( "Holstein.DDS" );
+  	// initText2D( "uvmap.DDS" );
+  	// initText2D( "aText.bmp" );
+  	// initText2D("aText.dds");
   	dtDraw = 0;
   	audio.playBackgroundMusic(true);
 
