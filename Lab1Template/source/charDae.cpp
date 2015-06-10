@@ -39,7 +39,9 @@ CharDae::CharDae(const string source, int inTexNum, float privScale, int daeToBe
     // TODO remove this magic
     meshInd = 0;
     daeType = daeToBe;
+    lastAnim = -1;
     animChoice = -1;
+    randomStart = false;
 
     hiddenScale = glm::vec3(privScale, privScale, privScale);
     scale = glm::vec3(1.0f, 1.0f, 1.0f);
@@ -48,7 +50,7 @@ CharDae::CharDae(const string source, int inTexNum, float privScale, int daeToBe
     //cout << "root " << scene->mRootNode << "\n";
     root = scene->mRootNode;
     meshes = scene->mMeshes;
-    cout << "scene " << scene << "\n";
+    /*cout << "scene " << scene << "\n";
     cout << "meshes " << meshes << "\n";
     cout << "num meshes " << scene->mNumMeshes << "\n";
     cout << "facees in mesh 1 " << meshes[meshInd]->mNumFaces << "\n";
@@ -57,7 +59,7 @@ CharDae::CharDae(const string source, int inTexNum, float privScale, int daeToBe
     cout << "duration of 1 " << scene->mAnimations[0]->mDuration << "\n";
     cout << "tps " << scene->mAnimations[0]->mTicksPerSecond << "\n";
     cout << "number of frames in 1 " << scene->mAnimations[0]->mChannels[0]->mNumRotationKeys << "\n";
-
+*/
 
     //cout << "has tex? " << meshes[meshInd]->HasTextureCoords(0) << "\n";
     //cout << "num comps: " << meshes[meshInd]->mNumUVComponents[0] << "\n";
@@ -332,7 +334,7 @@ aiVector3D CharDae::intTrans(float time, const aiNodeAnim* nodeAnim) {
     float factor = (time - nodeAnim->mPositionKeys[key].mTime) / dt;
 
     aiVector3D ret;
-    ret += startPos * (1.0f - factor); // TODO test this out
+    ret += startPos * (1.0f - factor);
     ret += endPos * (factor);
    // aiVector3D::Interpolate(ret, startPos, endPos, factor);
 
@@ -354,7 +356,14 @@ void CharDae::startAnimation(string animation) {
 
     if(animChoice != -1) {
         int numFrames = endAnim[daeType][animChoice] - startAnim[daeType][animChoice];
+        
+        int skippedFrames = 0;
+        if(lastAnim != animChoice && (animChoice == walk || animChoice == idle)) {
+            skippedFrames = rand() % (numFrames);
+            randomStart = false;
+        }
         // frames / fps
+        animStart = animStart - (((float) skippedFrames) / ((float) framesPerSec));
         endTime = (((float) numFrames) / ((float) framesPerSec)) + animStart;
     }
     lastAnim = animChoice;
@@ -396,7 +405,7 @@ void CharDae::drawChar(GLint h_ModelMatrix, GLint h_vertPos,
     glBindBuffer(GL_ARRAY_BUFFER, norBuf);
     glVertexAttribPointer(h_vertNor, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-    // texture TODO
+    // texture 
     glUniform1i(h_texFlag, 1);
 
     glEnable(GL_TEXTURE_2D);

@@ -31,7 +31,8 @@ public:
 	void drawMercs(GLint h_ModelMatrix, GLint h_vertPos, 
             GLint h_vertNor, GLint h_aTexCoord, GLint h_boneFlag,
             GLint h_boneIds, GLint h_boneWeights,
-            GLint h_boneTransforms, float time);
+            GLint h_boneTransforms, float time, GLint h_boneIds2,
+            GLint h_boneWeights2, GLint h_texFlag);
 	void init(TextureLoader* texLoader, Terrain* aTerrain, Menu* aMenu, bool* gP, float* fF, Manager* mgr, ProjectMeshes *newData, SoundPlayer* audio);
 	void draw(RenderingHelper* modelTrans, Camera* camera, glm::vec3 wagonPos);
 	void setPosition(float x, float y, float z);
