@@ -14,7 +14,7 @@ string JobNames[] = {"berzerker", "barbarian", "ranger", "cleric", "papiromancer
 // name generation tools
 string First[] = {"Zdislav", "Richard", "Bryn", "Omari", "Sizzle", 
                 "Victoria", "Victor", "Florence", "Napolean", "Alicia",
-                "Lord Donald", "Ulrich", "Forthwind", "Tybalt", "Terrowin"};
+                "Lord Don", "Ulrich", "Forthwind", "Tybalt", "Terrowin"};
 int firstCount = 15;
 
 string Last[] = {"Bobby", "Andrzejewski", "Zdrojewski", "Copperhordes", "Hugehair"
@@ -35,10 +35,15 @@ int BaseHungerRate[] = {15, 15, 15, 15, 15, 15};
 int BaseBeerRate[] = {15, 15, 15, 15, 15, 15};
 
 // Dae location
-string fileLoc[] = {"assets/characters/noAnim.dae", 
-        "assets/characters/noAnim.dae", "assets/characters/noAnim.dae", 
-        "assets/characters/noAnim.dae", "assets/characters/noAnim.dae", 
-        "assets/characters/noAnim.dae", "assets/characters/noAnim.dae"};
+string fileLoc[] = {"assets/characters/noAnim.dae", "assets/characters/noAnim.dae",
+        "assets/characters/spearman.dae", "assets/characters/spearman.dae",
+        "assets/characters/spearman.dae", "assets/characters/spearman.dae"};
+int texBufInd[] = {5800, 5800,
+        7400, 7400,
+        7400, 7400};
+float daeScale[] = {6, 6,
+        0.9, 0.9,
+        0.9, 0.9};
 
 string randFirstName() {
 	return First[rand() % firstCount];
@@ -58,7 +63,7 @@ Mercenary::Mercenary(vector<Obj3d> m) :
     firstName(randFirstName()),
     lastName(randLastName()),
     title(randTitle()),
-    job(rand() % 7),
+    job(rand() % 6),
     dead(false),
     maxHealth(BaseHealth[job] + rand() % HEALTH_VARIANCE),
     maxDamage(BaseDamage[job] + rand() % DAMAGE_VARIANCE),
@@ -81,7 +86,7 @@ Mercenary::Mercenary() :
     lastName(randLastName()),
     title(randTitle()),
     
-    job(rand() % 7),
+    job(rand() % 6),
     dead(false),
     maxHealth(BaseHealth[job] + rand() % HEALTH_VARIANCE),
     maxDamage(BaseDamage[job] + rand() % DAMAGE_VARIANCE),
@@ -130,7 +135,8 @@ void Mercenary::draw(GLint h_uModelMatrix, int meshIndex)
 void Mercenary::printDetails()
 {
 	cout << firstName + " " + lastName + ", the " + title + "\n";
-	cout << "   Class: " + JobNames[job] + "\n";
+	cout << "   job? " << job << "\n";
+    cout << "   Class: " + JobNames[job % 6] + "\n";
 	cout << "   Health: " + to_string(static_cast<long long int>(currHealth)) + "/" + to_string(static_cast<long long int>(maxHealth)) + "\n";
 	cout << "   Damage: " +  to_string(static_cast<long long int>(currDamage)) + "\n";
 	cout << "   Hunger: " +  to_string(static_cast<long long int>(currHunger)) + "\n";
@@ -149,7 +155,12 @@ void Mercenary::wave() {
 
 void Mercenary::initDae() {
     job = job < 0 ? -job : job;
-    dae = new CharDae(fileLoc[job % 7]);
+    // TODO give a scale as well
+    //dae = new CharDae("assets/characters/spearman.dae");
+    //cout << "seg fault... " << job % 7 << "\n"; 
+    dae = new CharDae(fileLoc[job % 6], texBufInd[job % 6], daeScale[job % 6], job % 6);
+    //dae = new CharDae("assets/characters/spearman.dae", 7400, 0.9, job % 7);
+    //cout << " no seg fault... " << job % 7 << "\n"; 
 }
 
 int Mercenary::calcDamage(){

@@ -102,6 +102,8 @@ GLint h_trail_flag, h_bone_flag;
 GLint h_boneFlag;
 GLint h_boneIds;
 GLint h_boneWeights;
+GLint h_boneIds2;
+GLint h_boneWeights2;
 GLint h_boneTransforms;
 
 bool keyToggles[256] = {false};
@@ -293,6 +295,8 @@ bool installBoneShader(const string &vShaderName, const string &fShaderName)
     h_boneFlag = GLSL::getUniformLocation(bonePid, "boneToggle");
     h_boneIds = GLSL::getAttribLocation(bonePid, "boneIds");
     h_boneWeights = GLSL::getAttribLocation(bonePid, "boneWeights");
+    h_boneIds2 = GLSL::getAttribLocation(bonePid, "boneIds2");
+    h_boneWeights2 = GLSL::getAttribLocation(bonePid, "boneWeights2");
     h_boneTransforms = GLSL::getUniformLocation(bonePid, "bones");
 
 	/*Toggle for plane coloring*/
@@ -605,9 +609,20 @@ void drawGL()
                // wagon.drawMercs(h_bone_ModelMatrix, h_bone_vertPos, h_bone_vertNor, 
                  //   h_bone_aTexCoord,  h_boneFlag, h_boneIds, h_boneWeights,
                   //  h_boneTransforms, dtDraw);
-		
+		// draw mercs
+		glUseProgram(bonePid);
+		glUniform1i(bone_terrainToggleID, 1);
+		glUniform3f(h_bone_ka, 1.0f, 1.0f, 1.0f);
+		glUniform1i(h_bone_uTexUnit, 0);
 		ModelTrans.loadIdentity();
-		glUseProgram(trailPid);
+		ModelTrans.pushMatrix();
+		ModelTrans.popMatrix();
+		ModelTrans.loadIdentity();
+        wagon.drawMercs(h_bone_ModelMatrix, h_bone_vertPos, h_bone_vertNor, 
+                    h_bone_aTexCoord,  h_boneFlag, h_boneIds, h_boneWeights,
+                    h_boneTransforms, dtDraw, h_boneIds2, h_boneWeights2, bone_terrainToggleID);
+		
+        glUseProgram(trailPid);
       setProjView(&h_trail_ProjMatrix, &h_trail_ViewMatrix);
 		glUniform1i(trailTerrainToggleID, 0);
       //Draw the skybox
@@ -646,7 +661,8 @@ void drawGL()
         // push a bunch of data
          tavern.drawTavernMercs(h_bone_ModelMatrix, h_bone_vertPos, h_bone_vertNor, 
                 h_bone_aTexCoord, dtDraw, h_boneFlag, h_boneIds, 
-                h_boneWeights, h_boneTransforms, bone_terrainToggleID);
+                h_boneWeights, h_boneTransforms, bone_terrainToggleID,
+                h_boneIds2, h_boneWeights2);
 		glUseProgram(0);
 
 		fire.draw(&camera, view.topMatrix()); //draw fire
@@ -746,6 +762,7 @@ bool hasCollided(glm::vec3 incr)
 	}
 
 	glm::vec3 camPos = camera.getPosition() + incr;
+	//printf("CamPosition: <%lf, %lf, %lf>\n", camPos.x, camPos.y, camPos.z);
 
 	float curCam[6] = {
     camera.bound.minX + camPos.x,
@@ -757,35 +774,10 @@ bool hasCollided(glm::vec3 incr)
 
 	bool validMove = (curCam[0] < 6.75 || curCam[1] > 39.5 || curCam[4] < -36.0 || curCam[5] > -11.4);
 
-	// for (std::vector<Obj3d>::iterator it1 = objs.begin(); it1 != objs.end(); ++it1)
-	// {
-	// 	glm::vec3 pos1 = it1 ->getCurSpot();
-	// 	if(it1->bound.checkCollision(curCam, it1->scale, pos1))
-	// 	{
-	// 		validMove = true;
-	// 	}
-	// }
-
 	int row, col;
   	row = (camPos.x - minX)/gridSize;
  	col = (camPos.z - minZ)/gridSize;
 	vector<Obj3d> currentCellObjs = grid[row][col];
-
- 	// for(int i = 0; i < currentCellObjs.size(); i++)
- 	// {
- 	// 	vec3 curTrans = currentCellObjs[i].getCurSpot();
-
- 	// 	if (currentCellObjs[i].bound.checkCollision(curCam, currentCellObjs[i].scale, curTrans))
- 	// 	{
- 	//   		if(!currentCellObjs[i].done)
-  //     		{
-  //       		currentCellObjs[i].hit();
-  //       		printf("Hit item %d at %lf, %lf\n", i, camPos.x, camPos.z);
-  //     		}
-
-  //   		validMove = false;
-  //   	}
-  // 	}
 
 	for(vector<Obj3d>::iterator it1 = currentCellObjs.begin(); it1 != currentCellObjs.end(); ++it1)
 	{
@@ -793,7 +785,6 @@ bool hasCollided(glm::vec3 incr)
 		if(it1->bound.checkCollision(curCam, it1->scale, pos1))
 		{
 			validMove = true;
-			//printf("Hit object at %lf, %lf\n!!", camPos.x, camPos.z);
 		}
 	}
 

@@ -310,31 +310,22 @@ void donate(void* mgr, bool* gamePaused ){
 }
 
 void Wagon::updateWagon(float globalTime) {
-  for(int i = 0; i < manager->mercs.size(); i++) {
-    if(manager->mercs[i].dae == NULL) {
-        manager->mercs[i].initDae();
-    }
-    manager->mercs[i].dae->position = position;
-    // the wagon has this transform from the stack
-    manager->mercs[i].dae->position.x -= 99.5 + (float) i / 3;
-    manager->mercs[i].dae->position.z += 0.4 - (i % 2) * 0.8;
-    manager->mercs[i].dae->position.y = 0;
-    manager->mercs[i].dae->scale = glm::vec3(0.05, 0.05, 0.05);
-    manager->mercs[i].dae->rotate = rotate;
-  }
-
   if (wagonStart && !terrain->atEnd(position)) {
     int event = terrain->checkEvents(position);
 
+    bool runOffset = false;
 
     if(!manager->partyDead()){
 
       if(event == 0) {
         for(int i = 0; i < manager->mercs.size(); i++) {
           if(!manager->mercs[i].dae->isAnimating()) {
+            manager->mercs[i].dae->randomStart = runOffset;
             manager->mercs[i].dae->startAnimation("run");
+            runOffset = true;
           }
         }
+        runOffset = false;
       } else if (event != 0){
         manager->tickHungerHealth();
       }
@@ -567,6 +558,30 @@ void Wagon::updateWagon(float globalTime) {
       rotate = 90.0f + -1.0 * atan(terrain->getSpline()->getDY(position.x)) * (180.0 / 3.14);
 
       startTime += deltaTime;
+  
+      for(int i = 0; i < manager->mercs.size(); i++) {
+        if(manager->mercs[i].dae == NULL) {
+           manager->mercs[i].initDae();
+        }
+        manager->mercs[i].dae->position = position;
+        // the wagon has this transform from the stack
+        vec3 groupCenter = position;
+        groupCenter.x -= 100;
+        groupCenter.x -= 0.2 * cos((-rotate + 90) * 3.14 / 180.0) * (i / 2);
+        groupCenter.z -= 0.2 * sin((-rotate + 90) * 3.14 / 180.0) * (i / 2);
+        groupCenter.y = 0;
+
+        groupCenter.x += cos((-rotate) * 3.14 / 180.0) * (0.5 - (i % 2) * 0.2);
+        groupCenter.z += sin((-rotate) * 3.14 / 180.0) * (0.5 - (i % 2) * 0.2);
+        //groupCenter.z += cos((rotate + 90.0f)  * 3.14 / 180.0) * 0.25;
+
+        manager->mercs[i].dae->position = groupCenter;
+        /*manager->mercs[i].dae->position.x -= 99.5 ;//+ (float) i / 3;
+        manager->mercs[i].dae->position.z += 0.4 - (i % 2) * 0.8;
+        manager->mercs[i].dae->position.y = 0;*/
+        manager->mercs[i].dae->scale = glm::vec3(0.08, 0.08, 0.08);
+        manager->mercs[i].dae->rotate = rotate;
+      }
     }
     else{
       printf("YOU DEAD\n");
@@ -733,10 +748,13 @@ void Wagon::draw(RenderingHelper* modelTrans, Camera* camera, glm::vec3 wagonPos
 void Wagon::drawMercs(GLint h_ModelMatrix, GLint h_vertPos, 
         GLint h_vertNor, GLint h_aTexCoord, GLint h_boneFlag, 
         GLint h_boneIds, GLint h_boneWeights, GLint h_boneTransforms, 
-        float time) {
+        float time, GLint h_boneIds2, GLint h_boneWeights2, GLint h_texFlag) {
     for (int i = 0; i < manager->mercs.size(); i++) {
-       // manager->mercs[i].dae->drawChar(h_ModelMatrix, h_vertPos, 
-       //         h_vertNor, h_aTexCoord, h_boneFlag, h_boneIds, 
-       //         h_boneWeights, h_boneTransforms, time);
+        if (manager->mercs[i].dae == NULL) {
+            manager->mercs[i].initDae();
+        }
+        manager->mercs[i].dae->drawChar(h_ModelMatrix, h_vertPos, 
+                h_vertNor, h_aTexCoord, h_boneFlag, h_boneIds, 
+                h_boneWeights, h_boneTransforms, time, h_texFlag, h_boneIds2, h_boneWeights2);
     }
 }
