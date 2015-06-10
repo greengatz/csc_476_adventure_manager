@@ -106,7 +106,7 @@ private:
 	tdogl::pngTexture* buyMercMenu; //3
 	tdogl::pngTexture* banditsMenu; //4
 	tdogl::pngTexture* beggarMenu; //5
-
+    CharDae* horse;
 };
 
 #endif

@@ -136,6 +136,7 @@ void Manager::restartFromTrail(){
 		mercs[i].currHappiness = mercs[i].maxHappiness;
 		mercs[i].currHunger = mercs[i].maxHunger;
 		mercs[i].dead = false;
+        mercs[i].dae->lastAnim = 0;
 	}
 	gold = 30;
 	beer = 4;
@@ -150,6 +151,7 @@ void Manager::restartFromTavern(){
 		if(mercs[i].dead){
 			mercs.erase(mercs.begin() + i);
 		}else{
+            mercs[i].dae->lastAnim = 0;
 			mercs[i].dead = false;
 			mercs[i].currHealth = mercs[i].maxHealth;
 			mercs[i].currHappiness = mercs[i].maxHappiness;
