@@ -19,10 +19,10 @@ public:
 	
 private:
 
-	static const int MAP_X = 50;
-	static const int MAP_Y = 50;
-	static const int MAP_Z = 50;
-	static const int MAP_SCALE = 1;
+	static const int MAP_X = 14;
+	static const int MAP_Y = 14;
+	static const int MAP_Z = 14;
+	static const int MAP_SCALE = 2;
 	float terrain[MAP_X][MAP_Z][3]; // Terrain data
 	float wallData[MAP_X][MAP_Y][3]; // wall data
 	float wallData2[MAP_X][MAP_Y][3];
