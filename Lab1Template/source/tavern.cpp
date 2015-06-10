@@ -6,6 +6,8 @@ int TAV_DOOR_ID = 5001;
 int TAV_TABLECHAIR_ID = 5002;
 int TAV_TABLE_ID = 5003;
 int TAV_BARRELS_ID = 5004;
+int TAV_MIRRORFRAME_ID = 5005;
+int TAV_WINDOW_ID = 5006;
 int TAV_LANDLORD_ID = 5500;
 int FIREPIT_BAKED = 5600;
 int TAV_LUMBERJACK_ID = 5700;
@@ -116,6 +118,8 @@ void Tavern::loadBufferData(TextureLoader* texLoader)
 	texLoader->LoadTexture((char *)"assets/tavern/table/tableDiffuse.bmp", TAV_TABLECHAIR_ID);
 	texLoader->LoadTexture((char *)"assets/tavern/table/tableDiffuse.bmp", TAV_TABLE_ID);
 	texLoader->LoadTexture((char *)"assets/tavern/barrel/barrelDiffuse.bmp", TAV_BARRELS_ID);
+	texLoader->LoadTexture((char *)"assets/tavern/table/tableDiffuse1.bmp", TAV_MIRRORFRAME_ID);
+	texLoader->LoadTexture((char *)"assets/tavern/mirror/village1.bmp", TAV_WINDOW_ID);
 }
 
 void Tavern::createTable1(glm::vec3 initLoc, float ang)
@@ -304,6 +308,12 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 	//Barrels
 	addTavernItem(BARRELS, 1, glm::vec3(1.5, 1.5, 1.5), glm::vec3(8.8, 0.7, -15.0), glm::mat4(1.0f));
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_BARRELS_ID);
+
+	//Mirror
+	addTavernItem(MIRRORFRAME, 1, glm::vec3(1.5, 1.5, 1.5), glm::vec3(7.6, 2.0, -19.1), glm::mat4(1.0f));
+	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_MIRRORFRAME_ID);
+	addTavernItem(MIRROR, 1, glm::vec3(1.5, 1.5, 1.5), glm::vec3(7.6, 2.0, -19.1), glm::mat4(1.0f));
+	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_WINDOW_ID);
 
 	//adding bookshelves
 	ang = 180;

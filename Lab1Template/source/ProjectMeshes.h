@@ -38,6 +38,8 @@ using namespace std;
 #define ROOF 12
 #define PLANK 13
 #define BARRELS 14
+#define MIRRORFRAME 15
+#define MIRROR 16
 // #define BALUSTRADE 14
 
 //terrain meshes
