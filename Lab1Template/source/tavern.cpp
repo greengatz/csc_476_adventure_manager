@@ -135,9 +135,9 @@ void Tavern::createTable1(glm::vec3 initLoc, float ang)
 
 	int start = (ang == 0) ? 0 : 8;
 	for (int iter = start; iter < 4 + start; iter += 2) {
-		addTavernItem(CHAIR, 1, glm::vec3(0.60, 0.60, 0.60), glm::vec3(initLoc.x + multInd[iter + 0], 0.5, initLoc.z + multInd[iter + 1]), rot);
+		addTavernItem(CHAIR, 1, glm::vec3(0.60, 0.60, 0.60), glm::vec3(initLoc.x + multInd[iter + 0], 0.6, initLoc.z + multInd[iter + 1]), rot);
 		tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_TABLECHAIR_ID);
-		addTavernItem(CHAIR, 1, glm::vec3(0.60, 0.60, 0.60), glm::vec3(initLoc.x + multInd[iter + 4], 0.5, initLoc.z + multInd[iter + 5]), addedRot);
+		addTavernItem(CHAIR, 1, glm::vec3(0.60, 0.60, 0.60), glm::vec3(initLoc.x + multInd[iter + 4], 0.6, initLoc.z + multInd[iter + 5]), addedRot);
 		tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_TABLECHAIR_ID);
 	}
 }
@@ -352,11 +352,11 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_LUMBERJACK_ID);
 
 	//fireplace and roasting
-	addTavernCharacter(SAMURAI, glm::vec3(1, 1, 1), glm::vec3(20.05, 1.3, -23.5), glm::mat4(1.0f));
+	addTavernCharacter(SAMURAI, glm::vec3(1, 1, 1), glm::vec3(20.05, 1.1, -23.5), glm::mat4(1.0f));
 	tavernCharacters[tavernCharacters.size() - 1].meshes[0].loadTextureCoor(TAV_SAMURAI_ID);
-	addTavernCharacter(SAMURAI, glm::vec3(1, 1, 1), glm::vec3(22.05, 1.3, -25.5), glm::mat4(1.0f));
+	addTavernCharacter(SAMURAI, glm::vec3(1, 1, 1), glm::vec3(22.05, 1.1, -25.5), glm::mat4(1.0f));
 	tavernCharacters[tavernCharacters.size() - 1].meshes[0].loadTextureCoor(TAV_SAMURAI_ID);
-	addTavernCharacter(SAMURAI, glm::vec3(1, 1, 1), glm::vec3(21.05, 1.3, -22.5), glm::mat4(1.0f));
+	addTavernCharacter(SAMURAI, glm::vec3(1, 1, 1), glm::vec3(21.05, 1.1, -22.5), glm::mat4(1.0f));
 	tavernCharacters[tavernCharacters.size() - 1].meshes[0].loadTextureCoor(TAV_SAMURAI_ID);
 	createFirePlace(glm::vec3(23.05, 1.5, -23.5));
 	createEmblems();
