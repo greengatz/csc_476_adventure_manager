@@ -37,6 +37,7 @@ using namespace std;
 // #define ROCK 12
 #define ROOF 12
 #define PLANK 13
+#define BARRELS 14
 // #define BALUSTRADE 14
 
 //terrain meshes

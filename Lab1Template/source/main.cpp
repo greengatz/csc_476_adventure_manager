@@ -773,35 +773,10 @@ bool hasCollided(glm::vec3 incr)
 
 	bool validMove = (curCam[0] < 6.75 || curCam[1] > 39.5 || curCam[4] < -36.0 || curCam[5] > -11.4);
 
-	// for (std::vector<Obj3d>::iterator it1 = objs.begin(); it1 != objs.end(); ++it1)
-	// {
-	// 	glm::vec3 pos1 = it1 ->getCurSpot();
-	// 	if(it1->bound.checkCollision(curCam, it1->scale, pos1))
-	// 	{
-	// 		validMove = true;
-	// 	}
-	// }
-
 	int row, col;
   	row = (camPos.x - minX)/gridSize;
  	col = (camPos.z - minZ)/gridSize;
 	vector<Obj3d> currentCellObjs = grid[row][col];
-
- 	// for(int i = 0; i < currentCellObjs.size(); i++)
- 	// {
- 	// 	vec3 curTrans = currentCellObjs[i].getCurSpot();
-
- 	// 	if (currentCellObjs[i].bound.checkCollision(curCam, currentCellObjs[i].scale, curTrans))
- 	// 	{
- 	//   		if(!currentCellObjs[i].done)
-  //     		{
-  //       		currentCellObjs[i].hit();
-  //       		printf("Hit item %d at %lf, %lf\n", i, camPos.x, camPos.z);
-  //     		}
-
-  //   		validMove = false;
-  //   	}
-  // 	}
 
 	for(vector<Obj3d>::iterator it1 = currentCellObjs.begin(); it1 != currentCellObjs.end(); ++it1)
 	{
@@ -809,7 +784,6 @@ bool hasCollided(glm::vec3 incr)
 		if(it1->bound.checkCollision(curCam, it1->scale, pos1))
 		{
 			validMove = true;
-			//printf("Hit object at %lf, %lf\n!!", camPos.x, camPos.z);
 		}
 	}
 
