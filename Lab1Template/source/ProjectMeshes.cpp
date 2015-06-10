@@ -12,7 +12,7 @@
 
 const int NUM_TAV = 14;
 const string tavFiles[] = {"assets/tavern/cube.obj",
-                       	   "assets/tavern/door.obj",
+                       	   "assets/tavern/door/door.obj",
                            "assets/tavern/bookshelf.obj",
                            "assets/tavern/stool.obj",
                            "assets/tavern/chair.obj",
@@ -23,10 +23,8 @@ const string tavFiles[] = {"assets/tavern/cube.obj",
                            "assets/tavern/pole.obj",
                            "assets/tavern/firepitlowpoly.obj",
                            "assets/tavern/turkey.obj",
-               			   // "assets/tavern/rock.obj", //pretty sure we can get rid fo this now
                			   "assets/tavern/roof.obj",
-               			   "assets/tavern/plank.obj",
-               			   // "assets/tavern/balustrade.obj",
+               			   "assets/tavern/plank.obj"
 };
 
 const int NUM_TERR = 5;

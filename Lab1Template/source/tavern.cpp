@@ -2,6 +2,7 @@
 #include <time.h>
 
 int TAV_CRATE_ID = 5000;
+int TAV_DOOR_ID = 5001;
 int TAV_LANDLORD_ID = 5500;
 int FIREPIT_BAKED = 5600;
 int TAV_LUMBERJACK_ID = 5700;
@@ -88,7 +89,6 @@ void Tavern::addTavernCharacter(int index, glm::vec3 scale, glm::vec3 trans, glm
 
 void Tavern::loadBufferData(TextureLoader* texLoader)
 {
-
 	//load textures
 	texLoader->LoadTexture((char *)"assets/tavern/crateTex.bmp", TAV_CRATE_ID);
 	texLoader->LoadTexture((char *)"assets/tavern/landlordTex.bmp", TAV_LANDLORD_ID);
@@ -109,6 +109,7 @@ void Tavern::loadBufferData(TextureLoader* texLoader)
 	texLoader->LoadTexture((char *)"assets/tavern/pegasusTex2.bmp", PEGASUS_EMBLEM_ID);
 	texLoader->LoadTexture((char *)"assets/tavern/phoenixTex2.bmp", PHOENIX_EMBLEM_ID);
 	texLoader->LoadTexture((char *)"assets/tavern/hydraTex2.bmp", HYDRA_EMBLEM_ID);
+	texLoader->LoadTexture((char *)"assets/tavern/door/doorDiffuse.bmp", TAV_DOOR_ID);
 }
 
 void Tavern::createTable1(glm::vec3 initLoc, float ang)
@@ -239,7 +240,7 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 
 	//door
 	addTavernItem(DOOR, 1, glm::vec3(1.5, 1.5, 1.5), glm::vec3(7.5, 1.35, -23), glm::mat4(1.0f));
-	tavernItems[tavernItems.size() - 1].materialNdx = 5;
+	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_DOOR_ID);
 
 	//bar stools
 	addTavernItem(STOOL, 1, glm::vec3(0.35, 0.32, 0.35), glm::vec3(11, .35, -16), glm::mat4(1.0f));
