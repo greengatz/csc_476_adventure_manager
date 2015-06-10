@@ -335,8 +335,8 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 	tavernItems[tavernItems.size() - 1].materialNdx = 8;
 	ang = 180;
 	rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 1.0f, 0));
-	addTavernItem(LANDLORD, 3, glm::vec3(1, 1, 1), glm::vec3(15, 1.13, -13), rot);
-	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_LANDLORD_ID);
+	//addTavernItem(LANDLORD, 3, glm::vec3(1, 1, 1), glm::vec3(15, 1.13, -13), rot);
+	//tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_LANDLORD_ID);
 	addTavernItem(LUMBERJACK, 3, glm::vec3(1, 1, 1), glm::vec3(15.5, .99, -16), glm::mat4(1.0f));
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_LUMBERJACK_ID);
 
@@ -355,7 +355,7 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 	createEmblems();
 
     // try some assimp stuff
-    sam = CharDae("assets/characters/noAnim.dae", 0, 0.0f, 0);
+    sam = CharDae("assets/characters/bartender.dae", 5500, 1.2f, 7);
 }
 
 void Tavern::enableBuff(GLint h_vertPos, GLint h_vertNor, GLuint posBuf, GLuint norBuf, GLuint indBuf) {
@@ -470,6 +470,25 @@ void Tavern::drawTavernMercs(GLint h_ModelMatrix, GLint h_vertPos,
                 h_boneFlag, h_boneIds, h_boneWeights, h_boneTransforms, ltime, h_texFlag,
                 h_boneIds2, h_boneWeights2);
     }
+
+    static int barKeepAnimChoice = 0;
+    barKeepAnimChoice++;
+    if (barKeepAnimChoice > 10) {
+        barKeepAnimChoice = 0;
+    }
+
+    if (!sam.isAnimating()) {
+        sam.startAnimation("idle");
+        if (barKeepAnimChoice > 6) {
+            sam.startAnimation("run");    
+        }
+    }
+
+    sam.position = glm::vec3(15, 0, -13.5);
+    sam.rotate = 180;
+    sam.drawChar(h_ModelMatrix, h_vertPos, h_vertNor, h_aTexCoord, 
+                h_boneFlag, h_boneIds, h_boneWeights, h_boneTransforms, ltime, h_texFlag,
+                h_boneIds2, h_boneWeights2);
 }
 
 void Tavern::applyTurkeySpin(double ltime)

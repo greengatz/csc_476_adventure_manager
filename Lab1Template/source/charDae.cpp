@@ -15,11 +15,11 @@ enum animations {
 int startAnim[][animCount] = {{1, 31, 71, 101}, {1, 31, 71, 101}, 
         {1, 85, 45, 125}, {1, 85, 45, 125},
         {1, 85, 45, 125}, {1, 85, 45, 125},
-        {250, 85, 45, 125}, {1, 85, 45, 125}};
+        {250, 85, 45, 125}, {75, 1, 1, 125}};
 int endAnim[][animCount] = {{30, 70, 100, 135}, {30, 70, 100, 135}, 
         {40, 120, 80, 190}, {40, 120, 80, 190},
         {40, 120, 80, 190}, {40, 120, 80, 190},
-        {310, 120, 80, 190}, {40, 120, 80, 190}};
+        {310, 120, 80, 190}, {280, 70, 70, 190}};
 
 int framesPerSec = 24;
 
@@ -365,7 +365,7 @@ void CharDae::startAnimation(string animation) {
         int numFrames = endAnim[daeType][animChoice] - startAnim[daeType][animChoice];
         
         int skippedFrames = 0;
-        if(lastAnim != animChoice && (animChoice == walk || animChoice == idle)) {
+        if(lastAnim != animChoice && (animChoice == walk || animChoice == idle) && daeType != 7) {
             skippedFrames = rand() % (numFrames);
             randomStart = false;
         }
