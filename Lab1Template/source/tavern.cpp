@@ -3,6 +3,7 @@
 
 int TAV_CRATE_ID = 5000;
 int TAV_DOOR_ID = 5001;
+int TAV_TABLECHAIR_ID = 5002;
 int TAV_LANDLORD_ID = 5500;
 int FIREPIT_BAKED = 5600;
 int TAV_LUMBERJACK_ID = 5700;
@@ -110,6 +111,7 @@ void Tavern::loadBufferData(TextureLoader* texLoader)
 	texLoader->LoadTexture((char *)"assets/tavern/phoenixTex2.bmp", PHOENIX_EMBLEM_ID);
 	texLoader->LoadTexture((char *)"assets/tavern/hydraTex2.bmp", HYDRA_EMBLEM_ID);
 	texLoader->LoadTexture((char *)"assets/tavern/door/doorDiffuse.bmp", TAV_DOOR_ID);
+	texLoader->LoadTexture((char *)"assets/tavern/tableChair/tableChairDiffuse.bmp", TAV_TABLECHAIR_ID);
 }
 
 void Tavern::createTable1(glm::vec3 initLoc, float ang)
@@ -133,10 +135,10 @@ void Tavern::createTable1(glm::vec3 initLoc, float ang)
 
 	int start = (ang == 0) ? 0 : 8;
 	for (int iter = start; iter < 4 + start; iter += 2) {
-		addTavernItem(CHAIR, 1, glm::vec3(0.75, 0.75, 0.75), glm::vec3(initLoc.x + multInd[iter + 0], initLoc.y + 0.5, initLoc.z + multInd[iter + 1]), rot);
-		tavernItems[tavernItems.size() - 1].materialNdx = 11;
-		addTavernItem(CHAIR, 1, glm::vec3(0.75, 0.75, 0.75), glm::vec3(initLoc.x + multInd[iter + 4], initLoc.y + 0.5, initLoc.z + multInd[iter + 5]), addedRot);
-		tavernItems[tavernItems.size() - 1].materialNdx = 11;
+		addTavernItem(CHAIR, 1, glm::vec3(0.60, 0.60, 0.60), glm::vec3(initLoc.x + multInd[iter + 0], 0.5, initLoc.z + multInd[iter + 1]), rot);
+		tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_TABLECHAIR_ID);
+		addTavernItem(CHAIR, 1, glm::vec3(0.60, 0.60, 0.60), glm::vec3(initLoc.x + multInd[iter + 4], 0.5, initLoc.z + multInd[iter + 5]), addedRot);
+		tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_TABLECHAIR_ID);
 	}
 }
 

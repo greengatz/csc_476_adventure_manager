@@ -223,10 +223,10 @@ void TavernTerrain::drawATex(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint 
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 
    int size = 0;
-   for (int index = 0; index < MAP_X - 1; index++)
+   for (int index = 0; index < MAP_X * MAP_Z - 2; ++index)
    {
-      glDrawArrays(GL_TRIANGLE_STRIP, size, (MAP_X - 1) * 4);
-      size += (MAP_X - 1) * 4;
+      glDrawArrays(GL_TRIANGLE_STRIP, size, 4);
+      size += 4;
    }
 
    GLSL::disableVertexAttribArray(h_pos);
