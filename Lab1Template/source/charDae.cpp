@@ -14,10 +14,12 @@ enum animations {
 
 int startAnim[][animCount] = {{1, 31, 71, 101}, {1, 31, 71, 101}, 
         {1, 85, 45, 125}, {1, 85, 45, 125},
-        {1, 85, 45, 125}, {1, 85, 45, 125}};
-int endAnim[][animCount] = {{30, 70, 100, 102}, {30, 70, 100, 102}, 
+        {1, 85, 45, 125}, {1, 85, 45, 125},
+        {250, 85, 45, 125}, {1, 85, 45, 125}};
+int endAnim[][animCount] = {{30, 70, 100, 135}, {30, 70, 100, 135}, 
         {40, 120, 80, 190}, {40, 120, 80, 190},
-        {40, 120, 80, 190}, {40, 120, 80, 190}};
+        {40, 120, 80, 190}, {40, 120, 80, 190},
+        {310, 120, 80, 190}, {40, 120, 80, 190}};
 
 int framesPerSec = 24;
 
@@ -344,6 +346,9 @@ aiVector3D CharDae::intTrans(float time, const aiNodeAnim* nodeAnim) {
 
 void CharDae::startAnimation(string animation) {
     animStart = lastTime;
+    if (lastAnim == die) {
+        return;
+    }
 
     animChoice = -1;
     if(strcmp(animation.c_str(), "run") == 0) {
@@ -352,6 +357,8 @@ void CharDae::startAnimation(string animation) {
         animChoice = punch;
     } else if(strcmp(animation.c_str(), "idle") == 0) {
         animChoice = idle;
+    } else if (strcmp(animation.c_str(), "die") == 0) {
+        animChoice = die;
     }
 
     if(animChoice != -1) {

@@ -26,6 +26,7 @@ int DRAGON_EMBLEM_ID = 4600;
 int PEGASUS_EMBLEM_ID = 4700;
 int PHOENIX_EMBLEM_ID = 4800;
 int HYDRA_EMBLEM_ID = 4900;
+int HORSE_ID = 22100;
 
 // Obj3dContainer containers[std::extent<decltype(tavObjFiles)>::value];
 
@@ -120,6 +121,7 @@ void Tavern::loadBufferData(TextureLoader* texLoader)
 	texLoader->LoadTexture((char *)"assets/tavern/barrel/barrelDiffuse.bmp", TAV_BARRELS_ID);
 	texLoader->LoadTexture((char *)"assets/tavern/table/tableDiffuse1.bmp", TAV_MIRRORFRAME_ID);
 	texLoader->LoadTexture((char *)"assets/tavern/mirror/village1.bmp", TAV_WINDOW_ID);
+	texLoader->LoadTexture((char *)"assets/horse/tex/tex_00.bmp", HORSE_ID);
 }
 
 void Tavern::createTable1(glm::vec3 initLoc, float ang)
