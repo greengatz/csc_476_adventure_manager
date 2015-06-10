@@ -554,11 +554,13 @@ void Wagon::updateWagon(float globalTime) {
         position += (*fastForward) * direction * deltaTime * velocity;
       }
 
+    // update wagons position
       position.z = terrain->getSpline()->getY(position.x);
       rotate = 90.0f + -1.0 * atan(terrain->getSpline()->getDY(position.x)) * (180.0 / 3.14);
 
       startTime += deltaTime;
   
+    // update mercenaries around wagon
       for(int i = 0; i < manager->mercs.size(); i++) {
         if(manager->mercs[i].dae == NULL) {
            manager->mercs[i].initDae();
@@ -573,15 +575,17 @@ void Wagon::updateWagon(float globalTime) {
 
         groupCenter.x += cos((-rotate) * 3.14 / 180.0) * (0.5 - (i % 2) * 0.2);
         groupCenter.z += sin((-rotate) * 3.14 / 180.0) * (0.5 - (i % 2) * 0.2);
-        //groupCenter.z += cos((rotate + 90.0f)  * 3.14 / 180.0) * 0.25;
 
         manager->mercs[i].dae->position = groupCenter;
-        /*manager->mercs[i].dae->position.x -= 99.5 ;//+ (float) i / 3;
-        manager->mercs[i].dae->position.z += 0.4 - (i % 2) * 0.8;
-        manager->mercs[i].dae->position.y = 0;*/
         manager->mercs[i].dae->scale = glm::vec3(0.08, 0.08, 0.08);
         manager->mercs[i].dae->rotate = rotate;
       }
+    // update wagon
+        if (horse == NULL) {
+            horse = new CharDae("assets/characters/horse.dae", 22100, 1.0, 7);
+        }
+        horse->position = position;
+        horse->position.z -= 100;
     }
     else{
       printf("YOU DEAD\n");
