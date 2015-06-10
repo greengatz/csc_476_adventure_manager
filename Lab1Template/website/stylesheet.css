@@ -2,3 +2,32 @@ body {
     background-color: #b7d1c4
 }
 
+p.rightAlign {
+    text-align: right;
+    font-family: "Arial", Helvetica, sans-serif;
+}
+
+p.main {
+    text-align: relative;
+    font-family: "Arial", Helvetica, sans-serif;
+}
+
+p.title {
+    text-align: center;
+    text-decoration: underline;
+    font-family: "Arial", Helvetica, sans-serif;
+    font-size:250%;
+}
+
+p.subtitle {
+    text-align: center;
+    text-decoration: underline;
+    font-family: "Arial", Helvetica, sans-serif;
+    font-size:150%;
+}
+
+p.header {
+    text-align: relative;
+    font-family: "Arial", Helvetica, sans-serif;
+    font-size:150%;
+}
