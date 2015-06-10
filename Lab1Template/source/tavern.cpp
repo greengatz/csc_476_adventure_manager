@@ -385,7 +385,6 @@ void Tavern::disableBuff(GLint h_vertPos, GLint h_vertNor, GLint h_aTexCoord) {
 
 void Tavern::enableTextureBuffer(GLint h_aTexCoord, GLuint texBuf, int id)
 {
-	// printf("tried to load the texture %d\n", id);
   glEnable(GL_TEXTURE_2D);
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, id);
@@ -413,11 +412,9 @@ void Tavern::drawTavern(GLint h_ModelMatrix, GLint h_vertPos,
 		//set a material
 		if (tavernItems[iter].materialNdx != -1) {
 			(*matSetter).setMaterial(tavernItems[iter].materialNdx);
-			// printf("object %d update material to %d\n", iter, tavernItems[iter].materialNdx);
 		}
 		else {
 			(*matSetter).setMaterial(9);
-			// printf("material is now 9");
 		}
 		enableBuff(h_vertPos, h_vertNor, (*tavernItems[iter].cont).posBuf, (*tavernItems[iter].cont).norBuf, (*tavernItems[iter].cont).indBuf);
 		if (tavernItems[iter].hasTexture) {
@@ -455,7 +452,6 @@ void Tavern::drawTavernMercs(GLint h_ModelMatrix, GLint h_vertPos,
                 GLint h_boneWeights, GLint h_boneTransforms, GLint h_texFlag,
                 GLint h_boneIds2, GLint h_boneWeights2)
 {
-	// printf("tried to load the texture %d\n", id);
     for (int iter = 0; iter < tavernCharacters.size(); iter++) {
         static int animSelect = 0;
         animSelect++;
