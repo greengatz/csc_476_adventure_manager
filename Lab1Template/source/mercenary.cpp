@@ -69,10 +69,7 @@ Mercenary::Mercenary(vector<Obj3d> m) :
 
     isWaving(false)
 {
-    cost += maxHealth - BaseHealth[job];
-    cost += maxDamage - BaseDamage[job];
-    cost -= maxHunger - BaseHungerRate[job];
-    cost -= maxHunger - BaseBeerRate[job];
+    cost = (rand() % 10) + 30;
     currDamage = maxDamage;
     currHealth = maxHealth;
     currHunger = maxHunger;
