@@ -45,7 +45,7 @@ const string otherFiles[] = {"assets/tavern/box.obj",
                              "assets/tavern/bottle.obj",
 };
 
-const int NUM_PPL = 5;
+const int NUM_PPL = 4;
 const string pplFiles[] = {"assets/characters/samuraistatic.obj",
 						   "assets/characters/spearmanstatic.obj",
                       	   "assets/tavern/landlord.obj",

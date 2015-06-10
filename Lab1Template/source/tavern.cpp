@@ -181,6 +181,7 @@ void Tavern::createFirePlace(glm::vec3 init)
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(FIREPIT_BAKED);
 
 	addTavernItem(TURKEY, 1, glm::vec3(.35, .35, .35), glm::vec3(init.x, 1.65f, init.z), glm::mat4(1.0f));
+	tavernItems[tavernItems.size() - 1].materialNdx = 14;
 	TURKEY_NUM = tavernItems.size() - 1;
 }
 
