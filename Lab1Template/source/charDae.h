@@ -28,7 +28,8 @@ class CharDae
                 GLint h_boneIds2, GLint h_boneWeights2);
         void startAnimation(string animation);
         bool isAnimating();
-        
+
+        bool randomStart;        
         int animChoice;
         int lastAnim;
         vec3 position;

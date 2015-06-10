@@ -609,9 +609,20 @@ void drawGL()
                // wagon.drawMercs(h_bone_ModelMatrix, h_bone_vertPos, h_bone_vertNor, 
                  //   h_bone_aTexCoord,  h_boneFlag, h_boneIds, h_boneWeights,
                   //  h_boneTransforms, dtDraw);
-		
+		// draw mercs
+		glUseProgram(bonePid);
+		glUniform1i(bone_terrainToggleID, 1);
+		glUniform3f(h_bone_ka, 1.0f, 1.0f, 1.0f);
+		glUniform1i(h_bone_uTexUnit, 0);
 		ModelTrans.loadIdentity();
-		glUseProgram(trailPid);
+		ModelTrans.pushMatrix();
+		ModelTrans.popMatrix();
+		ModelTrans.loadIdentity();
+        wagon.drawMercs(h_bone_ModelMatrix, h_bone_vertPos, h_bone_vertNor, 
+                    h_bone_aTexCoord,  h_boneFlag, h_boneIds, h_boneWeights,
+                    h_boneTransforms, dtDraw, h_boneIds2, h_boneWeights2, bone_terrainToggleID);
+		
+        glUseProgram(trailPid);
       setProjView(&h_trail_ProjMatrix, &h_trail_ViewMatrix);
 		glUniform1i(trailTerrainToggleID, 0);
       //Draw the skybox
