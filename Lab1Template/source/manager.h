@@ -72,8 +72,8 @@ class Manager
 		bool getInMenu();
 		void completedTrail();
 		void tickHungerHealth();
-		void beerMerc(int index);
-		void feedMerc(int index);
+		void beerMerc();
+		void feedMerc();
 		SoundPlayer* getAudio();
 		FadeSystem* getFade();
 		vector<Mercenary> mercs;

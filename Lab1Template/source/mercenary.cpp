@@ -35,7 +35,7 @@ int BaseHungerRate[] = {15, 15, 15, 15, 15, 15};
 int BaseBeerRate[] = {15, 15, 15, 15, 15, 15};
 
 // Dae location
-string fileLoc[] = {"assets/characters/noAnim.dae", "assets/characters/noAnim.dae",
+string fileLoc[] = {"assets/characters/samurai.dae", "assets/characters/samurai.dae",
         "assets/characters/spearman.dae", "assets/characters/spearman.dae",
         "assets/characters/spearman.dae", "assets/characters/spearman.dae"};
 int texBufInd[] = {5800, 5800,
@@ -74,10 +74,7 @@ Mercenary::Mercenary(vector<Obj3d> m) :
 
     isWaving(false)
 {
-    cost += maxHealth - BaseHealth[job];
-    cost += maxDamage - BaseDamage[job];
-    cost -= maxHunger - BaseHungerRate[job];
-    cost -= maxHunger - BaseBeerRate[job];
+    cost = (rand() % 10) + 30;
     currDamage = maxDamage;
     currHealth = maxHealth;
     currHunger = maxHunger;
@@ -162,7 +159,7 @@ void Mercenary::initDae() {
     //dae = new CharDae("assets/characters/spearman.dae");
     //cout << "seg fault... " << job % 7 << "\n"; 
     dae = new CharDae(fileLoc[job % 6], texBufInd[job % 6], daeScale[job % 6], job % 6);
-    //dae = new CharDae("assets/characters/spearman.dae", 7400, 0.9, job % 7);
+    //dae = new CharDae("assets/characters/horse.dae", 22100, 0.2, 6);
     //cout << " no seg fault... " << job % 7 << "\n"; 
 }
 

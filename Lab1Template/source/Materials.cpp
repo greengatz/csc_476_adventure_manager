@@ -95,5 +95,18 @@ void Materials::setMaterial(int i)
 			glUniform3f(*h_kd, 0.55294, 0.31765, 0.094118);
 			glUniform3f(*h_ks, 0.55294, 0.31765, 0.094118);
 			glUniform1f(*h_s, 0.01);
+			break;
+		case 13: //not specular
+			glUniform3f(*h_ka, 0.1, 0.1, 0.1);
+			glUniform3f(*h_kd, 0.1, 0.1, 0.01);
+			glUniform3f(*h_ks, 0.00015, 0.00015, 0.00015);
+			glUniform1f(*h_s, 0.001);
+			break;
+		case 14: //not specular
+			glUniform3f(*h_ka, 0.085, 0.01, 0.0045);
+			glUniform3f(*h_kd, 0.627, 0.3215, 0.1764);
+			glUniform3f(*h_ks, 0.076, 0.051, 0.051);
+			glUniform1f(*h_s, 0.001);
+			break;
 	}
 }

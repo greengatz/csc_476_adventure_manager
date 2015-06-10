@@ -124,12 +124,13 @@ int Terrain::checkEvents(glm::vec3 aPos){
 }
 
 void Terrain::placeEvents(){
+  glm::mat4 rot = glm::rotate(glm::mat4(1.0f), (const float)180, glm::vec3(0, 1.0, 0));
   for(int i = 0; i < MAP_Z; i++){
     glm::vec3 temp = criticalPoints[i];
     if(eventsMap[i] == AMBUSH){
       temp.x -= 100;
       temp.z -= 1;
-      terrainEvents.addAmbush(temp, glm::mat4(1.0f));
+      terrainEvents.addAmbush(temp, rot);
       printf("Placing ambush at %f, %f\n", temp.x, temp.z);
 
     }
@@ -148,7 +149,7 @@ void Terrain::placeEvents(){
     if(eventsMap[i] == BEGGAR){
       temp.x -= 100;
       temp.z -= 0.5;
-      terrainEvents.addRandomDuder(temp, glm::mat4(1.0f));
+      terrainEvents.addRandomDuder(temp, rot);
       printf("Placing beggar at %f, %f\n", temp.x, temp.z);
     }
   }

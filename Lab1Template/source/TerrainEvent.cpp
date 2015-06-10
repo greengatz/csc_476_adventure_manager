@@ -16,7 +16,7 @@ const mat4 charRotates[] = {glm::rotate(mat4(1.0f), (const float)180, glm::vec3(
 						    glm::rotate(mat4(1.0f), (const float)180, glm::vec3(0, 1.0f, 0)),
 };
 const float charYTrans[] = {0.085, //all the same...
-                            0.085,
+                            0.125,
                             0.085,
                             0.085,
 };
@@ -159,7 +159,7 @@ void TerrainEvent::addMerchantStand(vec3 loc, mat4 rot)
 
 	mat4 newRot = rot * objRotates[0];
 	addEventItem(STALL, 1, objScales[0], vec3(loc.x, objYTrans[0], loc.z), newRot);
-	eventItems[eventItems.size() - 1].materialNdx = 7;
+	eventItems[eventItems.size() - 1].materialNdx = 13;
 	newRot = rot * objRotates[2];
 	addEventItem(CRATE, 2, objScales[2], vec3(loc.x, objYTrans[2], loc.z), newRot);
 	eventItems[eventItems.size() - 1].loadTextureCoor(TERR_EV_ROOF_ID);
@@ -224,7 +224,8 @@ void TerrainEvent::addRandomDuder(vec3 loc, mat4 rot)
 void TerrainEvent::addCultist(vec3 loc, mat4 rot)
 {
 	mat4 newRot = rot * charRotates[3];
-	addEventItem(MONK, 3, charScales[3], glm::vec3(loc.x, charYTrans[3], loc.z), newRot);
+	// addEventItem(MONK, 3, charScales[3], glm::vec3(loc.x, charYTrans[3], loc.z), newRot);
+	addEventItem(LUMBERJACK, 3, charScales[2], glm::vec3(loc.x, charYTrans[2], loc.z), newRot);
 }
 
 void TerrainEvent::addBeggar(vec3 loc, mat4 rot)
