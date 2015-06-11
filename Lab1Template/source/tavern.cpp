@@ -207,9 +207,9 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 
    //Torches
    rot = glm::rotate(glm::mat4(1.0f), -30.0f, glm::vec3(0, 0, 1.0f));
-   addTavernItem(TORCH, 1, glm::vec3(0.4, 0.4, 0.4), glm::vec3(7.6, 2.1, -22), rot);
+   addTavernItem(TORCH, 1, glm::vec3(0.4, 0.4, 0.4), glm::vec3(7.6, 1.6, -22), rot);
    tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_TORCH_ID);
-   addTavernItem(TORCH, 1, glm::vec3(0.4, 0.4, 0.4), glm::vec3(7.6, 2.1, -24), rot);
+   addTavernItem(TORCH, 1, glm::vec3(0.4, 0.4, 0.4), glm::vec3(7.6, 1.6, -24), rot);
    tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_TORCH_ID);
 
 	//BAR STOOLS
@@ -311,6 +311,9 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_TABLECHAIR_ID);
 	addTavernItem(STOOL, 1, glm::vec3(0.35, 0.32, 0.35), glm::vec3(13.5, 1.1, -23.0), glm::mat4(1.0f));
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_TABLECHAIR_ID);
+	// glm::vec3(13.5, 0, -16.4)
+	addTavernItem(STOOL, 1, glm::vec3(0.35, 0.32, 0.35), glm::vec3(15.5, 0, -16.8), glm::mat4(1.0f));
+	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_TABLECHAIR_ID);
 }
 
 void Tavern::enableBuff(GLint h_vertPos, GLint h_vertNor, GLuint posBuf, GLuint norBuf, GLuint indBuf) {
@@ -358,7 +361,7 @@ void Tavern::drawTavern(GLint h_ModelMatrix, GLint h_vertPos,
                 GLint h_boneWeights, GLint h_boneTransforms)
 {
 	applyTurkeySpin(ltime);
-	for (int iter = 0; iter < tavernItems.size() - 3; ++iter) 
+	for (int iter = 0; iter < tavernItems.size() - 4; ++iter) 
 	{
 		//set a material
 		if (tavernItems[iter].materialNdx != -1) {
