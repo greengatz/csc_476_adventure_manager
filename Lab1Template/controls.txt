@@ -1,32 +1,20 @@
 movement:
 wasd
 
-unlocking z-axis:
-0
-
-randoming a new path:
-9
-
-switch camera view:
-x
-
-starting wagon:
-8
-
-make a merc wave:
-h
-
-buying mercs:
-1-5
-
-report mercs in the tavern:
-t
-
-reporting stats:
-m
+buying mercenaries in tavern:
+1
 
 buying food:
 f
 
 buying beer:
 b
+
+Go to trail:
+x
+
+toggle HUD:
+g
+
+trail decisions:
+1-4
