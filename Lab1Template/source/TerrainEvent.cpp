@@ -75,6 +75,8 @@ void TerrainEvent::init(Materials *newMatSetter, FrustumCull *newCuller, Project
 	ropeLoc = vec3(0, 0, 0);
 	bridgeAng = 110;
 	ropeScale = 0;
+	endCityStart = 0;
+	endCityEnd = 0;
 }
 
 void TerrainEvent::reset()
@@ -160,6 +162,7 @@ void TerrainEvent::addMerchantStand(vec3 loc, mat4 rot)
 	mat4 newRot = rot * objRotates[0];
 	addEventItem(STALL, 1, objScales[0], vec3(loc.x, objYTrans[0], loc.z), newRot);
 	eventItems[eventItems.size() - 1].materialNdx = 13;
+	startMerchant.push_back(eventItems.size() - 1);
 	newRot = rot * objRotates[2];
 	addEventItem(CRATE, 2, objScales[2], vec3(loc.x, objYTrans[2], loc.z), newRot);
 	eventItems[eventItems.size() - 1].loadTextureCoor(TERR_EV_ROOF_ID);
@@ -209,6 +212,7 @@ void TerrainEvent::addMerchantStand(vec3 loc, mat4 rot)
 		eventItems[eventItems.size() - 1].moveRot = glm::translate(mat4(1.0f), vec3(loc.x, charYTrans[num], loc.z)) * newRot;
 		eventItems[eventItems.size() - 1].loadTextureCoor(findTex(num));
 	}
+	endMerchant.push_back(eventItems.size() - 1);
 }
 
 void TerrainEvent::addRandomDuder(vec3 loc, mat4 rot) 
@@ -246,6 +250,7 @@ void TerrainEvent::addEndCity(vec3 loc)
 {
 	addEventItem(END_CITY, 1, vec3(4.05, 4.05, 4.05), vec3(loc.x, 0.45, loc.z - 0.2), glm::rotate(mat4(1.0f), (const float)-90, vec3(0, 1.0f, 0)));
 	eventItems[eventItems.size() - 1].loadTextureCoor(TERR_EV_STONE_ID);
+	endCityStart = eventItems.size() - 1;
 	
 	addEventItem(CRATE, 2, vec3(0.52, 0.05, 0.34), vec3(0.45, 0, 0), mat4(1.0f));
 	eventItems[eventItems.size() - 1].loadTextureCoor(TERR_EV_ROOF_ID);
@@ -264,6 +269,7 @@ void TerrainEvent::addEndCity(vec3 loc)
 
 	addEventItem(CRATE, 2, vec3(0.15, 0.15, 0.42), vec3(loc.x - 1.9, 0.84, loc.z - 1.065), mat4(1.0f));
 	eventItems[eventItems.size() - 1].loadTextureCoor(TERR_EV_STONE_ID);
+	endCityEnd = eventItems.size() - 1;
 }
 
 int TerrainEvent::findTex(int num) 
@@ -356,6 +362,12 @@ void TerrainEvent::setBridge(double ltime)
 
 void TerrainEvent::drawTerrainEvents(GLint h_ModelMatrix, GLint h_vertPos, GLint h_vertNor, GLint h_aTexCoord, double ltime)
 {
+	bool inMerchant = false;
+	bool inEndCity = false;
+	bool drawCity = false;
+	bool drawCurMerchant = false;
+	int merchantCounter = 0;
+
 	if (moveBridge) {
 		setBridge(ltime);
 	}
@@ -374,9 +386,43 @@ void TerrainEvent::drawTerrainEvents(GLint h_ModelMatrix, GLint h_vertPos, GLint
 		if (eventItems[iter].hasTexture) {
 			enableTextureBuffer(h_aTexCoord, eventItems[iter].texBuf, eventItems[iter].textureNdx);
 		}
+
 		//decide whether to cull
-		if ((*fCuller).checkCull(eventItems[iter])) {
-			eventItems[iter].draw(h_ModelMatrix);
+		if (inMerchant || drawCurMerchant) {
+			if (drawCurMerchant) {
+				eventItems[iter].draw(h_ModelMatrix);
+			}
+			if (iter == endMerchant[merchantCounter]) {
+				merchantCounter++;
+				inMerchant = false;
+				drawCurMerchant = false;
+			}
+		}
+		else if (inEndCity || drawCity) {
+			if (drawCity) {
+				eventItems[iter].draw(h_ModelMatrix);
+			}
+			if (iter == endCityEnd) {
+				inEndCity = false;
+				drawCity = false;
+			}
+		}
+		else {
+			if (merchantCounter < startMerchant.size() && iter == startMerchant[merchantCounter]) {
+				inMerchant = true;
+			}
+			if (iter == endCityStart) {
+				inEndCity = true;
+			}
+			if ((*fCuller).checkCull(eventItems[iter])) {
+				eventItems[iter].draw(h_ModelMatrix);
+				if (inMerchant) {
+					drawCurMerchant = true;
+				}
+				if (inEndCity) {
+					drawCity = true;
+				}
+			}
 		}
 		disableBuff(h_vertPos, h_vertNor, h_aTexCoord);
 	}

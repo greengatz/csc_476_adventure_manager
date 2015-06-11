@@ -89,7 +89,7 @@ class Manager
 		bool *gamePaused;
 		FadeSystem *fadeSystem;
 		SoundPlayer *audio;
-
+ 
 		tdogl::pngTexture* oopsRanMenu; //6
 		
 		tdogl::pngTexture* merchantRobbedMenu; //8

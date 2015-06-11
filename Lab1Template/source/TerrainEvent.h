@@ -50,6 +50,8 @@ class TerrainEvent
 		float ropeScale;
 		bool moveBridge;
 		vec3 bridgeLoc, ropeLoc;
+		vector<int> startMerchant, endMerchant;
+		int endCityStart, endCityEnd;
 		// void addEventMesh(const string filename, bool noNorms);
 		void addEventItem(int index, int vectMesh, glm::vec3 scale, glm::vec3 trans, glm::mat4 rot);
 		void addEventCharacter(int index, glm::vec3 scale, glm::vec3 trans, glm::mat4 rot);
