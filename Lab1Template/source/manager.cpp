@@ -162,7 +162,7 @@ void Manager::restartFromTrail(){
 		mercs[i].currHappiness = mercs[i].maxHappiness;
 		mercs[i].currHunger = mercs[i].maxHunger;
 		mercs[i].dead = false;
-			mercs[i].sick = false;
+		mercs[i].sick = false;
         mercs[i].dae->lastAnim = 0;
 	}
 	gold = 30;
