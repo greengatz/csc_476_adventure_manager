@@ -512,7 +512,7 @@ void drawGL()
 		glUseProgram(trailPid);
 		glUniform1i(h_trail_flag, 0);
 	}
-	glUniform1i(h_bone_flag, 0);
+
 
 	//Update Camera
 	// Get mouse position
@@ -531,9 +531,6 @@ void drawGL()
 		glUniform3fv(h_trail_lightPos2, 1, glm::value_ptr(glm::vec3(-125.0f, 4.0f, 25.0f)));
 		glUniform1f(h_trail_option, optionS);
 	}
-	glUniform3fv(h_bone_lightPos1, 1, glm::value_ptr(glm::vec3(23.05f, 4.0f, -23.5f)));
-	glUniform3fv(h_bone_lightPos2, 1, glm::value_ptr(glm::vec3(-125.0f, 4.0f, 25.0f)));
-	glUniform1f(h_bone_option, optionS);
 	
 	// Bind the program
 	//Set projection matrix
@@ -675,6 +672,11 @@ void drawGL()
 
 	glUseProgram(bonePid);
 	  // send bone transform shader data
+	glUniform1i(h_bone_flag, 0);
+	glUniform3fv(h_bone_lightPos1, 1, glm::value_ptr(glm::vec3(23.05f, 4.0f, -23.5f)));
+	glUniform3fv(h_bone_lightPos2, 1, glm::value_ptr(glm::vec3(-125.0f, 4.0f, 25.0f)));
+	glUniform1f(h_bone_option, optionS);
+	
 	glUniformMatrix4fv(h_bone_ViewMatrix, 1, GL_FALSE, glm::value_ptr(savedView));
 	glUniformMatrix4fv( h_bone_ProjMatrix, 1, GL_FALSE, glm::value_ptr(savedProj));
 	glUniform3fv(h_bone_lightPos1, 1, glm::value_ptr(glm::vec3(23.05f, 4.0f, -23.5f)));
