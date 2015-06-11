@@ -10,6 +10,7 @@ Obj3d::Obj3d(Obj3dContainer *newCont, vec3 newScale, vec3 initPos, mat4 newRot)
   rot = newRot;
   bound.createBounds((*cont).shape);
   hasTexture = false;
+  hasNormal = false;
   materialNdx = -1;
   preTrans = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
   moveRot = glm::mat4(1.0f);
@@ -43,6 +44,16 @@ void Obj3d::loadTextureCoor(int ndx)
    glBufferData(GL_ARRAY_BUFFER, shapeTexBuff.size()*sizeof(float), &shapeTexBuff[0], GL_STATIC_DRAW);
    hasTexture = true;
    textureNdx = ndx;
+}
+
+void Obj3d::loadNormalCoor(int ndx)
+{
+   const vector<float> &shapeNorBuff = (*cont).shape[0].mesh.texcoords;
+   glGenBuffers(1, &texNorBuf);
+   glBindBuffer(GL_ARRAY_BUFFER, texNorBuf);
+   glBufferData(GL_ARRAY_BUFFER, shapeNorBuff.size()*sizeof(float), &shapeNorBuff[0], GL_STATIC_DRAW);
+   hasNormal = true;
+   textNorNdx = ndx;
 }
 
 void Obj3d::chooseMaterial(int ndx)
