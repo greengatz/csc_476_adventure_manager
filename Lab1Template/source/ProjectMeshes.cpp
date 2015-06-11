@@ -91,14 +91,16 @@ void ProjectMeshes::loadMeshes()
 
 void ProjectMeshes::loadOnlyTavern()
 {
+	printf("        Tavern meshes: ");
 	float progress = (float)NUM_TAV / 2.0;
 	for (int iter  = 0; iter < NUM_TAV; iter++) {
 		if (iter > progress) {
-			printf("        Tavern meshes at %.2f%%\n", progress / NUM_TAV * 100);
+			printf("%.2f%% -- ", progress / NUM_TAV * 100);
 			progress += progress / 2.0;
 		}
 		addMesh(tavFiles[iter], &tavMeshes, false);
 	}
+	printf("DONE\n");
 }
 
 void ProjectMeshes::loadOnlyTrail()
@@ -120,10 +122,17 @@ void ProjectMeshes::loadOther()
 
 void ProjectMeshes::loadPpl()
 {
+	printf("        People meshes: ");
+	float progress = (float)NUM_PPL / 4.0;
 	for (int iter  = 0; iter < NUM_PPL; iter++) {
 		if (iter == SPEARMAN || iter == MONK)
 			addMesh(pplFiles[iter], &pplMeshes, true);
 		else 
 			addMesh(pplFiles[iter], &pplMeshes, false);
+		if (iter > progress) {
+			printf("%.2f%% -- ", progress / NUM_PPL * 100);
+			progress++;
+		}
 	}
+	printf("DONE\n");
 }
