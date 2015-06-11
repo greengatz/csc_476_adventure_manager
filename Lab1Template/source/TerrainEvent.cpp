@@ -390,11 +390,9 @@ void TerrainEvent::drawTerrainEvents(GLint h_ModelMatrix, GLint h_vertPos, GLint
 		//decide whether to cull
 		if (inMerchant || drawCurMerchant) {
 			if (drawCurMerchant) {
-				printf("drawing stand %d\n", iter);
 				eventItems[iter].draw(h_ModelMatrix);
 			}
 			if (iter == endMerchant[merchantCounter]) {
-				printf("ending merchant %d\n", merchantCounter);
 				merchantCounter++;
 				inMerchant = false;
 				drawCurMerchant = false;
@@ -402,28 +400,23 @@ void TerrainEvent::drawTerrainEvents(GLint h_ModelMatrix, GLint h_vertPos, GLint
 		}
 		else if (inEndCity || drawCity) {
 			if (drawCity) {
-				printf("drawing end %d\n", iter);
 				eventItems[iter].draw(h_ModelMatrix);
 			}
 			if (iter == endCityEnd) {
-				printf("ending city\n");
 				inEndCity = false;
 				drawCity = false;
 			}
 		}
 		else {
 			if (merchantCounter < startMerchant.size() && iter == startMerchant[merchantCounter]) {
-				printf("in merchant %d, total size %d\n", merchantCounter, startMerchant.size());
 				inMerchant = true;
 			}
 			if (iter == endCityStart) {
-				printf("in city\n");
 				inEndCity = true;
 			}
 			if ((*fCuller).checkCull(eventItems[iter])) {
 				eventItems[iter].draw(h_ModelMatrix);
 				if (inMerchant) {
-					printf("drawCurMerchant is true");
 					drawCurMerchant = true;
 				}
 				if (inEndCity) {
