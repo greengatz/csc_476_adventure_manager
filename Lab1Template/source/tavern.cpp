@@ -283,6 +283,7 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 	addTavernItem(JESUSHOLDER, 1, glm::vec3(0.8, 1.1, 1.0), glm::vec3(21.53, .72, -15.5), glm::mat4(1.0f));
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_MIRRORFRAME_ID);
 
+
 	//Add Characters
 	addTavernCharacter(SAMURAI, glm::vec3(1, 1, 1), glm::vec3(15.5, 1.1, -25.0), glm::mat4(1.0f));
 	tavernCharacters[tavernCharacters.size() - 1].meshes[0].loadTextureCoor(TAV_SAMURAI_ID);
@@ -301,6 +302,15 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
     sam = CharDae("assets/characters/bartender.dae", 5500, 1.2f, 7);
     fellowTraveler = new CharDae("assets/characters/lumberjack.dae", 5700, 1.2f, 8);
     fellowTraveler2 = new CharDae("assets/characters/lumberjack.dae", 5700, 1.2f, 8);
+
+	//DONT ADD ANYTHING AFTER THIS!!!!!!!!! or you die
+	//glm::vec3(15.5, 1.1, -25.0)
+	addTavernItem(STOOL, 1, glm::vec3(0.35, 0.32, 0.35), glm::vec3(15.5, 1.1, -25.0), glm::mat4(1.0f));
+	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_TABLECHAIR_ID);
+	addTavernItem(STOOL, 1, glm::vec3(0.35, 0.32, 0.35), glm::vec3(17.5, 1.1, -23.0), glm::mat4(1.0f));
+	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_TABLECHAIR_ID);
+	addTavernItem(STOOL, 1, glm::vec3(0.35, 0.32, 0.35), glm::vec3(13.5, 1.1, -23.0), glm::mat4(1.0f));
+	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_TABLECHAIR_ID);
 }
 
 void Tavern::enableBuff(GLint h_vertPos, GLint h_vertNor, GLuint posBuf, GLuint norBuf, GLuint indBuf) {
@@ -348,7 +358,7 @@ void Tavern::drawTavern(GLint h_ModelMatrix, GLint h_vertPos,
                 GLint h_boneWeights, GLint h_boneTransforms)
 {
 	applyTurkeySpin(ltime);
-	for (int iter = 0; iter < tavernItems.size(); iter++) 
+	for (int iter = 0; iter < tavernItems.size() - 3; ++iter) 
 	{
 		//set a material
 		if (tavernItems[iter].materialNdx != -1) {
