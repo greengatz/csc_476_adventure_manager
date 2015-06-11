@@ -223,7 +223,6 @@ void Manager::fleeingFromAmbush(){
  	*gamePaused = true;
 	about.push_back("While you were cowardly fleeing the bandits,");
 
-	
 	if(gold - goldLoss <= 0){
 		goldLoss = gold;
 		gold = 0;
@@ -252,11 +251,19 @@ void Manager::fleeingFromAmbush(){
 			if(mercs[i].currHealth <= 0){
 				mercs[i].currHealth = 0;
 				mercs[i].dead = true;
-				string aboutString = "and sent " + mercs[i].firstName + "to swim with the fishes.";
-				about.push_back(aboutString);
-			}else{
-				string aboutString = "and roughed up  " + mercs[i].firstName + " a bit!";
-				about.push_back(aboutString);
+			}
+
+			if(Manager::getRandomAliveMercIndex() < 0){
+				
+			    fpReturnTavern = returnTavern;
+			    fpRestartTrail = restartTrail;
+			    option resumeOpt = {"Restart from trail", fpRestartTrail, true};
+			    option resume2Opt = {"Restart from tavern", fpReturnTavern, true};
+			    vector<option> options;
+			    options.push_back(resumeOpt);
+			    options.push_back(resume2Opt);
+			    //Set the data
+			    menu->setData("Next time", about, options, &diedMenu, 10, about);
 			}
 		}
 	}else{
@@ -308,7 +315,8 @@ void Manager::fightingFromAmbush(int numBandits, int banditDamage){
 	}
 
 	incomingDamage -= defendingDamage;
-
+	if(incomingDamage <= 10)
+		incomingDamage = 10;
 	Manager::reportStats();
 	cout << "Incoming damage: " + to_string(incomingDamage) << endl;
 	
@@ -385,6 +393,8 @@ void Manager::fightingFromMerchant(int numGaurds, int gaurdDamage){
 
 	incomingDamage -= defendingDamage;
 
+	if(incomingDamage <= 10)
+		incomingDamage = 10;
 	Manager::reportStats();
 	cout << "Incoming damage: " + to_string(incomingDamage) << endl;
 	

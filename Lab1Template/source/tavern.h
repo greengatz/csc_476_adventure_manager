@@ -38,6 +38,7 @@ class Tavern
 		vec3 getFoodLoc();
 		Tavern();
 		void init(Materials *newMatSetter, FrustumCull *newCuller, ProjectMeshes *newData);
+		void spawn3NewMercs();
 		void loadTavernMeshes(TextureLoader* texLoader);
 		void showMercsForSale();
 		void newEmblem();
@@ -51,6 +52,7 @@ class Tavern
                     GLint h_boneFlag, GLint h_boneIds, 
                     GLint h_boneWeights, GLint h_boneTransforms, GLint h_texFlag,
                     GLint h_boneIds2, GLint h_boneWeights2);
+
 
 	private:
 		float curTime;

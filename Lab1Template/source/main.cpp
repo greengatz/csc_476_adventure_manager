@@ -718,6 +718,8 @@ void drawGL()
 	if (wagon.getPosition().x > -54.0 && !fadeSystem.isFading())
 	{
 		manager.completedTrail();
+		tavern.tavernCharacters.clear();
+		tavern.spawn3NewMercs();
 		manager.inTavern = manager.inTavern ? false : true;
         audio.playBackgroundMusic(manager.inTavern);
 		fadeSystem.startFade(g_width, g_height);
@@ -728,8 +730,6 @@ void drawGL()
 		fadeSystem.updateFade();
 		if (fadeSystem.readyToChangeScene())
 		{
-
-
 			if(!fadeSystem.dontToggleView){
 				camera.toggleGameViews();
 			}else{

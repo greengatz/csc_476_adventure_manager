@@ -189,6 +189,19 @@ void Tavern::createEmblems()
 	wallEmblem = tavernItems.size() - 1;
 }
 
+void Tavern::spawn3NewMercs(){
+	//Add Characters
+	addTavernCharacter(SAMURAI, glm::vec3(1, 1, 1), glm::vec3(15.5, 1.1, -25.0), glm::mat4(1.0f));
+	tavernCharacters[tavernCharacters.size() - 1].meshes[0].loadTextureCoor(TAV_SAMURAI_ID);
+
+	addTavernCharacter(SAMURAI, glm::vec3(1, 1, 1), glm::vec3(17.5, 1.1, -23.0), glm::mat4(1.0f));
+	tavernCharacters[tavernCharacters.size() - 1].meshes[0].loadTextureCoor(TAV_SAMURAI_ID);
+
+	addTavernCharacter(SAMURAI, glm::vec3(1, 1, 1), glm::vec3(13.5, 1.1, -23.0), glm::mat4(1.0f));
+	tavernCharacters[tavernCharacters.size() - 1].meshes[0].loadTextureCoor(TAV_SAMURAI_ID);
+
+}
+
 void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 {
 	srand(time(NULL));
