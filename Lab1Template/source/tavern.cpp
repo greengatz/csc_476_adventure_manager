@@ -106,7 +106,7 @@ void Tavern::loadBufferData(TextureLoader* texLoader)
 	texLoader->LoadTexture((char *)"assets/tavern/bookshelfTex.bmp", TAV_SHELF_ID);
 	texLoader->LoadTexture((char *)"assets/tavern/marbletopTex.bmp", TAV_MARBLE_ID);
 	texLoader->LoadTexture((char *)"assets/tavern/branchTex.bmp", TAV_BRANCHES_ID);
-	texLoader->LoadTexture((char *)"assets/tavern/roofTex.bmp", TAV_ROOF_ID);
+	texLoader->LoadTexture((char *)"assets/tavern/seamlesswood.bmp", TAV_ROOF_ID);
 	texLoader->LoadTexture((char *)"assets/tavern/torchTex.bmp", TAV_TORCH_ID);
 	texLoader->LoadTexture((char *)"assets/tavern/plankTex.bmp", TAV_PLANK_ID);
 	texLoader->LoadTexture((char *)"assets/tavern/rockTex.bmp", TAV_ROCK_ID);
@@ -224,27 +224,15 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 
 	loadBufferData(texLoader);
 
-	//2nd floor
-	addTavernItem(CUBE, 1, glm::vec3(28, 0.5, 8.0), glm::vec3(25, 7, -12), glm::mat4(1.0f));
-	addTavernItem(CUBE, 1, glm::vec3(28, 0.5, 8.0), glm::vec3(25, 7, -35), glm::mat4(1.0f));
-	addTavernItem(CUBE, 1, glm::vec3(11.0, 0.5, 28.0), glm::vec3(7, 7, -25), glm::mat4(1.0f));
-	addTavernItem(CUBE, 1, glm::vec3(11.0, 0.5, 28.0), glm::vec3(39, 7, -25), glm::mat4(1.0f));
-
-	//roof
-	ang = 45;
-	rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(1.0f, 0, 0));
-	addTavernItem(ROOF, 1, glm::vec3(28.0, 5.0, 28.0), glm::vec3(25, 9, -12), rot);
-	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_ROOF_ID);
-	ang = -45;
-	rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(1.0f, 0, 0));
-	addTavernItem(ROOF, 1, glm::vec3(28, 5.0, 28.0), glm::vec3(25, 9, -35), rot);
+	//2ND FLOOR
+	addTavernItem(TAVERNROOF, 1, glm::vec3(9.4, 8.3, 11.0), glm::vec3(15.8, 6.5, -22.55), glm::mat4(1.0f));
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_ROOF_ID);
 
-	//door
+	//THE DOOR
 	addTavernItem(DOOR, 1, glm::vec3(1.5, 1.5, 1.5), glm::vec3(7.5, 1.35, -23), glm::mat4(1.0f));
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_DOOR_ID);
 
-	//bar stools
+	//BAR STOOLS
 	addTavernItem(STOOL, 1, glm::vec3(0.35, 0.32, 0.35), glm::vec3(11, .35, -16), glm::mat4(1.0f));
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_TABLECHAIR_ID);
 	addTavernItem(STOOL, 1, glm::vec3(0.35, 0.32, 0.35), glm::vec3(12, .35, -16), glm::mat4(1.0f));
