@@ -802,7 +802,7 @@ bool hasCollided(glm::vec3 incr)
 	}
 
 	glm::vec3 camPos = camera.getPosition() + incr;
-	printf("CamPosition: <%lf, %lf, %lf>\n", camPos.x, camPos.y, camPos.z);
+	// printf("CamPosition: <%lf, %lf, %lf>\n", camPos.x, camPos.y, camPos.z);
 
 	float curCam[6] = {
     camera.bound.minX + camPos.x,
@@ -813,7 +813,7 @@ bool hasCollided(glm::vec3 incr)
     camera.bound.maxZ + camPos.z};
 
 	// bool validMove = (curCam[0] < 6.75 || curCam[1] > 39.5 || curCam[4] < -36.0 || curCam[5] > -11.4);
-	bool validMove = (curCam[0] < 6.75 || curCam[1] > 39.5 || curCam[4] < -36.0 || curCam[5] > -11.4);
+	bool validMove = (curCam[0] < 6.75 || curCam[1] > 21.5 || curCam[4] < -36.0 || curCam[5] > -16.4);
 	printf("CAMERA AT X: %lf, Z: %lf\n", camPos.x, camPos.z);
 	int row, col;
   	row = (camPos.x - minX)/gridSize;
