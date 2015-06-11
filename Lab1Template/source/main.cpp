@@ -748,27 +748,14 @@ void drawGL()
 				terrain.createTrail();
    				wagon.resetWagon();
 			}
-
-
-			
 		}
 	}
 	
 	//**************Draw HUD START*********************
 
+
 	hud.drawHud(&camera, g_width, g_height);
-	char info[64];
-	sprintf(info,"x %d", manager.getGold());
-	printText2D(info, 50, 566, 18);
-
-	sprintf(info,"x %d", manager.getFood());
-	printText2D(info, 220, 566, 18);
-
-	sprintf(info,"x %d", manager.getBeer());
-	printText2D(info, 430, 566, 18);
-
-	sprintf(info,"x %d", manager.getMercs());
-	printText2D(info, 620, 566, 18);
+	
 	
 	if(menu.inMenu)
 	{
@@ -779,10 +766,25 @@ void drawGL()
 	{
 		hud.drawSideHud(&camera, g_width, g_height);
 
-		if(hud.homeScreenOn)
-		{
-			printText2D("Press Enter to Continue", 75, 75, 24);
-		}
+	}
+	if(hud.homeScreenOn)
+	{
+		printText2D("Press Enter to Continue", 75, 75, 24);
+	}
+	else
+	{
+		char info[64];
+		sprintf(info,"x %d", manager.getGold());
+		printText2D(info, 50, 566, 18);
+
+		sprintf(info,"x %d", manager.getFood());
+		printText2D(info, 226, 566, 18);
+
+		sprintf(info,"x %d", manager.getBeer());
+		printText2D(info, 432, 566, 18);
+
+		sprintf(info,"x %d", manager.getMercs());
+		printText2D(info, 628, 566, 18);
 	}
 
 	//**************Draw HUD FINISH********************
