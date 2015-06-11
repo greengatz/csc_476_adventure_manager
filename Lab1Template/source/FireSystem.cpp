@@ -3,10 +3,8 @@
 #include "MatrixStack.h"
 
 const glm::vec3 fireLoc[] = {glm::vec3(15.5, 0.4, -23.0), //center fireplace
-							 // glm::vec3(18.5, 2.9, -27.7), //torch locations
-							 // glm::vec3(27.6, 2.9, -27.7),
-							 // glm::vec3(18.5, 2.9, -19.3),
-							 // glm::vec3(27.6, 2.9, -19.3),
+							  glm::vec3(7.8, 1.9, -22), //torch locations
+							  glm::vec3(7.8, 1.9, -24),
 							 glm::vec3(15.5, 0.5, -23.0) //center orb
 };
 
@@ -216,7 +214,7 @@ void FireSystem::draw(Camera *cam, glm::mat4 viewMat)
 		firePlace[iter].drawFirePlace(fireLoc[0], h_color, h_scale, h_ModelMat, (int)indBuf.size(), camPos);
 
 		//torches each torch has 1 /4 of the total particles
-		firePlace[iter].drawTorch(fireLoc[iter % 4 + 1], h_color, h_scale, h_ModelMat, (int)indBuf.size(), camPos);
+		firePlace[iter].drawTorch(fireLoc[iter % 2 + 1], h_color, h_scale, h_ModelMat, (int)indBuf.size(), camPos);
 		// firePlace[iter].drawTorch(fireLoc[curTorch], h_color, h_ModelMat, (int)indBuf.size(), camPos);
 		// firePlace[iter].drawTorch(fireLoc[curTorch + 1], h_color, h_ModelMat, (int)indBuf.size(), camPos);
 		// curTorch = (curTorch ==  1) ? 3 : 1; //switch which torches are drawn on
