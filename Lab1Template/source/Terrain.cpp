@@ -417,7 +417,7 @@ void Terrain::createTrail(){
 
     vec3 temp2 = criticalPoints[MAP_X - 1];
 
-    temp2.x -= 100;
+    temp2.x -= 98;
     temp2.y -= 0.1;
     temp2.z += 1;
     // temp2.z = temp.z * -1.0;
