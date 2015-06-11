@@ -2,6 +2,15 @@ body {
     background-color: #b7d1c4
 }
 
+div#one {
+    width: 50%;
+    float: left;
+}
+
+div#two {
+    margin-left: 60%;
+}
+
 p.rightAlign {
     text-align: right;
     font-family: "Arial", Helvetica, sans-serif;
