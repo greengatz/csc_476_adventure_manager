@@ -924,7 +924,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	{
 		if(camera.isTavernView()) {
 			manager.buyFood(5);
-			audio.playSoundEffect(MEAT_SOUND);
+			// audio.playSoundEffect(MEAT_SOUND);
 		}
 		else{
 			manager.feedMerc();
@@ -937,7 +937,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	{
 		if(camera.isTavernView()) {
 			manager.buyBeer(2);
-			audio.playSoundEffect(BEER_SOUND);
+			// audio.playSoundEffect(BEER_SOUND);
 		}
 		else
 			manager.beerMerc();
@@ -954,7 +954,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		{
 			hud.on = true;
 			manager.buyMercenary(key - GLFW_KEY_1, &tavern);
-			audio.playSoundEffect(COIN_SOUND);
+			// audio.playSoundEffect(COIN_SOUND);
 		}
 	}
 	
