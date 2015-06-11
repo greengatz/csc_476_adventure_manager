@@ -459,6 +459,7 @@ void Manager::buyFood(int cost)
 		food++;
 		gold -= cost;
 		cout << "Bought 1 food for " + to_string(static_cast<long double>(cost)) + " gold" << endl;
+		audio->playSoundEffect(MEAT_SOUND);
 	}
 	else
 	{
@@ -476,6 +477,7 @@ void Manager::buyBeer(int cost)
 		beer++;
 		gold -= cost;
 		cout << "Bought 1 beer for " + to_string(static_cast<long double>(cost)) + " gold\n";
+		audio->playSoundEffect(BEER_SOUND);
 	}
 	else
 	{
@@ -491,6 +493,7 @@ void Manager::buyMercenary(int mercenaryID, Tavern* tav)
 		mercs.push_back(tav->tavernCharacters[mercenaryID]);
 		gold -= tav->tavernCharacters[mercenaryID].cost;
 		tav->tavernCharacters.erase(tav->tavernCharacters.begin() + mercenaryID);
+		audio->playSoundEffect(COIN_SOUND);
 	}
 	reportStats();
 }
