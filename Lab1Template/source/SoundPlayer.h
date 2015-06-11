@@ -20,10 +20,13 @@
 #define BANDIT_ATTACK 9
 #define VILLAGER_GREETING 10
 #define ANGRY_YELL 11
+#define COIN_SOUND 12
+#define BEER_SOUND 13
+#define MEAT_SOUND 14
 
-const int NUM_SOUND_FILES = 12;
+const int NUM_SOUND_FILES = 15;
 
-const float sound_volume[] = {0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.65, 0.65, 0.65, 0.65, 0.65, 0.65};
+const float sound_volume[] = {0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.65, 0.65, 0.65, 0.65, 0.65, 0.65, 0.65, 0.65, 0.65};
 const float song_length[] = {240, 95, 273, 207, 252, 153}; //only for background music
 
 class SoundPlayer
