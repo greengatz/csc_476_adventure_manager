@@ -11,7 +11,10 @@ const char *files[] = {"assets/music/trailMusic1.mp3",
                        "assets/music/H01BanditB14.mp3",
                        "assets/music/BanditYesAttack1.wav",
                        "assets/music/VillagerM1.wav",
-                       "assets/music/GromYesAttack2.wav"};
+                       "assets/music/GromYesAttack2.wav",
+                       "assets/music/coinSound.mp3",
+                       "assets/music/beerSound.mp3",
+                       "assets/music/meatSound.mp3"};
 
 SoundPlayer::SoundPlayer()
 {
