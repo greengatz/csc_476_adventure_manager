@@ -77,6 +77,7 @@ class Tavern
 		void applyTurkeySpin(double ltime);
 
         CharDae sam;
+        CharDae *fellowTraveler, *fellowTraveler2;
 };
 
 #endif

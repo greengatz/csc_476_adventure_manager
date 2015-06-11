@@ -537,7 +537,7 @@ void drawGL()
 	
 	// Bind the program
 	//Set projection matrix
-    mat4 savedMat;
+    mat4 savedProj, savedView;
 	MatrixStack proj, view;
 	proj.pushMatrix();
 	camera.applyProjectionMatrix(&proj);
@@ -547,7 +547,7 @@ void drawGL()
 	else {
 		glUniformMatrix4fv( h_trail_ProjMatrix, 1, GL_FALSE, glm::value_ptr( proj.topMatrix()));
 	}
-    savedMat = proj.topMatrix();
+    savedProj = proj.topMatrix();
 	proj.pushMatrix();
 	camera.applyViewMatrix(&view, wagon.getPosition());
 	if (camera.isTavernView()) {
@@ -556,21 +556,22 @@ void drawGL()
 	else {
 		glUniformMatrix4fv(h_trail_ViewMatrix, 1, GL_FALSE, glm::value_ptr(view.topMatrix()));
 	}
+	savedView = view.topMatrix();
 
 	matSetter.setMaterial(2); //is this old code that we should delete?
 	trailMatSetter.setMaterial(2);
 	
     // send bone transform shader data
-    glUseProgram(bonePid);
-	glUniformMatrix4fv(h_bone_ViewMatrix, 1, GL_FALSE, glm::value_ptr(view.topMatrix()));
-	glUniformMatrix4fv( h_bone_ProjMatrix, 1, GL_FALSE, glm::value_ptr(savedMat));
-	glUniform3fv(h_bone_lightPos1, 1, glm::value_ptr(glm::vec3(23.05f, 4.0f, -23.5f)));
-	glUniform3fv(h_bone_lightPos2, 1, glm::value_ptr(glm::vec3(-125.0f, 4.0f, 25.0f)));
-	glUniform1f(h_bone_option, optionS);
+ //    glUseProgram(bonePid);
+	// glUniformMatrix4fv(h_bone_ViewMatrix, 1, GL_FALSE, glm::value_ptr(view.topMatrix()));
+	// glUniformMatrix4fv( h_bone_ProjMatrix, 1, GL_FALSE, glm::value_ptr(savedMat));
+	// glUniform3fv(h_bone_lightPos1, 1, glm::value_ptr(glm::vec3(23.05f, 4.0f, -23.5f)));
+	// glUniform3fv(h_bone_lightPos2, 1, glm::value_ptr(glm::vec3(-125.0f, 4.0f, 25.0f)));
+	// glUniform1f(h_bone_option, optionS);
 	
     fCuller.setProjMat(proj.topMatrix(), view.topMatrix());
 
-   glUseProgram(0);
+   // glUseProgram(0);
 	
 	//matSetter.setMaterial(2); //is this old code that we should delete?
 	//trailMatSetter.setMaterial(2);
@@ -610,17 +611,17 @@ void drawGL()
                  //   h_bone_aTexCoord,  h_boneFlag, h_boneIds, h_boneWeights,
                   //  h_boneTransforms, dtDraw);
 		// draw mercs
-		glUseProgram(bonePid);
-		glUniform1i(bone_terrainToggleID, 1);
-		glUniform3f(h_bone_ka, 1.0f, 1.0f, 1.0f);
-		glUniform1i(h_bone_uTexUnit, 0);
-		ModelTrans.loadIdentity();
-		ModelTrans.pushMatrix();
-		ModelTrans.popMatrix();
-		ModelTrans.loadIdentity();
-        wagon.drawMercs(h_bone_ModelMatrix, h_bone_vertPos, h_bone_vertNor, 
-                    h_bone_aTexCoord,  h_boneFlag, h_boneIds, h_boneWeights,
-                    h_boneTransforms, dtDraw, h_boneIds2, h_boneWeights2, bone_terrainToggleID);
+		// glUseProgram(bonePid);
+		// glUniform1i(bone_terrainToggleID, 1);
+		// glUniform3f(h_bone_ka, 1.0f, 1.0f, 1.0f);
+		// glUniform1i(h_bone_uTexUnit, 0);
+		// ModelTrans.loadIdentity();
+		// ModelTrans.pushMatrix();
+		// ModelTrans.popMatrix();
+		// ModelTrans.loadIdentity();
+  //       wagon.drawMercs(h_bone_ModelMatrix, h_bone_vertPos, h_bone_vertNor, 
+  //                   h_bone_aTexCoord,  h_boneFlag, h_boneIds, h_boneWeights,
+  //                   h_boneTransforms, dtDraw, h_boneIds2, h_boneWeights2, bone_terrainToggleID);
 		
         glUseProgram(trailPid);
       setProjView(&h_trail_ProjMatrix, &h_trail_ViewMatrix);
@@ -651,24 +652,64 @@ void drawGL()
                 h_aTexCoord, dtDraw, h_boneFlag, h_boneIds, 
                 h_boneWeights, h_boneTransforms);
         // load new shader
-		glUseProgram(bonePid);
+		// glUseProgram(bonePid);
+		// glUniform1i(bone_terrainToggleID, 1);
+		// glUniform3f(h_bone_ka, 1.0f, 1.0f, 1.0f);
+		// glUniform1i(h_bone_uTexUnit, 0);
+		// ModelTrans.loadIdentity();
+		// ModelTrans.pushMatrix();
+		// ModelTrans.popMatrix();
+  //       // push a bunch of data
+  //        tavern.drawTavernMercs(h_bone_ModelMatrix, h_bone_vertPos, h_bone_vertNor, 
+  //               h_bone_aTexCoord, dtDraw, h_boneFlag, h_boneIds, 
+  //               h_boneWeights, h_boneTransforms, bone_terrainToggleID,
+  //               h_boneIds2, h_boneWeights2);
+		// glUseProgram(0);
+
+		fire.draw(&camera, view.topMatrix()); //draw fire
+		glUniform1i(terrainToggleID, 0);
+
+	}
+
+	//===========================Drawing mercenaries============================
+
+	glUseProgram(bonePid);
+	  // send bone transform shader data
+	glUniformMatrix4fv(h_bone_ViewMatrix, 1, GL_FALSE, glm::value_ptr(savedView));
+	glUniformMatrix4fv( h_bone_ProjMatrix, 1, GL_FALSE, glm::value_ptr(savedProj));
+	glUniform3fv(h_bone_lightPos1, 1, glm::value_ptr(glm::vec3(23.05f, 4.0f, -23.5f)));
+	glUniform3fv(h_bone_lightPos2, 1, glm::value_ptr(glm::vec3(-125.0f, 4.0f, 25.0f)));
+	glUniform1f(h_bone_option, optionS);
+	glUniform1i(bone_terrainToggleID, 1);
+
+	if (!camera.isTavernView() || camera.isFreeRoam()) {
+		glUniform3f(h_bone_ka, 1.0f, 1.0f, 1.0f);
+		glUniform1i(h_bone_uTexUnit, 0);
+		ModelTrans.loadIdentity();
+		ModelTrans.pushMatrix();
+		ModelTrans.popMatrix();
+		ModelTrans.loadIdentity();
+        wagon.drawMercs(h_bone_ModelMatrix, h_bone_vertPos, h_bone_vertNor, 
+                    h_bone_aTexCoord,  h_boneFlag, h_boneIds, h_boneWeights,
+                    h_boneTransforms, dtDraw, h_boneIds2, h_boneWeights2, bone_terrainToggleID);
+	}
+
+	if (camera.isTavernView() || camera.isFreeRoam()) {
 		glUniform1i(bone_terrainToggleID, 1);
 		glUniform3f(h_bone_ka, 1.0f, 1.0f, 1.0f);
 		glUniform1i(h_bone_uTexUnit, 0);
 		ModelTrans.loadIdentity();
 		ModelTrans.pushMatrix();
 		ModelTrans.popMatrix();
-        // push a bunch of data
-         tavern.drawTavernMercs(h_bone_ModelMatrix, h_bone_vertPos, h_bone_vertNor, 
-                h_bone_aTexCoord, dtDraw, h_boneFlag, h_boneIds, 
-                h_boneWeights, h_boneTransforms, bone_terrainToggleID,
-                h_boneIds2, h_boneWeights2);
-		glUseProgram(0);
+	    // push a bunch of data
+	     tavern.drawTavernMercs(h_bone_ModelMatrix, h_bone_vertPos, h_bone_vertNor, 
+	            h_bone_aTexCoord, dtDraw, h_boneFlag, h_boneIds, 
+	            h_boneWeights, h_boneTransforms, bone_terrainToggleID,
+	            h_boneIds2, h_boneWeights2);
+ 	}
+	glUseProgram(0);
 
-		fire.draw(&camera, view.topMatrix()); //draw fire
-		glUniform1i(terrainToggleID, 0);
-
-	}
+	//End of mercenaries
 
 	//****************The fade system******************
 	//NOTE: Keep fade system above HUD so we still show hud when fading.
