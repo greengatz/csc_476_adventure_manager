@@ -41,6 +41,8 @@ using namespace std;
 #define MIRRORFRAME 15
 #define MIRROR 16
 #define STAIRS 17
+#define BARSTAND 18
+#define JESUSHOLDER 19
 // #define BALUSTRADE 14
 
 //terrain meshes
