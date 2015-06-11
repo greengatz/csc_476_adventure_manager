@@ -152,7 +152,7 @@ void Manager::completedTrail(){
     vector<option> options;
     options.push_back(resumeOpt);
     //Set the data
-    menu->setData("Trail Conquerer", about, options, &trailConqueredMenu, 5, dataStuffs);
+    menu->setData("Trail Conquerer", about, options, &trailConqueredMenu, 13, dataStuffs);
 }
 
 void Manager::restartFromTrail(){
