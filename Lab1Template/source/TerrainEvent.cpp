@@ -375,9 +375,9 @@ void TerrainEvent::drawTerrainEvents(GLint h_ModelMatrix, GLint h_vertPos, GLint
 			enableTextureBuffer(h_aTexCoord, eventItems[iter].texBuf, eventItems[iter].textureNdx);
 		}
 		//decide whether to cull
-		// if ((*fCuller).checkCull(eventItems[iter])) {
+		if ((*fCuller).checkCull(eventItems[iter])) {
 			eventItems[iter].draw(h_ModelMatrix);
-		// }
+		}
 		disableBuff(h_vertPos, h_vertNor, h_aTexCoord);
 	}
 	
