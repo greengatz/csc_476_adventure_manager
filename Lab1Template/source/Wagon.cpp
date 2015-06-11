@@ -187,6 +187,18 @@ void Wagon::init(TextureLoader* texLoader, Terrain* aTerrain, Menu* aMenu,
   bmp = tdogl::Bitmap::bitmapFromFile("assets/beggarMenu.png");
   beggarMenu = new tdogl::pngTexture(bmp, GL_LINEAR, GL_REPEAT);
 
+  bmp = tdogl::Bitmap::bitmapFromFile("assets/cantHealMenu.png");
+  cantHealMenu = new tdogl::pngTexture(bmp, GL_LINEAR, GL_REPEAT);
+
+  bmp = tdogl::Bitmap::bitmapFromFile("assets/maxMercsMenu.png");
+  maxMercsMenu = new tdogl::pngTexture(bmp, GL_LINEAR, GL_REPEAT);
+
+  bmp = tdogl::Bitmap::bitmapFromFile("assets/noGoldWandererMenu.png");
+  noGoldWandererMenu = new tdogl::pngTexture(bmp, GL_LINEAR, GL_REPEAT);
+
+  bmp = tdogl::Bitmap::bitmapFromFile("assets/noGoldWandererMenu.png");
+  noGoldWandererMenu = new tdogl::pngTexture(bmp, GL_LINEAR, GL_REPEAT);
+
     //unbind the arrays
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -404,6 +416,8 @@ void Wagon::updateWagon(float globalTime) {
             }
             if(event == SICKNESS){
                 vector<string> dataStuffs;
+                int textNum = 2;
+                tdogl::pngTexture* tempMenu = sicknessMenu;
                 soundSys->playVoice(ANGRY_YELL);
                 *gamePaused = true;
                 //Create about vector and add an element
@@ -441,6 +455,9 @@ void Wagon::updateWagon(float globalTime) {
                     options.push_back(healOpt);
                     options.push_back(hurtOpt);
                 }else{
+                  //input loaded cantHealMenu HERE!!!!!!!!!
+                    textNum = 13;
+                    tempMenu = cantHealMenu;
                     about.push_back("But it looks like you don't have enough");
                     about.push_back("beer and meat to treat them like they deserve!");
                     fpResume = resumeGame;
@@ -448,7 +465,7 @@ void Wagon::updateWagon(float globalTime) {
                     options.push_back(resumeOpt);
                 }
                 //Set the data
-                menu->setData("Sickness", about, options, &sicknessMenu, 2, dataStuffs);
+                menu->setData("Sickness", about, options, &tempMenu, textNum, dataStuffs);
                 for(int i = 0; i < manager->mercs.size(); i++) {
                     if (manager->mercs[i].currHealth > 0) {
                         manager->mercs[i].dae->startAnimation("punch");
@@ -468,18 +485,26 @@ void Wagon::updateWagon(float globalTime) {
                 //Create about vector and add an element
                 vector<option> options;
                 vector<string> dataStuffs;
+                int textNum = 3;
+                tdogl::pngTexture* textPointer = buyMercMenu;
                 // Obj3d temp(&((*meshData).terrMeshes[1]), scale, trans, rot);
                 // Mercenary *newMerc = new Mercenary(meshData->);
                 string name = "A lone wanderer";
                 dataStuffs.push_back(name);
                 about.push_back(name + " wants to join your party,");
 
+                //set loaded maxMercsMenu HERE!!!!!!!!!!
                 if(manager->getMercs() >= MAX_MERC){
                     about.push_back("but your crew at max size!");
-                    dataStuffs.push_back(to_string(cost));
+                    // dataStuffs.push_back(to_string(cost));
+                    textNum = 14;
+                    textPointer = maxMercsMenu;
                 }else if(manager->getGold() < cost){
+                  //set loaded noGoldWandererMenu HERE!!!!!!!!
                     about.push_back("but you're a little short on gold!");
-                    dataStuffs.push_back(to_string(cost));
+                    // dataStuffs.push_back(to_string(cost));
+                    textNum = 15;
+                    textPointer = noGoldWandererMenu;
                 }else{
                     string aboutString = "buy this mercenary for ";
                     dataStuffs.push_back(to_string(cost));
@@ -495,7 +520,7 @@ void Wagon::updateWagon(float globalTime) {
                 options.push_back(resumeOpt);
 
                 //Set the data
-                menu->setData("Wanderer", about, options, &buyMercMenu, 3, dataStuffs);
+                menu->setData("Wanderer", about, options, &textPointer, textNum, dataStuffs);
                 for(int i = 0; i < manager->mercs.size(); i++) {
                     if (manager->mercs[i].currHealth > 0) {
                         manager->mercs[i].dae->startAnimation("punch");
@@ -536,14 +561,29 @@ void Wagon::updateWagon(float globalTime) {
                 vector<string> dataStuffs;
                 vector<string> about;
                 if(manager->getGold() >= 20)
+                {
                     about.push_back("Donate 20 gold to poor beggar?");
+                    dataStuffs.push_back("20");
+                }
                 else if(manager->getGold() >= 10)
+                {
                     about.push_back("Donate 10 gold to poor beggar?");
-                else if(manager->getFood() >= 3)
-                    about.push_back("Donate 3 meat to poor beggar?");
-                else if(manager->getBeer() >= 3)
-                    about.push_back("Donate 3 beer to poor beggar?"); 
-                dataStuffs.push_back("10");
+                    dataStuffs.push_back("10");
+                }
+                else
+                {
+                  dataStuffs.push_back("0");
+                }
+                // else if(manager->getFood() >= 3)
+                // {
+                //     about.push_back("Donate 3 meat to poor beggar?");
+                //     dataStuffs.push_back("10");
+                // }
+                // else if(manager->getBeer() >= 3)
+                // {
+                //     about.push_back("Donate 3 beer to poor beggar?"); 
+                //     dataStuffs.push_back("10");
+                // }
 
 
                 about.push_back("The townspeople will notice your kindness");  

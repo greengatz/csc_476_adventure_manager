@@ -125,43 +125,100 @@ void Menu::drawMenu()
 
 	if(menuType == 0)
 	{
-
+		//nothing
 	}
 	else if(menuType == 1)
 	{
-		printText2D(data[0].c_str(), 280, 304, 15);
-		printText2D(data[1].c_str(), 280, 325, 15);
+
+		//merchant menu - meat beer
+		printText2D(data[1].c_str(), 280, 304, 15);
+		printText2D(data[0].c_str(), 280, 325, 15);
 	}
 	else if(menuType == 2)
 	{
-		printText2D(data[0].c_str(), 210, 345, 16);
-		printText2D(data[1].c_str(), 210, 325, 16);
+		// sickness
+		printText2D(data[2].c_str(), 248, 294, 16);
+		printText2D(data[3].c_str(), 357, 294, 16);
 		// printText2D(data[2].c_str(), 210, 204, 15);
+		// good
 	}
 	else if(menuType == 3)
 	{
-		printText2D(data[0].c_str(), 205, 345, 16);
-		printText2D(data[1].c_str(), 420, 322, 16);
+		// buy merc
+		// gold
+		// printText2D(data[0].c_str(), 205, 345, 16);
+		printText2D(data[1].c_str(), 407, 297, 16);
+		// good
 	}
 	else if(menuType == 4)
 	{
-		
+		//bandits
+		//nothing
 	}
 	else if(menuType == 5)
 	{
-		
+		//beggar
+		//gold
+		printText2D(data[0].c_str(), 269, 344, 16);
+		// printText2D(data[0].c_str(), 200, 200, 20);
+		// good
 	}
 	else if(menuType == 6)
 	{
-		
+		//oops
+		//nothing
 	}
 	else if(menuType == 7)
 	{
-		
+		// ?
 	}
 	else if(menuType == 8)
 	{
-		
+		// merchant robbed
+		printText2D(data[0].c_str(), 301, 348, 16);
+		// good
+	}
+	else if(menuType == 9)
+	{
+		// fight won gold beer food
+		printText2D(data[0].c_str(), 299, 329, 16);
+		printText2D(data[1].c_str(), 383, 329, 16);
+		printText2D(data[2].c_str(), 496, 329, 16);
+		// good
+	}
+	else if(menuType == 10)
+	{
+		// die
+		// nothing
+	}
+	else if(menuType == 11)
+	{
+		// coward flee gold beer food
+		printText2D(data[0].c_str(), 294, 321, 16); // gold
+		// printText2D(data[3].c_str(), 357, 294, 16);
+
+		//add food and beer here
+	}
+	else if(menuType == 12)
+	{
+		// skilled merchant
+		// nothing
+		// good
+	}
+	else if(menuType == 13)
+	{
+		// cant heal
+	}
+	else if(menuType == 14)
+	{
+		// noting max mercs
+		// good
+	}
+	else if(menuType == 15)
+	{
+		// no gold wanderer
+		// nothing
+		// good
 	}
 
 	//sprintf(info,"x %d", manager.getMercs());

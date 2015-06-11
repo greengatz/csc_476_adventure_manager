@@ -30,13 +30,10 @@ void Manager::init(Menu *m, bool *gp, FadeSystem *fS, SoundPlayer *aud){
 
 	tdogl::Bitmap bmp = tdogl::Bitmap::bitmapFromFile("assets/oopsRanMenu.png");
 	oopsRanMenu = new tdogl::pngTexture(bmp, GL_LINEAR, GL_REPEAT);
-
-	bmp = tdogl::Bitmap::bitmapFromFile("assets/noGoldWandererMenu.png");
-	noGoldWandererMenu = new tdogl::pngTexture(bmp, GL_LINEAR, GL_REPEAT);
-
 	
 
-	bmp = tdogl::Bitmap::bitmapFromFile("assets/merchantRobbed.png");
+	// bmp = tdogl::Bitmap::bitmapFromFile("assets/merchantRobbed.png");
+	bmp = tdogl::Bitmap::bitmapFromFile("assets/robberyMenu.png");
 	merchantRobbedMenu = new tdogl::pngTexture(bmp, GL_LINEAR, GL_REPEAT);
 
 	
@@ -49,6 +46,13 @@ void Manager::init(Menu *m, bool *gp, FadeSystem *fS, SoundPlayer *aud){
 
 	bmp = tdogl::Bitmap::bitmapFromFile("assets/cowardMenu.png");
 	cowardMenu = new tdogl::pngTexture(bmp, GL_LINEAR, GL_REPEAT);
+
+	bmp = tdogl::Bitmap::bitmapFromFile("assets/skilledMerchantMenu.png");
+	skilledMerchantMenu = new tdogl::pngTexture(bmp, GL_LINEAR, GL_REPEAT);
+
+	// bmp = tdogl::Bitmap::bitmapFromFile("assets/robberyMenu.png");
+	// robberyMenu = new tdogl::pngTexture(bmp, GL_LINEAR, GL_REPEAT);
+
 
 	
 
@@ -116,6 +120,7 @@ void Manager::completedTrail(){
 			mercs[i].currHunger = mercs[i].maxHunger;
 		}
 	}
+	//trailConqueredMenu HERE!!!!!!!!!!
 	// vector<string> dataStuffs;
  //    vector<string> about;
  //    about.push_back("Congratulations on overcoming the trail!");  
@@ -242,9 +247,13 @@ void Manager::fleeingFromAmbush(){
 		
 		string aboutString = "They took " + to_string((goldLoss)) + "gold,";
 		about.push_back(aboutString);
+		dataStuffs.clear();
+		dataStuffs.push_back(to_string(goldLoss));
 	
 		aboutString = ", " + to_string(foodLoss) + "food, and" + to_string(beerLoss) + "beer!";
 		about.push_back(aboutString);
+		dataStuffs.push_back(to_string(foodLoss));
+		dataStuffs.push_back(to_string(beerLoss));
 	}
 
     fpContinue = continueGame;
@@ -385,9 +394,10 @@ void Manager::fightingFromMerchant(int numGaurds, int gaurdDamage){
 	    options.push_back(resumeOpt);
 	    options.push_back(resume2Opt);
 	    //Set the data
-	    //TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	    menu->setData("Skilled merchant", about, options, &diedMenu, 10, about);
+	    //input loaded skilledMerchantMenu HERE!!!!!!!!! TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	    menu->setData("Skilled merchant", about, options, &skilledMerchantMenu, 12, about);
 	}else{
+		//robberyMenu HERE!!!!!!!!!!!
 		gold += goldGain;
 		dataStuffs.push_back(to_string(goldGain));
 		string aboutString = "You reaped " + to_string(goldGain) + "gold";

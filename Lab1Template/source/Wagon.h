@@ -106,6 +106,10 @@ private:
 	tdogl::pngTexture* buyMercMenu; //3
 	tdogl::pngTexture* banditsMenu; //4
 	tdogl::pngTexture* beggarMenu; //5
+	// tdogl::pngTexture* noGoldWandererMenu; //7
+	tdogl::pngTexture* cantHealMenu; //13
+	tdogl::pngTexture* maxMercsMenu; //14
+	tdogl::pngTexture* noGoldWandererMenu; //15
     CharDae* horse;
 };
 

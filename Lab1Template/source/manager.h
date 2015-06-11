@@ -90,11 +90,14 @@ class Manager
 		SoundPlayer *audio;
 
 		tdogl::pngTexture* oopsRanMenu; //6
-		tdogl::pngTexture* noGoldWandererMenu; //7
+		
 		tdogl::pngTexture* merchantRobbedMenu; //8
 		tdogl::pngTexture* fightWonMenu; //9
 		tdogl::pngTexture* diedMenu; //10
 		tdogl::pngTexture* cowardMenu; //11
+		tdogl::pngTexture* skilledMerchantMenu; //12
+		// tdogl::pngTexture* robberyMenu; //13
+
 		
 		
 
