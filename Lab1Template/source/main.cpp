@@ -643,7 +643,7 @@ void drawGL()
       glUniform1i(h_u2DNor, 1);
 		ModelTrans.loadIdentity();
 		ModelTrans.pushMatrix();
-		tavTerr.draw(h_vertPos, h_vertNor, h_aTexCoord, h_uNorUnit, normalToggleID, h_ModelMatrix, &ModelTrans);
+		tavTerr.draw(h_vertPos, h_vertNor, h_aTexCoord, h_uNorUnit, normalToggleID, h_ModelMatrix, &ModelTrans, &matSetter);
 		matSetter.setMaterial(4); // TODO does this line do anything?
 		ModelTrans.popMatrix();
 		matSetter.setMaterial(3);
@@ -818,7 +818,7 @@ bool hasCollided(glm::vec3 incr)
 
 	// bool validMove = (curCam[0] < 6.75 || curCam[1] > 39.5 || curCam[4] < -36.0 || curCam[5] > -11.4);
 	bool validMove = (curCam[0] < 6.75 || curCam[1] > 21.5 || curCam[4] < -29.0 || curCam[5] > -16.4);
-	printf("CAMERA AT X: %lf, Z: %lf\n", camPos.x, camPos.z);
+	//printf("CAMERA AT X: %lf, Z: %lf\n", camPos.x, camPos.z);
 	int row, col;
   	row = (camPos.x - minX)/gridSize;
  	col = (camPos.z - minZ)/gridSize;

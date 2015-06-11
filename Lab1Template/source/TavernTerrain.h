@@ -7,6 +7,7 @@
 #include "TextureLoader.h"
 #include "RenderingHelper.h"
 #include <vector>
+#include "Materials.h"
 
 
 class TavernTerrain
@@ -15,7 +16,7 @@ public:
 	TavernTerrain();
 	virtual ~TavernTerrain();
 	void init(TextureLoader* texLoader);
-	void draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_uNorUnit, GLint normalToggleID, GLint h_ModelMatrix, RenderingHelper *modelTrans);
+	void draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_uNorUnit, GLint normalToggleID, GLint h_ModelMatrix, RenderingHelper *modelTrans, Materials* matSetter);
 	
 private:
 

@@ -34,7 +34,7 @@ void main()
 	l1 = normalize(lightPos1 - pos.xyz);
 	h1 = normalize(l1 + e);
 	light1 = (ka + (kd * max(dot(l1,n), 0.0)) + (ks * pow(max(dot(h1,n), 0.0), s))) * intensity;
-	intensity = 0.2;
+	intensity = 0.6;
 	color = light1;
 
 	if (terrainToggle == 1)
