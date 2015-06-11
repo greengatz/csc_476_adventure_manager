@@ -127,6 +127,9 @@ void Manager::completedTrail(){
 	// trailConqueredMenu HERE!!!!!!!!!!
 	vector<string> dataStuffs;
     vector<string> about;
+    gold += 50;
+	food += 5;
+	beer += 5;
     about.push_back("Congratulations on overcoming the trail!");  
     about.push_back("As a reward, take 50gold, 5 beer, and 5 meat!");  
     //Create an option and add it to a vector
