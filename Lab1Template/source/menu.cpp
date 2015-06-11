@@ -181,9 +181,9 @@ void Menu::drawMenu()
 	else if(menuType == 9)
 	{
 		// fight won gold beer food
-		printText2D(data[0].c_str(), 299, 329, 16);
-		printText2D(data[1].c_str(), 383, 329, 16);
-		printText2D(data[2].c_str(), 496, 329, 16);
+		printText2D(data[0].c_str(), 310, 329, 17);
+		printText2D(data[1].c_str(), 391, 329, 17);
+		printText2D(data[2].c_str(), 504, 329, 17);
 		// good
 	}
 	else if(menuType == 10)

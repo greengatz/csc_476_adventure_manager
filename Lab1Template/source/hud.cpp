@@ -73,6 +73,15 @@ void HUD::initHUD(TextureLoader *texLoader)
   // face texture load
   bmp = tdogl::Bitmap::bitmapFromFile("assets/faceBlank.png");
   face = new tdogl::pngTexture(bmp, GL_LINEAR, GL_REPEAT);
+
+  // sickFace texture load
+  bmp = tdogl::Bitmap::bitmapFromFile("assets/sickFaceBlank.png");
+  sickFace = new tdogl::pngTexture(bmp, GL_LINEAR, GL_REPEAT);
+
+  // sickFace texture load
+  bmp = tdogl::Bitmap::bitmapFromFile("assets/deadFaceBlank.png");
+  deadFace = new tdogl::pngTexture(bmp, GL_LINEAR, GL_REPEAT);
+
   // heart texture load
   bmp = tdogl::Bitmap::bitmapFromFile("assets/heart2Plane.png");
   heart = new tdogl::pngTexture(bmp, GL_LINEAR, GL_REPEAT);
@@ -321,7 +330,18 @@ for(mercOffset; mercOffset < (currentPage * 4) && mercOffset < man -> mercs.size
 	_guiMVP = trans * _guiMVP;
 	glUniformMatrix4fv(h_ModelMatrix, 1, GL_FALSE, glm::value_ptr(_guiMVP));
 
-	enableBuff(posBufObjFace, face->object(), textBuffSideHud);
+  if(tempMerc.currHealth == 0)
+  {
+    enableBuff(posBufObjFace, deadFace->object(), textBuffSideHud);
+  }
+  else if(tempMerc.currHappiness == 0)
+  {
+    enableBuff(posBufObjFace, sickFace->object(), textBuffSideHud);
+  }
+  else
+  {
+    enableBuff(posBufObjFace, face->object(), textBuffSideHud);
+  }
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0); // draw first object
 	disableBuff();
 

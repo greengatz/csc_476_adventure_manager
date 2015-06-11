@@ -81,6 +81,8 @@ class HUD
 		tdogl::pngTexture* topHud;
 		tdogl::pngTexture* sideHud;
 		tdogl::pngTexture* face;
+		tdogl::pngTexture* sickFace;
+		tdogl::pngTexture* deadFace;
 		tdogl::pngTexture* heart;
 		tdogl::pngTexture* swords;
 };
