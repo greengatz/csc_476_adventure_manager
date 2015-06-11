@@ -29,22 +29,15 @@ using namespace std;
 #define RECT_TABLE 5
 #define MUG 6
 #define TORCH 7
-#define STICK 8
-#define POLE 9
-#define FIREPLACE 10
-// #define TABLEWARE 11
-#define TURKEY 11
-// #define ROCK 12
-#define ROOF 12
-#define PLANK 13
-#define BARRELS 14
-#define MIRRORFRAME 15
-#define MIRROR 16
-#define STAIRS 17
-#define BARSTAND 18
-#define JESUSHOLDER 19
-#define TAVERNROOF 20
-// #define BALUSTRADE 14
+#define FIREPLACE 8
+#define TURKEY 9
+#define BARRELS 10
+#define MIRRORFRAME 11
+#define MIRROR 12
+#define STAIRS 13
+#define BARSTAND 14
+#define JESUSHOLDER 15
+#define TAVERNROOF 16
 
 //terrain meshes
 #define START_CITY 0
