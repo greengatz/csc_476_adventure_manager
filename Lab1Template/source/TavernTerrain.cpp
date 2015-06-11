@@ -130,7 +130,7 @@ void TavernTerrain::calcBuffers(int coor1, int coor2, GLuint *posBuf, GLuint *no
 
 void TavernTerrain::init(TextureLoader* texLoader)
 {
-  ground = glm::vec3(5.0f, 0.0f, -11.0f);
+  ground = glm::vec3(5.0f, 0.0f, -12.0f);
   wall1 = glm::vec3(5.0f, 14.0f, -31.0f);
   wall2 = glm::vec3(7.5f, 14.0f, -31.0f);
 	scale = 0.75f;
