@@ -312,160 +312,93 @@ void donate(void* mgr, bool* gamePaused ){
         manager->setGold(manager->getGold() - 20);
     else if(manager->getGold() >= 10)
         manager->setGold(manager->getGold() - 10);
-    else if(manager->getFood() >= 3)
-        manager->setFood(manager->getFood() - 3);
-    else if(manager->getBeer() >= 3)
-        manager->setBeer(manager->getBeer() - 3);
 
     *gamePaused = false;
 
 }
 
 void Wagon::updateWagon(float globalTime) {
-    if (wagonStart && !terrain->atEnd(position)) {
-        int event = terrain->checkEvents(position);
+    if(terrain->atEnd(position)){
+      manager->completedTrail();
+    }else if (wagonStart && !terrain->atEnd(position)) {
+      int event = terrain->checkEvents(position);
 
-        bool runOffset = false;
+      bool runOffset = false;
 
-        if(!manager->partyDead()){
+      if(!manager->partyDead()){
 
-            if(event == 0) {
-                for(int i = 0; i < manager->mercs.size(); i++) {
-                    if(!manager->mercs[i].dae->isAnimating()) {
-                        if(manager->mercs[i].currHealth > 0) {
-                            manager->mercs[i].dae->randomStart = runOffset;
-                            manager->mercs[i].dae->startAnimation("run");
-                            runOffset = true;
-                        } else {
-                            manager->mercs[i].dae->startAnimation("die");
-                        }
+        if(event == 0) {
+            for(int i = 0; i < manager->mercs.size(); i++) {
+                if(!manager->mercs[i].dae->isAnimating()) {
+                    if(manager->mercs[i].currHealth > 0) {
+                        manager->mercs[i].dae->randomStart = runOffset;
+                        manager->mercs[i].dae->startAnimation("run");
+                        runOffset = true;
+                    } else {
+                        manager->mercs[i].dae->startAnimation("die");
                     }
                 }
-                runOffset = false;
-            } else if (event != 0){
-                manager->tickHungerHealth();
             }
-            if(event == MERCHANTEVENT){
-                soundSys->playVoice(VILLAGER_GREETING);
+            runOffset = false;
+        } else if (event != 0){
+            manager->tickHungerHealth();
+        }
+        if(event == MERCHANTEVENT){
+            soundSys->playVoice(VILLAGER_GREETING);
 
-                *gamePaused = true;
-                int beerCost = (rand() % 4) + 2;
-                int foodCost = (rand() % 4) + 2;
-                manager->setMedFoodCost(foodCost);
-                manager->setMedBeerCost(beerCost);
-                //Create about vector and add an element
-                vector<string> about;
+            *gamePaused = true;
+            int beerCost = (rand() % 4) + 2;
+            int foodCost = (rand() % 4) + 2;
+            manager->setMedFoodCost(foodCost);
+            manager->setMedBeerCost(beerCost);
+            //Create about vector and add an element
+            vector<string> about;
 
-                if(manager->blacklisted){
-                    string aboutString = "You are blacklisted from my";
-                    about.push_back(aboutString);
-                    about.push_back("shop for your crimes against merchants!");
-                    //Create an option and add it to a vector
-                    fpResume = resumeGame;
-                    fpRob = robMerch;
-                    option resumeOpt = {"Continue On", fpResume, true};
-                    option robOpt = {"Rob Merchant", fpRob, true};
-                    vector<option> options;
-                    options.push_back(resumeOpt);
-                    options.push_back(robOpt);
-                    menu->setData("Merchant Slayer", about, options, &merchantSlayerMenu, 0, about);
-                }else{
-                    if(manager->fortune){
-                        manager->setMedFoodCost(2);
-                        manager->setMedBeerCost(2);
-                    }
-                    vector<string> newData;
-                    newData.push_back(to_string(manager->medFoodCost));
-                    string aboutString = "Meat is  ";
-                    aboutString += to_string(manager->medFoodCost);
-                    aboutString += " gold and Beer is ";
-                    newData.push_back(to_string(manager->medBeerCost));
-                    aboutString += to_string(manager->medBeerCost);
-                    aboutString += " gold!";
-                    about.push_back(aboutString);
-                    about.push_back("Merchant looks like a wimp though");
-                    //Create an option and add it to a vector
-                    fpFood = buyFood;
-                    fpBeer = buyBeer;
-                    fpResume = resumeGame;
-                    fpRob = robMerch;
-                    option foodOpt = {"Buy Meat", fpFood, false};
-                    option beerOpt = {"Buy Beer", fpBeer, false};
-                    option robOpt = {"Rob Merchant", fpRob, true};
-                    option resumeOpt = {"Continue On", fpResume, true};
-                    vector<option> options;
-                    options.push_back(foodOpt);
-                    options.push_back(beerOpt);
-                    options.push_back(robOpt);
-                    options.push_back(resumeOpt);
-
-                    //Set the data
-                    menu->setData("Merchant", about, options, &merchantMenu, 1, newData);
-                    for(int i = 0; i < manager->mercs.size(); i++) {
-                        if (manager->mercs[i].currHealth > 0) {
-                            manager->mercs[i].dae->startAnimation("punch");
-                        } else {
-                            manager->mercs[i].dae->startAnimation("die");
-                        }
-                    }
-                    //Set the data
-                    menu->setData("Merchant", about, options, &merchantMenu, 1, newData);
-                }
-
-
-            }
-            if(event == SICKNESS){
-                vector<string> dataStuffs;
-                int textNum = 2;
-                tdogl::pngTexture* tempMenu = sicknessMenu;
-                soundSys->playVoice(ANGRY_YELL);
-                *gamePaused = true;
-                //Create about vector and add an element
-                vector<string> about;
-                srand(time(NULL));
-                int beerCost = (rand() % 4) + 2;
-                int foodCost = (rand() % 4) + 2;
-                int index = manager->getRandomAliveMercIndex();
-                manager->setFocus(index);
-                manager->setMedFoodCost(beerCost);
-                manager->setMedBeerCost(foodCost);
-
-                string sickness = Ailment[rand() % ailmentCount];
-                string name = manager->getName(index);
-                cout << name + " just got " + sickness << endl;
-                dataStuffs.push_back(name);
-                dataStuffs.push_back(sickness);
-                about.push_back(name + " came down with " + sickness + ",");
+            if(manager->blacklisted){
+                string aboutString = "You are blacklisted from my";
+                about.push_back(aboutString);
+                about.push_back("shop for your crimes against merchants!");
+                //Create an option and add it to a vector
+                fpResume = resumeGame;
+                fpRob = robMerch;
+                option resumeOpt = {"Continue On", fpResume, true};
+                option robOpt = {"Rob Merchant", fpRob, true};
                 vector<option> options;
-                if(manager->getBeer() >= manager->medBeerCost &&
-                        manager->getFood() >= manager->medFoodCost){
-                    string aboutString = "Use ";
-                    dataStuffs.push_back(to_string(manager->medFoodCost));
-                    aboutString += to_string(manager->medFoodCost);
-                    aboutString += " meat and ";
-                    dataStuffs.push_back(to_string(manager->medBeerCost));
-                    aboutString += to_string(manager->medBeerCost);
-                    aboutString += " beer?";
-                    about.push_back(aboutString);
-                    about.push_back("Otherwise their damage will drop");
-                    fpHeal = healMercenary;
-                    fpHurt = hurtMercenary;
-                    option healOpt = {"Restore " + name + "'s damage", fpHeal, true};
-                    option hurtOpt = { name + " will be fine!", fpHurt, true};
-                    options.push_back(healOpt);
-                    options.push_back(hurtOpt);
-                }else{
-                  //input loaded cantHealMenu HERE!!!!!!!!!
-                    textNum = 13;
-                    tempMenu = cantHealMenu;
-                    about.push_back("But it looks like you don't have enough");
-                    about.push_back("beer and meat to treat them like they deserve!");
-                    fpResume = resumeGame;
-                    option resumeOpt = {"Continue On", fpResume, true};
-                    options.push_back(resumeOpt);
+                options.push_back(resumeOpt);
+                options.push_back(robOpt);
+                menu->setData("Merchant Slayer", about, options, &merchantSlayerMenu, 0, about);
+            }else{
+                if(manager->fortune){
+                    manager->setMedFoodCost(2);
+                    manager->setMedBeerCost(2);
                 }
+                vector<string> newData;
+                newData.push_back(to_string(manager->medFoodCost));
+                string aboutString = "Meat is  ";
+                aboutString += to_string(manager->medFoodCost);
+                aboutString += " gold and Beer is ";
+                newData.push_back(to_string(manager->medBeerCost));
+                aboutString += to_string(manager->medBeerCost);
+                aboutString += " gold!";
+                about.push_back(aboutString);
+                about.push_back("Merchant looks like a wimp though");
+                //Create an option and add it to a vector
+                fpFood = buyFood;
+                fpBeer = buyBeer;
+                fpResume = resumeGame;
+                fpRob = robMerch;
+                option foodOpt = {"Buy Meat", fpFood, false};
+                option beerOpt = {"Buy Beer", fpBeer, false};
+                option robOpt = {"Rob Merchant", fpRob, true};
+                option resumeOpt = {"Continue On", fpResume, true};
+                vector<option> options;
+                options.push_back(foodOpt);
+                options.push_back(beerOpt);
+                options.push_back(robOpt);
+                options.push_back(resumeOpt);
+
                 //Set the data
-                menu->setData("Sickness", about, options, &tempMenu, textNum, dataStuffs);
+                menu->setData("Merchant", about, options, &merchantMenu, 1, newData);
                 for(int i = 0; i < manager->mercs.size(); i++) {
                     if (manager->mercs[i].currHealth > 0) {
                         manager->mercs[i].dae->startAnimation("punch");
@@ -473,176 +406,238 @@ void Wagon::updateWagon(float globalTime) {
                         manager->mercs[i].dae->startAnimation("die");
                     }
                 }
+                //Set the data
+                menu->setData("Merchant", about, options, &merchantMenu, 1, newData);
             }
-            if(event == WANDERER){
-                vector<string> about;
-                srand(time(NULL));
-                int cost = (rand() % 10) + 30;
-                int index = manager->getRandomAliveMercIndex();
-                // manager->setFocus(index);
-                manager->setMedGoldCost(cost);
-                *gamePaused = true;
-                //Create about vector and add an element
-                vector<option> options;
-                vector<string> dataStuffs;
-                int textNum = 3;
-                tdogl::pngTexture* textPointer = buyMercMenu;
-                // Obj3d temp(&((*meshData).terrMeshes[1]), scale, trans, rot);
-                // Mercenary *newMerc = new Mercenary(meshData->);
-                string name = "A lone wanderer";
-                dataStuffs.push_back(name);
-                about.push_back(name + " wants to join your party,");
+        }
+        if(event == SICKNESS){
+            vector<string> dataStuffs;
+            int textNum = 2;
+            tdogl::pngTexture* tempMenu = sicknessMenu;
+            soundSys->playVoice(ANGRY_YELL);
+            *gamePaused = true;
+            //Create about vector and add an element
+            vector<string> about;
+            srand(time(NULL));
+            int beerCost = (rand() % 4) + 2;
+            int foodCost = (rand() % 4) + 2;
+            int index = manager->getRandomAliveMercIndex();
+            manager->setFocus(index);
+            manager->setMedFoodCost(beerCost);
+            manager->setMedBeerCost(foodCost);
 
-                //set loaded maxMercsMenu HERE!!!!!!!!!!
-                if(manager->getMercs() >= MAX_MERC){
-                    about.push_back("but your crew at max size!");
-                    // dataStuffs.push_back(to_string(cost));
-                    textNum = 14;
-                    textPointer = maxMercsMenu;
-                }else if(manager->getGold() < cost){
-                  //set loaded noGoldWandererMenu HERE!!!!!!!!
-                    about.push_back("but you're a little short on gold!");
-                    // dataStuffs.push_back(to_string(cost));
-                    textNum = 15;
-                    textPointer = noGoldWandererMenu;
-                }else{
-                    string aboutString = "buy this mercenary for ";
-                    dataStuffs.push_back(to_string(cost));
-                    aboutString += to_string(cost);
-                    aboutString += " gold?";
-                    about.push_back(aboutString);
-                    fpMercenary = buyMercenary;
-                    option mercOpt = {"Buy mercenary", fpMercenary, true};
-                    options.push_back(mercOpt);
-                }
+            string sickness = Ailment[rand() % ailmentCount];
+            string name = manager->getName(index);
+            cout << name + " just got " + sickness << endl;
+            dataStuffs.push_back(name);
+            dataStuffs.push_back(sickness);
+            about.push_back(name + " came down with " + sickness + ",");
+            vector<option> options;
+            if(manager->getBeer() >= manager->medBeerCost &&
+                    manager->getFood() >= manager->medFoodCost){
+                string aboutString = "Use ";
+                dataStuffs.push_back(to_string(manager->medFoodCost));
+                aboutString += to_string(manager->medFoodCost);
+                aboutString += " meat and ";
+                dataStuffs.push_back(to_string(manager->medBeerCost));
+                aboutString += to_string(manager->medBeerCost);
+                aboutString += " beer?";
+                about.push_back(aboutString);
+                about.push_back("Otherwise their damage will drop");
+                fpHeal = healMercenary;
+                fpHurt = hurtMercenary;
+                option healOpt = {"Restore " + name + "'s damage", fpHeal, true};
+                option hurtOpt = { name + " will be fine!", fpHurt, true};
+                options.push_back(healOpt);
+                options.push_back(hurtOpt);
+            }else{
+              //input loaded cantHealMenu HERE!!!!!!!!!
+                textNum = 13;
+                tempMenu = cantHealMenu;
+                about.push_back("But it looks like you don't have enough");
+                about.push_back("beer and meat to treat them like they deserve!");
                 fpResume = resumeGame;
                 option resumeOpt = {"Continue On", fpResume, true};
                 options.push_back(resumeOpt);
-
-                //Set the data
-                menu->setData("Wanderer", about, options, &textPointer, textNum, dataStuffs);
-                for(int i = 0; i < manager->mercs.size(); i++) {
-                    if (manager->mercs[i].currHealth > 0) {
-                        manager->mercs[i].dae->startAnimation("punch");
-                    } else {
-                        manager->mercs[i].dae->startAnimation("die");
-                    }
-                }
             }
-            if(event == AMBUSH){
-                soundSys->playVoice(BANDIT_GREETING);
-                *gamePaused = true;
-                //Create about vector and add an element
-                vector<string> about;
-                about.push_back("Bandits are ambushing your party");
-                //Create an option and add it to a vector
-                fpFight = fightAmbush;
-                fpFlee = fleeAmbush;
-                option fightOpt = {"Fight", fpFight, true};
-                option fleeOpt = {"Flee", fpFlee, true};
-                vector<option> options;
-                options.push_back(fightOpt);
-                options.push_back(fleeOpt);
-
-                //Set the data
-                menu->setData("Ambush", about, options, &banditsMenu, 4, about);
-                for(int i = 0; i < manager->mercs.size(); i++) {
-                    if (manager->mercs[i].currHealth > 0) {
-                        manager->mercs[i].dae->startAnimation("punch");
-                    } else {
-                        manager->mercs[i].dae->startAnimation("die");
-                    }
-                }
-            }
-            if(event == BEGGAR){
-                soundSys->playVoice(BANDIT_GREETING);
-                *gamePaused = true;
-                //Create about vector and add an element
-                vector<string> dataStuffs;
-                vector<string> about;
-                if(manager->getGold() >= 20)
-                {
-                    about.push_back("Donate 20 gold to poor beggar?");
-                    dataStuffs.push_back("20");
-                }
-                else if(manager->getGold() >= 10)
-                {
-                    about.push_back("Donate 10 gold to poor beggar?");
-                    dataStuffs.push_back("10");
-                }
-                else
-                {
-                  dataStuffs.push_back("0");
-                }
-                // else if(manager->getFood() >= 3)
-                // {
-                //     about.push_back("Donate 3 meat to poor beggar?");
-                //     dataStuffs.push_back("10");
-                // }
-                // else if(manager->getBeer() >= 3)
-                // {
-                //     about.push_back("Donate 3 beer to poor beggar?"); 
-                //     dataStuffs.push_back("10");
-                // }
-
-
-                about.push_back("The townspeople will notice your kindness");  
-                //Create an option and add it to a vector
-                fpDonate = donate;
-                fpResume = resumeGame;
-                option donateOpt = {"Help beggar out", fpDonate, true};
-                option resumeOpt = {"Don't donate", fpResume, true};
-                vector<option> options;
-                options.push_back(donateOpt);
-                options.push_back(resumeOpt);
-                //Set the data
-                menu->setData("Beggar", about, options, &beggarMenu, 5, dataStuffs);
-            }
-
-            deltaTime = glfwGetTime() - startTime;
-
-            if (position.x >= nextPoint.x)
-            {
-                nextPoint = terrain->nextCriticalPoint(position);
-                direction = glm::normalize(nextPoint - position);
-                neg = -neg;
-                rotate = neg * cos((glm::dot(direction, orientation)/(glm::length(orientation) * glm::length(direction)))) * (180.0/3.14);
-            }
-            if(*gamePaused == true){
-                startTime = glfwGetTime() - deltaTime ;
-            }else{
-                position += (*fastForward) * direction * deltaTime * velocity;
-            }
-
-            // update wagons position
-            position.z = terrain->getSpline()->getY(position.x);
-            rotate = 90.0f + -1.0 * atan(terrain->getSpline()->getDY(position.x)) * (180.0 / 3.14);
-
-            startTime += deltaTime;
-
-            // update mercenaries around wagon
+            //Set the data
+            menu->setData("Sickness", about, options, &tempMenu, textNum, dataStuffs);
             for(int i = 0; i < manager->mercs.size(); i++) {
-                if(manager->mercs[i].dae == NULL) {
-                    manager->mercs[i].initDae();
-                }
                 if (manager->mercs[i].currHealth > 0) {
-                    manager->mercs[i].dae->position = position;
-                    // the wagon has this transform from the stack
-                    vec3 groupCenter = position;
-                    groupCenter.x -= 100;
-                    groupCenter.x -= 0.2 * cos((-rotate + 90) * 3.14 / 180.0) * (i / 2);
-                    groupCenter.z -= 0.2 * sin((-rotate + 90) * 3.14 / 180.0) * (i / 2);
-                    groupCenter.y = 0;
-
-                    groupCenter.x += cos((-rotate) * 3.14 / 180.0) * (0.5 - (i % 2) * 0.2);
-                    groupCenter.z += sin((-rotate) * 3.14 / 180.0) * (0.5 - (i % 2) * 0.2);
-
-                    manager->mercs[i].dae->position = groupCenter;
-                    manager->mercs[i].dae->scale = glm::vec3(0.08, 0.08, 0.08);
-                    manager->mercs[i].dae->rotate = rotate;
+                    manager->mercs[i].dae->startAnimation("punch");
+                } else {
+                    manager->mercs[i].dae->startAnimation("die");
                 }
             }
-    // update wagon
+        }
+        if(event == WANDERER){
+            vector<string> about;
+            srand(time(NULL));
+            int cost = (rand() % 10) + 30;
+            int index = manager->getRandomAliveMercIndex();
+            // manager->setFocus(index);
+            manager->setMedGoldCost(cost);
+            *gamePaused = true;
+            //Create about vector and add an element
+            vector<option> options;
+            vector<string> dataStuffs;
+            int textNum = 3;
+            tdogl::pngTexture* textPointer = buyMercMenu;
+            // Obj3d temp(&((*meshData).terrMeshes[1]), scale, trans, rot);
+            // Mercenary *newMerc = new Mercenary(meshData->);
+            string name = "A lone wanderer";
+            dataStuffs.push_back(name);
+            about.push_back(name + " wants to join your party,");
+
+            //set loaded maxMercsMenu HERE!!!!!!!!!!
+            if(manager->getMercs() >= MAX_MERC){
+                about.push_back("but your crew at max size!");
+                // dataStuffs.push_back(to_string(cost));
+                textNum = 14;
+                textPointer = maxMercsMenu;
+            }else if(manager->getGold() < cost){
+              //set loaded noGoldWandererMenu HERE!!!!!!!!
+                about.push_back("but you're a little short on gold!");
+                // dataStuffs.push_back(to_string(cost));
+                textNum = 15;
+                textPointer = noGoldWandererMenu;
+            }else{
+                string aboutString = "buy this mercenary for ";
+                dataStuffs.push_back(to_string(cost));
+                aboutString += to_string(cost);
+                aboutString += " gold?";
+                about.push_back(aboutString);
+                fpMercenary = buyMercenary;
+                option mercOpt = {"Buy mercenary", fpMercenary, true};
+                options.push_back(mercOpt);
+            }
+            fpResume = resumeGame;
+            option resumeOpt = {"Continue On", fpResume, true};
+            options.push_back(resumeOpt);
+
+            //Set the data
+            menu->setData("Wanderer", about, options, &textPointer, textNum, dataStuffs);
+            for(int i = 0; i < manager->mercs.size(); i++) {
+                if (manager->mercs[i].currHealth > 0) {
+                    manager->mercs[i].dae->startAnimation("punch");
+                } else {
+                    manager->mercs[i].dae->startAnimation("die");
+                }
+            }
+        }
+        if(event == AMBUSH){
+            soundSys->playVoice(BANDIT_GREETING);
+            *gamePaused = true;
+            //Create about vector and add an element
+            vector<string> about;
+            about.push_back("Bandits are ambushing your party");
+            //Create an option and add it to a vector
+            fpFight = fightAmbush;
+            fpFlee = fleeAmbush;
+            option fightOpt = {"Fight", fpFight, true};
+            option fleeOpt = {"Flee", fpFlee, true};
+            vector<option> options;
+            options.push_back(fightOpt);
+            options.push_back(fleeOpt);
+
+            //Set the data
+            menu->setData("Ambush", about, options, &banditsMenu, 4, about);
+            for(int i = 0; i < manager->mercs.size(); i++) {
+                if (manager->mercs[i].currHealth > 0) {
+                    manager->mercs[i].dae->startAnimation("punch");
+                } else {
+                    manager->mercs[i].dae->startAnimation("die");
+                }
+            }
+        }
+        if(event == BEGGAR){
+            soundSys->playVoice(BANDIT_GREETING);
+            *gamePaused = true;
+            //Create about vector and add an element
+            vector<string> dataStuffs;
+            vector<string> about;
+            if(manager->getGold() >= 20)
+            {
+                about.push_back("Donate 20 gold to poor beggar?");
+                dataStuffs.push_back("20");
+            }
+            else if(manager->getGold() >= 10)
+            {
+                about.push_back("Donate 10 gold to poor beggar?");
+                dataStuffs.push_back("10");
+            }
+            else
+            {
+              dataStuffs.push_back("0");
+            }
+            // else if(manager->getFood() >= 3)
+            // {
+            //     about.push_back("Donate 3 meat to poor beggar?");
+            //     dataStuffs.push_back("10");
+            // }
+            // else if(manager->getBeer() >= 3)
+            // {
+            //     about.push_back("Donate 3 beer to poor beggar?"); 
+            //     dataStuffs.push_back("10");
+            // }
+
+
+            about.push_back("The townspeople will notice your kindness");  
+            //Create an option and add it to a vector
+            fpDonate = donate;
+            fpResume = resumeGame;
+            option donateOpt = {"Help beggar out", fpDonate, true};
+            option resumeOpt = {"Don't donate", fpResume, true};
+            vector<option> options;
+            options.push_back(donateOpt);
+            options.push_back(resumeOpt);
+            //Set the data
+            menu->setData("Beggar", about, options, &beggarMenu, 5, dataStuffs);
+        }
+
+        deltaTime = glfwGetTime() - startTime;
+
+        if (position.x >= nextPoint.x){
+            nextPoint = terrain->nextCriticalPoint(position);
+            direction = glm::normalize(nextPoint - position);
+            neg = -neg;
+            rotate = neg * cos((glm::dot(direction, orientation)/(glm::length(orientation) * glm::length(direction)))) * (180.0/3.14);
+        }
+        if(*gamePaused == true){
+            startTime = glfwGetTime() - deltaTime ;
+        }else{
+            position += (*fastForward) * direction * deltaTime * velocity;
+        }
+
+        // update wagons position
+        position.z = terrain->getSpline()->getY(position.x);
+        rotate = 90.0f + -1.0 * atan(terrain->getSpline()->getDY(position.x)) * (180.0 / 3.14);
+
+        startTime += deltaTime;
+
+        // update mercenaries around wagon
+        for(int i = 0; i < manager->mercs.size(); i++) {
+            if(manager->mercs[i].dae == NULL) {
+                manager->mercs[i].initDae();
+            }
+            if (manager->mercs[i].currHealth > 0) {
+                manager->mercs[i].dae->position = position;
+                // the wagon has this transform from the stack
+                vec3 groupCenter = position;
+                groupCenter.x -= 100;
+                groupCenter.x -= 0.2 * cos((-rotate + 90) * 3.14 / 180.0) * (i / 2);
+                groupCenter.z -= 0.2 * sin((-rotate + 90) * 3.14 / 180.0) * (i / 2);
+                groupCenter.y = 0;
+
+                groupCenter.x += cos((-rotate) * 3.14 / 180.0) * (0.5 - (i % 2) * 0.2);
+                groupCenter.z += sin((-rotate) * 3.14 / 180.0) * (0.5 - (i % 2) * 0.2);
+
+                manager->mercs[i].dae->position = groupCenter;
+                manager->mercs[i].dae->scale = glm::vec3(0.08, 0.08, 0.08);
+                manager->mercs[i].dae->rotate = rotate;
+            }
+        }
+      // update wagon
             if (horse == NULL) {
                 horse = new CharDae("assets/characters/horse.dae", 
                         22100, 0.2, 6);
@@ -657,11 +652,10 @@ void Wagon::updateWagon(float globalTime) {
             horse->position.y -= 0.01;
             horse->scale = glm::vec3(0.03, 0.03, 0.03);
             horse->rotate = rotate;
+      }else{
+        printf("YOU DEAD\n");
+      }  
     }
-    else{
-      printf("YOU DEAD\n");
-    }  
-  }
 }
 
 bool Wagon::hasStarted()

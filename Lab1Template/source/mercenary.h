@@ -39,7 +39,7 @@ class Mercenary
         // character class
         int job;
 		int cost;
-
+		bool sick;
 		// these are temporary, edit them as you need
 		int maxHealth;
 		int currHealth;
