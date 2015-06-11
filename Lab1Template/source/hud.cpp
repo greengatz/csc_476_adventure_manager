@@ -334,7 +334,7 @@ for(mercOffset; mercOffset < (currentPage * 4) && mercOffset < man -> mercs.size
   {
     enableBuff(posBufObjFace, deadFace->object(), textBuffSideHud);
   }
-  else if(tempMerc.currHappiness == 0)
+  else if(tempMerc.sick)
   {
     enableBuff(posBufObjFace, sickFace->object(), textBuffSideHud);
   }
@@ -388,6 +388,7 @@ void HUD::enableBuff(GLuint posBufObjA, int ID, GLuint newGrdTxt) {
   else
   {
   	glBindBuffer(GL_ARRAY_BUFFER, posBufObjA);
+    
   }
   glVertexAttribPointer(h_vertPos, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 

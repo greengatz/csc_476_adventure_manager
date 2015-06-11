@@ -744,32 +744,18 @@ void drawGL()
 				wagon.startWagon();
 			}else{
    				manager.blacklisted = false;
-   				manager.completedTrail();
    				manager.fortune = false;
 				terrain.createTrail();
    				wagon.resetWagon();
 			}
-
-
-			
 		}
 	}
 	
 	//**************Draw HUD START*********************
 
+
 	hud.drawHud(&camera, g_width, g_height);
-	char info[64];
-	sprintf(info,"x %d", manager.getGold());
-	printText2D(info, 50, 566, 18);
-
-	sprintf(info,"x %d", manager.getFood());
-	printText2D(info, 220, 566, 18);
-
-	sprintf(info,"x %d", manager.getBeer());
-	printText2D(info, 430, 566, 18);
-
-	sprintf(info,"x %d", manager.getMercs());
-	printText2D(info, 620, 566, 18);
+	
 	
 	if(menu.inMenu)
 	{
@@ -780,10 +766,25 @@ void drawGL()
 	{
 		hud.drawSideHud(&camera, g_width, g_height);
 
-		if(hud.homeScreenOn)
-		{
-			printText2D("Press Enter to Continue", 75, 75, 24);
-		}
+	}
+	if(hud.homeScreenOn)
+	{
+		printText2D("Press Enter to Continue", 75, 75, 24);
+	}
+	else
+	{
+		char info[64];
+		sprintf(info,"x %d", manager.getGold());
+		printText2D(info, 50, 566, 18);
+
+		sprintf(info,"x %d", manager.getFood());
+		printText2D(info, 226, 566, 18);
+
+		sprintf(info,"x %d", manager.getBeer());
+		printText2D(info, 432, 566, 18);
+
+		sprintf(info,"x %d", manager.getMercs());
+		printText2D(info, 628, 566, 18);
 	}
 
 	//**************Draw HUD FINISH********************
@@ -802,7 +803,7 @@ bool hasCollided(glm::vec3 incr)
 	}
 
 	glm::vec3 camPos = camera.getPosition() + incr;
-	printf("CamPosition: <%lf, %lf, %lf>\n", camPos.x, camPos.y, camPos.z);
+	// printf("CamPosition: <%lf, %lf, %lf>\n", camPos.x, camPos.y, camPos.z);
 
 	float curCam[6] = {
     camera.bound.minX + camPos.x,
@@ -812,8 +813,9 @@ bool hasCollided(glm::vec3 incr)
     camera.bound.minZ + camPos.z,
     camera.bound.maxZ + camPos.z};
 
-	bool validMove = (curCam[0] < 6.75 || curCam[1] > 39.5 || curCam[4] < -36.0 || curCam[5] > -11.4);
-
+	// bool validMove = (curCam[0] < 6.75 || curCam[1] > 39.5 || curCam[4] < -36.0 || curCam[5] > -11.4);
+	bool validMove = (curCam[0] < 6.75 || curCam[1] > 21.5 || curCam[4] < -29.0 || curCam[5] > -16.4);
+	printf("CAMERA AT X: %lf, Z: %lf\n", camPos.x, camPos.z);
 	int row, col;
   	row = (camPos.x - minX)/gridSize;
  	col = (camPos.z - minZ)/gridSize;
@@ -922,12 +924,16 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	//Buy food
 	if (key == GLFW_KEY_F && action == GLFW_PRESS)
 	{
+		
 		if(camera.isTavernView()) {
-			manager.buyFood(5);
-			// audio.playSoundEffect(MEAT_SOUND);
+			manager.buyFood(4);
+			audio.playSoundEffect(MEAT_SOUND);
 		}
 		else{
-			manager.feedMerc();
+			if(manager.getFood() > 0){
+				manager.feedMerc();
+				audio.playSoundEffect(MEAT_SOUND);
+			}
 		}
 
 	}
@@ -936,11 +942,15 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	if (key == GLFW_KEY_B && action == GLFW_PRESS)
 	{
 		if(camera.isTavernView()) {
-			manager.buyBeer(2);
-			// audio.playSoundEffect(BEER_SOUND);
+			manager.buyBeer(4);
+			audio.playSoundEffect(BEER_SOUND);
 		}
-		else
-			manager.beerMerc();
+		else{
+			if(manager.getBeer() > 0){
+				manager.beerMerc();
+				audio.playSoundEffect(BEER_SOUND);
+			}
+		}
 	}
 	
 	if (key >= GLFW_KEY_1 && key <= GLFW_KEY_5 && action == GLFW_PRESS)
