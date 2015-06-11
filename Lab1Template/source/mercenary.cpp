@@ -64,6 +64,7 @@ Mercenary::Mercenary(vector<Obj3d> m) :
     lastName(randLastName()),
     title(randTitle()),
     job(rand() % 6),
+    sick(false),
     dead(false),
     maxHealth(BaseHealth[job] + rand() % HEALTH_VARIANCE),
     maxDamage(BaseDamage[job] + rand() % DAMAGE_VARIANCE),

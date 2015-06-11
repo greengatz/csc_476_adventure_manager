@@ -744,7 +744,6 @@ void drawGL()
 				wagon.startWagon();
 			}else{
    				manager.blacklisted = false;
-   				manager.completedTrail();
    				manager.fortune = false;
 				terrain.createTrail();
    				wagon.resetWagon();
@@ -923,12 +922,16 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	//Buy food
 	if (key == GLFW_KEY_F && action == GLFW_PRESS)
 	{
+		
 		if(camera.isTavernView()) {
-			manager.buyFood(5);
-			// audio.playSoundEffect(MEAT_SOUND);
+			manager.buyFood(4);
+			audio.playSoundEffect(MEAT_SOUND);
 		}
 		else{
-			manager.feedMerc();
+			if(manager.getFood() > 0){
+				manager.feedMerc();
+				audio.playSoundEffect(MEAT_SOUND);
+			}
 		}
 
 	}
@@ -937,11 +940,15 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	if (key == GLFW_KEY_B && action == GLFW_PRESS)
 	{
 		if(camera.isTavernView()) {
-			manager.buyBeer(2);
-			// audio.playSoundEffect(BEER_SOUND);
+			manager.buyBeer(4);
+			audio.playSoundEffect(BEER_SOUND);
 		}
-		else
-			manager.beerMerc();
+		else{
+			if(manager.getBeer() > 0){
+				manager.beerMerc();
+				audio.playSoundEffect(BEER_SOUND);
+			}
+		}
 	}
 	
 	if (key >= GLFW_KEY_1 && key <= GLFW_KEY_5 && action == GLFW_PRESS)
