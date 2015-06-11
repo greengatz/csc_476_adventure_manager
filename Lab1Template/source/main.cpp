@@ -902,14 +902,14 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
    	//Create a new trail
    	if (key == GLFW_KEY_9 && action == GLFW_PRESS)
    	{
-   		terrain.createTrail();
-   		wagon.resetWagon();
+   		// terrain.createTrail();
+   		// wagon.resetWagon();
    	}
 
 	//Print Manager status
 	if (key == GLFW_KEY_M && action == GLFW_PRESS)
 	{
-		manager.reportStats();
+		// manager.reportStats();
 	}
 	
 
@@ -986,13 +986,13 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	if (key == GLFW_KEY_EQUAL && action == GLFW_PRESS)
 	{
 		//manager.buyMercenary(key - GLFW_KEY_1, &tavern);
-        hud.deadScreenOn = !hud.deadScreenOn;
+        // hud.deadScreenOn = !hud.deadScreenOn;
 	}
 
 
 	if (key == GLFW_KEY_T && action == GLFW_PRESS)
     {
-        tavern.showMercsForSale();
+        // tavern.showMercsForSale();
     }
 
 	//Leave Tavern
@@ -1009,45 +1009,45 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
    	//Toggle between lines and filled polygons
    	if (key == GLFW_KEY_L && action == GLFW_PRESS)
    	{
-      	GLint polyType;
-      	glGetIntegerv(GL_POLYGON_MODE, &polyType);
-      	if(polyType == GL_FILL) {
-				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-			} 
-			else 
-			{
-				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-			}
+   //    	GLint polyType;
+   //    	glGetIntegerv(GL_POLYGON_MODE, &polyType);
+   //    	if(polyType == GL_FILL) {
+			// 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			// } 
+			// else 
+			// {
+			// 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			// }
    	}
 
    	//Toggle culling.
    	if (key == GLFW_KEY_K && action == GLFW_PRESS)
    	{
-      	cull = !cull;
-      	if(cull) {
-				glEnable(GL_CULL_FACE);
-			} 
-			else 
-			{
-				glDisable(GL_CULL_FACE);
-			}
+   //    	cull = !cull;
+   //    	if(cull) {
+			// 	glEnable(GL_CULL_FACE);
+			// } 
+			// else 
+			// {
+			// 	glDisable(GL_CULL_FACE);
+			// }
    	}
    	//Start wagon
    	if (key == GLFW_KEY_8 && action == GLFW_PRESS)
 		{
-			wagon.startWagon();
+			// wagon.startWagon();
 		}
 	//}
 		//testing frustum culling
 	if (key == GLFW_KEY_C && action == GLFW_PRESS)
 	{
-		fCuller.toggleMode();
+		// fCuller.toggleMode();
 		//will be using this to toggle it on and off at a specified points, maybe others too....
 	}
 	//freezes current projection matrix in for frustum culling
 	if (key == GLFW_KEY_V && action == GLFW_PRESS)
 	{
-		fCuller.holdView();
+		// fCuller.holdView();
 	}
 	//Toggle hud
 	if (key == GLFW_KEY_G && action == GLFW_PRESS)
@@ -1078,7 +1078,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	if (key == GLFW_KEY_N && action == GLFW_PRESS)
 	{
 		// fire.toggle();
-		tavern.newEmblem();
+		// tavern.newEmblem();
 	}
 	if (key == GLFW_KEY_Y && action == GLFW_PRESS)
 	{
@@ -1086,11 +1086,11 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	}
 	if (key == GLFW_KEY_U && action == GLFW_PRESS)
 	{
-		audio.playSoundEffect(EXPLOSION_SOUND);
+		// audio.playSoundEffect(EXPLOSION_SOUND);
 	}
 	if (key == GLFW_KEY_I && action == GLFW_PRESS)
 	{
-		audio.playVoice(BANDIT_GREETING);
+		// audio.playVoice(BANDIT_GREETING);
 	}
 	if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS)
 	{
