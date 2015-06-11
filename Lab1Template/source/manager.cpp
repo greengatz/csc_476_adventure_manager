@@ -50,8 +50,8 @@ void Manager::init(Menu *m, bool *gp, FadeSystem *fS, SoundPlayer *aud){
 	bmp = tdogl::Bitmap::bitmapFromFile("assets/skilledMerchantMenu.png");
 	skilledMerchantMenu = new tdogl::pngTexture(bmp, GL_LINEAR, GL_REPEAT);
 
-	// bmp = tdogl::Bitmap::bitmapFromFile("assets/robberyMenu.png");
-	// robberyMenu = new tdogl::pngTexture(bmp, GL_LINEAR, GL_REPEAT);
+	bmp = tdogl::Bitmap::bitmapFromFile("assets/trailConqueredMenu.png");
+	trailConqueredMenu = new tdogl::pngTexture(bmp, GL_LINEAR, GL_REPEAT);
 
 
 	
@@ -107,6 +107,10 @@ int Manager::getRandomAliveMercIndex(){
     return -1;
 }
 
+void continueGame(void* mgr, bool* gamePaused){
+  *gamePaused = false;
+}
+
 void Manager::completedTrail(){
 	int i = 0;
 	for(i = 0; i < mercs.size(); i++){
@@ -120,18 +124,19 @@ void Manager::completedTrail(){
 			mercs[i].currHunger = mercs[i].maxHunger;
 		}
 	}
-	//trailConqueredMenu HERE!!!!!!!!!!
-	// vector<string> dataStuffs;
- //    vector<string> about;
- //    about.push_back("Congratulations on overcoming the trail!");  
- //    about.push_back("As a reward, take 50gold, 5 beer, and 5 meat!");  
- //    //Create an option and add it to a vector
- //    fpResume = resumeGame;
- //    option resumeOpt = {"Collect", fpResume, true};
- //    vector<option> options;
- //    options.push_back(resumeOpt);
- //    //Set the data
- //    menu->setData("Trail Conquerer", about, options, &beggarMenu, 5, dataStuffs);
+	// trailConqueredMenu HERE!!!!!!!!!!
+	vector<string> dataStuffs;
+    vector<string> about;
+    about.push_back("Congratulations on overcoming the trail!");  
+    about.push_back("As a reward, take 50gold, 5 beer, and 5 meat!");  
+    //Create an option and add it to a vector
+    fpContinue = continueGame;
+    // fpResume = resumeGame;
+    option resumeOpt = {"Collect", fpContinue, true};
+    vector<option> options;
+    options.push_back(resumeOpt);
+    //Set the data
+    menu->setData("Trail Conquerer", about, options, &trailConqueredMenu, 5, dataStuffs);
 }
 
 void Manager::restartFromTrail(){
@@ -168,9 +173,6 @@ void Manager::restartFromTavern(){
 	food = 0;
 }
 
-void continueGame(void* mgr, bool* gamePaused){
-  *gamePaused = false;
-}
 
 void restartTrail(void* mgr, bool* gamePaused){
   // *gamePaused = false;

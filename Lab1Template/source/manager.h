@@ -96,7 +96,7 @@ class Manager
 		tdogl::pngTexture* diedMenu; //10
 		tdogl::pngTexture* cowardMenu; //11
 		tdogl::pngTexture* skilledMerchantMenu; //12
-		// tdogl::pngTexture* robberyMenu; //13
+		tdogl::pngTexture* trailConqueredMenu; //13
 
 		
 		
