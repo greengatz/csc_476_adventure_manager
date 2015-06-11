@@ -265,7 +265,7 @@ void TavernTerrain::drawATex(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint 
 void TavernTerrain::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_uNorUnit, GLint normalToggleID, 
                          GLint h_ModelMatrix, RenderingHelper *modelTrans, Materials* matSetter)
 {
-   matSetter->setMaterial(13);
+   matSetter->setMaterial(15);
   setUpStack(modelTrans, h_ModelMatrix, ground);
   drawATex(h_pos, h_nor, h_aTexCoord, h_ModelMatrix, posBufID, norBufID, texBufID, TERRAIN_TEX_TAVERN_FLOOR_ID, normalToggleID, h_uNorUnit);
 
