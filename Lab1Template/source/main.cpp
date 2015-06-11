@@ -715,6 +715,7 @@ void drawGL()
 
 	if (wagon.getPosition().x > -54.0 && !fadeSystem.isFading())
 	{
+		manager.completedTrail();
 		manager.inTavern = manager.inTavern ? false : true;
         audio.playBackgroundMusic(manager.inTavern);
 		fadeSystem.startFade(g_width, g_height);

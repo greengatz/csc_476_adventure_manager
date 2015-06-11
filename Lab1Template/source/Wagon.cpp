@@ -319,7 +319,8 @@ void donate(void* mgr, bool* gamePaused ){
 
 void Wagon::updateWagon(float globalTime) {
     if(terrain->atEnd(position)){
-      manager->completedTrail();
+      cout << "wtf" << endl;
+      // manager->completedTrail();  
     }else if (wagonStart && !terrain->atEnd(position)) {
       int event = terrain->checkEvents(position);
 
