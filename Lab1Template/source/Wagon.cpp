@@ -457,7 +457,7 @@ void Wagon::updateWagon(float globalTime) {
                 tempMenu = cantHealMenu;
                 about.push_back("But it looks like you don't have enough");
                 about.push_back("beer and meat to treat them like they deserve!");
-                fpResume = resumeGame;
+                fpResume = hurtMercenary;
                 option resumeOpt = {"Continue On", fpResume, true};
                 options.push_back(resumeOpt);
             }
