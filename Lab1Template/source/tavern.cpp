@@ -207,9 +207,9 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 
    //Torches
    rot = glm::rotate(glm::mat4(1.0f), -30.0f, glm::vec3(0, 0, 1.0f));
-   addTavernItem(TORCH, 1, glm::vec3(0.4, 0.4, 0.4), glm::vec3(7.6, 1.6, -22), rot);
+   addTavernItem(TORCH, 1, glm::vec3(0.4, 0.4, 0.4), glm::vec3(7.6, 2.1, -22), rot);
    tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_TORCH_ID);
-   addTavernItem(TORCH, 1, glm::vec3(0.4, 0.4, 0.4), glm::vec3(7.6, 1.6, -24), rot);
+   addTavernItem(TORCH, 1, glm::vec3(0.4, 0.4, 0.4), glm::vec3(7.6, 2.1, -24), rot);
    tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_TORCH_ID);
 
 	//BAR STOOLS

@@ -17,6 +17,7 @@ using namespace std;
 
 int TERRAIN_TEX_TAVERN_FLOOR_ID = 5200;
 int TERRAIN_TEX_TAVERN_WALL_ID = 5400;
+int TERRAIN_TEX_TAVERN_WALLNOR_ID = 5401;
 
 TavernTerrain::TavernTerrain() :
 	ground(0.0f, 0.0f, 0.0f),
@@ -161,6 +162,7 @@ void TavernTerrain::init(TextureLoader* texLoader)
       }
     }
     calcBuffers(MAP_X, MAP_Y, &wallPosBufID, &wallNorBufID, &wallTexBufID, wallData);
+    calcBuffers(MAP_X, MAP_Y, &wallPosBufID, &wallNorBufID, &wallTexBufNorID, wallData);
 
     index = 0;
     // loop through all of the heightfield points, calculating
@@ -179,6 +181,7 @@ void TavernTerrain::init(TextureLoader* texLoader)
     //Load Texture
     texLoader->LoadTexture((char *)"assets/tavern/stoneFloorTex.bmp", TERRAIN_TEX_TAVERN_FLOOR_ID);
     texLoader->LoadTexture((char *)"assets/tavern/walls/stoneWall1.bmp", TERRAIN_TEX_TAVERN_WALL_ID);
+    texLoader->LoadTexture((char *)"assets/tavern/walls/stoneWall1Norm.bmp", TERRAIN_TEX_TAVERN_WALLNOR_ID);
 
   	//unbind the arrays
   	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -197,7 +200,7 @@ void TavernTerrain::setUpStack(RenderingHelper *modelTrans, GLint h_ModelMatrix,
 }
 
 void TavernTerrain::drawATex(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMatrix, 
-                             GLuint posBuffer, GLuint norBuffer, GLuint texBuffer, int targetTex)
+                             GLuint posBuffer, GLuint norBuffer, GLuint texBuffer, int targetTex, GLint normalToggleID, GLint h_uNorUnit)
 {
    GLSL::enableVertexAttribArray(h_nor);
    glBindBuffer(GL_ARRAY_BUFFER, norBuffer);
@@ -214,6 +217,18 @@ void TavernTerrain::drawATex(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint 
    glEnable(GL_TEXTURE_2D);
    glActiveTexture(GL_TEXTURE0);
    glBindTexture(GL_TEXTURE_2D, targetTex);
+
+   if (targetTex == TERRAIN_TEX_TAVERN_WALL_ID)
+   {
+      glUniform1i(normalToggleID, 1);
+
+      GLSL::enableVertexAttribArray(h_uNorUnit);
+      glBindBuffer(GL_ARRAY_BUFFER, wallTexBufNorID);
+      glVertexAttribPointer(h_uNorUnit, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
+      glActiveTexture(GL_TEXTURE1);
+      glBindTexture(GL_TEXTURE_2D, TERRAIN_TEX_TAVERN_WALLNOR_ID);
+   }
 
    //mipmap creation
    glGenerateMipmap(GL_TEXTURE_2D);
@@ -232,27 +247,28 @@ void TavernTerrain::drawATex(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint 
    GLSL::disableVertexAttribArray(h_pos);
    GLSL::disableVertexAttribArray(h_nor);
    GLSL::disableVertexAttribArray(h_aTexCoord);
+   GLSL::disableVertexAttribArray(h_uNorUnit);
+   glUniform1i(normalToggleID, 0);
    glBindBuffer(GL_ARRAY_BUFFER, 0);
    glDisable(GL_TEXTURE_2D);
 }
 
-void TavernTerrain::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMatrix, RenderingHelper *modelTrans)
+void TavernTerrain::draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_uNorUnit, GLint normalToggleID, GLint h_ModelMatrix, RenderingHelper *modelTrans)
 {
-
   setUpStack(modelTrans, h_ModelMatrix, ground);
-  drawATex(h_pos, h_nor, h_aTexCoord, h_ModelMatrix, posBufID, norBufID, texBufID, TERRAIN_TEX_TAVERN_FLOOR_ID);
+  drawATex(h_pos, h_nor, h_aTexCoord, h_ModelMatrix, posBufID, norBufID, texBufID, TERRAIN_TEX_TAVERN_FLOOR_ID, normalToggleID, h_uNorUnit);
 
   //draw one of the walls
   setUpStack(modelTrans, h_ModelMatrix, wall1);
-  drawATex(h_pos, h_nor, h_aTexCoord, h_ModelMatrix, wallPosBufID, wallNorBufID, wallTexBufID, TERRAIN_TEX_TAVERN_WALL_ID);
+  drawATex(h_pos, h_nor, h_aTexCoord, h_ModelMatrix, wallPosBufID, wallNorBufID, wallTexBufID, TERRAIN_TEX_TAVERN_WALL_ID, normalToggleID, h_uNorUnit);
 
   //Wall with door
   setUpStack(modelTrans, h_ModelMatrix, glm::vec3(wall1.x, wall1.y, -12.0f));
-  drawATex(h_pos, h_nor, h_aTexCoord, h_ModelMatrix, wallPosBufID, wallNorBufID, wallTexBufID, TERRAIN_TEX_TAVERN_WALL_ID);
+  drawATex(h_pos, h_nor, h_aTexCoord, h_ModelMatrix, wallPosBufID, wallNorBufID, wallTexBufID, TERRAIN_TEX_TAVERN_WALL_ID, normalToggleID, h_uNorUnit);
 
   setUpStack(modelTrans, h_ModelMatrix, wall2);
-  drawATex(h_pos, h_nor, h_aTexCoord, h_ModelMatrix, wall2PosBufID, wall2NorBufID, wall2TexBufID, TERRAIN_TEX_TAVERN_WALL_ID);
+  drawATex(h_pos, h_nor, h_aTexCoord, h_ModelMatrix, wall2PosBufID, wall2NorBufID, wall2TexBufID, TERRAIN_TEX_TAVERN_WALL_ID, normalToggleID, h_uNorUnit);
 
   setUpStack(modelTrans, h_ModelMatrix, glm::vec3(24.0f, wall2.y, wall2.z));
-  drawATex(h_pos, h_nor, h_aTexCoord, h_ModelMatrix, wall2PosBufID, wall2NorBufID, wall2TexBufID, TERRAIN_TEX_TAVERN_WALL_ID);
+  drawATex(h_pos, h_nor, h_aTexCoord, h_ModelMatrix, wall2PosBufID, wall2NorBufID, wall2TexBufID, TERRAIN_TEX_TAVERN_WALL_ID, normalToggleID, h_uNorUnit);
 }

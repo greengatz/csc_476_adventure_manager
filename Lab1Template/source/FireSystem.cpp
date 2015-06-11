@@ -3,8 +3,8 @@
 #include "MatrixStack.h"
 
 const glm::vec3 fireLoc[] = {glm::vec3(15.5, 0.4, -23.0), //center fireplace
-							  glm::vec3(7.8, 1.9, -22), //torch locations
-							  glm::vec3(7.8, 1.9, -24),
+							  glm::vec3(7.8, 2.4, -22), //torch locations
+							  glm::vec3(7.8, 2.4, -24),
 							 glm::vec3(15.5, 0.5, -23.0) //center orb
 };
 

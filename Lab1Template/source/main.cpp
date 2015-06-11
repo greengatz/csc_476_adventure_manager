@@ -68,6 +68,7 @@ int points = 0;
 Terrain terrain;
 //Plane toggle for coloring
 GLint terrainToggleID, trailTerrainToggleID, bone_terrainToggleID;
+GLint normalToggleID;
 
 Wagon wagon;
 
@@ -82,9 +83,9 @@ int shapeCount = 1;
 GLuint pid, trailPid, bonePid;
 GLint h_vertPos, h_trail_vertPos, h_bone_vertPos;
 GLint h_vertNor, h_trail_vertNor, h_bone_vertNor;
-GLint h_aTexCoord, h_trail_aTexCoord, h_bone_aTexCoord;
+GLint h_aTexCoord, h_trail_aTexCoord, h_bone_aTexCoord, h_uNorUnit;
 //Handles to the shader data
-GLint h_uTexUnit, h_trail_uTexUnit, h_bone_uTexUnit;
+GLint h_uTexUnit, h_u2DNor, h_trail_uTexUnit, h_bone_uTexUnit;
 GLint h_ProjMatrix, h_trail_ProjMatrix, h_bone_ProjMatrix;
 GLint h_ViewMatrix, h_trail_ViewMatrix, h_bone_ViewMatrix;
 GLint h_ModelMatrix, h_trail_ModelMatrix, h_bone_ModelMatrix;
@@ -95,7 +96,7 @@ GLint h_ka, h_trail_ka, h_bone_ka;
 GLint h_kd, h_trail_kd;
 GLint h_ks, h_trail_ks; // we don't need these for bones
 GLint h_s, h_trail_s;
-GLint h_option, h_trail_option, h_bone_option;
+GLint h_trail_option, h_bone_option;
 GLint h_trail_flag, h_bone_flag;
 
 // bone handles
@@ -358,22 +359,23 @@ bool installTavShader(const string &vShaderName, const string &fShaderName)
 	h_vertPos = GLSL::getAttribLocation(pid, "vertPos");
 	h_vertNor = GLSL::getAttribLocation(pid, "vertNor");
 	h_aTexCoord = GLSL::getAttribLocation(pid, "aTexCoord");
+   h_uNorUnit = GLSL::getAttribLocation(pid, "normCoord");
 	h_ProjMatrix = GLSL::getUniformLocation(pid, "uProjMatrix");
 	h_ViewMatrix = GLSL::getUniformLocation(pid, "uViewMatrix");
 	h_ModelMatrix = GLSL::getUniformLocation(pid, "uModelMatrix");
 
 	h_uTexUnit = GLSL::getUniformLocation(pid, "uTexUnit");
+   h_u2DNor = GLSL::getUniformLocation(pid, "uTexNorUnit");
 
 	h_lightPos1 = GLSL::getUniformLocation(pid, "lightPos1");
-	h_lightPos2 = GLSL::getUniformLocation(pid, "lightPos2");
 	h_ka = GLSL::getUniformLocation(pid, "ka");
 	h_kd = GLSL::getUniformLocation(pid, "kd");
 	h_ks = GLSL::getUniformLocation(pid, "ks");
 	h_s = GLSL::getUniformLocation(pid, "s");
-	h_option = GLSL::getUniformLocation(pid, "option");
 
 	/*Toggle for plane coloring*/
-    terrainToggleID = GLSL::getUniformLocation(pid, "terrainToggle");
+   terrainToggleID = GLSL::getUniformLocation(pid, "terrainToggle");
+   normalToggleID = GLSL::getUniformLocation(pid, "normalToggle");
 
     matSetter.init(&pid, &h_ka, &h_kd, &h_ks, &h_s);
 
@@ -522,9 +524,8 @@ void drawGL()
 	camera.update(xpos, ypos, wagon.getPosition());
 
 	if (camera.isTavernView()) {
-		glUniform3fv(h_lightPos1, 1, glm::value_ptr(glm::vec3(23.05f, 4.0f, -23.5f)));
-		glUniform3fv(h_lightPos2, 1, glm::value_ptr(glm::vec3(-125.0f, 4.0f, 25.0f)));
-		glUniform1f(h_option, optionS);
+		glUniform3fv(h_lightPos1, 1, glm::value_ptr(glm::vec3(15.5f, 5.0f, -23.0f)));
+      glUniform1i(normalToggleID, 0);
 	}
 	else {
 		glUniform3fv(h_trail_lightPos1, 1, glm::value_ptr(glm::vec3(23.05f, 4.0f, -23.5f)));
@@ -639,9 +640,10 @@ void drawGL()
 		glUseProgram(pid);
 		glUniform1i(terrainToggleID, 1);
 		glUniform1i(h_uTexUnit, 0);
+      glUniform1i(h_u2DNor, 1);
 		ModelTrans.loadIdentity();
 		ModelTrans.pushMatrix();
-		tavTerr.draw(h_vertPos, h_vertNor, h_aTexCoord, h_ModelMatrix, &ModelTrans);
+		tavTerr.draw(h_vertPos, h_vertNor, h_aTexCoord, h_uNorUnit, normalToggleID, h_ModelMatrix, &ModelTrans);
 		matSetter.setMaterial(4); // TODO does this line do anything?
 		ModelTrans.popMatrix();
 		matSetter.setMaterial(3);

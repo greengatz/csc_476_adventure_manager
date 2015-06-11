@@ -15,7 +15,7 @@ public:
 	TavernTerrain();
 	virtual ~TavernTerrain();
 	void init(TextureLoader* texLoader);
-	void draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMatrix, RenderingHelper *modelTrans);
+	void draw(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_uNorUnit, GLint normalToggleID, GLint h_ModelMatrix, RenderingHelper *modelTrans);
 	
 private:
 
@@ -27,13 +27,13 @@ private:
 	float wallData[MAP_X][MAP_Y][3]; // wall data
 	float wallData2[MAP_X][MAP_Y][3];
 	GLuint posBufID, norBufID, texBufID;
-	GLuint wallPosBufID, wallNorBufID, wallTexBufID;
+	GLuint wallPosBufID, wallNorBufID, wallTexBufID, wallTexBufNorID;
 	GLuint wall2PosBufID, wall2NorBufID, wall2TexBufID;
 	glm::vec3 ground; // position
 	glm::vec3 wall1, wall2;
 	float scale;
 	void setUpStack(RenderingHelper *modelTrans, GLint h_ModelMatrix, glm::vec3 target);
-	void drawATex(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMatrix, GLuint posBuffer, GLuint norBuffer, GLuint texBuffer, int targetTex);
+	void drawATex(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint h_ModelMatrix, GLuint posBuffer, GLuint norBuffer, GLuint texBuffer, int targetTex, GLint normalToggleID, GLint h_uNorUnit);
 	void calcBuffers(int coor1, int coor2, GLuint *posBuf, GLuint *norBuf, GLuint *texBuf, float data[MAP_X][MAP_Z][3]);
 };
 
