@@ -108,5 +108,11 @@ void Materials::setMaterial(int i)
 			glUniform3f(*h_ks, 0.076, 0.051, 0.051);
 			glUniform1f(*h_s, 0.001);
 			break;
+      case 15: //Unknown
+         glUniform3f(*h_ka, 0.1, 0.1, 0.1);
+         glUniform3f(*h_kd, 0.4, 0.4, 0.4);
+         glUniform3f(*h_ks, 0.015, 0.015, 0.015);
+         glUniform1f(*h_s, 100.0);
+         break;
 	}
 }
