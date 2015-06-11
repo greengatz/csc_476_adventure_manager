@@ -961,7 +961,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		{
 			hud.on = true;
 			manager.buyMercenary(key - GLFW_KEY_1, &tavern);
-			audio.playSoundEffect(COIN_SOUND);
+			// audio.playSoundEffect(COIN_SOUND);
 		}
 	}
 	

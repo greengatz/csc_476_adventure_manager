@@ -140,6 +140,9 @@ void Manager::completedTrail(){
 	setMedGoldCost(50);
 	vector<string> dataStuffs;
     vector<string> about;
+    gold += 50;
+	food += 5;
+	beer += 5;
     about.push_back("Congratulations on overcoming the trail!");  
     about.push_back("As a reward, take 50gold, 5 beer, and 5 meat!");  
     //Create an option and add it to a vector
@@ -471,6 +474,7 @@ void Manager::buyFood(int cost)
 		food++;
 		gold -= cost;
 		cout << "Bought 1 food for " + to_string(static_cast<long double>(cost)) + " gold" << endl;
+		audio->playSoundEffect(MEAT_SOUND);
 	}
 	else
 	{
@@ -488,6 +492,7 @@ void Manager::buyBeer(int cost)
 		beer++;
 		gold -= cost;
 		cout << "Bought 1 beer for " + to_string(static_cast<long double>(cost)) + " gold\n";
+		audio->playSoundEffect(BEER_SOUND);
 	}
 	else
 	{
@@ -503,6 +508,7 @@ void Manager::buyMercenary(int mercenaryID, Tavern* tav)
 		mercs.push_back(tav->tavernCharacters[mercenaryID]);
 		gold -= tav->tavernCharacters[mercenaryID].cost;
 		tav->tavernCharacters.erase(tav->tavernCharacters.begin() + mercenaryID);
+		audio->playSoundEffect(COIN_SOUND);
 	}
 	reportStats();
 }

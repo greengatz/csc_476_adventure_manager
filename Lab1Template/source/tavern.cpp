@@ -156,7 +156,7 @@ void Tavern::createTable1(glm::vec3 initLoc, float ang)
 	}
 }
 
-void Tavern::createPillar(glm::vec3 initLoc, bool north)
+/*void Tavern::createPillar(glm::vec3 initLoc, bool north)
 {
 	float ang = 90.0f;
 	glm::mat4 rot = glm::rotate(glm::mat4(1.0f), ang, glm::vec3(0, 0, 1.0f));
@@ -177,7 +177,7 @@ void Tavern::createPillar(glm::vec3 initLoc, bool north)
 		addTavernItem(TORCH, 1, glm::vec3(0.4, 0.4, 0.4), glm::vec3(initLoc.x, initLoc.y + 1.6, initLoc.z + 0.2), rot);
 	}
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_TORCH_ID);
-}
+}*/
 
 void Tavern::createFirePlace(glm::vec3 init)
 {
@@ -231,6 +231,13 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 	//THE DOOR
 	addTavernItem(DOOR, 1, glm::vec3(1.5, 1.5, 1.5), glm::vec3(7.5, 1.35, -23), glm::mat4(1.0f));
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_DOOR_ID);
+
+   //Torches
+   rot = glm::rotate(glm::mat4(1.0f), -30.0f, glm::vec3(0, 0, 1.0f));
+   addTavernItem(TORCH, 1, glm::vec3(0.4, 0.4, 0.4), glm::vec3(7.6, 1.6, -22), rot);
+   tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_TORCH_ID);
+   addTavernItem(TORCH, 1, glm::vec3(0.4, 0.4, 0.4), glm::vec3(7.6, 1.6, -24), rot);
+   tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_TORCH_ID);
 
 	//BAR STOOLS
 	addTavernItem(STOOL, 1, glm::vec3(0.35, 0.32, 0.35), glm::vec3(11, .35, -16), glm::mat4(1.0f));
