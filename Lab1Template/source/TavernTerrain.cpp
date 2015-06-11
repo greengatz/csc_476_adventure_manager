@@ -131,8 +131,8 @@ void TavernTerrain::calcBuffers(int coor1, int coor2, GLuint *posBuf, GLuint *no
 void TavernTerrain::init(TextureLoader* texLoader)
 {
   ground = glm::vec3(5.0f, 0.0f, -12.0f);
-  wall1 = glm::vec3(5.0f, 14.0f, -31.0f);
-  wall2 = glm::vec3(7.5f, 14.0f, -31.0f);
+  wall1 = glm::vec3(5.0f, 19.0f, -31.0f);
+  wall2 = glm::vec3(7.5f, 19.0f, -31.0f);
 	scale = 0.75f;
 
     // loop through all of the heightfield points, calculating
@@ -223,11 +223,11 @@ void TavernTerrain::drawATex(GLint h_pos, GLint h_nor, GLint h_aTexCoord, GLint 
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 
    int size = 0;
-   for (int index = 0; index < MAP_X * MAP_Z - 2; ++index)
-   {
-      glDrawArrays(GL_TRIANGLE_STRIP, size, 4);
-      size += 4;
-   }
+    for (int index = 0; index < MAP_X * MAP_Z - 2; ++index)
+    {
+        glDrawArrays(GL_TRIANGLE_STRIP, size, 4);
+        size += 4;
+    }
 
    GLSL::disableVertexAttribArray(h_pos);
    GLSL::disableVertexAttribArray(h_nor);
