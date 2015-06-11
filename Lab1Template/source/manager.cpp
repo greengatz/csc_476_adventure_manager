@@ -111,6 +111,15 @@ void continueGame(void* mgr, bool* gamePaused){
   *gamePaused = false;
 }
 
+
+void collectReward(void* mgr, bool* gamePaused){
+	Manager* manager = (Manager*)mgr;
+	manager->setGold(manager->getGold() + manager->medGoldCost);
+	manager->setBeer(manager->getBeer() + manager->medBeerCost);
+	manager->setFood(manager->getFood() + manager->medFoodCost);
+  	*gamePaused = false;
+}
+
 void Manager::completedTrail(){
 	int i = 0;
 	for(i = 0; i < mercs.size(); i++){
@@ -118,6 +127,7 @@ void Manager::completedTrail(){
 			mercs.erase(mercs.begin() + i);
 		}else{
 			mercs[i].dead = false;
+			mercs[i].sick = false;
 			mercs[i].currHealth = mercs[i].maxHealth;
 			mercs[i].currHealth = mercs[i].maxHealth;
 			mercs[i].currHappiness = mercs[i].maxHappiness;
@@ -125,6 +135,9 @@ void Manager::completedTrail(){
 		}
 	}
 	// trailConqueredMenu HERE!!!!!!!!!!
+	setMedFoodCost(5);
+	setMedBeerCost(5);
+	setMedGoldCost(50);
 	vector<string> dataStuffs;
     vector<string> about;
     gold += 50;
@@ -133,13 +146,13 @@ void Manager::completedTrail(){
     about.push_back("Congratulations on overcoming the trail!");  
     about.push_back("As a reward, take 50gold, 5 beer, and 5 meat!");  
     //Create an option and add it to a vector
-    fpContinue = continueGame;
+    fpContinue = collectReward;
     // fpResume = resumeGame;
     option resumeOpt = {"Collect", fpContinue, true};
     vector<option> options;
     options.push_back(resumeOpt);
     //Set the data
-    menu->setData("Trail Conquerer", about, options, &trailConqueredMenu, 5, dataStuffs);
+    menu->setData("Trail Conquerer", about, options, &trailConqueredMenu, 13, dataStuffs);
 }
 
 void Manager::restartFromTrail(){
@@ -149,6 +162,7 @@ void Manager::restartFromTrail(){
 		mercs[i].currHappiness = mercs[i].maxHappiness;
 		mercs[i].currHunger = mercs[i].maxHunger;
 		mercs[i].dead = false;
+			mercs[i].sick = false;
         mercs[i].dae->lastAnim = 0;
 	}
 	gold = 30;
@@ -166,6 +180,7 @@ void Manager::restartFromTavern(){
 		}else{
             mercs[i].dae->lastAnim = 0;
 			mercs[i].dead = false;
+			mercs[i].sick = false;
 			mercs[i].currHealth = mercs[i].maxHealth;
 			mercs[i].currHappiness = mercs[i].maxHappiness;
 			mercs[i].currHunger = mercs[i].maxHunger;
@@ -459,6 +474,7 @@ void Manager::buyFood(int cost)
 		food++;
 		gold -= cost;
 		cout << "Bought 1 food for " + to_string(static_cast<long double>(cost)) + " gold" << endl;
+		audio->playSoundEffect(MEAT_SOUND);
 	}
 	else
 	{
@@ -476,6 +492,7 @@ void Manager::buyBeer(int cost)
 		beer++;
 		gold -= cost;
 		cout << "Bought 1 beer for " + to_string(static_cast<long double>(cost)) + " gold\n";
+		audio->playSoundEffect(BEER_SOUND);
 	}
 	else
 	{
@@ -491,6 +508,7 @@ void Manager::buyMercenary(int mercenaryID, Tavern* tav)
 		mercs.push_back(tav->tavernCharacters[mercenaryID]);
 		gold -= tav->tavernCharacters[mercenaryID].cost;
 		tav->tavernCharacters.erase(tav->tavernCharacters.begin() + mercenaryID);
+		audio->playSoundEffect(COIN_SOUND);
 	}
 	reportStats();
 }
@@ -580,8 +598,8 @@ void Manager::feedMerc()
 	if(food > 0){
 		food--;
 		for(i = 0; i < mercs.size(); i++){
-			Mercenary m = mercs[i];
-			m.currHunger = (((m.maxHunger / 4) + m.currHunger) >= m.maxHunger) ? m.maxHunger : floor(m.currHunger + (m.maxHunger / 4.0));
+			Mercenary *m = &mercs[i];
+			m->currHunger = (((m->maxHunger / 4) + m->currHunger) >= m->maxHunger) ? m->maxHunger : floor(m->currHunger + (m->maxHunger / 4.0));
 		}
 	}
 }
@@ -592,8 +610,8 @@ void Manager::beerMerc()
 	if(beer > 0){
 		beer--;
 		for(i = 0; i < mercs.size(); i++){
-			Mercenary m = mercs[i];
-			m.currHappiness = (((m.maxHappiness / 4) + m.currHappiness) >= m.maxHappiness) ? m.maxHappiness : floor(m.currHappiness + (m.maxHappiness / 4.0));
+			Mercenary *m = &mercs[i];
+			m->currHappiness = (((m->maxHappiness / 4) + m->currHappiness) >= m->maxHappiness) ? m->maxHappiness : floor(m->currHappiness + (m->maxHappiness / 4.0));
 		}
 	}
 }
@@ -601,6 +619,15 @@ void Manager::beerMerc()
 void Manager::lowerDamage(int index)
 {
 	mercs[index].currDamage -= floor((float)(mercs[index].currDamage / 2.0));
+	mercs[index].sick = true;
+}
+
+void Manager::healSickness(int index)
+{
+	mercs[index].currDamage = mercs[index].maxDamage;
+	mercs[index].currHealth = mercs[index].maxHealth;
+	mercs[index].currHunger = mercs[index].maxHunger;
+	mercs[index].sick = false;
 }
 
 int Manager::reportTotalDamage() {

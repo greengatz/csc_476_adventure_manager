@@ -744,7 +744,6 @@ void drawGL()
 				wagon.startWagon();
 			}else{
    				manager.blacklisted = false;
-   				manager.completedTrail();
    				manager.fortune = false;
 				terrain.createTrail();
    				wagon.resetWagon();
@@ -802,7 +801,7 @@ bool hasCollided(glm::vec3 incr)
 	}
 
 	glm::vec3 camPos = camera.getPosition() + incr;
-	printf("CamPosition: <%lf, %lf, %lf>\n", camPos.x, camPos.y, camPos.z);
+	// printf("CamPosition: <%lf, %lf, %lf>\n", camPos.x, camPos.y, camPos.z);
 
 	float curCam[6] = {
     camera.bound.minX + camPos.x,
@@ -812,8 +811,9 @@ bool hasCollided(glm::vec3 incr)
     camera.bound.minZ + camPos.z,
     camera.bound.maxZ + camPos.z};
 
-	bool validMove = (curCam[0] < 6.75 || curCam[1] > 39.5 || curCam[4] < -36.0 || curCam[5] > -11.4);
-
+	// bool validMove = (curCam[0] < 6.75 || curCam[1] > 39.5 || curCam[4] < -36.0 || curCam[5] > -11.4);
+	bool validMove = (curCam[0] < 6.75 || curCam[1] > 21.5 || curCam[4] < -36.0 || curCam[5] > -16.4);
+	printf("CAMERA AT X: %lf, Z: %lf\n", camPos.x, camPos.z);
 	int row, col;
   	row = (camPos.x - minX)/gridSize;
  	col = (camPos.z - minZ)/gridSize;
@@ -922,12 +922,16 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	//Buy food
 	if (key == GLFW_KEY_F && action == GLFW_PRESS)
 	{
+		
 		if(camera.isTavernView()) {
-			manager.buyFood(5);
+			manager.buyFood(4);
 			audio.playSoundEffect(MEAT_SOUND);
 		}
 		else{
-			manager.feedMerc();
+			if(manager.getFood() > 0){
+				manager.feedMerc();
+				audio.playSoundEffect(MEAT_SOUND);
+			}
 		}
 
 	}
@@ -936,11 +940,15 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	if (key == GLFW_KEY_B && action == GLFW_PRESS)
 	{
 		if(camera.isTavernView()) {
-			manager.buyBeer(2);
+			manager.buyBeer(4);
 			audio.playSoundEffect(BEER_SOUND);
 		}
-		else
-			manager.beerMerc();
+		else{
+			if(manager.getBeer() > 0){
+				manager.beerMerc();
+				audio.playSoundEffect(BEER_SOUND);
+			}
+		}
 	}
 	
 	if (key >= GLFW_KEY_1 && key <= GLFW_KEY_5 && action == GLFW_PRESS)
@@ -954,7 +962,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		{
 			hud.on = true;
 			manager.buyMercenary(key - GLFW_KEY_1, &tavern);
-			audio.playSoundEffect(COIN_SOUND);
+			// audio.playSoundEffect(COIN_SOUND);
 		}
 	}
 	

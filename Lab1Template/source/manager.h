@@ -56,6 +56,7 @@ class Manager
 		void setBeer(int newBeer);
 		void setFocus(int index);
 		void lowerDamage(int index);
+		void healSickness(int index);
 		int reportTotalDamage();
 		void setMedFoodCost(int cost);
 		void setMedBeerCost(int cost);
