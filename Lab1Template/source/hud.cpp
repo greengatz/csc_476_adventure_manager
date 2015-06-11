@@ -362,7 +362,7 @@ for(mercOffset; mercOffset < (currentPage * 4) && mercOffset < man -> mercs.size
 	data = to_string(static_cast<long long int>(tempMerc.currHealth)) + "/" + to_string(static_cast<long long int>(tempMerc.maxHealth));
 	printText2D(data.c_str(), 685, stringOffset - 40, 12);
 
-	data = to_string(static_cast<long long int>(tempMerc.currDamage));
+	data = to_string(static_cast<long long int>(tempMerc.calcDamage()));
 	printText2D(data.c_str(), 685, stringOffset - 70, 12);
 
 	stringOffset -= 120;
