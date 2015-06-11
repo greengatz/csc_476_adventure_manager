@@ -681,10 +681,10 @@ void drawGL()
 	glUniform3fv(h_bone_lightPos2, 1, glm::value_ptr(glm::vec3(-125.0f, 4.0f, 25.0f)));
 	glUniform1f(h_bone_option, optionS);
 	glUniform1i(bone_terrainToggleID, 1);
+	glUniform3f(h_bone_ka, 1.0f, 1.0f, 1.0f);
+	glUniform1i(h_bone_uTexUnit, 0);
 
 	if (!camera.isTavernView() || camera.isFreeRoam()) {
-		glUniform3f(h_bone_ka, 1.0f, 1.0f, 1.0f);
-		glUniform1i(h_bone_uTexUnit, 0);
 		ModelTrans.loadIdentity();
 		ModelTrans.pushMatrix();
 		ModelTrans.popMatrix();
@@ -695,9 +695,6 @@ void drawGL()
 	}
 
 	if (camera.isTavernView() || camera.isFreeRoam()) {
-		glUniform1i(bone_terrainToggleID, 1);
-		glUniform3f(h_bone_ka, 1.0f, 1.0f, 1.0f);
-		glUniform1i(h_bone_uTexUnit, 0);
 		ModelTrans.loadIdentity();
 		ModelTrans.pushMatrix();
 		ModelTrans.popMatrix();
@@ -923,8 +920,10 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	//Buy food
 	if (key == GLFW_KEY_F && action == GLFW_PRESS)
 	{
-		if(camera.isTavernView())
+		if(camera.isTavernView()) {
 			manager.buyFood(5);
+			audio.playSoundEffect(MEAT_SOUND);
+		}
 		else{
 			manager.feedMerc();
 		}
@@ -934,8 +933,10 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	//Buy beer
 	if (key == GLFW_KEY_B && action == GLFW_PRESS)
 	{
-		if(camera.isTavernView())
+		if(camera.isTavernView()) {
 			manager.buyBeer(2);
+			audio.playSoundEffect(BEER_SOUND);
+		}
 		else
 			manager.beerMerc();
 	}
@@ -951,6 +952,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		{
 			hud.on = true;
 			manager.buyMercenary(key - GLFW_KEY_1, &tavern);
+			audio.playSoundEffect(COIN_SOUND);
 		}
 	}
 	
