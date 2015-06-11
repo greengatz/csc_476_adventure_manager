@@ -29,8 +29,11 @@ class Obj3d
         mat4 preTrans;
         mat4 moveRot;
 		GLuint texBuf;
+      GLuint texNorBuf;
 		//texture and material data
 		bool hasTexture;
+      bool hasNormal;
+      int textNorNdx;
 		int textureNdx;
 		int materialNdx;
 
@@ -39,6 +42,7 @@ class Obj3d
 		vec3 getCurSpot();
 		void loadTextureCoor(int ndx);
 		void chooseMaterial(int ndx);
+      void loadNormalCoor(int ndx);
 };
 
 #endif

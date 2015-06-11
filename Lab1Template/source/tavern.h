@@ -37,8 +37,8 @@ class Tavern
 		vec3 getBeerLoc();
 		vec3 getFoodLoc();
 		Tavern();
-		void init(Materials *newMatSetter, FrustumCull *newCuller, ProjectMeshes *newData);
 		void spawn3NewMercs();
+		void init(Materials *newMatSetter, FrustumCull *newCuller, ProjectMeshes *newData, GLint* normalToggleID);
 		void loadTavernMeshes(TextureLoader* texLoader);
 		void showMercsForSale();
 		void newEmblem();
@@ -62,6 +62,7 @@ class Tavern
 		vec3 doorLoc;
 		vec3 beerLoc;
 		vec3 foodLoc;
+      GLint* normToggleID;
 		int wallEmblem;
 		float getRandFloat(float limit);
 		int getRandInt(int limit);
@@ -77,6 +78,7 @@ class Tavern
 		void enableBuff(GLint h_vertPos, GLint h_vertNor, GLuint posBuf, GLuint norBuf, GLuint indBuf);
 		void disableBuff(GLint h_vertPos, GLint h_vertNor, GLint h_aTexCoord);
 		void applyTurkeySpin(double ltime);
+      void enableNormalBuffer(GLint h_aTexCoord, GLuint texBuf, int id);
 
         CharDae sam;
         CharDae *fellowTraveler, *fellowTraveler2;

@@ -188,7 +188,7 @@ void initModels()
 
 
 	//Initialize Tavern object
-	tavern.init(&matSetter, &fCuller, &meshes);
+	tavern.init(&matSetter, &fCuller, &meshes, &normalToggleID);
 
 
 	//Initialize Terrain object

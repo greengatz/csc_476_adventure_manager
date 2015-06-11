@@ -6,10 +6,12 @@ int TAV_DOOR_ID = 5001;
 int TAV_TABLECHAIR_ID = 5002;
 int TAV_TABLE_ID = 5003;
 int TAV_BARRELS_ID = 5004;
+int TAV_BARRELNOR_ID = 5010;
 int TAV_MIRRORFRAME_ID = 5005;
 int TAV_WINDOW_ID = 5006;
 int TAV_STAIRS_ID = 5007;
 int TAV_BARSTAND_ID = 5008;
+int TAV_DOORNOR_ID = 5009;
 int TAV_LANDLORD_ID = 5500;
 int FIREPIT_BAKED = 5600;
 int TAV_LUMBERJACK_ID = 5700;
@@ -42,8 +44,9 @@ Tavern::Tavern() :
 	foodLoc = vec3(30, 1.5, -30);
 }
 
-void Tavern::init(Materials *newMatSetter, FrustumCull *newCuller, ProjectMeshes *newData)
+void Tavern::init(Materials *newMatSetter, FrustumCull *newCuller, ProjectMeshes *newData, GLint* normalToggleID)
 {
+   normToggleID = normalToggleID;
 	matSetter = newMatSetter;
 	fCuller = newCuller;
 	meshData = newData;
@@ -118,6 +121,7 @@ void Tavern::loadBufferData(TextureLoader* texLoader)
 	texLoader->LoadTexture((char *)"assets/tavern/phoenixTex2.bmp", PHOENIX_EMBLEM_ID);
 	texLoader->LoadTexture((char *)"assets/tavern/hydraTex2.bmp", HYDRA_EMBLEM_ID);
 	texLoader->LoadTexture((char *)"assets/tavern/door/doorDiffuse.bmp", TAV_DOOR_ID);
+   texLoader->LoadTexture((char *)"assets/tavern/door/doorNor.bmp", TAV_DOORNOR_ID);
 	texLoader->LoadTexture((char *)"assets/tavern/table/tableDiffuse.bmp", TAV_TABLECHAIR_ID);
 	texLoader->LoadTexture((char *)"assets/tavern/table/tableDiffuse.bmp", TAV_TABLE_ID);
 	texLoader->LoadTexture((char *)"assets/tavern/barrel/barrelDiffuse.bmp", TAV_BARRELS_ID);
@@ -126,6 +130,7 @@ void Tavern::loadBufferData(TextureLoader* texLoader)
 	texLoader->LoadTexture((char *)"assets/horse/tex/tex_00.bmp", HORSE_ID);
 	texLoader->LoadTexture((char *)"assets/tavern/table/tableDiffuse1.bmp", TAV_STAIRS_ID);
 	texLoader->LoadTexture((char *)"assets/tavern/barstand/barstand.bmp", TAV_BARSTAND_ID);
+   texLoader->LoadTexture((char *)"assets/tavern/barrel/barrelbump.bmp", TAV_BARRELNOR_ID);
 }
 
 void Tavern::createTable1(glm::vec3 initLoc, float ang)
@@ -217,6 +222,9 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 	//THE DOOR
 	addTavernItem(DOOR, 1, glm::vec3(1.5, 1.5, 1.5), glm::vec3(7.5, 1.35, -23), glm::mat4(1.0f));
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_DOOR_ID);
+   tavernItems[tavernItems.size() - 1].loadNormalCoor(TAV_DOORNOR_ID);
+   tavernItems[tavernItems.size() - 1].chooseMaterial(4);
+
 
    //Torches
    rot = glm::rotate(glm::mat4(1.0f), -30.0f, glm::vec3(0, 0, 1.0f));
@@ -265,9 +273,14 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 	//Barrels
 	addTavernItem(BARRELS, 1, glm::vec3(1.5, 1.5, 1.5), glm::vec3(8.8, 0.7, -15.0), glm::mat4(1.0f));
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_BARRELS_ID);
+   tavernItems[tavernItems.size() - 1].loadNormalCoor(TAV_BARRELNOR_ID);
+   tavernItems[tavernItems.size() - 1].chooseMaterial(8);
+
 	//Barrels by stairs to prevent players from going under stairs
 	addTavernItem(BARRELS, 1, glm::vec3(1.5, 1.5, 1.5), glm::vec3(22.6, 0.7, -18.0), glm::mat4(1.0f));
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_BARRELS_ID);
+   tavernItems[tavernItems.size() - 1].loadNormalCoor(TAV_BARRELNOR_ID);
+   tavernItems[tavernItems.size() - 1].chooseMaterial(8);
 
 	//Mirror
 	addTavernItem(MIRRORFRAME, 1, glm::vec3(1.5, 1.5, 1.5), glm::vec3(7.6, 2.0, -19.1), glm::mat4(1.0f));
@@ -324,6 +337,9 @@ void Tavern::loadTavernMeshes(TextureLoader* texLoader)
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_TABLECHAIR_ID);
 	addTavernItem(STOOL, 1, glm::vec3(0.35, 0.32, 0.35), glm::vec3(13.5, 1.1, -23.0), glm::mat4(1.0f));
 	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_TABLECHAIR_ID);
+	// glm::vec3(13.5, 0, -16.4)
+	addTavernItem(STOOL, 1, glm::vec3(0.35, 0.32, 0.35), glm::vec3(15.5, 0, -16.8), glm::mat4(1.0f));
+	tavernItems[tavernItems.size() - 1].loadTextureCoor(TAV_TABLECHAIR_ID);
 }
 
 void Tavern::enableBuff(GLint h_vertPos, GLint h_vertNor, GLuint posBuf, GLuint norBuf, GLuint indBuf) {
@@ -365,13 +381,31 @@ void Tavern::enableTextureBuffer(GLint h_aTexCoord, GLuint texBuf, int id)
   glVertexAttribPointer(h_aTexCoord, 2, GL_FLOAT, GL_FALSE, 0, 0);
 }
 
+void Tavern::enableNormalBuffer(GLint h_aTexCoord, GLuint texBuf, int id)
+{
+  glEnable(GL_TEXTURE_2D);
+  glActiveTexture(GL_TEXTURE1);
+  glBindTexture(GL_TEXTURE_2D, id);
+  //mipmap
+  glGenerateMipmap(GL_TEXTURE_2D);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+  
+  GLSL::enableVertexAttribArray(h_aTexCoord);
+
+  glBindBuffer(GL_ARRAY_BUFFER, texBuf);
+  glVertexAttribPointer(h_aTexCoord, 2, GL_FLOAT, GL_FALSE, 0, 0);
+}
+
 void Tavern::drawTavern(GLint h_ModelMatrix, GLint h_vertPos, 
                 GLint h_vertNor, GLint h_aTexCoord, double ltime,
                 GLint h_boneFlag, GLint h_boneIds,
                 GLint h_boneWeights, GLint h_boneTransforms)
 {
 	applyTurkeySpin(ltime);
-	for (int iter = 0; iter < tavernItems.size() - 3; ++iter) 
+	for (int iter = 0; iter < tavernItems.size() - 4; ++iter) 
 	{
 		//set a material
 		if (tavernItems[iter].materialNdx != -1) {
@@ -384,11 +418,17 @@ void Tavern::drawTavern(GLint h_ModelMatrix, GLint h_vertPos,
 		if (tavernItems[iter].hasTexture) {
 			enableTextureBuffer(h_aTexCoord, tavernItems[iter].texBuf, tavernItems[iter].textureNdx);
 		}
+      if (tavernItems[iter].hasNormal)
+      {
+         glUniform1i(*normToggleID, 1);
+         enableNormalBuffer(h_aTexCoord, tavernItems[iter].texBuf, tavernItems[iter].textNorNdx);
+      }
 		//decide whether to cull
 		if ((*fCuller).checkCull(tavernItems[iter])) {
 			tavernItems[iter].draw(h_ModelMatrix);
 		}
 		disableBuff(h_vertPos, h_vertNor, h_aTexCoord);
+      glUniform1i(*normToggleID, 0);
 	}
 	
 /*	for (int iter = 0; iter < tavernCharacters.size(); iter++) {
